@@ -9,7 +9,7 @@ var viewer = new BpmnJS({
 
 function openDiagram(xml) {
 
-    viewer.importXML(xml, function(err) {
+    viewer.importXML(xml, function (err) {
 
         if (err) {
             container
@@ -44,7 +44,7 @@ function registerFileDrop(container, callback) {
 
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
 
             var xml = e.target.result;
 
@@ -66,10 +66,10 @@ function registerFileDrop(container, callback) {
 }
 
 $('#js-drop-zone')
-    .on('dragover dragenter', function() {
+    .on('dragover dragenter', function () {
         $('#js-drop-zone').css('background-color', 'AliceBlue');
     })
-    .on('dragleave dragend drop', function() {
+    .on('dragleave dragend drop', function () {
         $('#js-drop-zone').css('background-color', 'white');
     })
 
@@ -82,3 +82,25 @@ if (!window.FileList || !window.FileReader) {
     registerFileDrop(container, openDiagram);
 }
 
+
+var eventBus = viewer.get('eventBus');
+
+// you may hook into any of the following events
+var events = [
+    'element.hover',
+    'element.out',
+    'element.click',
+    'element.dblclick',
+    'element.mousedown',
+    'element.mouseup'
+];
+
+events.forEach(function (event) {
+
+    eventBus.on(event, function (e) {
+        // e.element = the model element
+        // e.gfx = the graphical element
+
+       console.log(event + 'on' + e.element.id);
+    });
+});
