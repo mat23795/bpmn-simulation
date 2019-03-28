@@ -1,21 +1,24 @@
 body {
     font-family: 'Arial', sans-serif;
 }
+h1{
+    text-align:center;
+}
 /*.content{*/
     /*text-align: center;*/
 /*}*/
 .canvas {
+    /*position: relative;*/
+    /*overflow: scroll;*/
     border: solid 1px black;
     /*width:*/
     /*min-width:50px;*/
     /*max-width:*/
     /*height:*/
     /*min-height:50px;*/
-    min-height:100px;
-    /*max-height:200px;*/
+    height:600px;
 }
 #js-drop-zone{
-    overflow: auto;
     text-align: center;
     vertical-align: middle;
     height:100px;

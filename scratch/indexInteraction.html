@@ -1,0 +1,827 @@
+<html>
+<head>
+  <title>bpmn-js interaction demo</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@3.2.2/dist/assets/diagram-js.css" />
+
+  <style>
+    .console {
+      width: 100%;
+      min-height: 80px;
+      border: none;
+      padding: 0;
+    }
+
+    .console textarea {
+      width: 100%;
+      min-height: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>bpmn-js diagram interaction example</h1>
+    <p>
+      interact with the diagram using your mouse and see what happens,
+      click the end event for a special alert.
+    </p>
+  </div>
+
+  <hr>
+
+  <div class="canvas">
+    <h3>diagram</h3>
+    <div id="js-canvas"></div>
+  </div>
+
+  <hr>
+
+  <div class="console">
+    <h3>console</h3>
+    <textarea id="js-console"></textarea>
+  </div>
+
+  <!-- viewer -->
+  <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
+
+  <!-- app -->
+  <script>
+    var console = document.querySelector('#js-console');
+
+    function log() {
+      console.value += Array.prototype.slice.call(arguments).map(function(e) {
+        return String(e);
+      }).join(' ');
+
+      console.value += '\n';
+      console.scrollTop = console.scrollHeight;
+    }
+
+    // the diagram to display
+    // you may load it asynchronously via ajax, too
+    var diagramXML1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<definitions xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\r\n             xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\r\n             xmlns:omgdc=\"http://www.omg.org/spec/DD/20100524/DC\"\r\n             xmlns:omgdi=\"http://www.omg.org/spec/DD/20100524/DI\"\r\n             xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n             expressionLanguage=\"http://www.w3.org/1999/XPath\"\r\n             typeLanguage=\"http://www.w3.org/2001/XMLSchema\"\r\n             targetNamespace=\"\"\r\n             xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd\">\r\n<collaboration id=\"sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424\">\r\n    <participant id=\"sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F\" name=\"Customer\" processRef=\"sid-C3803939-0872-457F-8336-EAE484DC4A04\">\r\n    </participant>\r\n</collaboration>\r\n<process id=\"sid-C3803939-0872-457F-8336-EAE484DC4A04\" isClosed=\"false\" isExecutable=\"false\" name=\"Customer\" processType=\"None\">\r\n    <extensionElements/>\r\n    <laneSet id=\"sid-b167d0d7-e761-4636-9200-76b7f0e8e83a\">\r\n        <lane id=\"sid-57E4FE0D-18E4-478D-BC5D-B15164E93254\">\r\n            <flowNodeRef>sid-D7F237E8-56D0-4283-A3CE-4F0EFE446138</flowNodeRef>\r\n            <flowNodeRef>sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26</flowNodeRef>\r\n            <flowNodeRef>SCAN_OK</flowNodeRef>\r\n            <flowNodeRef>sid-E49425CF-8287-4798-B622-D2A7D78EF00B</flowNodeRef>\r\n            <flowNodeRef>END_EVENT</flowNodeRef>\r\n            <flowNodeRef>sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9</flowNodeRef>\r\n        </lane>\r\n    </laneSet>\r\n    <startEvent id=\"sid-D7F237E8-56D0-4283-A3CE-4F0EFE446138\" name=\"Notices&#10;QR code\">\r\n        <outgoing>sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD</outgoing>\r\n    </startEvent>\r\n    <task completionQuantity=\"1\" id=\"sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26\" isForCompensation=\"false\" name=\"Scan QR code\" startQuantity=\"1\">\r\n        <incoming>sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D</incoming>\r\n        <outgoing>sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A</outgoing>\r\n    </task>\r\n    <exclusiveGateway gatewayDirection=\"Diverging\" id=\"SCAN_OK\" name=\"Scan successful?&#10;\">\r\n        <incoming>sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A</incoming>\r\n        <outgoing>sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB</outgoing>\r\n        <outgoing>sid-337A23B9-A923-4CCE-B613-3E247B773CCE</outgoing>\r\n    </exclusiveGateway>\r\n    <task completionQuantity=\"1\" id=\"sid-E49425CF-8287-4798-B622-D2A7D78EF00B\" isForCompensation=\"false\" name=\"Open product information in mobile  app\" startQuantity=\"1\">\r\n        <incoming>sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB</incoming>\r\n        <outgoing>sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C</outgoing>\r\n    </task>\r\n    <endEvent id=\"END_EVENT\" name=\"Is informed\">\r\n        <incoming>sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C</incoming>\r\n    </endEvent>\r\n    <exclusiveGateway gatewayDirection=\"Converging\" id=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9\">\r\n        <incoming>sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD</incoming>\r\n        <incoming>sid-337A23B9-A923-4CCE-B613-3E247B773CCE</incoming>\r\n        <outgoing>sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D</outgoing>\r\n    </exclusiveGateway>\r\n    <sequenceFlow id=\"sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD\" sourceRef=\"sid-D7F237E8-56D0-4283-A3CE-4F0EFE446138\" targetRef=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9\"/>\r\n    <sequenceFlow id=\"sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A\" sourceRef=\"sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26\" targetRef=\"SCAN_OK\"/>\r\n    <sequenceFlow id=\"sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C\" sourceRef=\"sid-E49425CF-8287-4798-B622-D2A7D78EF00B\" targetRef=\"END_EVENT\"/>\r\n    <sequenceFlow id=\"sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB\" name=\"Yes\" sourceRef=\"SCAN_OK\" targetRef=\"sid-E49425CF-8287-4798-B622-D2A7D78EF00B\"/>\r\n    <sequenceFlow id=\"sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D\" sourceRef=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9\" targetRef=\"sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26\"/>\r\n    <sequenceFlow id=\"sid-337A23B9-A923-4CCE-B613-3E247B773CCE\" name=\"No\" sourceRef=\"SCAN_OK\" targetRef=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9\"/>\r\n</process>\r\n<bpmndi:BPMNDiagram id=\"sid-74620812-92c4-44e5-949c-aa47393d3830\">\r\n    <bpmndi:BPMNPlane bpmnElement=\"sid-c0e745ff-361e-4afb-8c8d-2a1fc32b1424\" id=\"sid-cdcae759-2af7-4a6d-bd02-53f3352a731d\">\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F\" id=\"sid-87F4C1D6-25E1-4A45-9DA7-AD945993D06F_gui\" isHorizontal=\"true\">\r\n            <omgdc:Bounds height=\"250.0\" width=\"933.0\" x=\"42.5\" y=\"75.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\">\r\n                <omgdc:Bounds height=\"59.142852783203125\" width=\"12.000000000000014\" x=\"47.49999999999999\" y=\"170.42857360839844\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-57E4FE0D-18E4-478D-BC5D-B15164E93254\" id=\"sid-57E4FE0D-18E4-478D-BC5D-B15164E93254_gui\" isHorizontal=\"true\">\r\n            <omgdc:Bounds height=\"250.0\" width=\"903.0\" x=\"72.5\" y=\"75.0\"/>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-D7F237E8-56D0-4283-A3CE-4F0EFE446138\" id=\"sid-D7F237E8-56D0-4283-A3CE-4F0EFE446138_gui\">\r\n            <omgdc:Bounds height=\"30.0\" width=\"30.0\" x=\"150.0\" y=\"165.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n                <omgdc:Bounds height=\"22.0\" width=\"46.35714340209961\" x=\"141.8214282989502\" y=\"197.0\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26\" id=\"sid-52EB1772-F36E-433E-8F5B-D5DFD26E6F26_gui\">\r\n            <omgdc:Bounds height=\"80.0\" width=\"100.0\" x=\"352.5\" y=\"140.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\">\r\n                <omgdc:Bounds height=\"12.0\" width=\"84.0\" x=\"360.5\" y=\"172.0\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"SCAN_OK\" id=\"SCAN_OK_gui\" isMarkerVisible=\"true\">\r\n            <omgdc:Bounds height=\"40.0\" width=\"40.0\" x=\"550.0\" y=\"160.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n                <omgdc:Bounds height=\"12.0\" width=\"102.0\" x=\"521.0\" y=\"127.0\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-E49425CF-8287-4798-B622-D2A7D78EF00B\" id=\"sid-E49425CF-8287-4798-B622-D2A7D78EF00B_gui\">\r\n            <omgdc:Bounds height=\"80.0\" width=\"100.0\" x=\"687.5\" y=\"140.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\">\r\n                <omgdc:Bounds height=\"36.0\" width=\"83.14285278320312\" x=\"695.9285736083984\" y=\"162.0\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"END_EVENT\" id=\"END_EVENT_gui\">\r\n            <omgdc:Bounds height=\"28.0\" width=\"28.0\" x=\"865.0\" y=\"166.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n                <omgdc:Bounds height=\"11.0\" width=\"62.857147216796875\" x=\"847.5714263916016\" y=\"196.0\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNShape bpmnElement=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9\" id=\"sid-5134932A-1863-4FFA-BB3C-A4B4078B11A9_gui\" isMarkerVisible=\"true\">\r\n            <omgdc:Bounds height=\"40.0\" width=\"40.0\" x=\"240.0\" y=\"160.0\"/>\r\n        </bpmndi:BPMNShape>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A\" id=\"sid-EE8A7BA0-5D66-4F8B-80E3-CC2751B3856A_gui\">\r\n            <omgdi:waypoint x=\"452.5\" y=\"180\"/>\r\n            <omgdi:waypoint x=\"550.0\" y=\"180\"/>\r\n        </bpmndi:BPMNEdge>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB\" id=\"sid-8B820AF5-DC5C-4618-B854-E08B71FB55CB_gui\">\r\n            <omgdi:waypoint x=\"590.0\" y=\"180\"/>\r\n            <omgdi:waypoint x=\"687.5\" y=\"180\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n                <omgdc:Bounds height=\"12.048704338048935\" width=\"16.32155963195521\" x=\"597.8850936986571\" y=\"155\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNEdge>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD\" id=\"sid-7B791A11-2F2E-4D80-AFB3-91A02CF2B4FD_gui\">\r\n            <omgdi:waypoint x=\"180.0\" y=\"180\"/>\r\n            <omgdi:waypoint x=\"240.0\" y=\"180\"/>\r\n        </bpmndi:BPMNEdge>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D\" id=\"sid-4DC479E5-5C20-4948-BCFC-9EC5E2F66D8D_gui\">\r\n            <omgdi:waypoint x=\"280.0\" y=\"180\"/>\r\n            <omgdi:waypoint x=\"352.5\" y=\"180\"/>\r\n        </bpmndi:BPMNEdge>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C\" id=\"sid-57EB1F24-BD94-479A-BF1F-57F1EAA19C6C_gui\">\r\n            <omgdi:waypoint x=\"787.5\" y=\"180.0\"/>\r\n            <omgdi:waypoint x=\"865.0\" y=\"180.0\"/>\r\n        </bpmndi:BPMNEdge>\r\n        <bpmndi:BPMNEdge bpmnElement=\"sid-337A23B9-A923-4CCE-B613-3E247B773CCE\" id=\"sid-337A23B9-A923-4CCE-B613-3E247B773CCE_gui\">\r\n            <omgdi:waypoint x=\"570.5\" y=\"200.0\"/>\r\n            <omgdi:waypoint x=\"570.5\" y=\"269.0\"/>\r\n            <omgdi:waypoint x=\"260.5\" y=\"269.0\"/>\r\n            <omgdi:waypoint x=\"260.5\" y=\"200.0\"/>\r\n            <bpmndi:BPMNLabel labelStyle=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n                <omgdc:Bounds height=\"21.4285888671875\" width=\"12.0\" x=\"550\" y=\"205\"/>\r\n            </bpmndi:BPMNLabel>\r\n        </bpmndi:BPMNEdge>\r\n    </bpmndi:BPMNPlane>\r\n    <bpmndi:BPMNLabelStyle id=\"sid-e0502d32-f8d1-41cf-9c4a-cbb49fecf581\">\r\n        <omgdc:Font isBold=\"false\" isItalic=\"false\" isStrikeThrough=\"false\" isUnderline=\"false\" name=\"Arial\" size=\"11.0\"/>\r\n    </bpmndi:BPMNLabelStyle>\r\n    <bpmndi:BPMNLabelStyle id=\"sid-84cb49fd-2f7c-44fb-8950-83c3fa153d3b\">\r\n        <omgdc:Font isBold=\"false\" isItalic=\"false\" isStrikeThrough=\"false\" isUnderline=\"false\" name=\"Arial\" size=\"12.0\"/>\r\n    </bpmndi:BPMNLabelStyle>\r\n</bpmndi:BPMNDiagram>\r\n</definitions>\r\n\r\n";
+
+    var diagramXML2 = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>\n" +
+            "<semantic:definitions id=\"_1364754596385\" name=\"Car Repair Process v0.20\" targetNamespace=\"http://www.trisotech.com/definitions/_1364754596385\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\" xmlns:semantic=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
+            "    <semantic:process isExecutable=\"false\" id=\"_6\">\n" +
+            "        <semantic:dataObject isCollection=\"false\" id=\"DF1364754596565\"/>\n" +
+            "        <semantic:dataObject isCollection=\"false\" id=\"DF1364754596566\"/>\n" +
+            "        <semantic:startEvent name=\"Customer Arrives\" id=\"_51BDA265-2FF5-40CB-B68D-1FBF9DAAA74C\">\n" +
+            "            <semantic:outgoing>_896FB358-BF3A-4609-8E83-8405D72DEA9B</semantic:outgoing>\n" +
+            "        </semantic:startEvent>\n" +
+            "        <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Make Estimate\" id=\"_BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\">\n" +
+            "            <semantic:incoming>_896FB358-BF3A-4609-8E83-8405D72DEA9B</semantic:incoming>\n" +
+            "            <semantic:outgoing>_222A5787-C138-497B-8638-02121C5E0477</semantic:outgoing>\n" +
+            "            <semantic:ioSpecification>\n" +
+            "                <semantic:dataInput id=\"Din1364754596628\"/>\n" +
+            "                <semantic:dataOutput id=\"Dout1364754596626\"/>\n" +
+            "                <semantic:inputSet>\n" +
+            "                    <semantic:dataInputRefs>Din1364754596628</semantic:dataInputRefs>\n" +
+            "                </semantic:inputSet>\n" +
+            "                <semantic:outputSet>\n" +
+            "                    <semantic:dataOutputRefs>Dout1364754596626</semantic:dataOutputRefs>\n" +
+            "                </semantic:outputSet>\n" +
+            "            </semantic:ioSpecification>\n" +
+            "            <semantic:dataInputAssociation id=\"_9EB2F46F-FA87-4DB3-9EA5-4CBA7FC355B2\">\n" +
+            "                <semantic:sourceRef>_6F155721-2EB2-4570-BFE0-E39C0B3EAD82</semantic:sourceRef>\n" +
+            "                <semantic:targetRef>Din1364754596628</semantic:targetRef>\n" +
+            "            </semantic:dataInputAssociation>\n" +
+            "            <semantic:dataOutputAssociation id=\"_D5635CA0-2E65-458D-A25B-B7EAC7E888E2\">\n" +
+            "                <semantic:sourceRef>Dout1364754596626</semantic:sourceRef>\n" +
+            "                <semantic:targetRef>_44E5E2EF-2B2F-4689-8531-4D451808B0A6</semantic:targetRef>\n" +
+            "            </semantic:dataOutputAssociation>\n" +
+            "        </semantic:task>\n" +
+            "        <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Verify if Estimate Accepted\" id=\"_D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\">\n" +
+            "            <semantic:incoming>_222A5787-C138-497B-8638-02121C5E0477</semantic:incoming>\n" +
+            "            <semantic:outgoing>_1F31B20E-FE41-440D-9D44-E7437D1639C6</semantic:outgoing>\n" +
+            "            <semantic:ioSpecification>\n" +
+            "                <semantic:dataInput id=\"Din1364754596627\"/>\n" +
+            "                <semantic:inputSet>\n" +
+            "                    <semantic:dataInputRefs>Din1364754596627</semantic:dataInputRefs>\n" +
+            "                </semantic:inputSet>\n" +
+            "                <semantic:outputSet/>\n" +
+            "            </semantic:ioSpecification>\n" +
+            "            <semantic:dataInputAssociation id=\"_C2B6A48C-B636-4186-955B-9C73CD3FA580\">\n" +
+            "                <semantic:sourceRef>_44E5E2EF-2B2F-4689-8531-4D451808B0A6</semantic:sourceRef>\n" +
+            "                <semantic:targetRef>Din1364754596627</semantic:targetRef>\n" +
+            "            </semantic:dataInputAssociation>\n" +
+            "        </semantic:task>\n" +
+            "        <semantic:exclusiveGateway gatewayDirection=\"Unspecified\" name=\"Accepted?\" id=\"_F7498C3B-5925-415A-80D7-D16758B353C9\">\n" +
+            "            <semantic:incoming>_1F31B20E-FE41-440D-9D44-E7437D1639C6</semantic:incoming>\n" +
+            "            <semantic:outgoing>_3654E294-536A-4CD2-9950-11F02657EE60</semantic:outgoing>\n" +
+            "            <semantic:outgoing>_3B161ED4-4C10-4349-9A2D-B4E002D5EC0E</semantic:outgoing>\n" +
+            "        </semantic:exclusiveGateway>\n" +
+            "        <semantic:endEvent name=\"Initial Estimate Not Accepted\" id=\"_87E52808-857B-45B0-93E8-F6D7AC0B4B3E\">\n" +
+            "            <semantic:incoming>_3654E294-536A-4CD2-9950-11F02657EE60</semantic:incoming>\n" +
+            "        </semantic:endEvent>\n" +
+            "        <semantic:subProcess triggeredByEvent=\"false\" completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Repair Car\" id=\"_EBE375AE-E49A-47F7-8E04-DA6A1532ECC2\">\n" +
+            "            <semantic:incoming>_3B161ED4-4C10-4349-9A2D-B4E002D5EC0E</semantic:incoming>\n" +
+            "            <semantic:outgoing>_0884CEBC-44CE-4BE2-958F-8941946BDA64</semantic:outgoing>\n" +
+            "            <semantic:startEvent name=\"Start Repairs\" id=\"_FA77D7D8-9C02-4006-942A-B003AEDA5E3C\">\n" +
+            "                <semantic:outgoing>_77A40DB9-8B5A-4E50-9138-ADCA63E4A219</semantic:outgoing>\n" +
+            "            </semantic:startEvent>\n" +
+            "            <semantic:exclusiveGateway gatewayDirection=\"Unspecified\" name=\"\" id=\"_7D509478-6734-4004-B618-32339FA33D31\">\n" +
+            "                <semantic:incoming>_77A40DB9-8B5A-4E50-9138-ADCA63E4A219</semantic:incoming>\n" +
+            "                <semantic:incoming>_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73</semantic:incoming>\n" +
+            "                <semantic:outgoing>_E2740126-A38E-40E2-9FA9-554778B51381</semantic:outgoing>\n" +
+            "            </semantic:exclusiveGateway>\n" +
+            "            <semantic:subProcess triggeredByEvent=\"true\" completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"\" id=\"_AF4F8D5E-E399-4ED8-992F-9AA653C17D6E\">\n" +
+            "                <semantic:startEvent isInterrupting=\"false\" name=\"Customer Requests Additional  Repairs\" id=\"_25E36E2C-9196-4170-8BA3-52DDF55D177E\">\n" +
+            "                    <semantic:outgoing>_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F</semantic:outgoing>\n" +
+            "                    <semantic:signalEventDefinition/>\n" +
+            "                </semantic:startEvent>\n" +
+            "                <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Add Additional Issue to List\" id=\"_D226B9E0-0194-481E-AAEC-32473D45FEEF\">\n" +
+            "                    <semantic:incoming>_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F</semantic:incoming>\n" +
+            "                    <semantic:outgoing>_24A3FEEC-8DE6-42DC-9B85-D076EB8909A4</semantic:outgoing>\n" +
+            "                    <semantic:ioSpecification>\n" +
+            "                        <semantic:dataOutput id=\"Dout1364754596601\"/>\n" +
+            "                        <semantic:inputSet/>\n" +
+            "                        <semantic:outputSet>\n" +
+            "                            <semantic:dataOutputRefs>Dout1364754596601</semantic:dataOutputRefs>\n" +
+            "                        </semantic:outputSet>\n" +
+            "                    </semantic:ioSpecification>\n" +
+            "                    <semantic:dataOutputAssociation id=\"_94CD5662-8EB9-4B23-A486-8B6970314AD7\">\n" +
+            "                        <semantic:sourceRef>Dout1364754596601</semantic:sourceRef>\n" +
+            "                        <semantic:targetRef>_C96534C9-934E-415D-8903-28DA8712B25E</semantic:targetRef>\n" +
+            "                    </semantic:dataOutputAssociation>\n" +
+            "                </semantic:task>\n" +
+            "                <semantic:endEvent name=\"Issue List Amended By Customer\" id=\"_4C551546-C127-4CD9-9106-78A3FC8978A6\">\n" +
+            "                    <semantic:incoming>_24A3FEEC-8DE6-42DC-9B85-D076EB8909A4</semantic:incoming>\n" +
+            "                </semantic:endEvent>\n" +
+            "                <semantic:dataObjectReference dataObjectRef=\"DF1364754596565\" name=\"Itemized  Issues\" id=\"_C96534C9-934E-415D-8903-28DA8712B25E\">\n" +
+            "                    <semantic:dataState name=\"Amended\"/>\n" +
+            "                </semantic:dataObjectReference>\n" +
+            "                <semantic:sequenceFlow sourceRef=\"_25E36E2C-9196-4170-8BA3-52DDF55D177E\" targetRef=\"_D226B9E0-0194-481E-AAEC-32473D45FEEF\" name=\"\" id=\"_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F\"/>\n" +
+            "                <semantic:sequenceFlow sourceRef=\"_D226B9E0-0194-481E-AAEC-32473D45FEEF\" targetRef=\"_4C551546-C127-4CD9-9106-78A3FC8978A6\" name=\"\" id=\"_24A3FEEC-8DE6-42DC-9B85-D076EB8909A4\"/>\n" +
+            "            </semantic:subProcess>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Take Apart for Issue\" id=\"_91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854\">\n" +
+            "                <semantic:incoming>_E2740126-A38E-40E2-9FA9-554778B51381</semantic:incoming>\n" +
+            "                <semantic:outgoing>_F165F4A8-69B1-4B19-A1A4-470BDE12FA77</semantic:outgoing>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Inspect for Issue\" id=\"_A9E2794B-4C41-429B-9C04-46C5B8741DDC\">\n" +
+            "                <semantic:incoming>_F165F4A8-69B1-4B19-A1A4-470BDE12FA77</semantic:incoming>\n" +
+            "                <semantic:outgoing>_FE1BBBD3-1730-4BC0-895D-76106317615D</semantic:outgoing>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:exclusiveGateway gatewayDirection=\"Unspecified\" name=\"\" id=\"_EA5D13A2-32CB-4F3D-80EF-F0886538C228\">\n" +
+            "                <semantic:incoming>_FE1BBBD3-1730-4BC0-895D-76106317615D</semantic:incoming>\n" +
+            "                <semantic:incoming>_F298A83E-5AD6-4BB6-95AF-E5B0A26A51FC</semantic:incoming>\n" +
+            "                <semantic:outgoing>_53EFF0AE-C44D-4EA4-A3AF-FA7E52B4CE52</semantic:outgoing>\n" +
+            "            </semantic:exclusiveGateway>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Handle New Found Issue\" id=\"_8040CF1A-3CAA-4A98-8E94-DD405EF233E9\">\n" +
+            "                <semantic:incoming>_BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC</semantic:incoming>\n" +
+            "                <semantic:outgoing>_F298A83E-5AD6-4BB6-95AF-E5B0A26A51FC</semantic:outgoing>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:exclusiveGateway gatewayDirection=\"Unspecified\" name=\"\" id=\"_5C0BF369-3360-43C3-9792-3E6492BA7291\">\n" +
+            "                <semantic:incoming>_53EFF0AE-C44D-4EA4-A3AF-FA7E52B4CE52</semantic:incoming>\n" +
+            "                <semantic:outgoing>_751A4C0A-FC0F-441E-A587-4016BE8101B3</semantic:outgoing>\n" +
+            "                <semantic:outgoing>_BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC</semantic:outgoing>\n" +
+            "            </semantic:exclusiveGateway>\n" +
+            "            <semantic:subProcess triggeredByEvent=\"true\" completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"\" id=\"_C89D1737-9813-44C2-A5D5-87649AE7AEC6\">\n" +
+            "                <semantic:startEvent isInterrupting=\"true\" name=\"Repairs Aborted\" id=\"_F9A272EE-D325-44CF-AFFC-4A615D2C9971\">\n" +
+            "                    <semantic:outgoing>_CF5A1710-35F8-48B6-85FD-A90C99FEC5B3</semantic:outgoing>\n" +
+            "                    <semantic:signalEventDefinition/>\n" +
+            "                </semantic:startEvent>\n" +
+            "                <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Prepare Car for remittance\" id=\"_52CCF00D-C0E3-4931-8D4E-6C989E317A07\">\n" +
+            "                    <semantic:incoming>_CF5A1710-35F8-48B6-85FD-A90C99FEC5B3</semantic:incoming>\n" +
+            "                    <semantic:outgoing>_19517CEB-6A0E-4B88-8911-FEEEFE3B55CE</semantic:outgoing>\n" +
+            "                    <semantic:ioSpecification>\n" +
+            "                        <semantic:dataOutput id=\"Dout1364754596612\"/>\n" +
+            "                        <semantic:inputSet/>\n" +
+            "                        <semantic:outputSet>\n" +
+            "                            <semantic:dataOutputRefs>Dout1364754596612</semantic:dataOutputRefs>\n" +
+            "                        </semantic:outputSet>\n" +
+            "                    </semantic:ioSpecification>\n" +
+            "                    <semantic:dataOutputAssociation id=\"_9DBCFE15-F025-4A3B-A3F7-41BFCFA182D1\">\n" +
+            "                        <semantic:sourceRef>Dout1364754596612</semantic:sourceRef>\n" +
+            "                        <semantic:targetRef>_4134CEB9-F012-4F9E-9EF3-932E18E731E5</semantic:targetRef>\n" +
+            "                    </semantic:dataOutputAssociation>\n" +
+            "                </semantic:task>\n" +
+            "                <semantic:endEvent name=\"Repairs Aborted\" id=\"_2BBAB508-4026-40F7-8FC3-23E68E77EE46\">\n" +
+            "                    <semantic:incoming>_19517CEB-6A0E-4B88-8911-FEEEFE3B55CE</semantic:incoming>\n" +
+            "                    <semantic:terminateEventDefinition/>\n" +
+            "                </semantic:endEvent>\n" +
+            "                <semantic:dataObjectReference dataObjectRef=\"DF1364754596565\" name=\"Itemized  Issues\" id=\"_4134CEB9-F012-4F9E-9EF3-932E18E731E5\">\n" +
+            "                    <semantic:dataState name=\"Completed Items\"/>\n" +
+            "                </semantic:dataObjectReference>\n" +
+            "                <semantic:sequenceFlow sourceRef=\"_F9A272EE-D325-44CF-AFFC-4A615D2C9971\" targetRef=\"_52CCF00D-C0E3-4931-8D4E-6C989E317A07\" name=\"\" id=\"_CF5A1710-35F8-48B6-85FD-A90C99FEC5B3\"/>\n" +
+            "                <semantic:sequenceFlow sourceRef=\"_52CCF00D-C0E3-4931-8D4E-6C989E317A07\" targetRef=\"_2BBAB508-4026-40F7-8FC3-23E68E77EE46\" name=\"\" id=\"_19517CEB-6A0E-4B88-8911-FEEEFE3B55CE\"/>\n" +
+            "            </semantic:subProcess>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Repair Issue\" id=\"_071B5D0A-5225-4E55-9105-8D15169DAC96\">\n" +
+            "                <semantic:incoming>_751A4C0A-FC0F-441E-A587-4016BE8101B3</semantic:incoming>\n" +
+            "                <semantic:outgoing>_7BCC27D0-D619-4895-92F5-4516D9583479</semantic:outgoing>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Verify if more Issues on Itemized List\" id=\"_2A752317-508C-4BB1-9AE7-49FBC7391B2B\">\n" +
+            "                <semantic:incoming>_7BCC27D0-D619-4895-92F5-4516D9583479</semantic:incoming>\n" +
+            "                <semantic:outgoing>_8C74C362-DDEF-48B9-AED2-E4034E917A40</semantic:outgoing>\n" +
+            "                <semantic:ioSpecification>\n" +
+            "                    <semantic:dataInput id=\"Din1364754596619\"/>\n" +
+            "                    <semantic:inputSet>\n" +
+            "                        <semantic:dataInputRefs>Din1364754596619</semantic:dataInputRefs>\n" +
+            "                    </semantic:inputSet>\n" +
+            "                    <semantic:outputSet/>\n" +
+            "                </semantic:ioSpecification>\n" +
+            "                <semantic:dataInputAssociation id=\"_7586D519-92CA-4824-93B9-59E925689D65\">\n" +
+            "                    <semantic:sourceRef>_A5699C3D-74E0-497C-8B62-607B9909A0C9</semantic:sourceRef>\n" +
+            "                    <semantic:targetRef>Din1364754596619</semantic:targetRef>\n" +
+            "                </semantic:dataInputAssociation>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:exclusiveGateway gatewayDirection=\"Unspecified\" name=\"Have further issues?\" id=\"_B78F09D7-A493-4FDC-B20C-B251C7405D95\">\n" +
+            "                <semantic:incoming>_8C74C362-DDEF-48B9-AED2-E4034E917A40</semantic:incoming>\n" +
+            "                <semantic:outgoing>_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73</semantic:outgoing>\n" +
+            "                <semantic:outgoing>_4799D2B0-A204-4A08-94ED-796C25D9AE57</semantic:outgoing>\n" +
+            "            </semantic:exclusiveGateway>\n" +
+            "            <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Prepare Car for Remittance\" id=\"_DFFBC045-8147-468B-BC85-DAF1134E19CF\">\n" +
+            "                <semantic:incoming>_4799D2B0-A204-4A08-94ED-796C25D9AE57</semantic:incoming>\n" +
+            "                <semantic:outgoing>_56B35746-D946-481B-95EF-27D2CB8F4D29</semantic:outgoing>\n" +
+            "            </semantic:task>\n" +
+            "            <semantic:endEvent name=\"Repairs Completed\" id=\"_B67579E4-E038-4D9D-AA46-A3F9628CADA1\">\n" +
+            "                <semantic:incoming>_56B35746-D946-481B-95EF-27D2CB8F4D29</semantic:incoming>\n" +
+            "            </semantic:endEvent>\n" +
+            "            <semantic:dataObjectReference dataObjectRef=\"DF1364754596565\" name=\"Itemized  Issues\" id=\"_A5699C3D-74E0-497C-8B62-607B9909A0C9\">\n" +
+            "                <semantic:dataState name=\"Accepted\"/>\n" +
+            "            </semantic:dataObjectReference>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_FA77D7D8-9C02-4006-942A-B003AEDA5E3C\" targetRef=\"_7D509478-6734-4004-B618-32339FA33D31\" name=\"\" id=\"_77A40DB9-8B5A-4E50-9138-ADCA63E4A219\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_7D509478-6734-4004-B618-32339FA33D31\" targetRef=\"_91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854\" name=\"\" id=\"_E2740126-A38E-40E2-9FA9-554778B51381\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_B78F09D7-A493-4FDC-B20C-B251C7405D95\" targetRef=\"_7D509478-6734-4004-B618-32339FA33D31\" name=\"More Issues to Repair\" id=\"_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_B78F09D7-A493-4FDC-B20C-B251C7405D95\" targetRef=\"_DFFBC045-8147-468B-BC85-DAF1134E19CF\" name=\"No More Issues to Repair\" id=\"_4799D2B0-A204-4A08-94ED-796C25D9AE57\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854\" targetRef=\"_A9E2794B-4C41-429B-9C04-46C5B8741DDC\" name=\"\" id=\"_F165F4A8-69B1-4B19-A1A4-470BDE12FA77\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_EA5D13A2-32CB-4F3D-80EF-F0886538C228\" targetRef=\"_5C0BF369-3360-43C3-9792-3E6492BA7291\" name=\"\" id=\"_53EFF0AE-C44D-4EA4-A3AF-FA7E52B4CE52\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_5C0BF369-3360-43C3-9792-3E6492BA7291\" targetRef=\"_071B5D0A-5225-4E55-9105-8D15169DAC96\" name=\"No Added  Issue Found\" id=\"_751A4C0A-FC0F-441E-A587-4016BE8101B3\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_5C0BF369-3360-43C3-9792-3E6492BA7291\" targetRef=\"_8040CF1A-3CAA-4A98-8E94-DD405EF233E9\" name=\"New Issue  Found\" id=\"_BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_A9E2794B-4C41-429B-9C04-46C5B8741DDC\" targetRef=\"_EA5D13A2-32CB-4F3D-80EF-F0886538C228\" name=\"\" id=\"_FE1BBBD3-1730-4BC0-895D-76106317615D\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_8040CF1A-3CAA-4A98-8E94-DD405EF233E9\" targetRef=\"_EA5D13A2-32CB-4F3D-80EF-F0886538C228\" name=\"\" id=\"_F298A83E-5AD6-4BB6-95AF-E5B0A26A51FC\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_071B5D0A-5225-4E55-9105-8D15169DAC96\" targetRef=\"_2A752317-508C-4BB1-9AE7-49FBC7391B2B\" name=\"\" id=\"_7BCC27D0-D619-4895-92F5-4516D9583479\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_2A752317-508C-4BB1-9AE7-49FBC7391B2B\" targetRef=\"_B78F09D7-A493-4FDC-B20C-B251C7405D95\" name=\"\" id=\"_8C74C362-DDEF-48B9-AED2-E4034E917A40\"/>\n" +
+            "            <semantic:sequenceFlow sourceRef=\"_DFFBC045-8147-468B-BC85-DAF1134E19CF\" targetRef=\"_B67579E4-E038-4D9D-AA46-A3F9628CADA1\" name=\"\" id=\"_56B35746-D946-481B-95EF-27D2CB8F4D29\"/>\n" +
+            "        </semantic:subProcess>\n" +
+            "        <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Prepare Invoice\" id=\"_956694A6-DFD0-4422-800E-A7DF51A627C0\">\n" +
+            "            <semantic:incoming>_0884CEBC-44CE-4BE2-958F-8941946BDA64</semantic:incoming>\n" +
+            "            <semantic:outgoing>_79CF3D66-DDC0-4E70-A721-206B98C9106D</semantic:outgoing>\n" +
+            "        </semantic:task>\n" +
+            "        <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Remit Car\" id=\"_78172A06-7EC8-47CC-B49B-01EAD0676195\">\n" +
+            "            <semantic:incoming>_CB71865E-954A-4D3D-874F-8DB33A5B391B</semantic:incoming>\n" +
+            "            <semantic:outgoing>_9088D441-44C5-462B-8695-47D60A7BC451</semantic:outgoing>\n" +
+            "        </semantic:task>\n" +
+            "        <semantic:endEvent name=\"Customer Leaves Shop\" id=\"_4CFC937C-2E42-4671-859E-42E710931963\">\n" +
+            "            <semantic:incoming>_9088D441-44C5-462B-8695-47D60A7BC451</semantic:incoming>\n" +
+            "        </semantic:endEvent>\n" +
+            "        <semantic:task completionQuantity=\"1\" isForCompensation=\"false\" startQuantity=\"1\" name=\"Accept Payment\" id=\"_12A4A22E-9449-4E50-BDFC-AC00C8DE8660\">\n" +
+            "            <semantic:incoming>_79CF3D66-DDC0-4E70-A721-206B98C9106D</semantic:incoming>\n" +
+            "            <semantic:outgoing>_CB71865E-954A-4D3D-874F-8DB33A5B391B</semantic:outgoing>\n" +
+            "        </semantic:task>\n" +
+            "        <semantic:dataObjectReference dataObjectRef=\"DF1364754596565\" name=\"Itemized  Issues\" id=\"_44E5E2EF-2B2F-4689-8531-4D451808B0A6\">\n" +
+            "            <semantic:dataState name=\"Estimated\"/>\n" +
+            "        </semantic:dataObjectReference>\n" +
+            "        <semantic:dataObjectReference dataObjectRef=\"DF1364754596566\" name=\"Reported Issues\" id=\"_6F155721-2EB2-4570-BFE0-E39C0B3EAD82\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_51BDA265-2FF5-40CB-B68D-1FBF9DAAA74C\" targetRef=\"_BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\" name=\"\" id=\"_896FB358-BF3A-4609-8E83-8405D72DEA9B\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\" targetRef=\"_D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\" name=\"\" id=\"_222A5787-C138-497B-8638-02121C5E0477\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\" targetRef=\"_F7498C3B-5925-415A-80D7-D16758B353C9\" name=\"\" id=\"_1F31B20E-FE41-440D-9D44-E7437D1639C6\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_F7498C3B-5925-415A-80D7-D16758B353C9\" targetRef=\"_87E52808-857B-45B0-93E8-F6D7AC0B4B3E\" name=\"Initial Estimate Not Accepted\" id=\"_3654E294-536A-4CD2-9950-11F02657EE60\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_F7498C3B-5925-415A-80D7-D16758B353C9\" targetRef=\"_EBE375AE-E49A-47F7-8E04-DA6A1532ECC2\" name=\"Initial Estimate Accepted\" id=\"_3B161ED4-4C10-4349-9A2D-B4E002D5EC0E\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_78172A06-7EC8-47CC-B49B-01EAD0676195\" targetRef=\"_4CFC937C-2E42-4671-859E-42E710931963\" name=\"\" id=\"_9088D441-44C5-462B-8695-47D60A7BC451\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_EBE375AE-E49A-47F7-8E04-DA6A1532ECC2\" targetRef=\"_956694A6-DFD0-4422-800E-A7DF51A627C0\" name=\"\" id=\"_0884CEBC-44CE-4BE2-958F-8941946BDA64\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_956694A6-DFD0-4422-800E-A7DF51A627C0\" targetRef=\"_12A4A22E-9449-4E50-BDFC-AC00C8DE8660\" name=\"\" id=\"_79CF3D66-DDC0-4E70-A721-206B98C9106D\"/>\n" +
+            "        <semantic:sequenceFlow sourceRef=\"_12A4A22E-9449-4E50-BDFC-AC00C8DE8660\" targetRef=\"_78172A06-7EC8-47CC-B49B-01EAD0676195\" name=\"\" id=\"_CB71865E-954A-4D3D-874F-8DB33A5B391B\"/>\n" +
+            "    </semantic:process>\n" +
+            "    <bpmndi:BPMNDiagram documentation=\"\" id=\"Trisotech_Visio-_6\" name=\"Car Repair\" resolution=\"96.00000267028808\">\n" +
+            "        <bpmndi:BPMNPlane bpmnElement=\"_6\">\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_51BDA265-2FF5-40CB-B68D-1FBF9DAAA74C\" id=\"S1364754596588__51BDA265-2FF5-40CB-B68D-1FBF9DAAA74C\">\n" +
+            "                <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"101.0\" y=\"426.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\" id=\"S1364754596589__BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"167.0\" y=\"407.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\" id=\"S1364754596590__D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"287.0\" y=\"407.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_F7498C3B-5925-415A-80D7-D16758B353C9\" isMarkerVisible=\"true\" id=\"S1364754596591__F7498C3B-5925-415A-80D7-D16758B353C9\">\n" +
+            "                <dc:Bounds height=\"42.0\" width=\"42.0\" x=\"407.0\" y=\"420.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_87E52808-857B-45B0-93E8-F6D7AC0B4B3E\" id=\"S1364754596592__87E52808-857B-45B0-93E8-F6D7AC0B4B3E\">\n" +
+            "                <dc:Bounds height=\"32.0\" width=\"32.0\" x=\"462.0\" y=\"548.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_EBE375AE-E49A-47F7-8E04-DA6A1532ECC2\" isExpanded=\"true\" id=\"S1364754596593__EBE375AE-E49A-47F7-8E04-DA6A1532ECC2\">\n" +
+            "                <dc:Bounds height=\"720.0\" width=\"1327.0\" x=\"627.0\" y=\"24.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_FA77D7D8-9C02-4006-942A-B003AEDA5E3C\" id=\"S1364754596594__FA77D7D8-9C02-4006-942A-B003AEDA5E3C\">\n" +
+            "                <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"667.0\" y=\"268.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_7D509478-6734-4004-B618-32339FA33D31\" isMarkerVisible=\"true\" id=\"S1364754596595__7D509478-6734-4004-B618-32339FA33D31\">\n" +
+            "                <dc:Bounds height=\"42.0\" width=\"42.0\" x=\"734.0\" y=\"263.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_AF4F8D5E-E399-4ED8-992F-9AA653C17D6E\" isExpanded=\"true\" id=\"S1364754596596__AF4F8D5E-E399-4ED8-992F-9AA653C17D6E\">\n" +
+            "                <dc:Bounds height=\"226.0\" width=\"426.0\" x=\"801.0\" y=\"480.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_25E36E2C-9196-4170-8BA3-52DDF55D177E\" id=\"S1364754596597__25E36E2C-9196-4170-8BA3-52DDF55D177E\">\n" +
+            "                <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"843.0\" y=\"602.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_D226B9E0-0194-481E-AAEC-32473D45FEEF\" id=\"S1364754596598__D226B9E0-0194-481E-AAEC-32473D45FEEF\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"938.0\" y=\"584.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_4C551546-C127-4CD9-9106-78A3FC8978A6\" id=\"S1364754596599__4C551546-C127-4CD9-9106-78A3FC8978A6\">\n" +
+            "                <dc:Bounds height=\"32.0\" width=\"32.0\" x=\"1115.0\" y=\"601.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_C96534C9-934E-415D-8903-28DA8712B25E\" id=\"S1364754596600__C96534C9-934E-415D-8903-28DA8712B25E\">\n" +
+            "                <dc:Bounds height=\"38.0\" width=\"30.0\" x=\"1018.0\" y=\"489.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854\" id=\"S1364754596602__91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"811.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_A9E2794B-4C41-429B-9C04-46C5B8741DDC\" id=\"S1364754596603__A9E2794B-4C41-429B-9C04-46C5B8741DDC\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"930.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_EA5D13A2-32CB-4F3D-80EF-F0886538C228\" isMarkerVisible=\"true\" id=\"S1364754596604__EA5D13A2-32CB-4F3D-80EF-F0886538C228\">\n" +
+            "                <dc:Bounds height=\"42.0\" width=\"42.0\" x=\"1050.0\" y=\"263.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_8040CF1A-3CAA-4A98-8E94-DD405EF233E9\" id=\"S1364754596605__8040CF1A-3CAA-4A98-8E94-DD405EF233E9\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"1108.0\" y=\"144.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_5C0BF369-3360-43C3-9792-3E6492BA7291\" isMarkerVisible=\"true\" id=\"S1364754596606__5C0BF369-3360-43C3-9792-3E6492BA7291\">\n" +
+            "                <dc:Bounds height=\"42.0\" width=\"42.0\" x=\"1208.0\" y=\"263.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_C89D1737-9813-44C2-A5D5-87649AE7AEC6\" isExpanded=\"true\" id=\"S1364754596607__C89D1737-9813-44C2-A5D5-87649AE7AEC6\">\n" +
+            "                <dc:Bounds height=\"228.0\" width=\"451.0\" x=\"1339.0\" y=\"478.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_F9A272EE-D325-44CF-AFFC-4A615D2C9971\" id=\"S1364754596608__F9A272EE-D325-44CF-AFFC-4A615D2C9971\">\n" +
+            "                <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"1396.0\" y=\"602.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_52CCF00D-C0E3-4931-8D4E-6C989E317A07\" id=\"S1364754596609__52CCF00D-C0E3-4931-8D4E-6C989E317A07\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"1474.0\" y=\"583.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_2BBAB508-4026-40F7-8FC3-23E68E77EE46\" id=\"S1364754596610__2BBAB508-4026-40F7-8FC3-23E68E77EE46\">\n" +
+            "                <dc:Bounds height=\"32.0\" width=\"32.0\" x=\"1687.0\" y=\"601.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_4134CEB9-F012-4F9E-9EF3-932E18E731E5\" id=\"S1364754596611__4134CEB9-F012-4F9E-9EF3-932E18E731E5\">\n" +
+            "                <dc:Bounds height=\"38.0\" width=\"30.0\" x=\"1546.0\" y=\"487.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_071B5D0A-5225-4E55-9105-8D15169DAC96\" id=\"S1364754596613__071B5D0A-5225-4E55-9105-8D15169DAC96\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"1359.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_2A752317-508C-4BB1-9AE7-49FBC7391B2B\" id=\"S1364754596614__2A752317-508C-4BB1-9AE7-49FBC7391B2B\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"1489.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_B78F09D7-A493-4FDC-B20C-B251C7405D95\" isMarkerVisible=\"true\" id=\"S1364754596615__B78F09D7-A493-4FDC-B20C-B251C7405D95\">\n" +
+            "                <dc:Bounds height=\"42.0\" width=\"42.0\" x=\"1620.0\" y=\"263.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_DFFBC045-8147-468B-BC85-DAF1134E19CF\" id=\"S1364754596616__DFFBC045-8147-468B-BC85-DAF1134E19CF\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"1744.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_B67579E4-E038-4D9D-AA46-A3F9628CADA1\" id=\"S1364754596617__B67579E4-E038-4D9D-AA46-A3F9628CADA1\">\n" +
+            "                <dc:Bounds height=\"32.0\" width=\"32.0\" x=\"1880.0\" y=\"268.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_A5699C3D-74E0-497C-8B62-607B9909A0C9\" id=\"S1364754596618__A5699C3D-74E0-497C-8B62-607B9909A0C9\">\n" +
+            "                <dc:Bounds height=\"38.0\" width=\"30.0\" x=\"1489.0\" y=\"144.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_956694A6-DFD0-4422-800E-A7DF51A627C0\" id=\"S1364754596620__956694A6-DFD0-4422-800E-A7DF51A627C0\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"2018.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_78172A06-7EC8-47CC-B49B-01EAD0676195\" id=\"S1364754596621__78172A06-7EC8-47CC-B49B-01EAD0676195\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"2241.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_4CFC937C-2E42-4671-859E-42E710931963\" id=\"S1364754596622__4CFC937C-2E42-4671-859E-42E710931963\">\n" +
+            "                <dc:Bounds height=\"32.0\" width=\"32.0\" x=\"2368.0\" y=\"268.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_12A4A22E-9449-4E50-BDFC-AC00C8DE8660\" id=\"S1364754596623__12A4A22E-9449-4E50-BDFC-AC00C8DE8660\">\n" +
+            "                <dc:Bounds height=\"68.0\" width=\"83.0\" x=\"2134.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_44E5E2EF-2B2F-4689-8531-4D451808B0A6\" id=\"S1364754596624__44E5E2EF-2B2F-4689-8531-4D451808B0A6\">\n" +
+            "                <dc:Bounds height=\"38.0\" width=\"30.0\" x=\"254.0\" y=\"545.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNShape bpmnElement=\"_6F155721-2EB2-4570-BFE0-E39C0B3EAD82\" id=\"S1364754596625__6F155721-2EB2-4570-BFE0-E39C0B3EAD82\">\n" +
+            "                <dc:Bounds height=\"38.0\" width=\"30.0\" x=\"143.0\" y=\"320.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNShape>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_E2740126-A38E-40E2-9FA9-554778B51381\" id=\"E1364754596630__E2740126-A38E-40E2-9FA9-554778B51381\">\n" +
+            "                <di:waypoint x=\"775.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"789.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"811.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_79CF3D66-DDC0-4E70-A721-206B98C9106D\" id=\"E1364754596631__79CF3D66-DDC0-4E70-A721-206B98C9106D\">\n" +
+            "                <di:waypoint x=\"2101.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"2134.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_7BCC27D0-D619-4895-92F5-4516D9583479\" id=\"E1364754596632__7BCC27D0-D619-4895-92F5-4516D9583479\">\n" +
+            "                <di:waypoint x=\"1442.0\" y=\"272.0\"/>\n" +
+            "                <di:waypoint x=\"1456.0\" y=\"272.0\"/>\n" +
+            "                <di:waypoint x=\"1489.0\" y=\"272.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_F165F4A8-69B1-4B19-A1A4-470BDE12FA77\" id=\"E1364754596633__F165F4A8-69B1-4B19-A1A4-470BDE12FA77\">\n" +
+            "                <di:waypoint x=\"894.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"930.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_24A3FEEC-8DE6-42DC-9B85-D076EB8909A4\" id=\"E1364754596634__24A3FEEC-8DE6-42DC-9B85-D076EB8909A4\">\n" +
+            "                <di:waypoint x=\"1021.0\" y=\"618.0\"/>\n" +
+            "                <di:waypoint x=\"1035.0\" y=\"618.0\"/>\n" +
+            "                <di:waypoint x=\"1115.0\" y=\"618.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC\" id=\"E1364754596635__BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC\">\n" +
+            "                <di:waypoint x=\"1229.0\" y=\"263.0\"/>\n" +
+            "                <di:waypoint x=\"1229.0\" y=\"178.0\"/>\n" +
+            "                <di:waypoint x=\"1192.0\" y=\"178.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_D5635CA0-2E65-458D-A25B-B7EAC7E888E2\" sourceElement=\"S1364754596589__BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\" id=\"E1364754596636__D5635CA0-2E65-458D-A25B-B7EAC7E888E2\">\n" +
+            "                <di:waypoint x=\"209.0\" y=\"475.0\"/>\n" +
+            "                <di:waypoint x=\"209.0\" y=\"564.0\"/>\n" +
+            "                <di:waypoint x=\"254.0\" y=\"564.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_FE1BBBD3-1730-4BC0-895D-76106317615D\" id=\"E1364754596637__FE1BBBD3-1730-4BC0-895D-76106317615D\">\n" +
+            "                <di:waypoint x=\"1014.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1028.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1050.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_1F31B20E-FE41-440D-9D44-E7437D1639C6\" id=\"E1364754596638__1F31B20E-FE41-440D-9D44-E7437D1639C6\">\n" +
+            "                <di:waypoint x=\"371.0\" y=\"441.0\"/>\n" +
+            "                <di:waypoint x=\"385.0\" y=\"441.0\"/>\n" +
+            "                <di:waypoint x=\"407.0\" y=\"441.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_896FB358-BF3A-4609-8E83-8405D72DEA9B\" id=\"E1364754596639__896FB358-BF3A-4609-8E83-8405D72DEA9B\">\n" +
+            "                <di:waypoint x=\"131.0\" y=\"441.0\"/>\n" +
+            "                <di:waypoint x=\"145.0\" y=\"441.0\"/>\n" +
+            "                <di:waypoint x=\"167.0\" y=\"441.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_222A5787-C138-497B-8638-02121C5E0477\" id=\"E1364754596640__222A5787-C138-497B-8638-02121C5E0477\">\n" +
+            "                <di:waypoint x=\"251.0\" y=\"441.0\"/>\n" +
+            "                <di:waypoint x=\"287.0\" y=\"441.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_0884CEBC-44CE-4BE2-958F-8941946BDA64\" id=\"E1364754596641__0884CEBC-44CE-4BE2-958F-8941946BDA64\">\n" +
+            "                <di:waypoint x=\"1954.0\" y=\"283.0\"/>\n" +
+            "                <di:waypoint x=\"1968.0\" y=\"283.0\"/>\n" +
+            "                <di:waypoint x=\"2018.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_7586D519-92CA-4824-93B9-59E925689D65\" targetElement=\"S1364754596614__2A752317-508C-4BB1-9AE7-49FBC7391B2B\" id=\"E1364754596642__7586D519-92CA-4824-93B9-59E925689D65\">\n" +
+            "                <di:waypoint x=\"1519.0\" y=\"163.0\"/>\n" +
+            "                <di:waypoint x=\"1544.0\" y=\"163.0\"/>\n" +
+            "                <di:waypoint x=\"1544.0\" y=\"250.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_751A4C0A-FC0F-441E-A587-4016BE8101B3\" id=\"E1364754596643__751A4C0A-FC0F-441E-A587-4016BE8101B3\">\n" +
+            "                <di:waypoint x=\"1249.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1359.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73\" id=\"E1364754596644__9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73\">\n" +
+            "                <di:waypoint x=\"1640.0\" y=\"304.0\"/>\n" +
+            "                <di:waypoint x=\"1640.0\" y=\"343.0\"/>\n" +
+            "                <di:waypoint x=\"754.0\" y=\"343.0\"/>\n" +
+            "                <di:waypoint x=\"755.0\" y=\"304.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_F298A83E-5AD6-4BB6-95AF-E5B0A26A51FC\" id=\"E1364754596645__F298A83E-5AD6-4BB6-95AF-E5B0A26A51FC\">\n" +
+            "                <di:waypoint x=\"1108.0\" y=\"178.0\"/>\n" +
+            "                <di:waypoint x=\"1070.0\" y=\"178.0\"/>\n" +
+            "                <di:waypoint x=\"1070.0\" y=\"263.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_C2B6A48C-B636-4186-955B-9C73CD3FA580\" targetElement=\"S1364754596590__D4804AD8-3EE4-47F1-942C-D9EAEA2811F0\" id=\"E1364754596646__C2B6A48C-B636-4186-955B-9C73CD3FA580\">\n" +
+            "                <di:waypoint x=\"285.0\" y=\"564.0\"/>\n" +
+            "                <di:waypoint x=\"329.0\" y=\"564.0\"/>\n" +
+            "                <di:waypoint x=\"329.0\" y=\"475.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_3B161ED4-4C10-4349-9A2D-B4E002D5EC0E\" id=\"E1364754596647__3B161ED4-4C10-4349-9A2D-B4E002D5EC0E\">\n" +
+            "                <di:waypoint x=\"427.0\" y=\"420.0\"/>\n" +
+            "                <di:waypoint x=\"427.0\" y=\"283.0\"/>\n" +
+            "                <di:waypoint x=\"627.0\" y=\"283.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_3654E294-536A-4CD2-9950-11F02657EE60\" id=\"E1364754596648__3654E294-536A-4CD2-9950-11F02657EE60\">\n" +
+            "                <di:waypoint x=\"427.0\" y=\"462.0\"/>\n" +
+            "                <di:waypoint x=\"427.0\" y=\"564.0\"/>\n" +
+            "                <di:waypoint x=\"462.0\" y=\"564.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_9EB2F46F-FA87-4DB3-9EA5-4CBA7FC355B2\" targetElement=\"S1364754596589__BA2B78BE-06A0-46C8-9BA2-D9EC923FDEAA\" id=\"E1364754596649__9EB2F46F-FA87-4DB3-9EA5-4CBA7FC355B2\">\n" +
+            "                <di:waypoint x=\"174.0\" y=\"339.0\"/>\n" +
+            "                <di:waypoint x=\"209.0\" y=\"339.0\"/>\n" +
+            "                <di:waypoint x=\"209.0\" y=\"407.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_9DBCFE15-F025-4A3B-A3F7-41BFCFA182D1\" sourceElement=\"S1364754596609__52CCF00D-C0E3-4931-8D4E-6C989E317A07\" id=\"E1364754596650__9DBCFE15-F025-4A3B-A3F7-41BFCFA182D1\">\n" +
+            "                <di:waypoint x=\"1490.0\" y=\"583.0\"/>\n" +
+            "                <di:waypoint x=\"1490.0\" y=\"506.0\"/>\n" +
+            "                <di:waypoint x=\"1546.0\" y=\"506.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_56B35746-D946-481B-95EF-27D2CB8F4D29\" id=\"E1364754596651__56B35746-D946-481B-95EF-27D2CB8F4D29\">\n" +
+            "                <di:waypoint x=\"1827.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1841.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1880.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_CB71865E-954A-4D3D-874F-8DB33A5B391B\" id=\"E1364754596652__CB71865E-954A-4D3D-874F-8DB33A5B391B\">\n" +
+            "                <di:waypoint x=\"2217.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"2241.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_4799D2B0-A204-4A08-94ED-796C25D9AE57\" id=\"E1364754596653__4799D2B0-A204-4A08-94ED-796C25D9AE57\">\n" +
+            "                <di:waypoint x=\"1661.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1675.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1744.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_77A40DB9-8B5A-4E50-9138-ADCA63E4A219\" id=\"E1364754596654__77A40DB9-8B5A-4E50-9138-ADCA63E4A219\">\n" +
+            "                <di:waypoint x=\"698.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"734.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F\" id=\"E1364754596655__62BD6E5E-B5C0-4719-86CE-D5E30A1D128F\">\n" +
+            "                <di:waypoint x=\"873.0\" y=\"618.0\"/>\n" +
+            "                <di:waypoint x=\"887.0\" y=\"618.0\"/>\n" +
+            "                <di:waypoint x=\"938.0\" y=\"618.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_53EFF0AE-C44D-4EA4-A3AF-FA7E52B4CE52\" id=\"E1364754596656__53EFF0AE-C44D-4EA4-A3AF-FA7E52B4CE52\">\n" +
+            "                <di:waypoint x=\"1091.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1208.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_94CD5662-8EB9-4B23-A486-8B6970314AD7\" sourceElement=\"S1364754596598__D226B9E0-0194-481E-AAEC-32473D45FEEF\" id=\"E1364754596657__94CD5662-8EB9-4B23-A486-8B6970314AD7\">\n" +
+            "                <di:waypoint x=\"954.0\" y=\"584.0\"/>\n" +
+            "                <di:waypoint x=\"954.0\" y=\"509.0\"/>\n" +
+            "                <di:waypoint x=\"1018.0\" y=\"508.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_8C74C362-DDEF-48B9-AED2-E4034E917A40\" id=\"E1364754596658__8C74C362-DDEF-48B9-AED2-E4034E917A40\">\n" +
+            "                <di:waypoint x=\"1572.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1586.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"1620.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_CF5A1710-35F8-48B6-85FD-A90C99FEC5B3\" id=\"E1364754596659__CF5A1710-35F8-48B6-85FD-A90C99FEC5B3\">\n" +
+            "                <di:waypoint x=\"1426.0\" y=\"617.0\"/>\n" +
+            "                <di:waypoint x=\"1440.0\" y=\"617.0\"/>\n" +
+            "                <di:waypoint x=\"1474.0\" y=\"617.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_9088D441-44C5-462B-8695-47D60A7BC451\" id=\"E1364754596660__9088D441-44C5-462B-8695-47D60A7BC451\">\n" +
+            "                <di:waypoint x=\"2324.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"2338.0\" y=\"284.0\"/>\n" +
+            "                <di:waypoint x=\"2368.0\" y=\"284.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "            <bpmndi:BPMNEdge bpmnElement=\"_19517CEB-6A0E-4B88-8911-FEEEFE3B55CE\" id=\"E1364754596661__19517CEB-6A0E-4B88-8911-FEEEFE3B55CE\">\n" +
+            "                <di:waypoint x=\"1557.0\" y=\"617.0\"/>\n" +
+            "                <di:waypoint x=\"1571.0\" y=\"617.0\"/>\n" +
+            "                <di:waypoint x=\"1687.0\" y=\"617.0\"/>\n" +
+            "                <bpmndi:BPMNLabel/>\n" +
+            "            </bpmndi:BPMNEdge>\n" +
+            "        </bpmndi:BPMNPlane>\n" +
+            "    </bpmndi:BPMNDiagram>\n" +
+            "    <semantic:relationship type=\"BPSimData\">\n" +
+            "        <semantic:extensionElements>\n" +
+            "            <bpsim:BPSimData>\n" +
+            "                <bpsim:Scenario author=\"Tim Stephenson\" created=\"2013-03-06T21:00:00\" id=\"S1\" modified=\"2013-03-06T21:00:00\" name=\"Scenario 1: Main flow without sub-processes\">\n" +
+            "                    <bpsim:ScenarioParameters replication=\"3\">\n" +
+            "                        <bpsim:Duration>\n" +
+            "                            <bpsim:DurationParameter value=\"PT60H\"/>\n" +
+            "                        </bpsim:Duration>\n" +
+            "                    </bpsim:ScenarioParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_6\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_51BDA265-2FF5-40CB-B68D-1FBF9DAAA74C\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:InterTriggerTimer>\n" +
+            "                                <bpsim:DurationParameter value=\"PT24M\"/>\n" +
+            "                            </bpsim:InterTriggerTimer>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                        <bpsim:PropertyParameters>\n" +
+            "                            <bpsim:Property name=\"noOfIssues\">\n" +
+            "                                <bpsim:TruncatedNormalDistribution max=\"1000\" mean=\"2\" min=\"1\" standardDeviation=\"1\"/>\n" +
+            "                            </bpsim:Property>\n" +
+            "                        </bpsim:PropertyParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_071B5D0A-5225-4E55-9105-8D15169DAC96\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                        <bpsim:PropertyParameters>\n" +
+            "                            <bpsim:Property name=\"noOfIssues\">\n" +
+            "                                <bpsim:ExpressionParameter value=\"getProperty('noOfIssues') -1\"/>\n" +
+            "                            </bpsim:Property>\n" +
+            "                        </bpsim:PropertyParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_8040CF1A-3CAA-4A98-8E94-DD405EF233E9\">\n" +
+            "                        <bpsim:PropertyParameters>\n" +
+            "                            <bpsim:Property name=\"noOfIssues\">\n" +
+            "                                <bpsim:ExpressionParameter value=\"getProperty('noOfIssues') + 1\"/>\n" +
+            "                            </bpsim:Property>\n" +
+            "                        </bpsim:PropertyParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Condition>\n" +
+            "                                <bpsim:ExpressionParameter value=\"getProperty('noOfIssues') &gt; 0\"/>\n" +
+            "                            </bpsim:Condition>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_4799D2B0-A204-4A08-94ED-796C25D9AE57\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Condition>\n" +
+            "                                <bpsim:ExpressionParameter value=\"getProperty('noOfIssues') &lt;= 0\"/>\n" +
+            "                            </bpsim:Condition>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_BEFA7BF4-D1C2-47CB-B0CD-EF87E541B1BC\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Probability>\n" +
+            "                                <bpsim:FloatingParameter value=\"0.25\"/>\n" +
+            "                            </bpsim:Probability>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_751A4C0A-FC0F-441E-A587-4016BE8101B3\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Probability>\n" +
+            "                                <bpsim:FloatingParameter value=\"0.75\"/>\n" +
+            "                            </bpsim:Probability>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_3B161ED4-4C10-4349-9A2D-B4E002D5EC0E\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Probability>\n" +
+            "                                <bpsim:FloatingParameter value=\"0.66\"/>\n" +
+            "                            </bpsim:Probability>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_3654E294-536A-4CD2-9950-11F02657EE60\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Probability>\n" +
+            "                                <bpsim:FloatingParameter value=\"0.33\"/>\n" +
+            "                            </bpsim:Probability>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_87E52808-857B-45B0-93E8-F6D7AC0B4B3E\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_FA77D7D8-9C02-4006-942A-B003AEDA5E3C\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_B67579E4-E038-4D9D-AA46-A3F9628CADA1\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_4CFC937C-2E42-4671-859E-42E710931963\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                </bpsim:Scenario>\n" +
+            "                <bpsim:Scenario id=\"S2\" inherits=\"S1\" name=\"Scenario 2: Main and Secondary paths\">\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_2BBAB508-4026-40F7-8FC3-23E68E77EE46\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                    <bpsim:ElementParameters elementRef=\"_F9A272EE-D325-44CF-AFFC-4A615D2C9971\">\n" +
+            "                        <bpsim:ControlParameters>\n" +
+            "                            <bpsim:Probability>\n" +
+            "                                <bpsim:FloatingParameter value=\"0.05\"/>\n" +
+            "                            </bpsim:Probability>\n" +
+            "                            <bpsim:InterTriggerTimer>\n" +
+            "                                <bpsim:DurationParameter value=\"PT0M\"/>\n" +
+            "                            </bpsim:InterTriggerTimer>\n" +
+            "                            <bpsim:TriggerCount>\n" +
+            "                                <bpsim:ResultRequest>count</bpsim:ResultRequest>\n" +
+            "                                <bpsim:NumericParameter value=\"1\"/>\n" +
+            "                            </bpsim:TriggerCount>\n" +
+            "                        </bpsim:ControlParameters>\n" +
+            "                    </bpsim:ElementParameters>\n" +
+            "                </bpsim:Scenario>\n" +
+            "            </bpsim:BPSimData>\n" +
+            "        </semantic:extensionElements>\n" +
+            "        <semantic:source>_1364754596385</semantic:source>\n" +
+            "        <semantic:target>_1364754596385</semantic:target>\n" +
+            "    </semantic:relationship>\n" +
+            "</semantic:definitions>";
+
+
+    var diagramXML = diagramXML1
+
+    var viewer = new BpmnJS({
+      container: document.querySelector('#js-canvas'),
+      height: 400
+    });
+
+    viewer.importXML(diagramXML, function(err) {
+      if (err) {
+        console.error('failed to load diagram');
+        console.error(err);
+
+        return log('failed to load diagram', err);
+      }
+
+
+      // diagram is loaded, add interaction to it
+
+      // Option 1:
+      // directly hook into internal diagram events
+      // this allows you to access the clicked element directly
+
+      var eventBus = viewer.get('eventBus');
+
+      // you may hook into any of the following events
+      var events = [
+        'element.hover',
+        'element.out',
+        'element.click',
+        'element.dblclick',
+        'element.mousedown',
+        'element.mouseup'
+      ];
+
+      events.forEach(function(event) {
+
+        eventBus.on(event, function(e) {
+          // e.element = the model element
+          // e.gfx = the graphical element
+
+          log(event, 'on', e.element.id);
+        });
+      });
+
+
+      // Option 2:
+      // directly attach an event listener to an elements graphical representation
+
+      // each model element a data-element-id attribute attached to it in HTML
+
+      // select the end event
+      var endEventNode = document.querySelector('#js-canvas [data-element-id=END_EVENT]');
+      endEventNode.addEventListener('click', function(e) {
+        alert('clicked the end event!');
+      });
+
+    });
+  </script>
+</html>

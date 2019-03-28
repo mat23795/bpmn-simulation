@@ -1,5 +1,3 @@
-
-
 var container = $('#js-drop-zone');
 
 
@@ -27,6 +25,8 @@ function openDiagram(xml) {
                 .addClass('with-diagram');
         }
         viewer.get('canvas').zoom('fit-viewport');
+
+        // $('.djs-container').css('overflow', 'auto');
 
 
     });
