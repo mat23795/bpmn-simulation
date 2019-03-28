@@ -15,6 +15,7 @@ body {
     /*max-height:200px;*/
 }
 #js-drop-zone{
+    overflow: auto;
     text-align: center;
     vertical-align: middle;
     height:100px;
