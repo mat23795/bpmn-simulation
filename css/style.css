@@ -1,0 +1,26 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+/*.content{*/
+    /*text-align: center;*/
+/*}*/
+.canvas {
+    border: solid 1px black;
+    /*width:*/
+    /*min-width:50px;*/
+    /*max-width:*/
+    /*height:*/
+    /*min-height:50px;*/
+    min-height:100px;
+    /*max-height:200px;*/
+}
+#js-drop-zone{
+    text-align: center;
+    vertical-align: middle;
+    height:100px;
+    line-height: 100px;
+    background-color: white;
+    outline: 2px dashed black;
+    outline-offset: -10px;
+    /*visibility:hidden;*/
+}
