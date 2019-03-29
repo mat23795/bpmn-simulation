@@ -10,18 +10,18 @@
 .djs-element.hover .djs-outline,
 .djs-element.selected .djs-outline {
     visibility: visible;
-    shape-rendering: crispEdges;
-    stroke-dasharray: 3,3;
+    shape-rendering: auto;
+    /*stroke-dasharray: 3,3;*/
 }
 
 .djs-element.selected .djs-outline {
-    stroke: #8888FF;
-    stroke-width: 1px;
+    stroke: blue;
+    stroke-width: 8px;
 }
 
 .djs-element.hover .djs-outline {
-    stroke: #FF8888;
-    stroke-width: 1px;
+    stroke: cornflowerblue;
+    stroke-width: 2px;
 }
 
 .djs-shape.connect-ok .djs-visual > :nth-child(1) {

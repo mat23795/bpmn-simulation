@@ -100,7 +100,12 @@ events.forEach(function (event) {
     eventBus.on(event, function (e) {
         // e.element = the model element
         // e.gfx = the graphical element
-
-       console.log(event + 'on' + e.element.id);
+        if (!e.element.id.includes("label")) {
+            console.log(event + 'on' + e.element.id);
+        }else{
+            //TODO disabilitare css per le label
+        }
     });
-});
+
+})
+;
