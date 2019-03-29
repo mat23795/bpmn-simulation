@@ -1,17 +1,30 @@
 body {
+
+    padding-left: 3%;
+    padding-right:3%;
     font-family: 'Arial', sans-serif;
 }
-
-h1{
-    text-align:center;
+label{
+    margin-top: 1.5%;
 }
-/*.content{*/
-    /*text-align: center;*/
-/*}*/
+.div-vertical-border{
+    margin-top: 2%;
+    margin-bottom:2%;
+}
+.centered-title{
+    text-align:center;
+    margin-top: 2%;
+    margin-bottom:2%;
+}
+.centered-title-sim-section{
+    text-align:center;
+    margin-top: 5%;
+    /*margin-bottom:1%;*/
+}
 .canvas {
     /*position: relative;*/
     /*overflow: scroll;*/
-    border: solid 1px black;
+    border: solid 2px black;
     /*width:*/
     /*min-width:50px;*/
     /*max-width:*/
@@ -28,4 +41,8 @@ h1{
     outline: 2px dashed black;
     outline-offset: -10px;
     /*visibility:hidden;*/
+}
+.sim-parameter-section{
+    margin-left: 5%;
+    margin-right:7%;
 }

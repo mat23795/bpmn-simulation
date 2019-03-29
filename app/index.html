@@ -1,83 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/diagram-js.css">
-
-
-    <title>BPMN Simulation</title>
-
-    <h1 class = "page-title"><b>BPMN Simulation</b></h1>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/diagram-js.css">
 
 
-</head>
-<body>
-
-<div class="content" id="js-drop-zone">
-    Drop you BPMN diagram here.
-</div>
+        <title>BPMN Simulation</title>
 
 
-<div class="canvas" id="js-canvas"></div>
-
-</div>
 
 
-<!-- viewer -->
-<script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
+    </head>
+    <body>
 
-<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+        <h1 class = "centered-title"><b>BPMN Simulation</b></h1>
 
-<script src="index.js"></script>
+        <div class="div-vertical-border" id="js-drop-zone">
+            Drop you BPMN diagram here.
+        </div>
 
-<!-- simulation-->
-<div class="simulation" id="js-simulation"></div>
-<h1> BPSim Simulation </h1>
-<form>
-    <div class="form-group" label="scenario">
-        <label for="id">ID</label>
-        <input type="text" class="form-control" id="id" placeholder="1">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Scenario">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" placeholder="First scenario">
-        INSERIRE 2 DATE PICKER
-        <label for="author">Author</label>
-        <input type="text" class="form-control" id="author" placeholder="Your Company">
-        <label for="vendor">Vendor</label>
-        <input type="text" class="form-control" id="vendor" placeholder="Lazazzera & Caputo">
-        <label for="version">Version</label>
-        <input type="text" class="form-control" id="version" placeholder="1.0">
-    </div>
-    <div class="form-group">
-        <label for="exampleFormControlSelect1">Example select</label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="exampleFormControlSelect2">Example multiple select</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="exampleFormControlTextarea1">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-</form>
-</div>
 
-</body>
+        <div class="canvas div-vertical-border" id="js-canvas"></div>
+
+
+
+
+        <!-- viewer -->
+        <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
+
+        <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+
+        <script src="index.js"></script>
+
+        <!-- simulation-->
+        <div class="sim-parameter-section" id="js-simulation">
+            <h1 class="centered-title-sim-section"> BPSim Parameters</h1>
+            <form>
+                <div class="form-group" label="scenario">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" placeholder="1">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Scenario">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" id="description" placeholder="First scenario">
+                    INSERIRE 2 DATE PICKER
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" id="author" placeholder="Your Company">
+                    <label for="vendor">Vendor</label>
+                    <input type="text" class="form-control" id="vendor" placeholder="Lazazzera & Caputo">
+                    <label for="version">Version</label>
+                    <input type="text" class="form-control" id="version" placeholder="1.0">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Example select</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="exampleFormControlSelect2">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Example textarea</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+
+    </body>
 </html>
