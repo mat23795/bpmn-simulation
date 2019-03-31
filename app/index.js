@@ -3,7 +3,7 @@ var container = $('#js-drop-zone');
 
 var viewer = new BpmnJS({
     container: $('#js-canvas'),
-    height: 600
+    height: 500
 });
 
 

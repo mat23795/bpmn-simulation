@@ -1,25 +1,40 @@
 body {
 
-    padding-left: 3%;
-    padding-right:3%;
+    padding-left: 5%;
+    padding-right:5%;
     font-family: 'Arial', sans-serif;
+    background: white;
 }
 label{
     margin-top: 1.5%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+.form-control-input{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    /*margin-top: 1.5%;*/
+    /*margin-left: 1%;*/
+    /*margin-right: 1%;*/
+    width: 98%;
 }
 .div-vertical-border{
-    margin-top: 2%;
-    margin-bottom:2%;
+    margin-top: 1%;
+    /*margin-bottom:2%;*/
 }
 .centered-title{
+    font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     text-align:center;
+    font-weight: bolder;
     margin-top: 2%;
-    margin-bottom:2%;
+    margin-bottom:3%;
 }
 .centered-title-sim-section{
     text-align:center;
-    margin-top: 5%;
-    /*margin-bottom:1%;*/
+    font-weight: bold;
+    /*margin-top: 7%;*/
+    margin-bottom:3%;
 }
 .canvas {
     /*position: relative;*/
@@ -30,7 +45,8 @@ label{
     /*max-width:*/
     /*height:*/
     /*min-height:50px;*/
-    height:600px;
+    height:500px;
+    background: white;
 }
 #js-drop-zone{
     text-align: center;
@@ -43,6 +59,31 @@ label{
     /*visibility:hidden;*/
 }
 .sim-parameter-section{
-    margin-left: 5%;
-    margin-right:7%;
+    margin-left:10%;
+    margin-right:10%;
+    margin-top:5%;
+    /*padding:5%;*/
+    padding-top: 2%;
+    padding-left:5%;
+    padding-right:5%;
+    /*background: aliceblue;*/
+    border-radius: 10px;
+    border: solid 1px black;
+}
+.form-group{
+    /*padding:1%;*/
+    /*background: AliceBlue;*/
+    border-radius: 10px;
+    border: solid 1px black;
+}
+.form-title{
+    text-align:center;
+    font-weight: bold;
+    color: white;
+    padding:1%;
+    background: darkcyan;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    /*border: solid 1px black;*/
 }

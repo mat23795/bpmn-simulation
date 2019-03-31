@@ -16,7 +16,7 @@
     </head>
     <body>
 
-        <h1 class = "centered-title"><b>BPMN Simulation</b></h1>
+        <h1 class = "centered-title">BPMN Simulation Tool</h1>
 
         <div class="div-vertical-border" id="js-drop-zone">
             Drop you BPMN diagram here.
@@ -37,11 +37,12 @@
 
         <!-- simulation-->
         <div class="sim-parameter-section" id="js-simulation">
-            <h1 class="centered-title-sim-section"> BPSim Parameters</h1>
+            <h1 class="centered-title-sim-section">BPSim Parameters</h1>
             <form>
-                <div class="form-group" label="scenario">
+                <div class="form-group" label="scenario-form">
+                    <h2 class="form-title">Scenario</h2>
                     <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" placeholder="1">
+                    <input type="text" class="form-control form-control-input" id="id" placeholder="1">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" id="name" placeholder="Scenario">
                     <label for="description">Description</label>
