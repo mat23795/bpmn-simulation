@@ -29,6 +29,29 @@ function openDiagram(xml) {
         // $('.djs-container').css('overflow', 'auto');
 
 
+        //TODO VEDERE QUESTO DOVE VA
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(xml,"text/xml");
+
+        relBpsim = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "BPSim");
+        //VA FATTO FOREACH PER OGNI SCENARIO
+
+
+        // AGGIUNGERE TAG IN SCRITTURA XML
+        // prova = xmlDoc.createElement("rel");
+        // relBpsim = xmlDoc.getElementsByTagNameNS("http://www.omg.org/spec/BPMN/20100524/MODEL", "definitions");
+        // relBpsim[0].appendChild(prova);
+        // console.log(relBpsim[0]);
+
+
+        //prova per leggere un valore di un attributo e settare uno nuovo o lo stesso
+        // relBpsim = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "DurationParameter");
+        // console.log(relBpsim);
+        // relBpsim[0].setAttribute("value", "PROVA")
+        // console.log(relBpsim[0].getAttribute("value"));
+        // console.log(relBpsim[0]);
+
+
     });
 }
 
