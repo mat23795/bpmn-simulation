@@ -43,24 +43,52 @@ function xmlParsing(xml) {
     const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
 
-    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSim");
+    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData");
     //VA FATTO FOREACH PER OGNI SCENARIO
 
     //ci colleghiamo al tag definitions bpmn
     let definitionsTag = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
 
+    //prefisso bpmn (es. semantic, bpmn)
+    const bpmnPrefix = definitionsTag[0].prefix;
+    let bpsimPrefix = "bpsim"; //default
+
+
     if (bpsimNS.length == 0) {
         //Aggiungere namespace bpsim al namespace
-        definitionsTag[0].setAttribute("xlmns:bpsim", bpsimNamespaceURI);
+        definitionsTag[0].setAttribute("xlmns:"+bpsimPrefix, bpsimNamespaceURI);
 
-        //Aggiungere relationship
-        relationship = xmlDoc.createElementNS(bpmnNamespaceURI,'relationship');
-        console.log(relationship);
+        //Aggiunta bpmn:relationship
+        let relationship = xmlDoc.createElement(bpmnPrefix+":relationship");
+        relationship.setAttribute("type","BPSimData");
         definitionsTag[0].appendChild(relationship);
 
-        console.log(definitionsTag[0]);
+        //Aggiunta bpmn:extensionElements
+        let extensionElements = xmlDoc.createElement(bpmnPrefix+":extensionElements");
+        relationship.appendChild(extensionElements);
+
+        //Aggiunta bpsim:BPSimData
+        let bpsimData = xmlDoc.createElement(bpsimPrefix+":BPSimData");
+        extensionElements.appendChild(bpsimData);
+
+        //Aggiunta bpsim:Scenario
+        let scenario = xmlDoc.createElement(bpsimPrefix+":Scenario");
+        scenario.setAttribute("id", $('#id').val());
+        scenario.setAttribute("name", $('#name').val());
+        scenario.setAttribute("description", $('#description').val());
+        //CREATED
+        //MODIFIED
+        scenario.setAttribute("author", $('#author').val());
+        scenario.setAttribute("vendor", $('#vendor').val());
+        scenario.setAttribute("version", $('#version').val());
+
+        bpsimData.appendChild(scenario);
+
+        console.log(bpsimData);
     }else{
         //TODO inserire nuovi valori del xml letto
+        bpsimPrefix = bpsimNS[0].prefix;
+        console.log("ciao "+ bpsimPrefix);
     }
     console.log(xmlDoc);
 
