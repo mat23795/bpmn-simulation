@@ -1,5 +1,4 @@
 class Scenario {
-
     constructor(id, name, description, created, modified, author, vendor = "Caputo & Lazazzera", version = "1.0",
                 scenarioParameters = null, vendorExtensions = null, elementsParameters = null) {
 

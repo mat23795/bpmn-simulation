@@ -30,9 +30,26 @@ function openDiagram(xml) {
         viewer.get('canvas').zoom('fit-viewport');
         // $('.djs-container').css('overflow', 'auto');
 
-        xmlParsing(xml);
-
+        // xmlParsing(xml);
+        structurePopulation();
     });
+}
+
+function structurePopulation() {
+
+    let sc = new Scenario("1","ciao","descr","ora","01/01/2019","Pippo");
+    console.log(sc);
+
+    let sc2 = new Scenario("2","ciao","descr","ora","01/01/2019","Pippo");
+    console.log(sc2);
+
+    let bp = new BPSimData(sc);
+    console.log(bp);
+
+    bp.addScenario(sc2);
+    console.log(bp);
+
+
 }
 
 function xmlParsing(xml) {
