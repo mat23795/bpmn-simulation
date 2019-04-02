@@ -11,48 +11,72 @@ function openDiagram(xml) {
 
     viewer.importXML(xml, function (err) {
 
-        if (err) {
-            container
-                .removeClass('with-diagram')
-                .addClass('with-error');
+        //TODO gestire errore caricamento
 
-            container.find('.error pre').text(err.message);
+        // if (err) {
+        //     container
+        //         .removeClass('with-diagram')
+        //         .addClass('with-error');
+        //
+        //     container.find('.error pre').text(err.message);
+        //
+        //     console.error(err);
+        // } else {
+        //     container
+        //         .removeClass('with-error')
+        //         .addClass('with-diagram');
+        // }
 
-            console.error(err);
-        } else {
-            container
-                .removeClass('with-error')
-                .addClass('with-diagram');
-        }
         viewer.get('canvas').zoom('fit-viewport');
-
         // $('.djs-container').css('overflow', 'auto');
 
-
-        //TODO VEDERE QUESTO DOVE VA
-        parser = new DOMParser();
-        xmlDoc = parser.parseFromString(xml,"text/xml");
-
-        relBpsim = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "BPSim");
-        //VA FATTO FOREACH PER OGNI SCENARIO
-
-
-        // AGGIUNGERE TAG IN SCRITTURA XML
-        // prova = xmlDoc.createElement("rel");
-        // relBpsim = xmlDoc.getElementsByTagNameNS("http://www.omg.org/spec/BPMN/20100524/MODEL", "definitions");
-        // relBpsim[0].appendChild(prova);
-        // console.log(relBpsim[0]);
-
-
-        //prova per leggere un valore di un attributo e settare uno nuovo o lo stesso
-        // relBpsim = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "DurationParameter");
-        // console.log(relBpsim);
-        // relBpsim[0].setAttribute("value", "PROVA")
-        // console.log(relBpsim[0].getAttribute("value"));
-        // console.log(relBpsim[0]);
-
+        xmlParsing(xml);
 
     });
+}
+
+function xmlParsing(xml) {
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+    const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
+    const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
+
+
+    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSim");
+    //VA FATTO FOREACH PER OGNI SCENARIO
+
+    //ci colleghiamo al tag definitions bpmn
+    let definitionsTag = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
+
+    if (bpsimNS.length == 0) {
+        //Aggiungere namespace bpsim al namespace
+        definitionsTag[0].setAttribute("xlmns:bpsim", bpsimNamespaceURI);
+
+        //Aggiungere relationship
+        relationship = xmlDoc.createElementNS(bpmnNamespaceURI,'relationship');
+        console.log(relationship);
+        definitionsTag[0].appendChild(relationship);
+
+        console.log(definitionsTag[0]);
+    }else{
+        //TODO inserire nuovi valori del xml letto
+    }
+    console.log(xmlDoc);
+
+    // AGGIUNGERE TAG IN SCRITTURA XML
+    // prova = xmlDoc.createElement("rel");
+    // bpsimNS = xmlDoc.getElementsByTagNameNS("http://www.omg.org/spec/BPMN/20100524/MODEL", "definitions");
+    // bpsimNS[0].appendChild(prova);
+    // console.log(bpsimNS[0]);
+
+
+    //prova per leggere un valore di un attributo e settare uno nuovo o lo stesso
+    // bpsimNS = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "DurationParameter");
+    // console.log(bpsimNS);
+    // bpsimNS[0].setAttribute("value", "PROVA")
+    // console.log(bpsimNS[0].getAttribute("value"));
+    // console.log(bpsimNS[0]);
 }
 
 function registerFileDrop(container, callback) {
@@ -125,7 +149,7 @@ events.forEach(function (event) {
         // e.gfx = the graphical element
         if (!e.element.id.includes("label")) {
             console.log(event + 'on' + e.element.id);
-        }else{
+        } else {
             //TODO disabilitare css per le label
         }
     });
