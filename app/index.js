@@ -73,14 +73,14 @@ function xmlParsing(xml) {
 
         //Aggiunta bpsim:Scenario
         let scenario = xmlDoc.createElement(bpsimPrefix+":Scenario");
-        scenario.setAttribute("id", $('#id').val());
-        scenario.setAttribute("name", $('#name').val());
-        scenario.setAttribute("description", $('#description').val());
+        // scenario.setAttribute("id", $('#id').val());
+        // scenario.setAttribute("name", $('#name').val());
+        // scenario.setAttribute("description", $('#description').val());
         //CREATED
         //MODIFIED
-        scenario.setAttribute("author", $('#author').val());
-        scenario.setAttribute("vendor", $('#vendor').val());
-        scenario.setAttribute("version", $('#version').val());
+        // scenario.setAttribute("author", $('#author').val());
+        // scenario.setAttribute("vendor", $('#vendor').val());
+        // scenario.setAttribute("version", $('#version').val());
 
         bpsimData.appendChild(scenario);
 
