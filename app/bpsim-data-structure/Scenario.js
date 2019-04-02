@@ -1,6 +1,7 @@
 class Scenario {
 
-    constructor(id, name, description, created, modified, author, vendor, version){
+    constructor(id, name, description, created, modified, author, vendor = "Caputo & Lazazzera", version = "1.0",
+                scenarioParameters = null, vendorExtensions = null, elementsParameters = null) {
 
         this._id = id;
         this._name = name;
@@ -10,8 +11,10 @@ class Scenario {
         this._author = author;
         this._vendor = vendor;
         this._version = version;
+        this._scenarioParameters = scenarioParameters;
+        this._vendorExtensions = vendorExtensions;
+        this._elementsParameters = elementsParameters;
     }
-
 
     get id() {
         return this._id;
@@ -75,5 +78,29 @@ class Scenario {
 
     set version(value) {
         this._version = value;
+    }
+
+    get scenarioParameters() {
+        return this._scenarioParameters;
+    }
+
+    set scenarioParameters(value) {
+        this._scenarioParameters = value;
+    }
+
+    get vendorExtensions() {
+        return this._vendorExtensions;
+    }
+
+    set vendorExtensions(value) {
+        this._vendorExtensions = value;
+    }
+
+    get elementsParameters() {
+        return this._elementsParameters;
+    }
+
+    set elementsParameters(value) {
+        this._elementsParameters = value;
     }
 }
