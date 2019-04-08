@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-google-chrome app/index.html
+npx webpack --config webpack.config.js
+google-chrome dist/index.html

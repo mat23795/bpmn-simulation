@@ -1,6 +1,10 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
+import {DateTime} from "./types/DateTime";
+import {Scenario} from "./types/Scenario";
+import {BPSimData} from "./types/BPSimData";
 // import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-import {DateTime} from './types/DateTime.ts';
+// import {*} from './types/';
+
 
 var container = $('#js-drop-zone');
 
@@ -41,20 +45,20 @@ function openDiagram(xml) {
 
 function structurePopulation() {
     let d1 = new DateTime(2019, 1, 5);
-    console.log(d1.date);
-    // let d2 = new DateTime(2019, 1, 10);
+    let d2 = new DateTime(2019, 1, 10);
 
-    // let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
-    // console.log(sc);
-    //
-    // let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
-    // console.log(sc2);
-    //
-    // let bp = new BPSimData(sc);
-    // console.log(bp);
+    let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
+    console.log(sc);
 
-    // bp.addScenario(sc2);
-    // console.log(bp);
+    let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
+    console.log(sc2);
+
+    let bp = new BPSimData();
+    bp.addScenario(sc);
+    console.log(bp);
+
+    bp.addScenario(sc2);
+    console.log(bp);
 
 
 }

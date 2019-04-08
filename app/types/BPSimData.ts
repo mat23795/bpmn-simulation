@@ -3,8 +3,10 @@ import {Scenario} from "./Scenario";
 export class BPSimData{
     private _scenarios : Scenario[];
 
-    constructor(scenarios: Scenario[]) {
-        this._scenarios.concat(scenarios);
+    constructor(scenarios: Scenario[]=null) {
+        if (scenarios != null){
+            this._scenarios.concat(scenarios);
+        }
     }
 
     get scenarios() : Scenario[] {
