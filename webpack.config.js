@@ -12,10 +12,15 @@ module.exports = {
             from: './app/index.html'
         }])
     ],
+    resolve: {
+        extensions: [ '.tsx', '.ts', '.js' ]
+    },
     module: {
         rules: [
             { test: /\.bpmn$/, use: 'text-loader' },
-            { test: /\.ts$/, use: 'ts-loader' }
+
+            { test: /\.ts$/, use: 'ts-loader' },
+
         ]
     }
 };

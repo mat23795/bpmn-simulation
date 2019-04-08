@@ -1,6 +1,6 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
-import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-import DateTime from './types/DateTime.ts';
+// import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
+import {DateTime} from './types/DateTime.ts';
 
 var container = $('#js-drop-zone');
 
@@ -40,7 +40,6 @@ function openDiagram(xml) {
 }
 
 function structurePopulation() {
-
     let d1 = new DateTime(2019, 1, 5);
     console.log(d1.date);
     // let d2 = new DateTime(2019, 1, 10);
