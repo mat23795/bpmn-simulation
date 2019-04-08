@@ -1,3 +1,6 @@
+import firstdiagramXML from '../resources/firstDiagram.bpmn';
+import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
+import DateTime from './types/DateTime.ts';
 
 var container = $('#js-drop-zone');
 
@@ -39,19 +42,20 @@ function openDiagram(xml) {
 function structurePopulation() {
 
     let d1 = new DateTime(2019, 1, 5);
-    let d2 = new DateTime(2019, 1, 10);
+    console.log(d1.date);
+    // let d2 = new DateTime(2019, 1, 10);
 
-    let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
-    console.log(sc);
+    // let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
+    // console.log(sc);
+    //
+    // let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
+    // console.log(sc2);
+    //
+    // let bp = new BPSimData(sc);
+    // console.log(bp);
 
-    let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
-    console.log(sc2);
-
-    let bp = new BPSimData(sc);
-    console.log(bp);
-
-    bp.addScenario(sc2);
-    console.log(bp);
+    // bp.addScenario(sc2);
+    // console.log(bp);
 
 
 }
@@ -144,6 +148,8 @@ function registerFileDrop(container, callback) {
 
             var xml = e.target.result;
 
+            // console.log(e.target);
+
             callback(xml);
         };
 
@@ -175,6 +181,11 @@ if (!window.FileList || !window.FileReader) {
         'Looks like you use an older browser that does not support drag and drop. ' +
         'Try using Chrome, Firefox or the Internet Explorer > 10.');
 } else {
+
+    // console.log(firstdiagramXML);
+
+    openDiagram(firstdiagramXML);
+
     registerFileDrop(container, openDiagram);
 }
 

@@ -19,9 +19,11 @@
   "homepage": "https://github.com/mat23795/bpmn-simulation#readme",
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.2",
+    "text-loader": "0.0.1",
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.0",
+    "xml-loader": "^1.2.1"
   }
 }

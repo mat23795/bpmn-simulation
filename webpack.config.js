@@ -11,5 +11,12 @@ module.exports = {
         new CopyWebpackPlugin([{
             from: './app/index.html'
         }])
-    ]
+    ],
+    module: {
+        rules: [
+            { test: /\.bpmn$/, use: 'text-loader' },
+            { test: /\.ts$/, use: 'ts-loader' }
+        ]
+    }
 };
+
