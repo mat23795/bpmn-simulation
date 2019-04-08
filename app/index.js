@@ -1,3 +1,4 @@
+
 var container = $('#js-drop-zone');
 
 
@@ -37,10 +38,13 @@ function openDiagram(xml) {
 
 function structurePopulation() {
 
-    let sc = new Scenario("1","ciao","descr","ora","01/01/2019","Pippo");
+    let d1 = new DateTime(2019, 1, 5);
+    let d2 = new DateTime(2019, 1, 10);
+
+    let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
     console.log(sc);
 
-    let sc2 = new Scenario("2","ciao","descr","ora","01/01/2019","Pippo");
+    let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
     console.log(sc2);
 
     let bp = new BPSimData(sc);
