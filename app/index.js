@@ -1,9 +1,8 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
+// import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
 import {DateTime} from "./types/DateTime";
 import {Scenario} from "./types/Scenario";
 import {BPSimData} from "./types/BPSimData";
-// import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-// import {*} from './types/';
 
 
 var container = $('#js-drop-zone');
@@ -60,6 +59,7 @@ function structurePopulation() {
     bp.addScenario(sc2);
     console.log(bp);
 
+    new ResultType();
 
 }
 

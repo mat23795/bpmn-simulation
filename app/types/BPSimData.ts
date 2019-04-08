@@ -1,7 +1,7 @@
 import {Scenario} from "./Scenario";
 
 export class BPSimData{
-    private _scenarios : Scenario[];
+    private _scenarios : Scenario[] = [];
 
     constructor(scenarios: Scenario[]=null) {
         if (scenarios != null){
