@@ -1,7 +1,7 @@
 import {DateTime} from "./DateTime";
 import {VendorExtension} from "./VendorExtension";
-import {ScenarioParameter} from "./ScenarioParameter";
-import {ElementParameter} from "./ElementParameter";
+import {ScenarioParameters} from "./ScenarioParameters";
+import {ElementParameters} from "./ElementParameters";
 
 
 export class Scenario {
@@ -15,14 +15,13 @@ export class Scenario {
     private _version: string;
     private _result: Scenario;
     private _inherits: Scenario;
-    private _elementParameters: ElementParameter;
-    private _scenarioParameters: ScenarioParameter;
-    private _vendorExtension: VendorExtension;
+    private _elementParameters: ElementParameters[] = [];
+    private _scenarioParameters: ScenarioParameters;
+    private _vendorExtensions: VendorExtension[] = [];
 
 
     constructor(id: string, name: string, description: string, created: DateTime, modified: DateTime, author: string, vendor: string = "Caputo & Lazazzera", version: string = "1.0",
-                result: Scenario = null, inherits: Scenario = null, scenarioParameters: ScenarioParameter = null, vendorExtension: VendorExtension = null, elementParameters: ElementParameter = null) {
-
+                result: Scenario = null, inherits: Scenario = null, scenarioParameters: ScenarioParameters = null, vendorExtension: VendorExtension[] = null, elementParameters: ElementParameters[] = null) {
         this._id = id;
         this._name = name;
         this._description = description;
@@ -35,7 +34,7 @@ export class Scenario {
         this._inherits = inherits;
         this._elementParameters = elementParameters;
         this._scenarioParameters = scenarioParameters;
-        this._vendorExtension = vendorExtension;
+        this._vendorExtensions = vendorExtension;
     }
 
     get id(): string {
@@ -118,27 +117,27 @@ export class Scenario {
         this._inherits = value;
     }
 
-    get elementParameters(): ElementParameter {
+    get elementParameters(): ElementParameters[] {
         return this._elementParameters;
     }
 
-    set elementParameters(value: ElementParameter) {
+    set elementParameters(value: ElementParameters[]) {
         this._elementParameters = value;
     }
 
-    get scenarioParameters(): ScenarioParameter {
+    get scenarioParameters(): ScenarioParameters {
         return this._scenarioParameters;
     }
 
-    set scenarioParameters(value: ScenarioParameter) {
+    set scenarioParameters(value: ScenarioParameters) {
         this._scenarioParameters = value;
     }
 
-    get vendorExtension(): VendorExtension {
-        return this._vendorExtension;
+    get vendorExtensions(): VendorExtension[] {
+        return this._vendorExtensions;
     }
 
-    set vendorExtension(value: VendorExtension) {
-        this._vendorExtension = value;
+    set vendorExtensions(value: VendorExtension[]) {
+        this._vendorExtensions = value;
     }
 }

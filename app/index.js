@@ -3,6 +3,8 @@ import firstdiagramXML from '../resources/firstDiagram.bpmn';
 import {DateTime} from "./types/DateTime";
 import {Scenario} from "./types/Scenario";
 import {BPSimData} from "./types/BPSimData";
+import {ConstantParameter} from "./types/ParameterValue";
+import {ResultType} from "./types/ResultType";
 
 
 var container = $('#js-drop-zone');
@@ -59,7 +61,7 @@ function structurePopulation() {
     bp.addScenario(sc2);
     console.log(bp);
 
-    new ResultType();
+    //let temp = new ConstantParameter(null,"",ResultType.COUNT, d1, null);
 
 }
 

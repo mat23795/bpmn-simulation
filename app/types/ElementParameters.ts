@@ -1,4 +1,4 @@
-export class ElementParameter {
+export class ElementParameters {
     private _temp: string;
     constructor(temp: string = "prova"){
 

@@ -1,4 +1,4 @@
-export enum ResultTypes{
+export enum ResultType{
     MIN = "min",
     MAX = "max",
     MEAN = "mean",
