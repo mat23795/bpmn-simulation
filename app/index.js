@@ -1,5 +1,5 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
-// import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
+import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
 import {Scenario} from "./types/scenario/Scenario";
 import {BPSimData} from "./types/scenario/BPSimData";
 import {ConstantParameter} from "./types/parameter_type/ParameterValue";
@@ -40,7 +40,8 @@ function openDiagram(xml) {
         // $('.djs-container').css('overflow', 'auto');
 
         // xmlParsing(xml);
-        structurePopulation();
+        xmlParsingToLeaves(xml);
+        // structurePopulation();
     });
 }
 
@@ -64,6 +65,33 @@ function structurePopulation() {
     //let id = new ConstantParameter(null,"",ResultType.COUNT, d1, null);
 
 }
+
+function xmlParsingToLeaves(xml){
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+    const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
+    const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
+
+
+    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData");
+    console.log(bpsimNS[0]);
+
+    var nodes = Array.prototype.slice.call(bpsimNS[0].getElementsByTagName("*"), 0);
+    var leafNodes = nodes.filter(function(elem) {
+        return !elem.hasChildNodes();
+    });
+
+    console.log(leafNodes);
+    var nome = leafNodes[0].localName;
+    console.log(nome);
+    // switch (nome) {
+    //     case 'DurationParameter':
+    //         let d = new DurationParameter();
+    //         break;
+    // }
+}
+
 
 function xmlParsing(xml) {
     let parser = new DOMParser();
@@ -155,6 +183,9 @@ function registerFileDrop(container, callback) {
 
             // console.log(e.target);
 
+
+            $('#js-drop-zone').css('display', 'none');
+            $('#js-canvas').css('display', 'block');
             callback(xml);
         };
 
@@ -187,9 +218,13 @@ if (!window.FileList || !window.FileReader) {
         'Try using Chrome, Firefox or the Internet Explorer > 10.');
 } else {
 
-    // console.log(firstdiagramXML);
+    //TODO remove these line
+    $('#js-drop-zone').css('display', 'none');
+    $('#js-canvas').css('display', 'block');
+    // openDiagram(firstdiagramXML);
+    openDiagram(carRepairProcessXML);
+    // END
 
-    openDiagram(firstdiagramXML);
 
     registerFileDrop(container, openDiagram);
 }
@@ -213,7 +248,7 @@ events.forEach(function (event) {
         // e.element = the model element
         // e.gfx = the graphical element
         if (!e.element.id.includes("label")) {
-            console.log(event + 'on' + e.element.id);
+            // console.log(event + 'on' + e.element.id);
         } else {
             //TODO disabilitare css per le label
         }

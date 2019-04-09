@@ -4,6 +4,7 @@ body {
     padding-right:5%;
     font-family: 'Arial', sans-serif;
     background: white;
+    /*text-align: center;*/
 }
 label{
     margin-top: 1.5%;
@@ -49,28 +50,6 @@ label{
     height:500px;
     background: white;
 }
-#js-drop-zone{
-    font-size: larger;
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-bottom: 0.3%;
-    padding-top: 0.3%;
-    margin-left: auto;
-    width: fit-content;
-    margin-right: auto;
-
-    /*display: block;*/
-    /*alignment: center;*/
-    /*text-align: center;*/
-    vertical-align: middle;
-    /*height:60px;*/
-    /*width: 50%;*/
-    line-height: 60px;
-    background-color: white;
-    outline: 2px dashed black;
-    outline-offset: -10px;
-    /*visibility:hidden;*/
-}
 .sim-parameter-section{
     /*margin-left:10%;*/
     /*margin-right:10%;*/
@@ -103,9 +82,47 @@ label{
 #wrapper{
     display: flex;
 }
+#js-drop-zone{
+    height: 500px;
+
+    font-size: 40px;
+
+    /*padding-top: 50%;*/
+    /*padding-bottom: 50%;*/
+
+    /*padding-left: 2%;*/
+    /*padding-right: 2%;*/
+    /*padding-bottom: 0.3%;*/
+    /*padding-top: 0.3%;*/
+
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*margin-right: 1%;*/
+
+    width: fit-content;
+
+
+    /*display: block;*/
+    /*alignment: center;*/
+    text-align: center;
+    vertical-align: middle;
+    /*height:60px;*/
+    /*width: 50%;*/
+
+    line-height: 500px;
+    background-color: white;
+
+    outline: 2px dashed black;
+    outline-offset: -10px;
+
+    flex: 0 0 60%;
+
+    display: block;
+}
 #js-canvas{
     margin-right: 1%;
     flex: 0 0 60%;
+    display: none;
 }
 #js-simulation{
     height: 800px;
