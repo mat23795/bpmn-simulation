@@ -4,7 +4,7 @@ import {Scenario} from "./types/scenario/Scenario";
 import {BPSimData} from "./types/scenario/BPSimData";
 import {ConstantParameter} from "./types/parameter_type/ParameterValue";
 import {ResultType} from "./types/parameter_type/ResultType";
-import {DateTime} from "./types/parameter_type/ConstantParameter";
+import {DateTime, Duration} from "./types/parameter_type/ConstantParameter";
 
 
 var container = $('#js-drop-zone');
@@ -70,14 +70,17 @@ function xmlParsingToLeaves(xml){
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
 
+    // const bpmnPrefix = definitionsTag[0].prefix;
+
     const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
     const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
 
-    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData");
+    let bpsimNS = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
     console.log(bpsimNS[0]);
 
     var nodes = Array.prototype.slice.call(bpsimNS[0].getElementsByTagName("*"), 0);
+    console.log(nodes);
     var leafNodes = nodes.filter(function(elem) {
         return !elem.hasChildNodes();
     });
@@ -85,6 +88,13 @@ function xmlParsingToLeaves(xml){
     console.log(leafNodes);
     var nome = leafNodes[0].localName;
     console.log(nome);
+
+    let d = new Duration();
+    let temp = "value";
+
+    d[temp] = temp;
+    console.log(d[temp]);
+
     // switch (nome) {
     //     case 'DurationParameter':
     //         let d = new DurationParameter();

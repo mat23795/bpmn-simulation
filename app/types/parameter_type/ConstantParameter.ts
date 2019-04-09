@@ -87,7 +87,7 @@ export class DateTimeParameter extends ConstantParameter {
 export class Duration{
     private _value: string;
 
-    constructor(value: string = "undefined") {
+        constructor(value: string = "undefined") {
         this._value = value;
     }
 
