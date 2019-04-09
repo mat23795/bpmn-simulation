@@ -1,7 +1,7 @@
-import {DateTime} from "../DateTime";
 import {VendorExtension} from "./VendorExtension";
 import {ScenarioParameters} from "./ScenarioParameters";
 import {ElementParameters} from "../parameters/ElementParameters";
+import {DateTime} from "../parameter_type/ConstantParameter";
 
 
 export class Scenario {

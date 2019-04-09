@@ -1,8 +1,7 @@
 import {ParameterValue} from "./ParameterValue";
-import {ConstantParameter} from "./ConstantParameter";
+import {ConstantParameter, DateTime} from "./ConstantParameter";
 import {Calendar} from "../calendar/Calendar";
 import {ResultType} from "./ResultType";
-import {DateTime} from "../DateTime";
 
 export class EnumParameter extends ParameterValue{
     private _values: ConstantParameter[] = [];

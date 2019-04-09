@@ -1,7 +1,7 @@
 import {TimeUnit} from "./TimeUnit";
-import {Duration} from "../Duration";
 import {Parameter} from "../parameter_type/Parameter";
 import {PropertyParameters} from "../parameters/PropertyParameters";
+import {Duration} from "../parameter_type/ConstantParameter";
 
 export class ScenarioParameters {
     private _start: Parameter;

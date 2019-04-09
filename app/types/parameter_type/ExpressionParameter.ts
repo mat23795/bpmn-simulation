@@ -1,7 +1,7 @@
 import {ParameterValue} from "./ParameterValue";
 import {Calendar} from "../calendar/Calendar";
 import {ResultType} from "./ResultType";
-import {DateTime} from "../DateTime";
+import {DateTime} from "./ConstantParameter";
 
 export class ExpressionParameter extends ParameterValue{
     private _value: string;

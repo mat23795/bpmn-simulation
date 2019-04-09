@@ -2,7 +2,7 @@ import {ParameterValue} from "./ParameterValue";
 import {TimeUnit} from "../scenario/TimeUnit";
 import {Calendar} from "../calendar/Calendar";
 import {ResultType} from "./ResultType";
-import {DateTime} from "../DateTime";
+import {DateTime} from "./ConstantParameter";
 
 export class DistributionParameter extends ParameterValue{
     private _timeUnit: TimeUnit;
