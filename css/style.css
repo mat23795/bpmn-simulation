@@ -51,11 +51,13 @@ label{
 }
 #js-drop-zone{
     font-size: larger;
-    padding-left: 1.5%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 0.3%;
+    padding-top: 0.3%;
     margin-left: auto;
     width: fit-content;
     margin-right: auto;
-    padding-right: 1.5%;
 
     /*display: block;*/
     /*alignment: center;*/
@@ -75,8 +77,8 @@ label{
     /*margin-top:5%;*/
     /*padding:5%;*/
     padding-top: 2%;
-    padding-left:5%;
-    padding-right:5%;
+    padding-left:2%;
+    padding-right:2%;
     /*background: aliceblue;*/
     border-radius: 10px;
     border: solid 1px black;
@@ -110,4 +112,14 @@ label{
     overflow-y: auto;
     flex: 1 1 0%;
 
+}
+.scrollbar {
+    background-color: #F5F5F5;
+    float: left;
+    height: 300px;
+    margin-bottom: 25px;
+    margin-left: 22px;
+    margin-top: 40px;
+    width: 65px;
+    overflow-y: scroll;
 }
