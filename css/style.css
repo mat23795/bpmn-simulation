@@ -60,9 +60,9 @@ label{
     /*visibility:hidden;*/
 }
 .sim-parameter-section{
-    margin-left:10%;
-    margin-right:10%;
-    margin-top:5%;
+    /*margin-left:10%;*/
+    /*margin-right:10%;*/
+    /*margin-top:5%;*/
     /*padding:5%;*/
     padding-top: 2%;
     padding-left:5%;
@@ -87,4 +87,17 @@ label{
     border-top-right-radius: 10px;
 
     /*border: solid 1px black;*/
+}
+#wrapper{
+    display: flex;
+}
+#js-canvas{
+    margin-right: 1%;
+    flex: 0 0 60%;
+}
+#js-simulation{
+    height: 800px;
+    overflow-y: auto;
+    flex: 1 1 0%;
+
 }

@@ -23,70 +23,73 @@
         </div>
 
 
-        <div class="canvas div-vertical-border" id="js-canvas"></div>
+        <div id="wrapper">
+
+            <div class="canvas div-vertical-border" id="js-canvas"></div>
 
 
 
 
-        <!-- viewer -->
-        <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
+            <!-- viewer -->
+            <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
 
-        <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+            <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
 
-        <script src="index.js" type="text/javascript"></script>
-<!--        <script app="types/Scenario.js"></script>-->
-<!--        <script app="types/BPSimData.js"></script>-->
-<!--        <script app="types/ScenarioParameters.js"></script>-->
-<!--        <script app="types/VendorExtension.js"></script>-->
-<!--        <script> var exports = {}; </script>-->
+            <script src="index.js" type="text/javascript"></script>
+    <!--        <script app="types/Scenario.js"></script>-->
+    <!--        <script app="types/BPSimData.js"></script>-->
+    <!--        <script app="types/ScenarioParameters.js"></script>-->
+    <!--        <script app="types/VendorExtension.js"></script>-->
+    <!--        <script> var exports = {}; </script>-->
 
 
 
-        <!-- simulation-->
-        <div class="sim-parameter-section" id="js-simulation">
-            <h1 class="centered-title-sim-section">BPSim Parameters</h1>
-            <form>
-                <div class="form-group" label="scenario-form">
-                    <h2 class="form-title">Scenario</h2>
-                    <label for="id">ID</label>
-                    <input type="text" class="form-control form-control-input" id="id" value="1">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control form-control-input" id="name" value="Scenario">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control form-control-input" id="description" value="First scenario">
-                    INSERIRE 2 DATE PICKER
-                    <label for="author">Author</label>
-                    <input type="text" class="form-control form-control-input" id="author" value="Your Company">
-                    <label for="vendor">Vendor</label>
-                    <input type="text" class="form-control form-control-input" id="vendor" value="Caputo & Lazazzera">
-                    <label for="version">Version</label>
-                    <input type="text" class="form-control form-control-input" id="version" value="1.0">
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Example select</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect2">Example multiple select</label>
-                    <select multiple class="form-control" id="exampleFormControlSelect2">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Example textarea</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-            </form>
+            <!-- simulation-->
+            <div class="sim-parameter-section" id="js-simulation">
+                <h1 class="centered-title-sim-section">BPSim Parameters</h1>
+                <form>
+                    <div class="form-group" label="scenario-form">
+                        <h2 class="form-title">Scenario</h2>
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control form-control-input" id="id" value="1">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control form-control-input" id="name" value="Scenario">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control form-control-input" id="description" value="First scenario">
+                        INSERIRE 2 DATE PICKER
+                        <label for="author">Author</label>
+                        <input type="text" class="form-control form-control-input" id="author" value="Your Company">
+                        <label for="vendor">Vendor</label>
+                        <input type="text" class="form-control form-control-input" id="vendor" value="Caputo & Lazazzera">
+                        <label for="version">Version</label>
+                        <input type="text" class="form-control form-control-input" id="version" value="1.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Example select</label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect2">Example multiple select</label>
+                        <select multiple class="form-control" id="exampleFormControlSelect2">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Example textarea</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </body>
