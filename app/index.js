@@ -1,10 +1,10 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
 // import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-import {DateTime} from "./types/DateTime";
 import {Scenario} from "./types/scenario/Scenario";
 import {BPSimData} from "./types/scenario/BPSimData";
 import {ConstantParameter} from "./types/parameter_type/ParameterValue";
 import {ResultType} from "./types/parameter_type/ResultType";
+import {DateTime} from "./types/parameter_type/ConstantParameter";
 
 
 var container = $('#js-drop-zone');

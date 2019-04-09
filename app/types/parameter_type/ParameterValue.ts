@@ -1,6 +1,6 @@
 import {ResultType} from "./ResultType";
 import {DateTime} from "../DateTime";
-import {Calendar} from "../Calendar";
+import {Calendar} from "../calendar/Calendar";
 
 export class ParameterValue{
     private _validFor: Calendar;
@@ -46,22 +46,5 @@ export class ParameterValue{
 
     set resultTimeStamp(value: DateTime) {
         this._resultTimeStamp = value;
-    }
-}
-
-export class ConstantParameter extends ParameterValue{
-    private _value:Object;
-
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: Object) {
-        super(validFor, instance, result, resultTimeStamp);
-        this._value = value;
-    }
-
-    get value(): Object {
-        return this._value;
-    }
-
-    set value(value: Object) {
-        this._value = value;
     }
 }
