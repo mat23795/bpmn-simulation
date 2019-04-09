@@ -1,6 +1,6 @@
 import {ResultType} from "./ResultType";
-import {DateTime} from "./DateTime";
-import {Calendar} from "./Calendar";
+import {DateTime} from "../DateTime";
+import {Calendar} from "../Calendar";
 
 export class ParameterValue{
     private _validFor: Calendar;

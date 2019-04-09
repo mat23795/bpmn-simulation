@@ -1,10 +1,10 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
 // import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
 import {DateTime} from "./types/DateTime";
-import {Scenario} from "./types/Scenario";
-import {BPSimData} from "./types/BPSimData";
-import {ConstantParameter} from "./types/ParameterValue";
-import {ResultType} from "./types/ResultType";
+import {Scenario} from "./types/scenario/Scenario";
+import {BPSimData} from "./types/scenario/BPSimData";
+import {ConstantParameter} from "./types/parameter_type/ParameterValue";
+import {ResultType} from "./types/parameter_type/ResultType";
 
 
 var container = $('#js-drop-zone');
@@ -61,7 +61,7 @@ function structurePopulation() {
     bp.addScenario(sc2);
     console.log(bp);
 
-    //let temp = new ConstantParameter(null,"",ResultType.COUNT, d1, null);
+    //let id = new ConstantParameter(null,"",ResultType.COUNT, d1, null);
 
 }
 

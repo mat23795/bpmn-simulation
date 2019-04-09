@@ -1,4 +1,4 @@
-import {Parameter} from "./Parameter";
+import {Parameter} from "../parameter_type/Parameter";
 import {Property} from "./Property";
 
 export class PropertyParameters{

@@ -1,7 +1,7 @@
-import {Parameter} from "./Parameter";
+import {Parameter} from "../parameter_type/Parameter";
 import {PropertyType} from "./PropertyType";
-import {ParameterValue} from "./ParameterValue";
-import {ResultType} from "./ResultType";
+import {ParameterValue} from "../parameter_type/ParameterValue";
+import {ResultType} from "../parameter_type/ResultType";
 
 export class Property extends Parameter {
     private _name: string;
