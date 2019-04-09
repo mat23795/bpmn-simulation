@@ -28,8 +28,8 @@ label{
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     text-align:center;
     font-weight: bolder;
-    margin-top: 2%;
-    margin-bottom:3%;
+    margin-top: 0.5%;
+    margin-bottom:1%;
 }
 .centered-title-sim-section{
     text-align:center;
@@ -50,10 +50,20 @@ label{
     background: white;
 }
 #js-drop-zone{
-    text-align: center;
+    font-size: larger;
+    padding-left: 1.5%;
+    margin-left: auto;
+    width: fit-content;
+    margin-right: auto;
+    padding-right: 1.5%;
+
+    /*display: block;*/
+    /*alignment: center;*/
+    /*text-align: center;*/
     vertical-align: middle;
-    height:100px;
-    line-height: 100px;
+    /*height:60px;*/
+    /*width: 50%;*/
+    line-height: 60px;
     background-color: white;
     outline: 2px dashed black;
     outline-offset: -10px;
