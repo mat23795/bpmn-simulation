@@ -2,10 +2,7 @@ export class VendorExtension {
     private _name: string;
     private _value: Object;
 
-    constructor(name: string = "BPSim Vendor", value: Object = "Caputo & Lazazzera"){
-        this._name = name;
-        this._value = value;
-    }
+    constructor(){}
 
     get name(): string {
         return this._name;

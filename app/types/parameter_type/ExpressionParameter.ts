@@ -6,9 +6,8 @@ import {DateTime} from "./ConstantParameter";
 export class ExpressionParameter extends ParameterValue{
     private _value: string;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: string) {
-        super(validFor, instance, result, resultTimeStamp);
-        this._value = value;
+    constructor() {
+        super();
     }
 
     get value(): string {

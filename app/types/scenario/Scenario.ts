@@ -11,7 +11,7 @@ export class Scenario {
     private _created: DateTime;
     private _modified: DateTime;
     private _author: string;
-    private _vendor: string;
+    private _vendor: string = "Caputo & Lazazzera";
     private _version: string;
     private _result: Scenario;
     private _inherits: Scenario;
@@ -19,23 +19,7 @@ export class Scenario {
     private _scenarioParameters: ScenarioParameters;
     private _vendorExtensions: VendorExtension[] = [];
 
-
-    constructor(id: string, name: string, description: string, created: DateTime, modified: DateTime, author: string, vendor: string = "Caputo & Lazazzera", version: string = "1.0",
-                result: Scenario = null, inherits: Scenario = null, scenarioParameters: ScenarioParameters = null, vendorExtension: VendorExtension[] = null, elementParameters: ElementParameters[] = null) {
-        this._id = id;
-        this._name = name;
-        this._description = description;
-        this._created = created;
-        this._modified = modified;
-        this._author = author;
-        this._vendor = vendor;
-        this._version = version;
-        this._result = result;
-        this._inherits = inherits;
-        this._elementParameters = elementParameters;
-        this._scenarioParameters = scenarioParameters;
-        this._vendorExtensions = vendorExtension;
-    }
+    constructor(){}
 
     get id(): string {
         return this._id;

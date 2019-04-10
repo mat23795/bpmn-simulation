@@ -6,12 +6,7 @@ export class ResourceParameters{
     private _selection: Parameter;
     private _role: Parameter[] = [];
 
-    constructor(availability: Parameter, quantity: Parameter, selection: Parameter, role: Parameter[]) {
-        this._availability = availability;
-        this._quantity = quantity;
-        this._selection = selection;
-        this._role = role;
-    }
+    constructor(){}
 
     get availability(): Parameter {
         return this._availability;

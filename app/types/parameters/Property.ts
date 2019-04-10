@@ -8,12 +8,9 @@ export class Property extends Parameter {
     private _type: PropertyType;
 
 
-    constructor(value: ParameterValue, resultRequest: ResultType, name: string, type: PropertyType) {
-        super(value, resultRequest);
-        this._name = name;
-        this._type = type;
+    constructor(){
+        super()
     }
-
 
     get name(): string {
         return this._name;

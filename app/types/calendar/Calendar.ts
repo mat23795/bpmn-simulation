@@ -3,12 +3,7 @@ export class Calendar{
     private _name: string;
     private _calendar: Object;
 
-    constructor(id: string, name: string, calendar: Object) {
-        this._id = id;
-        this._name = name;
-        this._calendar = calendar;
-    }
-
+    constructor(){}
 
     get id(): string {
         return this._id;

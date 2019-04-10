@@ -17,20 +17,7 @@ export class ElementParameters {
     private _propertyParameters: PropertyParameters;
     private _priorityParameters: PriorityParameters;
 
-    constructor(id: string, elementRef: string, vendorExtensions: VendorExtension[], timeParameters: TimeParameters = null,
-                controlParameters: ControlParameters = null, costParameters: CostParameters = null,
-                resourceParameters: ResourceParameters = null, propertyParameters: PropertyParameters = null,
-                priorityParameters: PriorityParameters = null) {
-        this._id = id;
-        this._elementRef = elementRef;
-        this._vendorExtensions = vendorExtensions;
-        this._timeParameters = timeParameters;
-        this._controlParameters = controlParameters;
-        this._costParameters = costParameters;
-        this._resourceParameters = resourceParameters;
-        this._propertyParameters = propertyParameters;
-        this._priorityParameters = priorityParameters;
-    }
+    constructor(){}
 
     get id(): string {
         return this._id;

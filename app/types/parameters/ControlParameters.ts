@@ -6,12 +6,8 @@ export class ControlParameters{
     private _probability: Parameter;
     private _condition: Parameter;
 
-    constructor(interTriggerTime: Parameter, triggerCount: Parameter, probability: Parameter, condition: Parameter) {
-        this._interTriggerTime = interTriggerTime;
-        this._triggerCount = triggerCount;
-        this._probability = probability;
-        this._condition = condition;
-    }
+    constructor(){}
+
 
     get interTriggerTime(): Parameter {
         return this._interTriggerTime;

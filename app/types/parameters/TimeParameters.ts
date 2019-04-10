@@ -12,18 +12,7 @@ export class TimeParameters{
     private _duration: Parameter;
     private _elapsedTime: Parameter;
 
-    constructor(transferTime: Parameter, queueTime: Parameter, waitTime: Parameter, setupTime: Parameter, processingTime: Parameter, validationTime: Parameter, reworkTime: Parameter, lagTime: Parameter, duration: Parameter, elapsedTime: Parameter) {
-        this._transferTime = transferTime;
-        this._queueTime = queueTime;
-        this._waitTime = waitTime;
-        this._setupTime = setupTime;
-        this._processingTime = processingTime;
-        this._validationTime = validationTime;
-        this._reworkTime = reworkTime;
-        this._lagTime = lagTime;
-        this._duration = duration;
-        this._elapsedTime = elapsedTime;
-    }
+    constructor(){}
 
     get transferTime(): Parameter {
         return this._transferTime;

@@ -6,9 +6,22 @@ export class PropertyParameters{
     private _queueLength: Parameter;
 
 
-    constructor(property: Property[], queueLength: Parameter) {
-        this._property = property;
-        this._queueLength = queueLength;
+    constructor(){
     }
 
+    get property(): Property[] {
+        return this._property;
+    }
+
+    set property(value: Property[]) {
+        this._property = value;
+    }
+
+    get queueLength(): Parameter {
+        return this._queueLength;
+    }
+
+    set queueLength(value: Parameter) {
+        this._queueLength = value;
+    }
 }

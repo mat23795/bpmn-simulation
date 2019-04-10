@@ -4,10 +4,8 @@ export class CostParameters{
     private _fixedCost: Parameter;
     private _unitCost: Parameter;
 
-    constructor(fixedCost: Parameter, unitCost: Parameter) {
-        this._fixedCost = fixedCost;
-        this._unitCost = unitCost;
-    }
+    constructor(){}
+
 
     get fixedCost(): Parameter {
         return this._fixedCost;

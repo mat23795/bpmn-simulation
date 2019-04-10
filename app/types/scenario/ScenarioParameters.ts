@@ -7,34 +7,17 @@ export class ScenarioParameters {
     private _start: Parameter;
     private _duration: Parameter;
     private _warmup: Parameter;
-    private _replication: number;
+    private _replication: number = 1;
     private _seed: number;
-    private _baseTimeUnit: TimeUnit;
-    private _baseCurrencyUnit: string;
+    private _baseTimeUnit: TimeUnit = TimeUnit.MINUTES;
+    private _baseCurrencyUnit: string = "USD";
     private _baseResultFrequency: Duration;
-    private _baseResultFrequencyCumul: boolean;
-    private _traceOutput: boolean;
-    private _traceFormat: string;
+    private _baseResultFrequencyCumul: boolean = false;
+    private _traceOutput: boolean = false;
+    private _traceFormat: string = "XES";
     private _propertyParameters: PropertyParameters[];
 
-
-    constructor(start: Parameter, duration: Parameter, warmup: Parameter, replication: number = 1, seed: number,
-                baseTimeUnit: TimeUnit = TimeUnit.MINUTES, baseCurrencyUnit: string = "USD",
-                baseResultFrequency: Duration = null, baseResultFrequencyCumul: boolean = false,
-                traceOutput: boolean = false, traceFormat: string = "XES", propertyParameters: PropertyParameters[]) {
-        this._start = start;
-        this._duration = duration;
-        this._warmup = warmup;
-        this._replication = replication;
-        this._seed = seed;
-        this._baseTimeUnit = baseTimeUnit;
-        this._baseCurrencyUnit = baseCurrencyUnit;
-        this._baseResultFrequency = baseResultFrequency;
-        this._baseResultFrequencyCumul = baseResultFrequencyCumul;
-        this._traceOutput = traceOutput;
-        this._traceFormat = traceFormat;
-        this._propertyParameters = propertyParameters;
-    }
+    constructor(){}
 
     get start(): Parameter {
         return this._start;

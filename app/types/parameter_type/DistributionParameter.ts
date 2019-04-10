@@ -1,15 +1,11 @@
 import {ParameterValue} from "./ParameterValue";
 import {TimeUnit} from "../scenario/TimeUnit";
-import {Calendar} from "../calendar/Calendar";
-import {ResultType} from "./ResultType";
-import {DateTime} from "./ConstantParameter";
 
 export class DistributionParameter extends ParameterValue{
-    private _timeUnit: TimeUnit;
+    protected _timeUnit: TimeUnit;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit) {
-        super(validFor, instance, result, resultTimeStamp);
-        this._timeUnit = timeUnit;
+    constructor() {
+        super();
     }
 
     get timeUnit(): TimeUnit {
@@ -25,10 +21,24 @@ export class BetaDistribution extends DistributionParameter{
     private _shape: number;
     private _scale: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, shape: number, scale: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._shape = shape;
-        this._scale = scale;
+    constructor() {
+        super();
+    }
+
+    get shape(): number {
+        return this._shape;
+    }
+
+    set shape(value: number) {
+        this._shape = value;
+    }
+
+    get scale(): number {
+        return this._scale;
+    }
+
+    set scale(value: number) {
+        this._scale = value;
     }
 }
 
@@ -36,10 +46,24 @@ export class BinomialDistribution extends DistributionParameter{
     private _probability: number;
     private _trials: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, probability: number, trials: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._probability = probability;
-        this._trials = trials;
+    constructor() {
+        super();
+    }
+
+    get probability(): number {
+        return this._probability;
+    }
+
+    set probability(value: number) {
+        this._probability = value;
+    }
+
+    get trials(): number {
+        return this._trials;
+    }
+
+    set trials(value: number) {
+        this._trials = value;
     }
 }
 
@@ -47,10 +71,24 @@ export class WeibullDistribution extends DistributionParameter{
     private _shape: number;
     private _scale: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, shape: number, scale: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._shape = shape;
-        this._scale = scale;
+    constructor() {
+        super();
+    }
+
+    get shape(): number {
+        return this._shape;
+    }
+
+    set shape(value: number) {
+        this._shape = value;
+    }
+
+    get scale(): number {
+        return this._scale;
+    }
+
+    set scale(value: number) {
+        this._scale = value;
     }
 }
 
@@ -58,10 +96,24 @@ export class NormalDistribution extends DistributionParameter{
     private _mean: number;
     private _standardDeviation: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, mean: number, standardDeviation: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
-        this._standardDeviation = standardDeviation;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
+    }
+
+    get standardDeviation(): number {
+        return this._standardDeviation;
+    }
+
+    set standardDeviation(value: number) {
+        this._standardDeviation = value;
     }
 }
 
@@ -69,10 +121,24 @@ export class LogNormalDistribution extends DistributionParameter{
     private _mean: number;
     private _standardDeviation: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, mean: number, standardDeviation: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
-        this._standardDeviation = standardDeviation;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
+    }
+
+    get standardDeviation(): number {
+        return this._standardDeviation;
+    }
+
+    set standardDeviation(value: number) {
+        this._standardDeviation = value;
     }
 }
 
@@ -80,10 +146,24 @@ export class UniformDistribution extends DistributionParameter{
     private _min: number;
     private _max: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, min: number, max: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._min = min;
-        this._max = max;
+    constructor() {
+        super();
+    }
+
+    get min(): number {
+        return this._min;
+    }
+
+    set min(value: number) {
+        this._min = value;
+    }
+
+    get max(): number {
+        return this._max;
+    }
+
+    set max(value: number) {
+        this._max = value;
     }
 }
 
@@ -92,11 +172,32 @@ export class TriangularDistribution extends DistributionParameter{
     private _max: number;
     private _mode: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, min: number, max: number, mode:number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mode = mode;
-        this._min = min;
-        this._max = max;
+    constructor() {
+        super();
+    }
+
+    get min(): number {
+        return this._min;
+    }
+
+    set min(value: number) {
+        this._min = value;
+    }
+
+    get max(): number {
+        return this._max;
+    }
+
+    set max(value: number) {
+        this._max = value;
+    }
+
+    get mode(): number {
+        return this._mode;
+    }
+
+    set mode(value: number) {
+        this._mode = value;
     }
 }
 
@@ -106,30 +207,72 @@ export class TruncatedNormalDistribution extends DistributionParameter{
     private _min: number;
     private _max: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, min: number, max: number, mean:number, standardDeviation: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
-        this._standardDeviation = standardDeviation;
-        this._min = min;
-        this._max = max;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
+    }
+
+    get standardDeviation(): number {
+        return this._standardDeviation;
+    }
+
+    set standardDeviation(value: number) {
+        this._standardDeviation = value;
+    }
+
+    get min(): number {
+        return this._min;
+    }
+
+    set min(value: number) {
+        this._min = value;
+    }
+
+    get max(): number {
+        return this._max;
+    }
+
+    set max(value: number) {
+        this._max = value;
     }
 }
 
 export class PoissonDistribution extends DistributionParameter{
     private _mean: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, mean: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
     }
 }
 
 export class NegativeExponentialDistribution extends DistributionParameter{
     private _mean: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, mean: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
     }
 }
 
@@ -137,10 +280,24 @@ export class ErlangDistribution extends DistributionParameter{
     private _mean: number;
     private _k: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, mean: number, k: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._mean = mean;
-        this._k = k;
+    constructor() {
+        super();
+    }
+
+    get mean(): number {
+        return this._mean;
+    }
+
+    set mean(value: number) {
+        this._mean = value;
+    }
+
+    get k(): number {
+        return this._k;
+    }
+
+    set k(value: number) {
+        this._k = value;
     }
 }
 
@@ -148,10 +305,24 @@ export class GammaDistribution extends DistributionParameter{
     private _shape: number;
     private _scale: number;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, shape: number, scale: number) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._shape = shape;
-        this._scale = scale;
+    constructor() {
+        super();
+    }
+
+    get shape(): number {
+        return this._shape;
+    }
+
+    set shape(value: number) {
+        this._shape = value;
+    }
+
+    get scale(): number {
+        return this._scale;
+    }
+
+    set scale(value: number) {
+        this._scale = value;
     }
 }
 
@@ -159,10 +330,24 @@ export class UserDistribution extends DistributionParameter{
     private _points: UserDistributionDataPoint[] = [];
     private _discrete: boolean;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, timeUnit: TimeUnit, points: UserDistributionDataPoint[], discrete: boolean = false) {
-        super(validFor, instance, result, resultTimeStamp, timeUnit);
-        this._points = points;
-        this._discrete = discrete;
+    constructor() {
+        super();
+    }
+
+    get points(): UserDistributionDataPoint[] {
+        return this._points;
+    }
+
+    set points(value: UserDistributionDataPoint[]) {
+        this._points = value;
+    }
+
+    get discrete(): boolean {
+        return this._discrete;
+    }
+
+    set discrete(value: boolean) {
+        this._discrete = value;
     }
 }
 
@@ -170,9 +355,7 @@ export class UserDistributionDataPoint{
     private _probability: number;
     private _value: ParameterValue;
 
-    constructor(probability: number, value: ParameterValue) {
-        this._probability = probability;
-        this._value = value;
+    constructor() {
     }
 
     get probability(): number {

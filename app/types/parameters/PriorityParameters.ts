@@ -4,10 +4,8 @@ export class PriorityParameters{
     private _interruptible: Parameter;
     private _priority: Parameter;
 
-    constructor(interruptible: Parameter, priority: Parameter) {
-        this._interruptible = interruptible;
-        this._priority = priority;
-    }
+    constructor(){}
+
 
     get interruptible(): Parameter {
         return this._interruptible;

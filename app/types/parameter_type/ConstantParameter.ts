@@ -1,14 +1,12 @@
-import {Calendar} from "../calendar/Calendar";
-import {ResultType} from "./ResultType";
 import {ParameterValue} from "./ParameterValue";
 import {TimeUnit} from "../scenario/TimeUnit";
 
 export class ConstantParameter extends ParameterValue {
-    private _value: any;
+    protected _value: any;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: any) {
-        super(validFor, instance, result, resultTimeStamp);
-        this._value = value;
+
+    constructor() {
+        super();
     }
 
     get value(): any {
@@ -22,18 +20,16 @@ export class ConstantParameter extends ParameterValue {
 
 export class StringParameter extends ConstantParameter {
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: string) {
-        super(validFor, instance, result, resultTimeStamp, value);
+    constructor() {
+        super();
     }
 }
 
 export class NumericParameter extends ConstantParameter {
     private _timeUnit: TimeUnit;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: number,
-                timeUnit: TimeUnit) {
-        super(validFor, instance, result, resultTimeStamp, value);
-        this._timeUnit = timeUnit;
+    constructor() {
+        super();
     }
 
     get timeUnit(): TimeUnit {
@@ -48,10 +44,8 @@ export class NumericParameter extends ConstantParameter {
 export class FloatingParameter extends ConstantParameter {
     private _timeUnit: TimeUnit;
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: number,
-                timeUnit: TimeUnit) {
-        super(validFor, instance, result, resultTimeStamp, value);
-        this._timeUnit = timeUnit;
+    constructor() {
+        super();
     }
 
     get timeUnit(): TimeUnit {
@@ -65,32 +59,30 @@ export class FloatingParameter extends ConstantParameter {
 
 export class BooleanParameter extends ConstantParameter {
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: boolean) {
-        super(validFor, instance, result, resultTimeStamp, value);
+    constructor() {
+        super();
     }
 }
 
 export class DurationParameter extends ConstantParameter {
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: Duration) {
-        super(validFor, instance, result, resultTimeStamp, value);
+    constructor() {
+        super();
     }
 }
 
 export class DateTimeParameter extends ConstantParameter {
 
-    constructor(validFor: Calendar, instance: string, result: ResultType, resultTimeStamp: DateTime, value: DateTime) {
-        super(validFor, instance, result, resultTimeStamp, value);
+    constructor() {
+        super();
     }
 }
 
 export class Duration{
     private _value: string;
 
-        constructor(value: string = "undefined") {
-        this._value = value;
+    constructor() {
     }
-
 
     get value(): string {
         return this._value;
@@ -103,10 +95,8 @@ export class Duration{
 
 export class DateTime{
     private _date: string;
-    constructor(year: number, month: number, day: number,
-                hour: number = 0, minutes: number = 0, seconds: number = 0){
-        var temp = new Date(Date.UTC(year,month,day,hour,minutes,seconds));
-        this._date = temp.toISOString();
+
+    constructor() {
     }
 
     get date() : string{

@@ -1,10 +1,9 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
 import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-import {Scenario} from "./types/scenario/Scenario";
+import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParameter";
 import {BPSimData} from "./types/scenario/BPSimData";
-import {ConstantParameter} from "./types/parameter_type/ParameterValue";
-import {ResultType} from "./types/parameter_type/ResultType";
-import {DateTime, Duration} from "./types/parameter_type/ConstantParameter";
+import {Scenario} from "./types/scenario/Scenario";
+import {factory} from "./types/factory";
 
 
 var container = $('#js-drop-zone');
@@ -45,6 +44,7 @@ function openDiagram(xml) {
     });
 }
 
+
 function structurePopulation() {
     let d1 = new DateTime(2019, 1, 5);
     let d2 = new DateTime(2019, 1, 10);
@@ -84,16 +84,32 @@ function xmlParsingToLeaves(xml){
     var leafNodes = nodes.filter(function(elem) {
         return !elem.hasChildNodes();
     });
-
     console.log(leafNodes);
-    var nome = leafNodes[0].localName;
-    console.log(nome);
 
-    let d = new Duration();
-    let temp = "value";
 
-    d[temp] = temp;
-    console.log(d[temp]);
+    //creo gli oggetti per ogni nodo foglia
+    let leafObjects = [];
+    for(let i=0; i<leafNodes.length; i++){
+        leafObjects[i] = new factory[leafNodes[i].localName]();
+    }
+
+    // console.log(leafObjects[0]);
+    // leafObjects[0]["value"] = "ciao";
+
+    console.log(leafObjects);
+
+
+
+
+
+
+    // let temp = "value";
+    //
+    // d[temp] = temp;
+    // console.log(d[temp]);
+
+
+
 
     // switch (nome) {
     //     case 'DurationParameter':
