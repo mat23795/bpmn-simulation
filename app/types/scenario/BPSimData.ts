@@ -10,6 +10,10 @@ export class BPSimData{
         return this._scenarios;
     }
 
+    set scenarios(scenarios: Scenario[]){
+        this._scenarios = scenarios
+    }
+
     addScenario(scenario: Scenario){
         this._scenarios.push(scenario);
     }

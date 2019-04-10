@@ -87,10 +87,13 @@ function xmlParsingToLeaves(xml){
     console.log(leafNodes);
 
 
-    //creo gli oggetti per ogni nodo foglia
+    //creo gli oggetti per ogni nodo foglia e li avvaloro in base ai campi definiti nel bpsim in input
     let leafObjects = [];
     for(let i=0; i<leafNodes.length; i++){
         leafObjects[i] = new factory[leafNodes[i].localName]();
+        for(let j=0; j<leafNodes[i].attributes.length; j++){
+            leafObjects[i][leafNodes[i].attributes[j].localName] = leafNodes[i].attributes[j].value ;
+        }
     }
 
     // console.log(leafObjects[0]);
