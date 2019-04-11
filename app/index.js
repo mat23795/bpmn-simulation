@@ -48,7 +48,7 @@ function openDiagram(xml) {
     });
 }
 
-function createFormFields(xml){
+function createFormFields(xml) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
 
@@ -65,8 +65,8 @@ function createFormFields(xml){
     console.log(nodes);
 
     var nodesTask = [];
-    for (let i=0; i< nodes.length;i++){
-        if(nodes[i].localName == "task"){
+    for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].localName == "task") {
 
             nodesTask.push(nodes[i]);
         }
@@ -108,10 +108,10 @@ function structurePopulation() {
     let d1 = new DateTime(2019, 1, 5);
     let d2 = new DateTime(2019, 1, 10);
 
-    let sc = new Scenario("1","ciao","descr",d1,d2,"Pippo");
+    let sc = new Scenario("1", "ciao", "descr", d1, d2, "Pippo");
     console.log(sc);
 
-    let sc2 = new Scenario("2","ciao","provola",d1,d2,"Pippo");
+    let sc2 = new Scenario("2", "ciao", "provola", d1, d2, "Pippo");
     console.log(sc2);
 
     let bp = new BPSimData();
@@ -125,7 +125,7 @@ function structurePopulation() {
 
 }
 
-function xmlParsingToLeaves(xml){
+function xmlParsingToLeaves(xml) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
 
@@ -143,11 +143,11 @@ function xmlParsingToLeaves(xml){
 
     //creo gli oggetti per ogni nodo  e li avvaloro in base ai campi definiti nel bpsim in input
     let nodeObjects = [];
-    for(let i=0; i<nodes.length; i++){
+    for (let i = 0; i < nodes.length; i++) {
         // console.log(nodes[i].localName,"    ", factory[nodes[i].localName]);
-        if(nodes[i].localName === "ResultRequest"){
+        if (nodes[i].localName === "ResultRequest") {
             nodeObjects[i] = factory[nodes[i].localName][nodes[i].textContent];
-        }else {
+        } else {
             nodeObjects[i] = new factory[nodes[i].localName]();
             for (let j = 0; j < nodes[i].attributes.length; j++) {
                 nodeObjects[i][nodes[i].attributes[j].localName] = nodes[i].attributes[j].value;
@@ -155,7 +155,13 @@ function xmlParsingToLeaves(xml){
         }
     }
 
-   console.log(nodeObjects);
+    console.log(nodeObjects);
+
+    let temp = buildDataTree(nodes[0], createObj(nodes[0]));
+    console.log(temp);
+
+
+    // buildDataTree(nodes, nodeObjects);
 
 
     // var leafNodes = nodes.filter(function(elem) {
@@ -173,6 +179,54 @@ function xmlParsingToLeaves(xml){
 
     // console.log(leafObjects);
 
+}
+
+function createObj(node) {
+    let nodeObject;
+    if (node.localName === "ResultRequest") {
+        nodeObject = factory[node.localName][node.textContent];
+    } else {
+        nodeObject = new factory[node.localName]();
+        for (let j = 0; j < node.attributes.length; j++) {
+            nodeObject[node.attributes[j].localName] = node.attributes[j].value;
+        }
+    }
+    return nodeObject
+}
+
+function buildDataTree(nodo, nodoObject) {
+
+    let numFigli = nodo.childElementCount;
+    let nodoFiglio;
+
+    let childNodes=nodo.childNodes;
+    let temp=[];
+    for(let i = 0; i<childNodes.length;i++){
+        if(childNodes[i].nodeName != '#text'){
+            temp.push(childNodes[i]);
+        }
+    }
+    childNodes = temp;
+
+    while (numFigli > 0) {
+        let childToPass = childNodes.pop();
+        nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
+        //VEDERE SE FUNZIONA PER CHI HA ARRAY OLTRE
+        if(nodoFiglio[0].localName === "Scenario"){
+            let tempArray = [];
+            tempArray.push(nodoFiglio[1]);
+            nodo[nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1)] = tempArray;
+
+        }else {
+            nodo[nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1)] = nodoFiglio[1];
+        }
+        numFigli--;
+    }
+
+    let nodo_nodoObj = [];
+    nodo_nodoObj.push(nodo);
+    nodo_nodoObj.push(nodoObject);
+    return nodo_nodoObj;
 }
 
 
@@ -197,23 +251,23 @@ function xmlParsing(xml) {
 
     if (bpsimNS.length == 0) {
         //Aggiungere namespace bpsim al namespace
-        definitionsTag[0].setAttribute("xlmns:"+bpsimPrefix, bpsimNamespaceURI);
+        definitionsTag[0].setAttribute("xlmns:" + bpsimPrefix, bpsimNamespaceURI);
 
         //Aggiunta bpmn:relationship
-        let relationship = xmlDoc.createElement(bpmnPrefix+":relationship");
-        relationship.setAttribute("type","BPSimData");
+        let relationship = xmlDoc.createElement(bpmnPrefix + ":relationship");
+        relationship.setAttribute("type", "BPSimData");
         definitionsTag[0].appendChild(relationship);
 
         //Aggiunta bpmn:extensionElements
-        let extensionElements = xmlDoc.createElement(bpmnPrefix+":extensionElements");
+        let extensionElements = xmlDoc.createElement(bpmnPrefix + ":extensionElements");
         relationship.appendChild(extensionElements);
 
         //Aggiunta bpsim:BPSimData
-        let bpsimData = xmlDoc.createElement(bpsimPrefix+":BPSimData");
+        let bpsimData = xmlDoc.createElement(bpsimPrefix + ":BPSimData");
         extensionElements.appendChild(bpsimData);
 
         //Aggiunta bpsim:Scenario
-        let scenario = xmlDoc.createElement(bpsimPrefix+":Scenario");
+        let scenario = xmlDoc.createElement(bpsimPrefix + ":Scenario");
         // scenario.setAttribute("id", $('#id').val());
         // scenario.setAttribute("name", $('#name').val());
         // scenario.setAttribute("description", $('#description').val());
@@ -226,10 +280,10 @@ function xmlParsing(xml) {
         bpsimData.appendChild(scenario);
 
         console.log(bpsimData);
-    }else{
+    } else {
         //TODO inserire nuovi valori del xml letto
         bpsimPrefix = bpsimNS[0].prefix;
-        console.log("ciao "+ bpsimPrefix);
+        console.log("ciao " + bpsimPrefix);
     }
     console.log(xmlDoc);
 
@@ -331,11 +385,10 @@ events.forEach(function (event) {
         // e.element = the model element
         // e.gfx = the graphical element
 
-        if(event == 'element.click'){
-            var scrollPos =  $("#exampleFormControlTextarea1").offset().top;
+        if (event == 'element.click') {
+            var scrollPos = $("#exampleFormControlTextarea1").offset().top;
             $('#js-simulation').scrollTop(scrollPos);
         }
-
 
 
         if (!e.element.id.includes("label")) {
