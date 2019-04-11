@@ -140,3 +140,12 @@ label{
     width: 65px;
     overflow-y: scroll;
 }
+#task-form{
+    display: none;
+}
+#gateway-form{
+    display: none;
+}
+#altro-form{
+    display: none;
+}

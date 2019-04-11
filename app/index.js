@@ -40,8 +40,64 @@ function openDiagram(xml) {
 
         // xmlParsing(xml);
         xmlParsingToLeaves(xml);
+        createFormFields(xml);
         // structurePopulation();
     });
+}
+
+function createFormFields(xml){
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+    // const bpmnPrefix = definitionsTag[0].prefix;
+
+    const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
+    const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
+
+
+    let bpmnProcessFields = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "process");
+    console.log(bpmnProcessFields[0]);
+
+    var nodes = Array.prototype.slice.call(bpmnProcessFields[0].getElementsByTagName("*"), 0);
+    console.log(nodes);
+
+    var nodesTask = [];
+    for (let i=0; i< nodes.length;i++){
+        if(nodes[i].localName == "task"){
+
+            nodesTask.push(nodes[i]);
+        }
+        // console.log(nodes[i].localName);
+    }
+    console.log(nodesTask);
+
+    let taskForm = $('#task-form');
+
+    let a1 = jQuery('<label/>', {
+        for: 'vendor1',
+        text: 'Vendor1'
+    });
+
+    let b1 = jQuery('<input/>', {
+        type: 'text',
+        class: 'form-control form-control-input',
+        id: 'vendor1',
+        value: 'Caputo & Lazazzera'
+    });
+
+    taskForm.css('display', 'block');
+
+    let a2 = $("<label for=\"vendor2\">Vendor2</label>");
+
+    let b2 = $("<input type=\"text\" class=\"form-control form-control-input\" id=\"vendor2\" value=\"Caputo & Lazazzera\">");
+
+
+    taskForm.append(a1);
+    taskForm.append(b1);
+
+    taskForm.append(a2);
+    taskForm.append(b2);
+
 }
 
 
@@ -252,7 +308,7 @@ if (!window.FileList || !window.FileReader) {
     $('#js-canvas').css('display', 'block');
     // openDiagram(firstdiagramXML);
     openDiagram(carRepairProcessXML);
-    // END
+    // END Remove
 
 
     registerFileDrop(container, openDiagram);
@@ -276,6 +332,14 @@ events.forEach(function (event) {
     eventBus.on(event, function (e) {
         // e.element = the model element
         // e.gfx = the graphical element
+
+        if(event == 'element.click'){
+            var scrollPos =  $("#exampleFormControlTextarea1").offset().top;
+            $('#js-simulation').scrollTop(scrollPos);
+        }
+
+
+
         if (!e.element.id.includes("label")) {
             // console.log(event + 'on' + e.element.id);
         } else {
