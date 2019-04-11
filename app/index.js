@@ -4,6 +4,7 @@ import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParame
 import {BPSimData} from "./types/scenario/BPSimData";
 import {Scenario} from "./types/scenario/Scenario";
 import {factory} from "./types/factory";
+import {ResultType} from "./types/parameter_type/ResultType";
 
 
 var container = $('#js-drop-zone');
@@ -39,8 +40,9 @@ function openDiagram(xml) {
         // $('.djs-container').css('overflow', 'auto');
 
         // xmlParsing(xml);
-        xmlParsingToLeaves(xml);
         createFormFields(xml);
+        xmlParsingToLeaves(xml);
+
         // structurePopulation();
     });
 }
@@ -137,6 +139,25 @@ function xmlParsingToLeaves(xml){
 
     var nodes = Array.prototype.slice.call(bpsimNS[0].getElementsByTagName("*"), 0);
     console.log(nodes);
+
+    //creo gli oggetti per ogni nodo  e li avvaloro in base ai campi definiti nel bpsim in input
+    let nodeObjects = [];
+    for(let i=0; i<nodes.length; i++){
+        // console.log(nodes[i].localName,"    ", factory[nodes[i].localName]);
+        if(nodes[i].localName === "ResultRequest"){
+            let typeNode = nodes[i].textContent;
+            nodeObjects[i] = factory[nodes[i].localName].typeNode;
+        }else {
+            nodeObjects[i] = new factory[nodes[i].localName]();
+            for (let j = 0; j < nodes[i].attributes.length; j++) {
+                nodeObjects[i][nodes[i].attributes[j].localName] = nodes[i].attributes[j].value;
+            }
+        }
+    }
+
+
+    console.log(nodeObjects);
+
     var leafNodes = nodes.filter(function(elem) {
         return !elem.hasChildNodes();
     });
@@ -152,15 +173,7 @@ function xmlParsingToLeaves(xml){
         }
     }
 
-    // console.log(leafObjects[0]);
-    // leafObjects[0]["value"] = "ciao";
-
     console.log(leafObjects);
-
-
-
-
-
 
     // let temp = "value";
     //

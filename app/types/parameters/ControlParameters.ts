@@ -1,7 +1,7 @@
 import {Parameter} from "../parameter_type/Parameter";
 
 export class ControlParameters{
-    private _interTriggerTime: Parameter;
+    private _interTriggerTimer: Parameter;
     private _triggerCount: Parameter;
     private _probability: Parameter;
     private _condition: Parameter;
@@ -9,12 +9,12 @@ export class ControlParameters{
     constructor(){}
 
 
-    get interTriggerTime(): Parameter {
-        return this._interTriggerTime;
+    get interTriggerTimer(): Parameter {
+        return this._interTriggerTimer;
     }
 
-    set interTriggerTime(value: Parameter) {
-        this._interTriggerTime = value;
+    set interTriggerTimer(value: Parameter) {
+        this._interTriggerTimer = value;
     }
 
     get triggerCount(): Parameter {

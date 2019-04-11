@@ -2,6 +2,6 @@ export enum ResultType{
     MIN = "min",
     MAX = "max",
     MEAN = "mean",
-    COUNT = "count",
+    count = "count",
     SUM = "sum"
 }

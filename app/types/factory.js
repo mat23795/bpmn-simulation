@@ -35,6 +35,7 @@ import {Property} from "./parameters/Property";
 import {PropertyType} from "./parameters/PropertyType";
 import {ResourceParameters} from "./parameters/ResourceParameters";
 import {TimeParameters} from "./parameters/TimeParameters";
+import {PropertyParameters} from "./parameters/PropertyParameters";
 
 export var factory = {
     "BPSimData": BPSimData,
@@ -77,10 +78,16 @@ export var factory = {
     "ElementParameters": ElementParameters,
     "PriorityParameters": PriorityParameters,
     "Property": Property,
+    "PropertyParameters": PropertyParameters,
     "PropertyType": PropertyType,
     "ResourceParameters": ResourceParameters,
     "TimeParameters": TimeParameters,
 
-
+    //non di classe i seguenti ma campi di classi
+    "TriggerCount": Parameter,
+    "InterTriggerTimer": Parameter,
+    "Probability": Parameter,
+    "Condition": Parameter,
+    "ResultRequest": ResultType
 
 }
