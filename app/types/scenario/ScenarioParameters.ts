@@ -9,7 +9,7 @@ export class ScenarioParameters {
     private _warmup: Parameter;
     private _replication: number = 1;
     private _seed: number;
-    private _baseTimeUnit: TimeUnit = TimeUnit.MINUTES;
+    private _baseTimeUnit: TimeUnit = TimeUnit.minutes;
     private _baseCurrencyUnit: string = "USD";
     private _baseResultFrequency: Duration;
     private _baseResultFrequencyCumul: boolean = false;

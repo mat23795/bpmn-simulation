@@ -1,8 +1,8 @@
 export enum PropertyType  {
-    STRING = "string",
-    BOOLEAN= "boolean",
-    LONG = "long",
-    DOUBLE = "double",
-    DURATION = "duration",
-    DATETIME = "dateTime"
+    string = "string",
+    boolean= "boolean",
+    long = "long",
+    double = "double",
+    duration = "duration",
+    dateTime = "dateTime"
 }

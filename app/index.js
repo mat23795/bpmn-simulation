@@ -5,6 +5,7 @@ import {BPSimData} from "./types/scenario/BPSimData";
 import {Scenario} from "./types/scenario/Scenario";
 import {factory} from "./types/factory";
 import {ResultType} from "./types/parameter_type/ResultType";
+import {Parameter} from "./types/parameter_type/Parameter";
 
 
 var container = $('#js-drop-zone');
@@ -145,8 +146,7 @@ function xmlParsingToLeaves(xml){
     for(let i=0; i<nodes.length; i++){
         // console.log(nodes[i].localName,"    ", factory[nodes[i].localName]);
         if(nodes[i].localName === "ResultRequest"){
-            let typeNode = nodes[i].textContent;
-            nodeObjects[i] = factory[nodes[i].localName].typeNode;
+            nodeObjects[i] = factory[nodes[i].localName][nodes[i].textContent];
         }else {
             nodeObjects[i] = new factory[nodes[i].localName]();
             for (let j = 0; j < nodes[i].attributes.length; j++) {
@@ -155,39 +155,24 @@ function xmlParsingToLeaves(xml){
         }
     }
 
-
-    console.log(nodeObjects);
-
-    var leafNodes = nodes.filter(function(elem) {
-        return !elem.hasChildNodes();
-    });
-    console.log(leafNodes);
+   console.log(nodeObjects);
 
 
-    //creo gli oggetti per ogni nodo foglia e li avvaloro in base ai campi definiti nel bpsim in input
-    let leafObjects = [];
-    for(let i=0; i<leafNodes.length; i++){
-        leafObjects[i] = new factory[leafNodes[i].localName]();
-        for(let j=0; j<leafNodes[i].attributes.length; j++){
-            leafObjects[i][leafNodes[i].attributes[j].localName] = leafNodes[i].attributes[j].value ;
-        }
-    }
-
-    console.log(leafObjects);
-
-    // let temp = "value";
-    //
-    // d[temp] = temp;
-    // console.log(d[temp]);
-
-
-
-
-    // switch (nome) {
-    //     case 'DurationParameter':
-    //         let d = new DurationParameter();
-    //         break;
+    // var leafNodes = nodes.filter(function(elem) {
+    //     return !elem.hasChildNodes();
+    // });
+    // console.log(leafNodes);
+    // //creo gli oggetti per ogni nodo foglia e li avvaloro in base ai campi definiti nel bpsim in input
+    // let leafObjects = [];
+    // for(let i=0; i<leafNodes.length; i++){
+    //     leafObjects[i] = new factory[leafNodes[i].localName]();
+    //     for(let j=0; j<leafNodes[i].attributes.length; j++){
+    //         leafObjects[i][leafNodes[i].attributes[j].localName] = leafNodes[i].attributes[j].value ;
+    //     }
     // }
+
+    // console.log(leafObjects);
+
 }
 
 

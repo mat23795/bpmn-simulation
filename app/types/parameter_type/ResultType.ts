@@ -1,7 +1,7 @@
 export enum ResultType{
-    MIN = "min",
-    MAX = "max",
-    MEAN = "mean",
+    min = "min",
+    max = "max",
+    mean = "mean",
     count = "count",
-    SUM = "sum"
+    sum = "sum"
 }
