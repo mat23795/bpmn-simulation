@@ -39,9 +39,9 @@ function openDiagram(xml) {
         // }
 
         viewer.get('canvas').zoom('fit-viewport');
-        // TODO vedere scrollbar 
+        // TODO vedere scrollbar
         // $('.djs-container').css('overflow', 'auto');
-        
+
         // * creare dal XML il form field
         createFormFields(xml);
 
@@ -119,32 +119,48 @@ function xmlParsing(xml){
 
 
     // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
-    let extentionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+    let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
 
     // * elemento XML delle definizioni
     let definitionsTagXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
 
     // * prefisso bpmn (es. semantic, bpmn)
     const bpmnPrefix = definitionsTagXML[0].prefix;
-    let bpsimPrefix = "bpsim"; //default
+    let bpsimPrefix = "bpsim"; // * default
 
+    let dataTree; // * variabile che contiene la struttura dati
 
-    if (extentionElementXML.length == 0) {
+    if (extensionElementXML.length == 0) {
         //TODO scrivere xml in base a dati della struttura presi da form fields
         //TODO 1) field2emptytree 2) tree2xml
     }else{
         // * Fase 1 xml2tree
-        bpsimPrefix = extentionElementXML[0].prefix;
+        bpsimPrefix = extensionElementXML[0].childNodes[1].prefix;
 
         // * Leggere bpsim e inserirlo nella struttura dati
-        let dataTree = xml2tree(extentionElementXML[0])
+        dataTree = xml2tree(extensionElementXML[0])
         console.log("Struttura ad albero"); //TODO REMOVE
         console.log(dataTree); //TODO REMOVE
 
         // * Fase 2 field2tree
 
-        // * Fase 3 tree2xml
+
+        // * rimozione vecchio BPSimData
+        // extensionElementXML[0].removeChild(xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData")[0]); 
+
     }
+
+    // * Fase 3 tree2xml (comune per entrambi i casi sia che ci sia simulazione che senza)
+    let dataTreeObj = dataTree[1];
+
+   
+
+
+    extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
+
+
+    console.log(xmlDoc);
+
 
 }
 
@@ -152,7 +168,7 @@ function xmlParsing(xml){
 function xml2tree(bpsimDataXML) {
     // * array di tutti gli elementi presenti in "extensionElements", ovvero BPSimData
     var nodes = Array.prototype.slice.call(bpsimDataXML.getElementsByTagName("*"), 0);
-   
+
     return buildDataTree(nodes[0], createObj(nodes[0]));
 }
 
@@ -210,9 +226,9 @@ function buildDataTree(nodo, nodoObject) {
 
 // * Funzione di appoggio che permette di capire se un attributo è di tipo array
 function isArrayAttribute(attribute){
-    let attributes = ["Scenario", "ElementParameters", "VendorExtensions", "PropertyParameters", "ParameterValue", 
+    let attributes = ["Scenario", "ElementParameters", "VendorExtensions", "PropertyParameters", "ParameterValue",
     "Calendar", "UserDistributionDataPoint", "ConstantParameter"];
-    
+
     return attributes.includes(attribute);
 }
 
@@ -311,7 +327,7 @@ function registerFileDrop(container, callback) {
             // * mette visibile il div del diagramma e toglie quello della drop-zone
             $('#js-drop-zone').css('display', 'none');
             $('#js-canvas').css('display', 'block');
-            
+
             // * richiama la funzione openDiagram
             callback(xml);
         };
@@ -378,7 +394,7 @@ events.forEach(function (event) {
         // * funzione che al click nella zona del diagramma cambia il focus della zona delle properties
         // TODO cambiare la zona
         if (event == 'element.click') {
-            // 
+            //
             var scrollPos = $("#exampleFormControlTextarea1").offset().top;
             $('#js-simulation').scrollTop(scrollPos);
         }

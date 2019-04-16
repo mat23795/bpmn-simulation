@@ -20,4 +20,18 @@ export class BPSimData{
     addScenario(scenario: Scenario){
         this._scenario.push(scenario);
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any){
+
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        
+        let bpsimDataXMLelement = xmlDoc.createElement(bpsimPrefix + ":BPSimData");
+        
+        for(let i=0; i< this._scenario.length; i++) {
+            bpsimDataXMLelement.appendChild(this._scenario[i].toXMLelement(bpsimPrefix,xml));
+        }
+
+        return bpsimDataXMLelement;
+    }
 }

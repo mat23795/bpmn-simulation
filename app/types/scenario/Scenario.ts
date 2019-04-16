@@ -140,4 +140,45 @@ export class Scenario {
             this._calendar.push(value[i]);
         }
     }
+
+    eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }        
+
+
+    toXMLelement(bpsimPrefix: string, xml: any) : any{
+
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let scenarioXMLelement = xmlDoc.createElement(bpsimPrefix + ":Scenario");
+
+        // private _id: string;
+        this.eventuallyAddAttribute(scenarioXMLelement, "id", this._id);
+        this.eventuallyAddAttribute(scenarioXMLelement, "name", this._name);
+        this.eventuallyAddAttribute(scenarioXMLelement, "description", this._description);
+
+        //TODO capire come fare il toXml di tipi complessi
+        // private _created: DateTime;
+        // private _modified: DateTime;
+        // private _author: string;
+        // private _vendor: string = "Caputo & Lazazzera";
+        // private _version: string;
+        // private _result: Scenario;
+        // private _inherits: Scenario;
+        // private _elementParameters: ElementParameters[] = [];
+        // private _scenarioParameters: ScenarioParameters;
+        // private _vendorExtensions: VendorExtension[] = [];
+        // private _calendar : Calendar[] = []
+
+
+        
+        // for(let i=0; i< this._scenario.length; i++) {
+        //     bpsimDataXMLelement.appendChild(this._scenario[i].toXMLelement(bpsimPrefix));
+        // }
+        return scenarioXMLelement;
+    }
+
 }
