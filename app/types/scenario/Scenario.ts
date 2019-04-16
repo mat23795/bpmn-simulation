@@ -106,7 +106,9 @@ export class Scenario {
     }
 
     set elementParameters(value: ElementParameters[]) {
-        this._elementParameters = value;
+        for(let i=0; i<value.length; i++) {
+            this._elementParameters.push(value[i]);
+        }
     }
 
     get scenarioParameters(): ScenarioParameters {
@@ -122,6 +124,8 @@ export class Scenario {
     }
 
     set vendorExtensions(value: VendorExtension[]) {
-        this._vendorExtensions = value;
+        for (let i = 0; i < value.length; i++) {
+            this._vendorExtensions.push(value[i]);
+        }
     }
 }

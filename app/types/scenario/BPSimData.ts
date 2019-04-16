@@ -1,22 +1,23 @@
 import {Scenario} from "./Scenario";
 
 export class BPSimData{
-    private _scenarios : Scenario[] = [];
+    private _scenario : Scenario[] = [];
 
     constructor(){}
 
 
-    get scenarios() : Scenario[] {
-        return this._scenarios;
+    get scenario() : Scenario[] {
+        return this._scenario;
     }
 
-    set scenarios(scenarios: Scenario[]){
-        for(let i=0; i<scenarios.length; i++) {
-            this._scenarios.push(scenarios[i]);
+    set scenario(scenario: Scenario[]){
+        for(let i=0; i<scenario.length; i++) {
+            this._scenario.push(scenario[i]);
         }
+
     }
 
     addScenario(scenario: Scenario){
-        this._scenarios.push(scenario);
+        this._scenario.push(scenario);
     }
 }

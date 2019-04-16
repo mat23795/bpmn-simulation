@@ -158,6 +158,8 @@ function xmlParsingToLeaves(xml) {
     console.log(nodeObjects);
 
     let temp = buildDataTree(nodes[0], createObj(nodes[0]));
+    // console.log("RISULTATO SEGUE");
+
     console.log(temp);
 
 
@@ -211,14 +213,24 @@ function buildDataTree(nodo, nodoObject) {
     while (numFigli > 0) {
         let childToPass = childNodes.pop();
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
+        let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
         //VEDERE SE FUNZIONA PER CHI HA ARRAY OLTRE
-        if(nodoFiglio[0].localName === "Scenario"){
+        if(nodoFiglio[0].localName === "Scenario" ||
+            nodoFiglio[0].localName === "ElementParameters"
+        ){
             let tempArray = [];
             tempArray.push(nodoFiglio[1]);
-            nodo[nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1)] = tempArray;
+            // console.log(tempArray);
+
+            // console.log(nameAttr);
+            nodoObject[nameAttr] = tempArray;
 
         }else {
-            nodo[nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1)] = nodoFiglio[1];
+            // console.log(nodo);
+            // console.log(nodoObject);
+            // console.log(nameAttr);
+
+            nodoObject[nameAttr] = nodoFiglio[1];
         }
         numFigli--;
     }
