@@ -339,7 +339,9 @@ export class UserDistribution extends DistributionParameter{
     }
 
     set points(value: UserDistributionDataPoint[]) {
-        this._points = value;
+        for (let i = 0; i < value.length; i++) {
+            this._points.push(value[i]);
+        } 
     }
 
     get discrete(): boolean {

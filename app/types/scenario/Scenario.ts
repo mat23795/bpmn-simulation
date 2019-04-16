@@ -2,6 +2,7 @@ import {VendorExtension} from "./VendorExtension";
 import {ScenarioParameters} from "./ScenarioParameters";
 import {ElementParameters} from "../parameters/ElementParameters";
 import {DateTime} from "../parameter_type/ConstantParameter";
+import {Calendar} from "../calendar/Calendar";
 
 
 export class Scenario {
@@ -18,6 +19,7 @@ export class Scenario {
     private _elementParameters: ElementParameters[] = [];
     private _scenarioParameters: ScenarioParameters;
     private _vendorExtensions: VendorExtension[] = [];
+    private _calendar : Calendar[] = []
 
     constructor(){}
 
@@ -126,6 +128,16 @@ export class Scenario {
     set vendorExtensions(value: VendorExtension[]) {
         for (let i = 0; i < value.length; i++) {
             this._vendorExtensions.push(value[i]);
+        }
+    }
+
+    get calendar(): Calendar[] {
+        return this._calendar;
+    }
+
+    set calendar(value: Calendar[]) {
+        for (let i = 0; i < value.length; i++) {
+            this._calendar.push(value[i]);
         }
     }
 }

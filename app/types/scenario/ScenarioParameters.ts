@@ -112,6 +112,8 @@ export class ScenarioParameters {
     }
 
     set propertyParameters(value: PropertyParameters[]) {
-        this._propertyParameters = value;
+        for (let i = 0; i < value.length; i++) {
+            this._propertyParameters.push(value[i]);
+        }
     }
 }

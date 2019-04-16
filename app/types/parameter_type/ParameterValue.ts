@@ -3,7 +3,7 @@ import {Calendar} from "../calendar/Calendar";
 import {DateTime} from "./ConstantParameter";
 
 export class ParameterValue{
-    protected _validFor: Calendar;
+    protected _validFor: Calendar[];
     protected _instance: string;
     protected _result: ResultType;
     protected _resultTimeStamp: DateTime;
@@ -11,12 +11,14 @@ export class ParameterValue{
     constructor(){};
 
 
-    get validFor(): Calendar {
+    get validFor(): Calendar[] {
         return this._validFor;
     }
 
-    set validFor(value: Calendar) {
-        this._validFor = value;
+    set validFor(value: Calendar[]) {
+        for (let i = 0; i < value.length; i++) {
+            this._validFor.push(value[i]);
+        }
     }
 
     get instance(): string {
