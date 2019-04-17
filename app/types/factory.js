@@ -88,6 +88,7 @@ export var factory = {
     "InterTriggerTimer": Parameter,
     "Probability": Parameter,
     "Condition": Parameter,
-    "ResultRequest": ResultType
+    "ResultRequest": ResultType,
+    "Start": Parameter
 
 }

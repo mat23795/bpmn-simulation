@@ -1,5 +1,7 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
 import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
+import tecnicalSupportProcessXML from '../resources/TechnicalSupportProcess.bpmn';
+
 import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParameter";
 import {BPSimData} from "./types/scenario/BPSimData";
 import {Scenario} from "./types/scenario/Scenario";
@@ -146,14 +148,14 @@ function xmlParsing(xml){
 
 
         // * rimozione vecchio BPSimData
-        // extensionElementXML[0].removeChild(xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData")[0]); 
+        // extensionElementXML[0].removeChild(xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData")[0]);
 
     }
 
     // * Fase 3 tree2xml (comune per entrambi i casi sia che ci sia simulazione che senza)
     let dataTreeObj = dataTree[1];
 
-   
+
 
 
     extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
@@ -174,6 +176,7 @@ function xml2tree(bpsimDataXML) {
 
 // * Funzione che dato un nodo ti restituisce l'oggetto relativo al nodo
 function createObj(node) {
+    console.log(node);
     let nodeObject;
     if (node.localName === "ResultRequest") {
         nodeObject = factory[node.localName][node.textContent];
@@ -206,13 +209,14 @@ function buildDataTree(nodo, nodoObject) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-
+        console.log(nameAttr);
         if(isArrayAttribute(nodoFiglio[0].localName)){
             // * attributo array di un nodo viene popolato in maniera differente rispetto ad attributo atomico
             let tempArray = [];
             tempArray.push(nodoFiglio[1]);
             nodoObject[nameAttr] = tempArray;
         } else {
+            console.log(nodoObject);
             nodoObject[nameAttr] = nodoFiglio[1];
         }
         numFigli--;
@@ -365,7 +369,8 @@ if (!window.FileList || !window.FileReader) {
     $('#js-drop-zone').css('display', 'none');
     $('#js-canvas').css('display', 'block');
     // openDiagram(firstdiagramXML);
-    openDiagram(carRepairProcessXML);
+    // openDiagram(carRepairProcessXML);
+    openDiagram(tecnicalSupportProcessXML);
     // * END Remove
 
 

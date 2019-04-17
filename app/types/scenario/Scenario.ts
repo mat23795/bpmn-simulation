@@ -141,12 +141,11 @@ export class Scenario {
         }
     }
 
-    eventuallyAddAttribute(elementXML: any, name: string, value:any){
+    private eventuallyAddAttribute(elementXML: any, name: string, value:any){
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
     }        
-
 
     toXMLelement(bpsimPrefix: string, xml: any) : any{
 
@@ -155,29 +154,36 @@ export class Scenario {
 
         let scenarioXMLelement = xmlDoc.createElement(bpsimPrefix + ":Scenario");
 
-        // private _id: string;
         this.eventuallyAddAttribute(scenarioXMLelement, "id", this._id);
         this.eventuallyAddAttribute(scenarioXMLelement, "name", this._name);
         this.eventuallyAddAttribute(scenarioXMLelement, "description", this._description);
+        this.eventuallyAddAttribute(scenarioXMLelement, "created", this._created);
+        this.eventuallyAddAttribute(scenarioXMLelement, "modified", this._modified);
+        this.eventuallyAddAttribute(scenarioXMLelement, "author", this._author);
+        this.eventuallyAddAttribute(scenarioXMLelement, "vendor", this._vendor);
+        this.eventuallyAddAttribute(scenarioXMLelement, "version", this._version);
+        this.eventuallyAddAttribute(scenarioXMLelement, "result", this._result);
+        this.eventuallyAddAttribute(scenarioXMLelement, "inherits", this._inherits);
 
-        //TODO capire come fare il toXml di tipi complessi
-        // private _created: DateTime;
-        // private _modified: DateTime;
-        // private _author: string;
-        // private _vendor: string = "Caputo & Lazazzera";
-        // private _version: string;
-        // private _result: Scenario;
-        // private _inherits: Scenario;
-        // private _elementParameters: ElementParameters[] = [];
-        // private _scenarioParameters: ScenarioParameters;
-        // private _vendorExtensions: VendorExtension[] = [];
-        // private _calendar : Calendar[] = []
+        // TODO
+        if(this._scenarioParameters != undefined){
+            scenarioXMLelement.appendChild(this._scenarioParameters.toXMLelement(bpsimPrefix,xml));
+        }
 
+        // TODO
+        for(let i=0; i< this._elementParameters.length; i++) {
+            scenarioXMLelement.appendChild(this._elementParameters[i].toXMLelement(bpsimPrefix, xml));
+        }
 
-        
-        // for(let i=0; i< this._scenario.length; i++) {
-        //     bpsimDataXMLelement.appendChild(this._scenario[i].toXMLelement(bpsimPrefix));
-        // }
+        for(let i=0; i< this._vendorExtensions.length; i++) {
+            scenarioXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, xml));
+        }
+
+        // TODO
+        for(let i=0; i< this._calendar.length; i++) {
+            scenarioXMLelement.appendChild(this._calendar[i].toXMLelement(bpsimPrefix, xml));
+        }
+
         return scenarioXMLelement;
     }
 

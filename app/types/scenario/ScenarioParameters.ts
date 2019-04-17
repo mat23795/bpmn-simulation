@@ -4,6 +4,7 @@ import {PropertyParameters} from "../parameters/PropertyParameters";
 import {Duration} from "../parameter_type/ConstantParameter";
 
 export class ScenarioParameters {
+    
     private _start: Parameter;
     private _duration: Parameter;
     private _warmup: Parameter;
@@ -115,5 +116,20 @@ export class ScenarioParameters {
         for (let i = 0; i < value.length; i++) {
             this._propertyParameters.push(value[i]);
         }
+    }
+
+    private eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }        
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let scenarioParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ScenarioParameters");
+        // TODO FINIRLA
+        return scenarioParametersXMLelement;
     }
 }

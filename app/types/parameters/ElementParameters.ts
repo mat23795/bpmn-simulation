@@ -7,6 +7,7 @@ import {PropertyParameters} from "./PropertyParameters";
 import {PriorityParameters} from "./PriorityParameters";
 
 export class ElementParameters {
+    
     private _id: string;
     private _elementRef: string;
     private _vendorExtensions: VendorExtension[] = [];
@@ -89,5 +90,14 @@ export class ElementParameters {
 
     set priorityParameters(value: PriorityParameters) {
         this._priorityParameters = value;
+    }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let elementParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ElementParameters");
+        // TODO FINIRLA
+        return elementParametersXMLelement;
     }
 }
