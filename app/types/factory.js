@@ -107,7 +107,10 @@ export var factory = {
     "Interruptible" : Parameter,
     "Priority": Parameter,
     "Type": PropertyType,
-    "QueueLength": Parameter
+    "QueueLength": Parameter,
+    "ResultTimeStamp": DateTime,
+    "FixedCost": Parameter,
+    "UnitCost": Parameter
     // "Duration": Parameter
 
 }
