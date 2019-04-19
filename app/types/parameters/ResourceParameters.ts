@@ -37,6 +37,7 @@ export class ResourceParameters{
     }
 
     set role(value: Parameter[]) {
-        this._role = value;
-    }
+        for(let i=0; i<value.length; i++) {
+            this._role.push(value[i]);
+        }    }
 }

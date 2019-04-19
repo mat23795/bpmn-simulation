@@ -42,10 +42,11 @@ export class Calendar{
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
         let calendarXMLelement = xmlDoc.createElement(bpsimPrefix + ":Calendar");
+        
         // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);
         this.eventuallyAddAttribute(calendarXMLelement, "name", this._name);
-
+        //TODO terzo attributo esiste realmente?
 
 
         return calendarXMLelement;

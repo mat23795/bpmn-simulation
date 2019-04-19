@@ -44,6 +44,10 @@ function openDiagram(xml) {
         // TODO vedere scrollbar
         // $('.djs-container').css('overflow', 'auto');
 
+        // * rimozione commenti dal xml perché creano problemi con il parsing
+        const regExpRemoveComments = /(\<!--.*?\-->)/g;
+        xml = xml.replace(regExpRemoveComments,"");
+
         // * creare dal XML il form field
         createFormFields(xml);
 
@@ -118,8 +122,7 @@ function createFormFields(xml) {
 function xmlParsing(xml){
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
-
-
+    
     // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
     let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
 
@@ -155,12 +158,8 @@ function xmlParsing(xml){
     // * Fase 3 tree2xml (comune per entrambi i casi sia che ci sia simulazione che senza)
     let dataTreeObj = dataTree[1];
 
-
-
-
     extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
-
-
+    
     console.log(xmlDoc);
 
 
@@ -176,14 +175,20 @@ function xml2tree(bpsimDataXML) {
 
 // * Funzione che dato un nodo ti restituisce l'oggetto relativo al nodo
 function createObj(node) {
-    console.log(node);
     let nodeObject;
-    if (node.localName === "ResultRequest") {
+    if (node.localName === "ResultRequest") { //prendere testo nel tag per result request
         nodeObject = factory[node.localName][node.textContent];
     } else {
         nodeObject = new factory[node.localName]();
         for (let j = 0; j < node.attributes.length; j++) {
-            nodeObject[node.attributes[j].localName] = node.attributes[j].value;
+            // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
+            if(node.attributes[j].localName === "validFor"){
+                let tempArray = [];
+                tempArray.push(node.attributes[j].value);
+                nodeObject[node.attributes[j].localName] = tempArray;
+            }else{
+                nodeObject[node.attributes[j].localName] = node.attributes[j].value;
+            }
         }
     }
     return nodeObject
@@ -216,7 +221,7 @@ function buildDataTree(nodo, nodoObject) {
             tempArray.push(nodoFiglio[1]);
             nodoObject[nameAttr] = tempArray;
         } else {
-            console.log(nodoObject);
+            console.log(nodoObject); //TODO REMOVE
             nodoObject[nameAttr] = nodoFiglio[1];
         }
         numFigli--;

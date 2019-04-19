@@ -3,7 +3,7 @@ import {Calendar} from "../calendar/Calendar";
 import {DateTime} from "./ConstantParameter";
 
 export class ParameterValue{
-    protected _validFor: Calendar[];
+    protected _validFor: Calendar[] = [];
     protected _instance: string;
     protected _result: ResultType;
     protected _resultTimeStamp: DateTime;

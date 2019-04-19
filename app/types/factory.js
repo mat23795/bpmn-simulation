@@ -89,6 +89,25 @@ export var factory = {
     "Probability": Parameter,
     "Condition": Parameter,
     "ResultRequest": ResultType,
-    "Start": Parameter
+    "Start": Parameter,
+    "Warmup": Parameter,
+    "ElapsedTime": Parameter,
+    "TransferTime": Parameter,
+    "QueueTime": Parameter,
+    "WaitTime": Parameter,
+    "SetupTime": Parameter,
+    "ProcessingTime": Parameter,
+    "ValidationTime": Parameter,
+    "ReworkTime": Parameter,
+    "LagTime": Parameter,
+    "Availability": Parameter,
+    "Quantity": Parameter,
+    "Selection": Parameter,
+    "Role": Parameter,
+    "Interruptible" : Parameter,
+    "Priority": Parameter,
+    "Type": PropertyType,
+    "QueueLength": Parameter
+    // "Duration": Parameter
 
 }
