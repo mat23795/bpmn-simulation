@@ -51,7 +51,6 @@ export var factory = {
     "BooleanParameter": BooleanParameter,
     "DurationParameter": DurationParameter,
     "DateTimeParameter": DateTimeParameter,
-    "Duration": Duration,
     "DateTime": DateTime,
     "DistributionParameter": DistributionParameter,
     "BetaDistribution": BetaDistribution,
@@ -110,7 +109,11 @@ export var factory = {
     "QueueLength": Parameter,
     "ResultTimeStamp": DateTime,
     "FixedCost": Parameter,
-    "UnitCost": Parameter
-    // "Duration": Parameter
+    "UnitCost": Parameter,
+
+    //TODO vedere qui quale usare
+    "Duration": Parameter
+    // "Duration": Duration
+
 
 }

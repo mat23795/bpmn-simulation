@@ -16,7 +16,7 @@ export class ScenarioParameters {
     private _baseResultFrequencyCumul: boolean = false;
     private _traceOutput: boolean = false;
     private _traceFormat: string = "XES";
-    private _propertyParameters: PropertyParameters[];
+    private _propertyParameters: PropertyParameters[] = [];
 
     constructor(){}
 
@@ -129,7 +129,32 @@ export class ScenarioParameters {
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
         let scenarioParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ScenarioParameters");
+
+        if(this._start != undefined){
+            scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix,xml));
+        }
+        if(this._duration != undefined){
+            console.log(this);
+            scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml));
+        }
+        if(this._warmup != undefined){
+            scenarioParametersXMLelement.appendChild(this._warmup.toXMLelement(bpsimPrefix,xml));
+        }
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "replication", this._replication);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "seed", this._seed);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseTimeUnit", this._baseTimeUnit);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseCurrencyUnit", this._baseCurrencyUnit);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequency", this._baseResultFrequency);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequencyCumul", this._baseResultFrequencyCumul);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceOutput", this._traceOutput);
+        this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceFormat", this._traceFormat)
+
+        for(let i=0; i< this._propertyParameters.length; i++) {
+            scenarioParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix,xml));
+        }
+
         // TODO FINIRLA
+
         return scenarioParametersXMLelement;
     }
 }

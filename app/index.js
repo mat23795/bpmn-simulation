@@ -214,14 +214,12 @@ function buildDataTree(nodo, nodoObject) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-        console.log(nameAttr);
         if(isArrayAttribute(nodoFiglio[0].localName)){
             // * attributo array di un nodo viene popolato in maniera differente rispetto ad attributo atomico
             let tempArray = [];
             tempArray.push(nodoFiglio[1]);
             nodoObject[nameAttr] = tempArray;
         } else {
-            console.log(nodoObject); //TODO REMOVE
             nodoObject[nameAttr] = nodoFiglio[1];
         }
         numFigli--;
