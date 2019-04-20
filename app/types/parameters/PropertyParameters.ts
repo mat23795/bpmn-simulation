@@ -31,7 +31,17 @@ export class PropertyParameters{
 
         let propertyParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":PropertyParameters");
 
-        //TODO finirla
+        //TODO passare a Property
+        for(let i=0; i< this._property.length; i++) {
+            propertyParametersXMLelement.appendChild(this._property[i].toXMLelement(bpsimPrefix,xml));
+        }
+
+        //TODO Property e Parameter uguali???
+
+        //TODO passare a Parameter
+        if(this._queueLength != undefined){
+            propertyParametersXMLelement.appendChild(this._queueLength.toXMLelement(bpsimPrefix,xml));
+        }
 
         return propertyParametersXMLelement;
     }

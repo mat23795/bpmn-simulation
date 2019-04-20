@@ -1,5 +1,5 @@
 export class Calendar{
-    
+
     private _id: string;
     private _name: string;
     private _calendar: any;
@@ -34,7 +34,7 @@ export class Calendar{
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
-    }    
+    }
 
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -42,10 +42,11 @@ export class Calendar{
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
         let calendarXMLelement = xmlDoc.createElement(bpsimPrefix + ":Calendar");
-        
+
         // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);
         this.eventuallyAddAttribute(calendarXMLelement, "name", this._name);
+
         //TODO terzo attributo esiste realmente?
 
 

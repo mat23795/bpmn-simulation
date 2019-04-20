@@ -4,7 +4,7 @@ import {PropertyParameters} from "../parameters/PropertyParameters";
 import {Duration} from "../parameter_type/ConstantParameter";
 
 export class ScenarioParameters {
-    
+
     private _start: Parameter;
     private _duration: Parameter;
     private _warmup: Parameter;
@@ -122,7 +122,7 @@ export class ScenarioParameters {
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
-    }        
+    }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
@@ -133,6 +133,7 @@ export class ScenarioParameters {
         if(this._start != undefined){
             scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix,xml));
         }
+
         if(this._duration != undefined){
             console.log(this);
             scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml));
@@ -149,11 +150,12 @@ export class ScenarioParameters {
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceOutput", this._traceOutput);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceFormat", this._traceFormat)
 
+        // TODO Passare a PropertyParameters
         for(let i=0; i< this._propertyParameters.length; i++) {
             scenarioParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix,xml));
         }
 
-        // TODO FINIRLA
+
 
         return scenarioParametersXMLelement;
     }
