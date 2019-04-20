@@ -93,4 +93,53 @@ export class TimeParameters{
     set elapsedTime(value: Parameter) {
         this._elapsedTime = value;
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let timeParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":TimeParameters");
+
+        if(this._duration != undefined){
+            timeParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));
+        }
+
+        if(this._elapsedTime != undefined){
+            timeParametersXMLelement.appendChild(this._elapsedTime.toXMLelement(bpsimPrefix, xml, "ElapsedTime"));
+        }
+
+        if(this._lagTime != undefined){
+            timeParametersXMLelement.appendChild(this._lagTime.toXMLelement(bpsimPrefix, xml, "LagTime"));
+        }
+
+        if(this._processingTime != undefined){
+            timeParametersXMLelement.appendChild(this._processingTime.toXMLelement(bpsimPrefix, xml, "ProcessingTime"));
+        }
+
+        if(this._queueTime != undefined){
+            timeParametersXMLelement.appendChild(this._queueTime.toXMLelement(bpsimPrefix, xml, "QueueTime"));
+        }
+
+        if(this._reworkTime != undefined){
+            timeParametersXMLelement.appendChild(this._reworkTime.toXMLelement(bpsimPrefix, xml, "ReworkTime"));
+        }
+
+        if(this._setupTime != undefined){
+            timeParametersXMLelement.appendChild(this._setupTime.toXMLelement(bpsimPrefix, xml, "SetupTime"));
+        }
+
+        if(this._transferTime != undefined){
+            timeParametersXMLelement.appendChild(this._transferTime.toXMLelement(bpsimPrefix, xml, "TransferTime"));
+        }
+
+        if(this._validationTime != undefined){
+            timeParametersXMLelement.appendChild(this._validationTime.toXMLelement(bpsimPrefix, xml, "ValidationTime"));
+        }
+
+        if(this._waitTime != undefined){
+            timeParametersXMLelement.appendChild(this._waitTime.toXMLelement(bpsimPrefix, xml, "WaitTime"));
+        }
+
+        return timeParametersXMLelement;
+    }
 }

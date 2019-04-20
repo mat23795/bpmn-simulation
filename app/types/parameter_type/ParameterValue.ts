@@ -44,4 +44,14 @@ export class ParameterValue{
     set resultTimeStamp(value: DateTime) {
         this._resultTimeStamp = value;
     }
+
+    // toXMLelement(element: any): any {
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        // TODO
+        console.log("sono in ParameterValue");
+
+        // TODO valutare se fare una funzione che aggiunge solo i parametri ad un oggetto XML passsato in input
+        // element.add
+    }
+
 }

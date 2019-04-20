@@ -19,7 +19,7 @@ export class Scenario {
     private _elementParameters: ElementParameters[] = [];
     private _scenarioParameters: ScenarioParameters;
     private _vendorExtensions: VendorExtension[] = [];
-    private _calendar : Calendar[] = []
+    private _calendar : Calendar[] = [];
 
     constructor(){}
 
@@ -145,7 +145,7 @@ export class Scenario {
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
-    }        
+    }
 
     toXMLelement(bpsimPrefix: string, xml: any) : any{
 

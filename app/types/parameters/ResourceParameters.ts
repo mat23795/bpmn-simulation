@@ -39,5 +39,31 @@ export class ResourceParameters{
     set role(value: Parameter[]) {
         for(let i=0; i<value.length; i++) {
             this._role.push(value[i]);
-        }    }
+        }    
+    }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let resourceParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":ResourceParameters");
+
+        if(this._availability != undefined){
+            resourceParametersXMLelement.appendChild(this._availability.toXMLelement(bpsimPrefix, xml, "Availability"));
+        }
+
+        if(this._quantity != undefined){
+            resourceParametersXMLelement.appendChild(this._quantity.toXMLelement(bpsimPrefix, xml, "Quantity"));
+        }
+
+        if(this._selection != undefined){
+            resourceParametersXMLelement.appendChild(this._selection.toXMLelement(bpsimPrefix, xml, "Selection"));
+        }
+
+        for(let i = 0; i < this._role.length; i++){
+            resourceParametersXMLelement.appendChild(this._role[i].toXMLelement(bpsimPrefix, xml, "Role"));
+        }
+
+        return resourceParametersXMLelement;
+    }
 }

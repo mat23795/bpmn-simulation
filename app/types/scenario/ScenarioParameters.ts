@@ -131,19 +131,20 @@ export class ScenarioParameters {
         let scenarioParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ScenarioParameters");
 
         if(this._start != undefined){
-            scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix,xml));
+            scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix, xml, "Start"));
         }
 
         if(this._duration != undefined){
             console.log(this);
-            scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml));
+            scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));
         }
         if(this._warmup != undefined){
-            scenarioParametersXMLelement.appendChild(this._warmup.toXMLelement(bpsimPrefix,xml));
+            scenarioParametersXMLelement.appendChild(this._warmup.toXMLelement(bpsimPrefix,xml, "Warmup"));
         }
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "replication", this._replication);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "seed", this._seed);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseTimeUnit", this._baseTimeUnit);
+        //TODO controllare questo che è Duration e non parametro semplice
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseCurrencyUnit", this._baseCurrencyUnit);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequency", this._baseResultFrequency);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequencyCumul", this._baseResultFrequencyCumul);

@@ -33,14 +33,18 @@ export class PropertyParameters{
 
         //TODO passare a Property
         for(let i=0; i< this._property.length; i++) {
+            // qui in realtà è Property, che è figlio di Parameter, ma non essemdoci
+            // la funz in Property, si prende quella del padre
+            // TODO fare la funzione per Property e soprattutto capire se vuole anche gli attributi del padre
             propertyParametersXMLelement.appendChild(this._property[i].toXMLelement(bpsimPrefix,xml));
+
         }
 
         //TODO Property e Parameter uguali???
 
         //TODO passare a Parameter
         if(this._queueLength != undefined){
-            propertyParametersXMLelement.appendChild(this._queueLength.toXMLelement(bpsimPrefix,xml));
+            propertyParametersXMLelement.appendChild(this._queueLength.toXMLelement(bpsimPrefix,xml, "QueueLength"));
         }
 
         return propertyParametersXMLelement;

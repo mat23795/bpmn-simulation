@@ -16,6 +16,28 @@ export class ConstantParameter extends ParameterValue {
     set value(value: any) {
         this._value = value;
     }
+
+    protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }
+
+    // toXMLelement(bpsimPrefix: string, xml: any): any {
+    //     let parser = new DOMParser();
+    //     let xmlDoc = parser.parseFromString(xml, "text/xml");
+    //
+    //     let betaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BetaDistribution");
+    //
+    //     // TODO vedere se vanno aggiunti i parametri del padre
+    //     // super.toXMLelement(expressionParameterXMLelement);
+    //
+    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
+    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "scale", this._scale);
+    //
+    //     return betaDistributionXMLelement;
+    //
+    // }
 }
 
 export class StringParameter extends ConstantParameter {
@@ -23,6 +45,8 @@ export class StringParameter extends ConstantParameter {
     constructor() {
         super();
     }
+
+    // TODO vedere se qui serve il toXML
 }
 
 export class NumericParameter extends ConstantParameter {

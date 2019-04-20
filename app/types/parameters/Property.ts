@@ -27,4 +27,11 @@ export class Property extends Parameter {
     set type(value: PropertyType) {
         this._type = value;
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        // TODO aggiungere cose ereditate e cose di property
+    }
+
+
+
 }

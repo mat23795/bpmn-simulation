@@ -1,6 +1,6 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
-import carRepairProcessXML from '../resources/CarRepairProcess.bpmn';
-import tecnicalSupportProcessXML from '../resources/TechnicalSupportProcess.bpmn';
+import carRepairProcessXML from '../resources/1_CarRepairProcessV1.bpmn';
+import tecnicalSupportProcessXML from '../resources/5_TechnicalSupportProcessV1.bpmn';
 
 import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParameter";
 import {BPSimData} from "./types/scenario/BPSimData";
@@ -122,7 +122,7 @@ function createFormFields(xml) {
 function xmlParsing(xml){
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
-    
+
     // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
     let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
 
@@ -159,8 +159,11 @@ function xmlParsing(xml){
     let dataTreeObj = dataTree[1];
 
     extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
-    
+
     console.log(xmlDoc);
+
+    console.log(extensionElementXML);
+
 
 
 }

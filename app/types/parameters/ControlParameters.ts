@@ -40,4 +40,30 @@ export class ControlParameters{
     set condition(value: Parameter) {
         this._condition = value;
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let controlParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":ControlParameters");
+
+        if(this._interTriggerTimer != undefined){
+            controlParametersXMLelement.appendChild(this._interTriggerTimer.toXMLelement(bpsimPrefix, xml, "InterTriggerTime"));
+        }
+
+        if(this._triggerCount != undefined){
+            controlParametersXMLelement.appendChild(this._triggerCount.toXMLelement(bpsimPrefix, xml, "TriggerCount"));
+        }
+
+        if(this._probability != undefined){
+            controlParametersXMLelement.appendChild(this._probability.toXMLelement(bpsimPrefix, xml, "Probability"));
+        }
+
+        if(this._condition != undefined){
+            controlParametersXMLelement.appendChild(this._condition.toXMLelement(bpsimPrefix, xml, "Condition"));
+        }
+
+        return controlParametersXMLelement;
+    }
+
 }

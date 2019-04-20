@@ -4,4 +4,5 @@ export enum ResultType{
     mean = "mean",
     count = "count",
     sum = "sum"
+    
 }

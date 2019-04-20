@@ -2,8 +2,8 @@ import {ResultType} from "./ResultType";
 import {ParameterValue} from "./ParameterValue";
 
 export class Parameter{
-    
-    private _value: ParameterValue[];
+
+    private _value: ParameterValue[] = [];
     private _resultRequest: ResultType;
 
     constructor(){}
@@ -31,15 +31,23 @@ export class Parameter{
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
-    } 
+    }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, xml: any, nameTag: string): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let parameterXMLelement = xmlDoc.createElement(bpsimPrefix + ":Parameter");
+        let parameterXMLelement = xmlDoc.createElement(bpsimPrefix +":"+ nameTag);
 
-        this.eventuallyAddAttribute(parameterXMLelement, "resultRequest", this._resultRequest);
+        for(let i=0; i< this._value.length; i++) {
+            parameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
+        }
+
+        //TODO verificare check su undefined per un enum
+        if(this._resultRequest != undefined){
+            let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
+            resultRequestXMLelement.textContent = this._resultRequest;
+        }
 
         //TODO finirla
 
