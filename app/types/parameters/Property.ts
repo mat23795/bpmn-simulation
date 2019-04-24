@@ -29,9 +29,26 @@ export class Property extends Parameter {
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
-        // TODO aggiungere cose ereditate e cose di property
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+        let propertyXMLelement = xmlDoc.createElement(bpsimPrefix +":Property");
+
+        this.eventuallyAddAttribute(propertyXMLelement, "name", this._name);
+        this.eventuallyAddAttribute(propertyXMLelement, "type", this._type);
+
+        for(let i=0; i< this._value.length; i++) {
+            propertyXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
+        }
+
+        //TODO verificare check su undefined per un enum
+        if(this._resultRequest != undefined){
+            let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
+            resultRequestXMLelement.textContent = this._resultRequest;
+            propertyXMLelement.appendChild(resultRequestXMLelement);
+        }
+
+        return propertyXMLelement;        
     }
-
-
 
 }

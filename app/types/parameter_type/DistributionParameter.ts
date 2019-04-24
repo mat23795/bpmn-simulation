@@ -16,11 +16,17 @@ export class DistributionParameter extends ParameterValue{
         this._timeUnit = value;
     }
 
-    protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
-        if(value != undefined){
-            elementXML.setAttribute(name, value);
-        }
+    protected addTimeUnitToSuperClassAttributesToXMLElement(elementXML: any){
+        this.addSuperClassAttributesToXMLElement(elementXML);
+        this.eventuallyAddAttribute(elementXML, "timeUnit", this._timeUnit);
     }
+
+
+    // protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
+    //     if(value != undefined){
+    //         elementXML.setAttribute(name, value);
+    //     }
+    // }
 
     // toXMLelement(bpsimPrefix: string, xml: any): any {
     //     let parser = new DOMParser();
@@ -70,9 +76,7 @@ export class BetaDistribution extends DistributionParameter{
 
         let betaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BetaDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(betaDistributionXMLelement);
         this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
         this.eventuallyAddAttribute(betaDistributionXMLelement, "scale", this._scale);
 
@@ -111,9 +115,7 @@ export class BinomialDistribution extends DistributionParameter{
 
         let binomialDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BinomialDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(binomialDistributionXMLelement);
         this.eventuallyAddAttribute(binomialDistributionXMLelement, "probability", this._probability);
         this.eventuallyAddAttribute(binomialDistributionXMLelement, "trials", this._trials);
 
@@ -152,9 +154,7 @@ export class WeibullDistribution extends DistributionParameter{
 
         let weibullDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":WeibullDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(weibullDistributionXMLelement);
         this.eventuallyAddAttribute(weibullDistributionXMLelement, "shape", this._shape);
         this.eventuallyAddAttribute(weibullDistributionXMLelement, "scale", this._scale);
 
@@ -193,9 +193,7 @@ export class NormalDistribution extends DistributionParameter{
 
         let normalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":NormalDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(normalDistributionXMLelement);
         this.eventuallyAddAttribute(normalDistributionXMLelement, "mean", this._mean);
         this.eventuallyAddAttribute(normalDistributionXMLelement, "standardDeviation", this._standardDeviation);
 
@@ -235,9 +233,7 @@ export class LogNormalDistribution extends DistributionParameter{
 
         let logNormalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":LogNormalDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(logNormalDistributionXMLelement);
         this.eventuallyAddAttribute(logNormalDistributionXMLelement, "mean", this._mean);
         this.eventuallyAddAttribute(logNormalDistributionXMLelement, "standardDeviation", this._standardDeviation);
 
@@ -276,9 +272,7 @@ export class UniformDistribution extends DistributionParameter{
 
         let uniformDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":UniformDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(uniformDistributionXMLelement);
         this.eventuallyAddAttribute(uniformDistributionXMLelement, "min", this._min);
         this.eventuallyAddAttribute(uniformDistributionXMLelement, "max", this._max);
 
@@ -326,9 +320,7 @@ export class TriangularDistribution extends DistributionParameter{
 
         let triangularDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":TriangularDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(triangularDistributionXMLelement);
         this.eventuallyAddAttribute(triangularDistributionXMLelement, "min", this._min);
         this.eventuallyAddAttribute(triangularDistributionXMLelement, "max", this._max);
         this.eventuallyAddAttribute(triangularDistributionXMLelement, "mode", this._mode);
@@ -387,9 +379,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
 
         let truncatedNormalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":TruncatedNormalDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(truncatedNormalDistributionXMLelement);
         this.eventuallyAddAttribute(truncatedNormalDistributionXMLelement, "mean", this._mean);
         this.eventuallyAddAttribute(truncatedNormalDistributionXMLelement, "standardDeviation", this._standardDeviation);
         this.eventuallyAddAttribute(truncatedNormalDistributionXMLelement, "min", this._min);
@@ -421,9 +411,7 @@ export class PoissonDistribution extends DistributionParameter{
 
         let poissonDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":PoissonDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(poissonDistributionXMLelement);
         this.eventuallyAddAttribute(poissonDistributionXMLelement, "mean", this._mean);
 
         return poissonDistributionXMLelement;
@@ -452,9 +440,7 @@ export class NegativeExponentialDistribution extends DistributionParameter{
 
         let negativeExponentialDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":NegativeExponentialDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(negativeExponentialDistributionXMLelement);
         this.eventuallyAddAttribute(negativeExponentialDistributionXMLelement, "mean", this._mean);
 
         return negativeExponentialDistributionXMLelement;
@@ -492,9 +478,7 @@ export class ErlangDistribution extends DistributionParameter{
 
         let erlangDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":ErlangDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(erlangDistributionXMLelement);
         this.eventuallyAddAttribute(erlangDistributionXMLelement, "mean", this._mean);
         this.eventuallyAddAttribute(erlangDistributionXMLelement, "k", this._k);
 
@@ -534,9 +518,7 @@ export class GammaDistribution extends DistributionParameter{
 
         let gammaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":GammaDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
+        this.addTimeUnitToSuperClassAttributesToXMLElement(gammaDistributionXMLelement);
         this.eventuallyAddAttribute(gammaDistributionXMLelement, "shape", this._shape);
         this.eventuallyAddAttribute(gammaDistributionXMLelement, "scale", this._scale);
 
@@ -579,10 +561,10 @@ export class UserDistribution extends DistributionParameter{
 
         let userDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistribution");
 
-        // TODO vedere se vanno aggiunti i parametri del padre
-        // super.toXMLelement(expressionParameterXMLelement);
-
-        this.eventuallyAddAttribute(userDistributionXMLelement, "points", this._points);
+        this.addTimeUnitToSuperClassAttributesToXMLElement(userDistributionXMLelement);
+        for(let i = 0; i < this._points.length; i++){
+            userDistributionXMLelement.appendChild(this._points[i].toXMLelement(bpsimPrefix,xml));
+        }
         this.eventuallyAddAttribute(userDistributionXMLelement, "discrete", this._discrete);
 
         return userDistributionXMLelement;
@@ -613,20 +595,22 @@ export class UserDistributionDataPoint{
         this._value = value;
     }
 
-    // TODO check se serve qui
-    // toXMLelement(bpsimPrefix: string, xml: any): any {
-    //     let parser = new DOMParser();
-    //     let xmlDoc = parser.parseFromString(xml, "text/xml");
-    //
-    //     let userDistributionDataPointXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistributionDataPoint");
-    //
-    //     // TODO vedere se vanno aggiunti i parametri del padre
-    //     // super.toXMLelement(expressionParameterXMLelement);
-    //
-    //     this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "probability", this._probability);
-    //     this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "trials", this._trials);
-    //
-    //     return userDistributionDataPointXMLelement;
-    //
-    // }
+    eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let userDistributionDataPointXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistributionDataPoint");
+    
+        this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "probability", this._probability);
+        userDistributionDataPointXMLelement.appendChild(this._value.toXMLelement(bpsimPrefix,xml));
+    
+        return userDistributionDataPointXMLelement;
+    
+    }
 }

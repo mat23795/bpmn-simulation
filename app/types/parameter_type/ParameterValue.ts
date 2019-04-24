@@ -3,7 +3,7 @@ import {Calendar} from "../calendar/Calendar";
 import {DateTime} from "./ConstantParameter";
 
 export class ParameterValue{
-    protected _validFor: Calendar[] = [];
+    protected _validFor: Calendar;
     protected _instance: string;
     protected _result: ResultType;
     protected _resultTimeStamp: DateTime;
@@ -11,14 +11,12 @@ export class ParameterValue{
     constructor(){};
 
 
-    get validFor(): Calendar[] {
+    get validFor(): Calendar {
         return this._validFor;
     }
 
-    set validFor(value: Calendar[]) {
-        for (let i = 0; i < value.length; i++) {
-            this._validFor.push(value[i]);
-        }
+    set validFor(value: Calendar) {
+        this._validFor = value;
     }
 
     get instance(): string {
@@ -45,13 +43,28 @@ export class ParameterValue{
         this._resultTimeStamp = value;
     }
 
+    protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }
+
+    // * Aggiunge automaticamente, se chiamata, i 4 attributi a tutte le sue sottoclassi
+    protected addSuperClassAttributesToXMLElement(elementXML: any){
+        this.eventuallyAddAttribute(elementXML, "validFor", this.validFor);
+        this.eventuallyAddAttribute(elementXML, "instance", this._instance);
+        this.eventuallyAddAttribute(elementXML, "result", this._result);
+        this.eventuallyAddAttribute(elementXML, "resultTimeStamp", this._resultTimeStamp);
+        console.log("sono nella funzione figlia di tutti i parameteValue");
+    }
+
     // toXMLelement(element: any): any {
     toXMLelement(bpsimPrefix: string, xml: any): any {
         // TODO
-        console.log("sono in ParameterValue");
+        console.log("sono in ParameterValue"); //TODO REMOVE
 
-        // TODO valutare se fare una funzione che aggiunge solo i parametri ad un oggetto XML passsato in input
-        // element.add
+        //TODO chiamare addSuper... anche qui, dopo aver scritto toxml di tutti i suoi figli
+
     }
 
 }

@@ -4,7 +4,6 @@ import {TimeUnit} from "../scenario/TimeUnit";
 export class ConstantParameter extends ParameterValue {
     protected _value: any;
 
-
     constructor() {
         super();
     }
@@ -17,27 +16,6 @@ export class ConstantParameter extends ParameterValue {
         this._value = value;
     }
 
-    protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
-        if(value != undefined){
-            elementXML.setAttribute(name, value);
-        }
-    }
-
-    // toXMLelement(bpsimPrefix: string, xml: any): any {
-    //     let parser = new DOMParser();
-    //     let xmlDoc = parser.parseFromString(xml, "text/xml");
-    //
-    //     let betaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BetaDistribution");
-    //
-    //     // TODO vedere se vanno aggiunti i parametri del padre
-    //     // super.toXMLelement(expressionParameterXMLelement);
-    //
-    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
-    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "scale", this._scale);
-    //
-    //     return betaDistributionXMLelement;
-    //
-    // }
 }
 
 export class StringParameter extends ConstantParameter {
@@ -46,7 +24,18 @@ export class StringParameter extends ConstantParameter {
         super();
     }
 
-    // TODO vedere se qui serve il toXML
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":StringParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+    
+        return childParameterXMLelement;
+    
+    }
 }
 
 export class NumericParameter extends ConstantParameter {
@@ -62,6 +51,20 @@ export class NumericParameter extends ConstantParameter {
 
     set timeUnit(value: TimeUnit) {
         this._timeUnit = value;
+    }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":NumericParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+        this.eventuallyAddAttribute(childParameterXMLelement, "timeUnit", this._timeUnit);
+    
+        return childParameterXMLelement;
+    
     }
 }
 
@@ -79,12 +82,39 @@ export class FloatingParameter extends ConstantParameter {
     set timeUnit(value: TimeUnit) {
         this._timeUnit = value;
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":FloatingParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+        this.eventuallyAddAttribute(childParameterXMLelement, "timeUnit", this._timeUnit);
+    
+        return childParameterXMLelement;
+    
+    }
 }
 
 export class BooleanParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":BooleanParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+    
+        return childParameterXMLelement;
+    
     }
 }
 
@@ -93,12 +123,38 @@ export class DurationParameter extends ConstantParameter {
     constructor() {
         super();
     }
+
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DurationParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+    
+        return childParameterXMLelement;
+    
+    }
 }
 
 export class DateTimeParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+    
+    toXMLelement(bpsimPrefix: string, xml: any): any {
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xml, "text/xml");
+    
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DateTimeParamater");
+    
+        this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
+        this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
+    
+        return childParameterXMLelement;
+    
     }
 }
 
@@ -118,7 +174,6 @@ export class Duration{
 }
 
 export class DateTime{
-
     private _date: string;
 
     constructor() {

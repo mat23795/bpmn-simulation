@@ -46,9 +46,7 @@ export class Calendar{
         // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);
         this.eventuallyAddAttribute(calendarXMLelement, "name", this._name);
-
-        //TODO terzo attributo esiste realmente?
-
+        calendarXMLelement.textContent = this._calendar;
 
         return calendarXMLelement;
     }

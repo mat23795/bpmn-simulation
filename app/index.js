@@ -182,6 +182,7 @@ function createObj(node) {
     if (node.localName === "ResultRequest") { //prendere testo nel tag per result request
         nodeObject = factory[node.localName][node.textContent];
     } else {
+        
         nodeObject = new factory[node.localName]();
         for (let j = 0; j < node.attributes.length; j++) {
             // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
@@ -193,7 +194,20 @@ function createObj(node) {
                 nodeObject[node.attributes[j].localName] = node.attributes[j].value;
             }
         }
+        
+        //TODO REMOVE
+        if(node.localName === "Scenario"){
+            console.log(node.attributes);
+            console.log(node);
+            console.log(nodeObject);
+        }
+
+        // if per salvare il contenuto di testo del tag xml calendar
+        if(node.localName === "Calendar"){
+            nodeObject["calendar"] = node.textContent;
+        }
     }
+
     return nodeObject
 }
 

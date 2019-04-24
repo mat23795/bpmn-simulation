@@ -3,8 +3,8 @@ import {ParameterValue} from "./ParameterValue";
 
 export class Parameter{
 
-    private _value: ParameterValue[] = [];
-    private _resultRequest: ResultType;
+    protected _value: ParameterValue[] = [];
+    protected _resultRequest: ResultType;
 
     constructor(){}
 
@@ -14,6 +14,7 @@ export class Parameter{
     }
 
     set value(value: ParameterValue[]) {
+        console.log("value");
         for (let i = 0; i < value.length; i++) {
             this._value.push(value[i]);
         }
@@ -27,13 +28,19 @@ export class Parameter{
         this._resultRequest = value;
     }
 
-    private eventuallyAddAttribute(elementXML: any, name: string, value:any){
+    protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
         if(value != undefined){
             elementXML.setAttribute(name, value);
         }
     }
 
     toXMLelement(bpsimPrefix: string, xml: any, nameTag: string): any {
+        // if(nameTag == "Selection"){
+        //     console.log(nameTag);
+        //     console.log(this._value[0]);
+        // }
+        
+
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
@@ -47,9 +54,9 @@ export class Parameter{
         if(this._resultRequest != undefined){
             let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest;
-        }
 
-        //TODO finirla
+            parameterXMLelement.appendChild(resultRequestXMLelement);
+        }
 
         return parameterXMLelement;
     }

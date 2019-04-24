@@ -92,12 +92,50 @@ export class ElementParameters {
         this._priorityParameters = value;
     }
 
+    private eventuallyAddAttribute(elementXML: any, name: string, value:any){
+        if(value != undefined){
+            elementXML.setAttribute(name, value);
+        }
+    }
+
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
         let elementParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ElementParameters");
-        // TODO FINIRLA
+
+        this.eventuallyAddAttribute(elementParametersXMLelement, "id", this._id);
+        this.eventuallyAddAttribute(elementParametersXMLelement, "elementRef", this._elementRef);
+        
+        for(let i=0; i< this._vendorExtensions.length; i++) {
+            elementParametersXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, xml));
+        }
+
+        if(this._timeParameters != undefined){
+            elementParametersXMLelement.appendChild(this._timeParameters.toXMLelement(bpsimPrefix, xml));
+        }
+
+        if(this._controlParameters != undefined){
+            elementParametersXMLelement.appendChild(this._controlParameters.toXMLelement(bpsimPrefix, xml));
+        }
+        
+        if(this._costParameters != undefined){
+            elementParametersXMLelement.appendChild(this._costParameters.toXMLelement(bpsimPrefix, xml));
+        }
+
+        if(this._resourceParameters != undefined){
+            elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, xml));
+        }
+
+        if(this._propertyParameters != undefined){
+            elementParametersXMLelement.appendChild(this._propertyParameters.toXMLelement(bpsimPrefix, xml));
+        }
+
+        if(this._priorityParameters != undefined){
+            elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, xml));
+        }
+
         return elementParametersXMLelement;
     }
 }
