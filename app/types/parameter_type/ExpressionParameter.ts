@@ -19,7 +19,6 @@ export class ExpressionParameter extends ParameterValue{
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
-        console.log("ciao");
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 

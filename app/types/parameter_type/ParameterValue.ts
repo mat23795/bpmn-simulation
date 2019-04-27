@@ -55,7 +55,7 @@ export class ParameterValue{
         this.eventuallyAddAttribute(elementXML, "instance", this._instance);
         this.eventuallyAddAttribute(elementXML, "result", this._result);
         this.eventuallyAddAttribute(elementXML, "resultTimeStamp", this._resultTimeStamp);
-        console.log("sono nella funzione figlia di tutti i parameteValue");
+        // console.log("sono nella funzione figlia di tutti i parameteValue"); //TODO remove
     }
 
     // toXMLelement(element: any): any {

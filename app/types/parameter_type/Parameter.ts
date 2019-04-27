@@ -7,6 +7,7 @@ export class Parameter{
     protected _resultRequest: ResultType;
 
     constructor(){}
+    
 
 
     get value(): ParameterValue[] {
@@ -14,7 +15,6 @@ export class Parameter{
     }
 
     set value(value: ParameterValue[]) {
-        console.log("value");
         for (let i = 0; i < value.length; i++) {
             this._value.push(value[i]);
         }

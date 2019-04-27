@@ -8,6 +8,7 @@ import {Scenario} from "./types/scenario/Scenario";
 import {factory} from "./types/factory";
 import {ResultType} from "./types/parameter_type/ResultType";
 import {Parameter} from "./types/parameter_type/Parameter";
+import {PropertyType} from "./types/parameters/PropertyType";
 
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
@@ -182,8 +183,8 @@ function createObj(node) {
     if (node.localName === "ResultRequest") { //prendere testo nel tag per result request
         nodeObject = factory[node.localName][node.textContent];
     } else {
-        
         nodeObject = new factory[node.localName]();
+        // console.log(isParameter(node.localName)+"   "+node.localName); //TODO remove
         for (let j = 0; j < node.attributes.length; j++) {
             // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
             if(node.attributes[j].localName === "validFor"){
@@ -194,13 +195,13 @@ function createObj(node) {
                 nodeObject[node.attributes[j].localName] = node.attributes[j].value;
             }
         }
-        
+
         //TODO REMOVE
-        if(node.localName === "Scenario"){
-            console.log(node.attributes);
-            console.log(node);
-            console.log(nodeObject);
-        }
+        // if(node.localName === "Scenario"){
+        //     console.log(node.attributes);
+        //     console.log(node);
+        //     console.log(nodeObject);
+        // }
 
         // if per salvare il contenuto di testo del tag xml calendar
         if(node.localName === "Calendar"){
@@ -237,7 +238,24 @@ function buildDataTree(nodo, nodoObject) {
             tempArray.push(nodoFiglio[1]);
             nodoObject[nameAttr] = tempArray;
         } else {
-            nodoObject[nameAttr] = nodoFiglio[1];
+            // creare un Parameter con value avvalorato correttamente
+            if(isParameter(nodoFiglio[0].localName)){
+                let parameterFieldsToDelete = [];
+                for(let i = 0; i < Object.keys(nodoFiglio[1]).length; i++){
+                    // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
+                    if(Object.keys(nodoFiglio[1])[i].charAt(0) != "_"){
+                        let temp = nodoFiglio[1][Object.keys(nodoFiglio[1])[i]];
+                        parameterFieldsToDelete.push(temp);
+                    }
+                }
+                let tempResultRequest = nodoFiglio[1].resultRequest;
+                nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
+                nodoFiglio[1].resultRequest = tempResultRequest;
+                nodoFiglio[1].value = parameterFieldsToDelete;
+                nodoObject[nameAttr] = nodoFiglio[1];
+            }else{
+                nodoObject[nameAttr] = nodoFiglio[1];
+            }
         }
         numFigli--;
     }
@@ -246,6 +264,16 @@ function buildDataTree(nodo, nodoObject) {
     nodo_nodoObj.push(nodo);
     nodo_nodoObj.push(nodoObject);
     return nodo_nodoObj;
+}
+
+// * Funzione di appoggio per scoprire se un campo è di tipo Parameter
+function isParameter(field){
+    let fields = ["TriggerCount", "InterTriggerTimer", "Probability", "Condition", "Start", "Warmup", "ElapsedTime",
+        "TransferTime", "QueueTime", "WaitTime", "ProcessingTime", "ValidationTime", "ReworkTime", "LagTime",
+        "Availability", "Quantity", "Selection", "Role", "Interruptible", "Priority", "QueueLength", "FixedCost",
+        "UnitCost", "Duration"]
+    
+    return fields.includes(field);
 }
 
 // * Funzione di appoggio che permette di capire se un attributo è di tipo array
