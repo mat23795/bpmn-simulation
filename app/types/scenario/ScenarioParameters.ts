@@ -135,7 +135,7 @@ export class ScenarioParameters {
         }
 
         if(this._duration != undefined){
-            console.log(this);
+            // console.log(this);
             scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));
         }
         if(this._warmup != undefined){

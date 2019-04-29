@@ -43,22 +43,49 @@
             <!-- simulation-->
             <div class="sim-parameter-section div-vertical-border" id="js-simulation">
                 <h1 class="centered-title-sim-section">BPSim Parameters</h1>
+
+
+                <div class="div-scenario-picker">
+                    <label for="scenario-picker">Select Scenario </label>
+                    <select class = "scenario-picker" id="scenario-picker">
+                        <option></option>
+                    </select>
+                </div>
+
                 <form>
                     <div class="form-group" label="scenario-form">
                         <h2 class="form-title">Scenario</h2>
-                        <label for="id">ID</label>
-                        <input type="text" class="form-control form-control-input" id="id" value="1">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control form-control-input" id="name" value="Scenario">
-                        <label for="description">Description</label>
-                        <input type="text" class="form-control form-control-input" id="description" value="First scenario">
-                        INSERIRE 2 DATE PICKER
-                        <label for="author">Author</label>
-                        <input type="text" class="form-control form-control-input" id="author" value="Your Company">
-                        <label for="vendor">Vendor</label>
-                        <input type="text" class="form-control form-control-input" id="vendor" value="Caputo & Lazazzera">
-                        <label for="version">Version</label>
-                        <input type="text" class="form-control form-control-input" id="version" value="1.0">
+                        <label for="scenario-id-input">ID</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-id-input" value=" ">
+
+                        <label for="scenario-name-input">Name</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-name-input" value="Scenario">
+
+                        <label for="scenario-description-input">Description</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-description-input" value="First scenario">
+
+                        <label for="scenario-created-input">Created</label>
+                        <input type="date" class="form-control form-control-input" id="scenario-created-input"><!-- value="2013-05-20"-->
+
+                        <label for="scenario-modified-input">Modified</label>
+                        <input type="date" class="form-control form-control-input" id="scenario-modified-input">
+
+                        <!--<div class="input-group date">-->
+                            <!--<div class="input-group addon">-->
+                                <!--<i class="fa fa-calendar">-->
+                                    <!--::before-->
+                                <!--</i>-->
+                            <!--</div>-->
+                            <!--<input type="text" class="form-control pull-right" id="datepicker">-->
+                        <!--</div>-->
+
+                        <!--<input type="file">-->
+                        <label for="scenario-author-input">Author</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-author-input" value="Your Company">
+                        <label for="scenario-vendor-input">Vendor</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-vendor-input" value="Caputo & Lazazzera">
+                        <label for="scenario-version-input">Version</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-version-input" value="1.0">
                     </div>
                     <div class="form-group" label="task-form" id="task-form">
 

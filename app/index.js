@@ -22,6 +22,7 @@ var viewer = new BpmnJS({
 });
 
 
+
 function openDiagram(xml) {
 
     viewer.importXML(xml, function (err) {
@@ -48,6 +49,8 @@ function openDiagram(xml) {
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
         xml = xml.replace(regExpRemoveComments,"");
+
+        //TODO creare qui la funzine che produce una sola volta l'obj e lo passiamo alle altre funzioni
 
         // * creare dal XML il form field
         createFormFields(xml);
@@ -117,6 +120,86 @@ function createFormFields(xml) {
     // let input2 = $("<input type=\"text\" class=\"form-control form-control-input\" id=\"vendor2\" value=\"Caputo & Lazazzera\">");
     // taskForm.append(label2);
     // taskForm.append(input2);
+
+
+
+
+
+    // parte completamento form con dati esistenti
+    // let parser = new DOMParser();
+    // let xmlDoc = parser.parseFromString(xml, "text/xml");
+
+    // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
+    let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+    let dataTree; // * variabile che contiene la struttura dati
+
+    dataTree = xml2tree(extensionElementXML[0]);
+    let dataTreeObj = dataTree[1];
+
+    let scenarios = dataTreeObj.scenario;
+
+    let numScenarios = scenarios.length;
+
+    for(let i = 0; i < numScenarios; i++) {
+        $('#scenario-picker').append($('<option>', {
+            value: i+1,
+            text: i+1
+        }));
+    }
+
+
+    $('#scenario-picker')
+        .on('change', function () {
+            refreshFormFieds(scenarios);
+        });
+
+
+}
+
+
+// * Funzione che aggiorna i campi in base allo scenario selezionato
+function refreshFormFieds(scenarios){
+    let scenarioSelected = $('#scenario-picker').val();
+    if(scenarioSelected!=""){
+
+        scenarioSelected=scenarioSelected-1;
+
+        let idScenarioInput = $('#scenario-id-input');
+        idScenarioInput.val(scenarios[scenarioSelected].id);
+
+        let nameScenarioInput = $('#scenario-name-input');
+        nameScenarioInput.val(scenarios[scenarioSelected].name);
+
+        let descriptionScenarioInput = $('#scenario-description-input');
+        descriptionScenarioInput.val(scenarios[scenarioSelected].description);
+
+
+        let created = scenarios[scenarioSelected].created;
+        let createdDateSplitted = created.toString().split("T");
+        let createdScenarioInput = $('#scenario-created-input');
+        createdScenarioInput.val(createdDateSplitted[0]);
+
+
+        let modified = scenarios[scenarioSelected].modified;
+        let modifiedDateSplitted = modified.toString().split("T");
+        let modifiedScenarioInput = $('#scenario-modified-input');
+        modifiedScenarioInput.val(modifiedDateSplitted[0]);
+
+
+        let authorScenarioInput = $('#scenario-author-input');
+        authorScenarioInput.val(scenarios[scenarioSelected].author);
+
+        let vendorScenarioInput = $('#scenario-vendor-input');
+        vendorScenarioInput.val(scenarios[scenarioSelected].vendor);
+
+        let versionScenarioInput = $('#scenario-version-input');
+        versionScenarioInput.val(scenarios[scenarioSelected].version);
+    }else{
+        //TODO valutare se settare defaults e considerare aggiunta scenario
+    }
+
+
+
 }
 
 // * Funzione per parsare l'XML ed eseguire le azioni sugli elementi della simulazione
@@ -145,8 +228,8 @@ function xmlParsing(xml){
 
         // * Leggere bpsim e inserirlo nella struttura dati
         dataTree = xml2tree(extensionElementXML[0])
-        console.log("Struttura ad albero"); //TODO REMOVE
-        console.log(dataTree); //TODO REMOVE
+        // console.log("Struttura ad albero"); //TODO REMOVE
+        // console.log(dataTree); //TODO REMOVE
 
         // * Fase 2 field2tree
 
@@ -159,11 +242,12 @@ function xmlParsing(xml){
     // * Fase 3 tree2xml (comune per entrambi i casi sia che ci sia simulazione che senza)
     let dataTreeObj = dataTree[1];
 
+    console.log(extensionElementXML);
     extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
 
     console.log(xmlDoc);
 
-    console.log(extensionElementXML);
+    // console.log(extensionElementXML);
 
 
 
@@ -272,7 +356,7 @@ function isParameter(field){
         "TransferTime", "QueueTime", "WaitTime", "ProcessingTime", "ValidationTime", "ReworkTime", "LagTime",
         "Availability", "Quantity", "Selection", "Role", "Interruptible", "Priority", "QueueLength", "FixedCost",
         "UnitCost", "Duration"]
-    
+
     return fields.includes(field);
 }
 
@@ -404,7 +488,8 @@ $('#js-drop-zone')
     })
     .on('dragleave dragend drop', function () {
         $('#js-drop-zone').css('background-color', 'white');
-    })
+    });
+
 
 // * Check file api availability
 if (!window.FileList || !window.FileReader) {
@@ -417,8 +502,8 @@ if (!window.FileList || !window.FileReader) {
     $('#js-drop-zone').css('display', 'none');
     $('#js-canvas').css('display', 'block');
     // openDiagram(firstdiagramXML);
-    // openDiagram(carRepairProcessXML);
-    openDiagram(tecnicalSupportProcessXML);
+    openDiagram(carRepairProcessXML);
+    // openDiagram(tecnicalSupportProcessXML);
     // * END Remove
 
 

@@ -374,6 +374,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
+        console.log("ciao");
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
@@ -604,13 +605,13 @@ export class UserDistributionDataPoint{
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
-    
+
         let userDistributionDataPointXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistributionDataPoint");
-    
+
         this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "probability", this._probability);
         userDistributionDataPointXMLelement.appendChild(this._value.toXMLelement(bpsimPrefix,xml));
-    
+
         return userDistributionDataPointXMLelement;
-    
+
     }
 }

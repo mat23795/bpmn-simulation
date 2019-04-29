@@ -79,6 +79,15 @@ label{
 
     /*border: solid 1px black;*/
 }
+.scenario-picker{
+    padding: .375rem .75rem;
+    background-color: #fff;
+    margin-left: 2%;
+    margin-bottom: 5%;
+}
+.div-scenario-picker{
+    text-align: center;
+}
 #wrapper{
     display: flex;
 }

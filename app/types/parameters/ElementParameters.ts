@@ -7,7 +7,7 @@ import {PropertyParameters} from "./PropertyParameters";
 import {PriorityParameters} from "./PriorityParameters";
 
 export class ElementParameters {
-    
+
     private _id: string;
     private _elementRef: string;
     private _vendorExtensions: VendorExtension[] = [];
@@ -107,7 +107,7 @@ export class ElementParameters {
 
         this.eventuallyAddAttribute(elementParametersXMLelement, "id", this._id);
         this.eventuallyAddAttribute(elementParametersXMLelement, "elementRef", this._elementRef);
-        
+
         for(let i=0; i< this._vendorExtensions.length; i++) {
             elementParametersXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, xml));
         }
@@ -119,7 +119,7 @@ export class ElementParameters {
         if(this._controlParameters != undefined){
             elementParametersXMLelement.appendChild(this._controlParameters.toXMLelement(bpsimPrefix, xml));
         }
-        
+
         if(this._costParameters != undefined){
             elementParametersXMLelement.appendChild(this._costParameters.toXMLelement(bpsimPrefix, xml));
         }
@@ -128,9 +128,11 @@ export class ElementParameters {
             elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, xml));
         }
 
+        console.log("prima");
         if(this._propertyParameters != undefined){
             elementParametersXMLelement.appendChild(this._propertyParameters.toXMLelement(bpsimPrefix, xml));
         }
+        console.log("dopo");
 
         if(this._priorityParameters != undefined){
             elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, xml));
