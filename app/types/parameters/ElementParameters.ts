@@ -15,7 +15,7 @@ export class ElementParameters {
     private _controlParameters: ControlParameters;
     private _costParameters: CostParameters;
     private _resourceParameters: ResourceParameters;
-    private _propertyParameters: PropertyParameters;
+    private _propertyParameters: PropertyParameters[] = []; //da traccia non è un array, ma per esigenze lo diventa (no side effects)
     private _priorityParameters: PriorityParameters;
 
     constructor(){}
@@ -41,7 +41,9 @@ export class ElementParameters {
     }
 
     set vendorExtensions(value: VendorExtension[]) {
-        this._vendorExtensions = value;
+        for (let i = 0; i < value.length; i++) {
+            this._vendorExtensions.push(value[i]);
+        }
     }
 
     get timeParameters(): TimeParameters {
@@ -76,11 +78,11 @@ export class ElementParameters {
         this._resourceParameters = value;
     }
 
-    get propertyParameters(): PropertyParameters {
+    get propertyParameters(): PropertyParameters [] {
         return this._propertyParameters;
     }
 
-    set propertyParameters(value: PropertyParameters) {
+    set propertyParameters(value: PropertyParameters[]) {
         this._propertyParameters = value;
     }
 
@@ -128,11 +130,13 @@ export class ElementParameters {
             elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, xml));
         }
 
-        console.log("prima");
-        if(this._propertyParameters != undefined){
-            elementParametersXMLelement.appendChild(this._propertyParameters.toXMLelement(bpsimPrefix, xml));
+        // console.log("prima");
+        for(let i=0; i< this._propertyParameters.length; i++) {
+        // if(this._propertyParameters != undefined){
+            // console.log(this);
+            elementParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, xml));
         }
-        console.log("dopo");
+        // console.log("dopo");
 
         if(this._priorityParameters != undefined){
             elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, xml));

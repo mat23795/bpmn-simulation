@@ -171,7 +171,7 @@ export class Scenario {
         }
 
         // TODO
-        console.log(this._elementParameters.length);
+        // console.log(this._elementParameters.length);
         for(let i=0; i< this._elementParameters.length; i++) {
             scenarioXMLelement.appendChild(this._elementParameters[i].toXMLelement(bpsimPrefix, xml));
         }

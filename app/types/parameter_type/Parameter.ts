@@ -4,7 +4,7 @@ import {ParameterValue} from "./ParameterValue";
 export class Parameter{
 
     protected _value: ParameterValue[] = [];
-    protected _resultRequest: ResultType;
+    protected _resultRequest: ResultType[] = [];
 
     constructor(){}
     
@@ -20,12 +20,14 @@ export class Parameter{
         }
     }
 
-    get resultRequest(): ResultType {
+    get resultRequest(): ResultType [] {
         return this._resultRequest;
     }
 
-    set resultRequest(value: ResultType) {
-        this._resultRequest = value;
+    set resultRequest(value: ResultType []) {
+        for (let i = 0; i < value.length; i++) {
+            this._resultRequest.push(value[i]);
+        }   
     }
 
     protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
@@ -35,12 +37,7 @@ export class Parameter{
     }
 
     toXMLelement(bpsimPrefix: string, xml: any, nameTag: string): any {
-        // if(nameTag == "Selection"){
-        //     console.log(nameTag);
-        //     console.log(this._value[0]);
-        // }
         
-
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
@@ -51,9 +48,9 @@ export class Parameter{
         }
 
         //TODO verificare check su undefined per un enum
-        if(this._resultRequest != undefined){
+        for(let i=0; i< this._resultRequest.length; i++) {
             let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
-            resultRequestXMLelement.textContent = this._resultRequest;
+            resultRequestXMLelement.textContent = this._resultRequest[i];
 
             parameterXMLelement.appendChild(resultRequestXMLelement);
         }

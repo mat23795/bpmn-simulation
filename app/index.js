@@ -1,6 +1,11 @@
 import firstdiagramXML from '../resources/firstDiagram.bpmn';
-import carRepairProcessXML from '../resources/1_CarRepairProcessV1.bpmn';
-import tecnicalSupportProcessXML from '../resources/5_TechnicalSupportProcessV1.bpmn';
+import bpmn_example1 from '../resources/1_CarRepairProcessV1.bpmn';
+import bpmn_example2 from '../resources/2_CarRepairProcessV2.bpmn';
+import bpmn_example3 from '../resources/3_LoanProcessV1.bpmn';
+import bpmn_example4 from '../resources/4_LoanProcessV2.bpmn';
+import bpmn_example5 from '../resources/5_TechnicalSupportProcessV1.bpmn';
+import bpmn_example6 from '../resources/6_TechnicalSupportProcessV1_1.bpmn';
+import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2.bpmn';
 
 import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParameter";
 import {BPSimData} from "./types/scenario/BPSimData";
@@ -147,6 +152,13 @@ function createFormFields(xml) {
         }));
     }
 
+    // $('#scenario-picker').append($('<option>', {
+    //     value: 2,
+    //     text: 2
+    // }));
+
+    refreshFormFieds(scenarios);
+
 
     $('#scenario-picker')
         .on('change', function () {
@@ -157,43 +169,55 @@ function createFormFields(xml) {
 }
 
 
+// * Funzione di supporto per settare i valori nel form se presenti, altrimenti viene messo undefined 
+function setField(inputElement, valueToSet){
+    if(valueToSet != undefined){
+        inputElement.val(valueToSet);
+    }else{
+        inputElement.val(undefined);
+    }
+}
+
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFieds(scenarios){
     let scenarioSelected = $('#scenario-picker').val();
-    if(scenarioSelected!=""){
+    if(scenarioSelected != "" ){
 
         scenarioSelected=scenarioSelected-1;
-
+        
         let idScenarioInput = $('#scenario-id-input');
-        idScenarioInput.val(scenarios[scenarioSelected].id);
+        let idScenarioVal = scenarios[scenarioSelected].id;
+        setField(idScenarioInput, idScenarioVal);
 
         let nameScenarioInput = $('#scenario-name-input');
-        nameScenarioInput.val(scenarios[scenarioSelected].name);
+        let nameScenarioVal = scenarios[scenarioSelected].name
+        setField(nameScenarioInput, nameScenarioVal);
 
         let descriptionScenarioInput = $('#scenario-description-input');
-        descriptionScenarioInput.val(scenarios[scenarioSelected].description);
-
-
-        let created = scenarios[scenarioSelected].created;
-        let createdDateSplitted = created.toString().split("T");
+        let descriptionScenarioVal = scenarios[scenarioSelected].description;
+        setField(descriptionScenarioInput, descriptionScenarioVal);
+        
         let createdScenarioInput = $('#scenario-created-input');
-        createdScenarioInput.val(createdDateSplitted[0]);
+        let createdScenarioVal = scenarios[scenarioSelected].created;
+        setField(createdScenarioInput, createdScenarioVal);
 
-
-        let modified = scenarios[scenarioSelected].modified;
-        let modifiedDateSplitted = modified.toString().split("T");
         let modifiedScenarioInput = $('#scenario-modified-input');
-        modifiedScenarioInput.val(modifiedDateSplitted[0]);
-
+        let modifiedScenarioVal = scenarios[scenarioSelected].modified;
+        setField(modifiedScenarioInput, modifiedScenarioVal);
 
         let authorScenarioInput = $('#scenario-author-input');
-        authorScenarioInput.val(scenarios[scenarioSelected].author);
+        let authorScenarioVal = scenarios[scenarioSelected].author;
+        setField(authorScenarioInput, authorScenarioVal);
 
         let vendorScenarioInput = $('#scenario-vendor-input');
-        vendorScenarioInput.val(scenarios[scenarioSelected].vendor);
+        let vendorScenarioVal = scenarios[scenarioSelected].vendor;
+        setField(vendorScenarioInput, vendorScenarioVal);
 
         let versionScenarioInput = $('#scenario-version-input');
-        versionScenarioInput.val(scenarios[scenarioSelected].version);
+        let versionScenarioVal = scenarios[scenarioSelected].version;
+        setField(versionScenarioInput, versionScenarioVal);
+        
+    
     }else{
         //TODO valutare se settare defaults e considerare aggiunta scenario
     }
@@ -316,28 +340,34 @@ function buildDataTree(nodo, nodoObject) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-        if(isArrayAttribute(nodoFiglio[0].localName)){
-            // * attributo array di un nodo viene popolato in maniera differente rispetto ad attributo atomico
-            let tempArray = [];
-            tempArray.push(nodoFiglio[1]);
-            nodoObject[nameAttr] = tempArray;
-        } else {
-            // creare un Parameter con value avvalorato correttamente
-            if(isParameter(nodoFiglio[0].localName)){
-                let parameterFieldsToDelete = [];
-                for(let i = 0; i < Object.keys(nodoFiglio[1]).length; i++){
-                    // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
-                    if(Object.keys(nodoFiglio[1])[i].charAt(0) != "_"){
-                        let temp = nodoFiglio[1][Object.keys(nodoFiglio[1])[i]];
-                        parameterFieldsToDelete.push(temp);
-                    }
+       
+        // creare un Parameter con value avvalorato correttamente
+        if(isParameter(nodoFiglio[0].localName)){
+            let parameterFieldsToDelete = [];
+            for(let i = 0; i < Object.keys(nodoFiglio[1]).length; i++){
+                // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
+                if(Object.keys(nodoFiglio[1])[i].charAt(0) != "_"){
+                    let temp = nodoFiglio[1][Object.keys(nodoFiglio[1])[i]];
+                    parameterFieldsToDelete.push(temp);
                 }
-                let tempResultRequest = nodoFiglio[1].resultRequest;
-                nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
-                nodoFiglio[1].resultRequest = tempResultRequest;
-                nodoFiglio[1].value = parameterFieldsToDelete;
+            }
+            let tempResultRequest = nodoFiglio[1].resultRequest;
+            nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
+            nodoFiglio[1].resultRequest = tempResultRequest;
+            nodoFiglio[1].value = parameterFieldsToDelete;
+            if(isArrayAttribute(nodoFiglio[0].localName)){
+                let tempArray = [];
+                tempArray.push(nodoFiglio[1]);
+                nodoObject[nameAttr] = tempArray;
+            } else{  
                 nodoObject[nameAttr] = nodoFiglio[1];
-            }else{
+            }
+        }else{
+            if(isArrayAttribute(nodoFiglio[0].localName)){
+                let tempArray = [];
+                tempArray.push(nodoFiglio[1]);
+                nodoObject[nameAttr] = tempArray;
+            } else{
                 nodoObject[nameAttr] = nodoFiglio[1];
             }
         }
@@ -355,7 +385,7 @@ function isParameter(field){
     let fields = ["TriggerCount", "InterTriggerTimer", "Probability", "Condition", "Start", "Warmup", "ElapsedTime",
         "TransferTime", "QueueTime", "WaitTime", "ProcessingTime", "ValidationTime", "ReworkTime", "LagTime",
         "Availability", "Quantity", "Selection", "Role", "Interruptible", "Priority", "QueueLength", "FixedCost",
-        "UnitCost", "Duration"]
+        "UnitCost", "Duration", "Property"];
 
     return fields.includes(field);
 }
@@ -363,7 +393,7 @@ function isParameter(field){
 // * Funzione di appoggio che permette di capire se un attributo è di tipo array
 function isArrayAttribute(attribute){
     let attributes = ["Scenario", "ElementParameters", "VendorExtensions", "PropertyParameters", "ParameterValue",
-    "Calendar", "UserDistributionDataPoint", "ConstantParameter"];
+    "Calendar", "UserDistributionDataPoint", "ConstantParameter", "Property", "Role", "ResultRequest"];
 
     return attributes.includes(attribute);
 }
@@ -498,12 +528,18 @@ if (!window.FileList || !window.FileReader) {
         'Try using Chrome, Firefox or the Internet Explorer > 10.');
 } else {
 
-    //TODO remove these line
+    //TODO remove these line 
     $('#js-drop-zone').css('display', 'none');
     $('#js-canvas').css('display', 'block');
     // openDiagram(firstdiagramXML);
-    openDiagram(carRepairProcessXML);
-    // openDiagram(tecnicalSupportProcessXML);
+    // openDiagram(bpmn_example1);
+    // openDiagram(bpmn_example2);
+    // openDiagram(bpmn_example3);
+    // openDiagram(bpmn_example4);
+    // openDiagram(bpmn_example5);
+    // openDiagram(bpmn_example6);
+    openDiagram(bpmn_example7);
+
     // * END Remove
 
 

@@ -374,7 +374,6 @@ export class TruncatedNormalDistribution extends DistributionParameter{
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
-        console.log("ciao");
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 

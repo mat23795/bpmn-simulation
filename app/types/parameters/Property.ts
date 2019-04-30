@@ -42,9 +42,9 @@ export class Property extends Parameter {
         }
 
         //TODO verificare check su undefined per un enum
-        if(this._resultRequest != undefined){
+        for(let i=0; i< this._resultRequest.length; i++) {
             let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
-            resultRequestXMLelement.textContent = this._resultRequest;
+            resultRequestXMLelement.textContent = this._resultRequest[i];
             propertyXMLelement.appendChild(resultRequestXMLelement);
         }
 
