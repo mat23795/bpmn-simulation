@@ -148,8 +148,11 @@ function createFormFields(xml) {
     console.log(nodesArrow); //TODO REMOVE
 
 
+
+
+
     // * elemento HTML contenente la sezione degli element parameter
-    let elementParameterHTML = $('#element-parameter-section');
+    let elementParameterHTML = $('#element-parameter-section-haveInner');
     
     
 
@@ -158,14 +161,30 @@ function createFormFields(xml) {
         label: 'element-parameter-form'
     });
 
+
     let buttonTask = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
-        text: 'Task'
+        text: 'Task',
+        id: 'button-task'
     });
+    buttonTask.data('clicked', false);
     let divTask = jQuery('<div/>', {
         class: 'content',
-        label: 'element-parameter-task-form'
+        label: 'element-parameter-task-form',
+        id: 'div-task'
+    });
+
+    let buttonGateway = jQuery('<button/>', {
+        class: 'collapsible button-collapsible-style',
+        type: 'button',
+        text: 'Gateway',
+        id: 'button-gateway'
+    });
+    let divGateway = jQuery('<div/>', {
+        class: 'content',
+        label: 'element-parameter-gateway-form',
+        id: 'div-gateway'
     });
 
 
@@ -173,23 +192,94 @@ function createFormFields(xml) {
     
 
 
-    
+    //TODO rimuovere questi due for seguenti
     for(let counter = 0; counter<nodesTask.length; counter++){
-        let labelVar = 'vendor'+(counter+1);
+
+        let labelElementRef;
+        let elRef = nodesTask[counter].id;
+        if(counter==0){
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+elRef,
+            });
+
+        }else{
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+nodesTask[counter].id,
+                style: 'margin-top:15%'
+            });
+        }
+        
+        
+        divTask.append(labelElementRef);
+        
+
+
+
+
+        let labelId = jQuery('<label/>', {
+            for: 'task'+(counter+1)+'-id-input',
+            text: 'ID'
+        });
+        
+        let inputId = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'task'+(counter+1)+'-id-input-'+elRef,
+            placeholder: 'Task Id'
+        });
+        divTask.append(labelId);
+        divTask.append(inputId);
+
+
+
+        let labelVendor = jQuery('<label/>', {
+            for: 'task'+(counter+1)+'-vendor-input',
+            text: 'Vendor Extention'
+        });
+        
+        let inputVendor = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'task'+(counter+1)+'-vendor-input',
+            placeholder: 'Vendor DA FARE'
+        });
+        divTask.append(labelVendor);
+        divTask.append(inputVendor);
+
+
+
+        
+    }
+
+
+    for(let counter = 0; counter<nodesGateway.length; counter++){
+
+        let labelId = 'vendor'+(counter+1);
         let label1 = jQuery('<label/>', {
-            for: labelVar,
-            text: labelVar
+            for: labelId,
+            text: labelId
         });
         
         let input1 = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: labelVar,
+            id: labelId,
             value: 'Caputo & Lazazzera'
         });
 
-        divTask.append(label1);
-        divTask.append(input1);
+        divGateway.append(label1);
+        divGateway.append(input1);
+
+
+
+        
+
+
+
     }
 
 
@@ -198,19 +288,45 @@ function createFormFields(xml) {
 
     divElementParameter.append(buttonTask);
     divElementParameter.append(divTask);
+    divElementParameter.append(buttonGateway);
+    divElementParameter.append(divGateway);
+
+    // let buttonTaskHTML = $('#button-task');
+
+    // buttonTaskHTML.toggle("active");
+
 
     elementParameterHTML.append(divElementParameter);
+
+    // elementParameterHTML.append(buttonTask);
+    // elementParameterHTML.append(divTask);
+
 
     // costruzione buttons in scenario
     var coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
+            // console.log("prima");
+            // console.log(this.clicked);
+            $(this).data('clicked', !$(this).data('clicked'));
+            // console.log("dopo");
+            // console.log(this.clicked);
             this.classList.toggle("active");
             var content = this.nextElementSibling;
+            var haveInner = content.id.includes("haveInner");
+            var scrollHeightInner = 0;
+            if(haveInner){
+                var contentChildren = content.childNodes[0].childNodes;
+                for(let i = 0; i<contentChildren.length; i++){
+                    if( i%2 != 0){
+                        scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
+                    }
+                }
+            }
             if (content.style.maxHeight){
                 content.style.maxHeight = null;
             } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
             } 
         });
     }
@@ -716,9 +832,38 @@ events.forEach(function (event) {
         // TODO cambiare la zona
         if (event == 'element.click') {
             //Front Office
+            let elemRefClicked = e.element.id;
+            
+            
+            
+            if(e.element.type.toLowerCase().includes("task")){
+                // console.log("attenzione qui");
 
-            var scrollPos = $("#exampleFormControlTextarea1").offset().top;
-            $('#js-simulation').scrollTop(scrollPos);
+                // console.log($("#button-task"));
+                console.log("qua   "+$("#button-task").data('clicked'));
+            
+                if($("#button-task").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#elem-par-btn").click();
+                    $("#button-task").click();
+                }else{
+                    console.log("non lo facciooooo");
+                }
+            }
+            // else if(e.element.type.toLowerCase().includes("gateway")){
+            //     $("#elem-par-btn").click();      
+            //     $("#button-gateway").click();
+            // }
+            // else if(e.element.type.toLowerCase().includes("event")){
+            //     $("#elem-par-btn").click();
+            //     $("#button-event").click();
+            // }
+
+            // * do il focus all'input tag che ha come id l'element ref che ho cliccato
+
+
+            $( "input[id*='"+elemRefClicked+"']" ).focus();
+           
         
 
 

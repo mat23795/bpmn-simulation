@@ -15,6 +15,7 @@ label{
     display: block;
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 1%;
     /*margin-top: 1.5%;*/
     /*margin-left: 1%;*/
     /*margin-right: 1%;*/
@@ -94,11 +95,16 @@ label{
     margin-right: 1%;
     margin-left: 1%;
 }
+.label-new-element{
+    width: 100%;
+    font-weight: bold;
+    
+}
 #wrapper{
     display: flex;
 }
 #js-drop-zone{
-    height: 700px;
+    height: 500px;
 
     font-size: 40px;
 
@@ -132,7 +138,7 @@ label{
 
     flex: 0 0 60%;
 
-    display: block;
+    /* display: block; */
 }
 #js-canvas{
     margin-right: 1%;
