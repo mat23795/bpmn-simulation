@@ -23,14 +23,14 @@ var container = $('#js-drop-zone');
 
 var viewer = new BpmnJS({
     container: $('#js-canvas'),
-    height: 500
+    height: "695px" // poco minore di 700 per lasciare uno spazio prima del bordo finale
 });
-
 
 
 function openDiagram(xml) {
 
     viewer.importXML(xml, function (err) {
+
 
         //TODO gestire errore caricamento
         // if (err) {
@@ -47,9 +47,10 @@ function openDiagram(xml) {
         //         .addClass('with-diagram');
         // }
 
-        viewer.get('canvas').zoom('fit-viewport');
+        viewer.get('canvas').zoom('fit-viewport'); //TODO Vedere se mantenere zoom
         // TODO vedere scrollbar
-        // $('.djs-container').css('overflow', 'auto');
+        $('.djs-container').css('overflow', 'auto');
+        // $('.djs-container').css('height', '700px');
 
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
@@ -79,44 +80,174 @@ function createFormFields(xml) {
     // console.log("Elementi del bpmn"); //TODO REMOVE
     // console.log(bpmnElementXML[0]); //TODO REMOVE
 
-    // * array di tutti gli elementi presenti in "process"
-    var nodes = Array.prototype.slice.call(bpmnElementXML[0].getElementsByTagName("*"), 0);
-    // console.log("Array di elementi del bpmn"); //TODO REMOVE
-    // console.log(nodes); //TODO REMOVE
 
-    // * variabile che contiene solo i task
-    var nodesTask = [];
-    for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].localName == "task") {
+    let nodesTask = [];
+    let nodesGateway = [];
+    let nodesEvent = [];
+    let nodesArrow = [];
 
-            nodesTask.push(nodes[i]);
+    for(let i = 0; i<bpmnElementXML.length; i++){
+
+        // * array di tutti gli elementi presenti in "process"
+        let nodes = Array.prototype.slice.call(bpmnElementXML[i].getElementsByTagName("*"), 0);
+        // console.log("Array di elementi del bpmn"); //TODO REMOVE
+        // console.log(nodes); //TODO REMOVE
+
+        // * avvaloramento variabile che contiene solo i task
+        for (let j = 0; j < nodes.length; j++) {
+            if (nodes[j].localName.toLowerCase().includes("task")) {
+
+                nodesTask.push(nodes[j]);
+            }
+            // console.log(nodes[j].localName);
         }
-        // console.log(nodes[i].localName);
+        
+
+        // * avvaloramento variabile che contiene solo i gateway
+        for (let j = 0; j < nodes.length; j++) {
+            if (nodes[j].localName.toLowerCase().includes("gateway")){
+
+                nodesGateway.push(nodes[j]);
+            }
+            // console.log(nodes[j].localName);
+        }
+        
+
+        // * avvaloramento variabile che contiene solo gli eventi
+        for (let j = 0; j < nodes.length; j++) {
+            if (nodes[j].localName.toLowerCase().includes("event")){
+
+                nodesEvent.push(nodes[j]);
+            }
+            // console.log(nodes[j].localName);
+        }
+        
+
+        // * avvaloramento variabile che contiene solo le freccie
+        for (let j = 0; j < nodes.length; j++) {
+            if (nodes[j].localName.toLowerCase().includes("outgoing")||
+                nodes[j].localName.toLowerCase().includes("incoming")){
+
+                nodesArrow.push(nodes[j]);
+            }
+            // console.log(nodes[j].localName);
+        }
+        
     }
-    // console.log("Array di soli task"); //TODO REMOVE
-    // console.log(nodesTask); //TODO REMOVE
 
-    // * elemnto HTML contenente la sezione dei task
-    let taskForm = $('#task-form');
+    console.log("Array di soli task"); //TODO REMOVE
+    console.log(nodesTask); //TODO REMOVE
 
-    // * settaggio del task-form 'visibile'. Di default è settato a none
-    taskForm.css('display', 'block');
+    console.log("Array di soli gateway"); //TODO REMOVE
+    console.log(nodesGateway); //TODO REMOVE
 
-    // * modo1 creazione label
-    let label1 = jQuery('<label/>', {
-        for: 'vendor1',
-        text: 'Vendor1'
+    console.log("Array di soli eventi"); //TODO REMOVE
+    console.log(nodesEvent); //TODO REMOVE
+
+    console.log("Array di soli eventi"); //TODO REMOVE
+    console.log(nodesArrow); //TODO REMOVE
+
+
+    // * elemento HTML contenente la sezione degli element parameter
+    let elementParameterHTML = $('#element-parameter-section');
+    
+    
+
+    let divElementParameter = jQuery('<div/>', {
+        class: 'form-group',
+        label: 'element-parameter-form'
     });
-    // * modo1 creazione input field
-    let input1 = jQuery('<input/>', {
-        type: 'text',
-        class: 'form-control form-control-input',
-        id: 'vendor1',
-        value: 'Caputo & Lazazzera'
+
+    let buttonTask = jQuery('<button/>', {
+        class: 'collapsible button-collapsible-style',
+        type: 'button',
+        text: 'Task'
+    });
+    let divTask = jQuery('<div/>', {
+        class: 'content',
+        label: 'element-parameter-task-form'
     });
 
-    taskForm.append(label1);
-    taskForm.append(input1);
+
+    
+    
+
+
+    
+    for(let counter = 0; counter<nodesTask.length; counter++){
+        let labelVar = 'vendor'+(counter+1);
+        let label1 = jQuery('<label/>', {
+            for: labelVar,
+            text: labelVar
+        });
+        
+        let input1 = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: labelVar,
+            value: 'Caputo & Lazazzera'
+        });
+
+        divTask.append(label1);
+        divTask.append(input1);
+    }
+
+
+
+
+
+    divElementParameter.append(buttonTask);
+    divElementParameter.append(divTask);
+
+    elementParameterHTML.append(divElementParameter);
+
+    // costruzione buttons in scenario
+    var coll = document.getElementsByClassName("collapsible");
+    for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } 
+        });
+    }
+
+
+
+    
+
+
+
+    
+
+
+
+
+    
+    // // * elemnto HTML contenente la sezione dei task
+    // let taskForm = $('#task-form');
+
+    // // * settaggio del task-form 'visibile'. Di default è settato a none
+    // taskForm.css('display', 'block');
+
+    // // * modo1 creazione label
+    // let label1 = jQuery('<label/>', {
+    //     for: 'vendor1',
+    //     text: 'Vendor1'
+    // });
+    // // * modo1 creazione input field
+    // let input1 = jQuery('<input/>', {
+    //     type: 'text',
+    //     class: 'form-control form-control-input',
+    //     id: 'vendor1',
+    //     value: 'Caputo & Lazazzera'
+    // });
+
+    // taskForm.append(label1);
+    // taskForm.append(input1);
 
     //TODO rimuovere modi seguenti
     // * modo2 creazione label
@@ -181,6 +312,8 @@ function setField(inputElement, valueToSet){
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFieds(scenarios){
     let scenarioSelected = $('#scenario-picker').val();
+
+    //TODO gestire caso in cui si debba creare bspim da zero
     if(scenarioSelected != "" ){
 
         scenarioSelected=scenarioSelected-1;
@@ -216,6 +349,15 @@ function refreshFormFieds(scenarios){
         let versionScenarioInput = $('#scenario-version-input');
         let versionScenarioVal = scenarios[scenarioSelected].version;
         setField(versionScenarioInput, versionScenarioVal);
+
+        let resultScenarioInput = $('#scenario-result-input');
+        let resultScenarioVal = scenarios[scenarioSelected].result;
+        setField(resultScenarioInput, resultScenarioVal);
+
+        let inheritsScenarioInput = $('#scenario-inherits-input');
+        let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
+        setField(inheritsScenarioInput, inheritsScenarioVal);
+
         
     
     }else{
@@ -512,6 +654,8 @@ function registerFileDrop(container, callback) {
     container.get(0).addEventListener('drop', handleFileSelect, false);
 }
 
+
+
 $('#js-drop-zone')
     .on('dragover dragenter', function () {
         $('#js-drop-zone').css('background-color', 'AliceBlue');
@@ -528,9 +672,12 @@ if (!window.FileList || !window.FileReader) {
         'Try using Chrome, Firefox or the Internet Explorer > 10.');
 } else {
 
+
     //TODO remove these line 
     $('#js-drop-zone').css('display', 'none');
     $('#js-canvas').css('display', 'block');
+
+    
     // openDiagram(firstdiagramXML);
     // openDiagram(bpmn_example1);
     // openDiagram(bpmn_example2);
@@ -568,16 +715,22 @@ events.forEach(function (event) {
         // * funzione che al click nella zona del diagramma cambia il focus della zona delle properties
         // TODO cambiare la zona
         if (event == 'element.click') {
-            //
+            //Front Office
+
             var scrollPos = $("#exampleFormControlTextarea1").offset().top;
             $('#js-simulation').scrollTop(scrollPos);
-        }
+        
 
 
-        if (!e.element.id.includes("label")) {
-            // console.log(event + 'on' + e.element.id);
-        } else {
-            //TODO disabilitare css per le label
+            // non selezioniamo con un rettangolo blu le label dei task, ma gli altri elementi si
+            if (e.element.id.includes("label")) {
+                $('.djs-element.selected .djs-outline').css("stroke-width", "0px");
+                // console.log(event + 'on' + e.element.id);
+            } else {
+                $('.djs-element.selected .djs-outline').css("stroke-width", "8px");
+
+            }
+
         }
     });
 

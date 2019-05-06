@@ -80,13 +80,67 @@
                         <!--</div>-->
 
                         <!--<input type="file">-->
+
                         <label for="scenario-author-input">Author</label>
                         <input type="text" class="form-control form-control-input" id="scenario-author-input" placeholder="Your Company">
+
                         <label for="scenario-vendor-input">Vendor</label>
                         <input type="text" class="form-control form-control-input" id="scenario-vendor-input" value="Caputo & Lazazzera">
+
                         <label for="scenario-version-input">Version</label>
                         <input type="text" class="form-control form-control-input" id="scenario-version-input" placeholder="1.0">
+
+
+                        <label for="scenario-result-input">Result</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-result-input" placeholder="Scenario ID">
+
+
+                        <label for="scenario-inherits-input">Inherits</label>
+                        <input type="text" class="form-control form-control-input" id="scenario-inherits-input" placeholder="Scenario ID">
+
+                        <!-- <p>Collapsible Set:</p> -->
+                        <button class="collapsible button-collapsible-style" type="button">Element Parameters</button>
+                        <div class="content" id="element-parameter-section"></div>
+
+                        <button class="collapsible button-collapsible-style" type="button">Scenario Parameters</button>
+                        <div class="content">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </div>
+
+                        <button class="collapsible button-collapsible-style" type="button">Vendor Extension</button>
+                        <div class="content">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </div>
+
+                        <button class="collapsible button-collapsible-style" type="button">Calendar</button>
+                        <div class="content">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </div>
+
+
                     </div>
+
+                    <!-- TODO spostare questo script in index.js -->
+                    <script>
+                    
+                        // // costruzione buttons in scenario
+                        // var coll = document.getElementsByClassName("collapsible");
+                        // for (let i = 0; i < coll.length; i++) {
+                        //     coll[i].addEventListener("click", function() {
+                        //         this.classList.toggle("active");
+                        //         var content = this.nextElementSibling;
+                        //         if (content.style.maxHeight){
+                        //             content.style.maxHeight = null;
+                        //         } else {
+                        //             content.style.maxHeight = content.scrollHeight + "px";
+                        //         } 
+                        //     });
+                        // }
+
+                    </script>
+
+
+                    <!-- TODO eliminare -->
                     <div class="form-group" label="task-form" id="task-form">
 
                     </div>
@@ -120,6 +174,7 @@
                         <label for="exampleFormControlTextarea1">Example textarea</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
+                    <!-- TODO fine eliminare -->
                 </form>
             </div>
         </div>
