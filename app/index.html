@@ -19,16 +19,15 @@
         <h1 class = "centered-title">BPMN Simulation Tool</h1>
 
 
+        <div class="orizzontal-wrapper">
+            <div class="vertical-wrapper">
+                <div class="div-vertical-border" id="js-drop-zone">
+                    Drop you BPMN diagram here.
+                </div>
 
-
-        <div id="wrapper">
-
-            <div class="div-vertical-border" id="js-drop-zone">
-                Drop you BPMN diagram here.
+                <div class="canvas div-vertical-border" id="js-canvas"></div>
+                <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="generate-bpsim">Generate BPSim XML</button>
             </div>
-
-            <div class="canvas div-vertical-border" id="js-canvas"></div>
-
 
             <!-- viewer -->
             <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
@@ -141,7 +140,7 @@
 
 
                     <!-- TODO eliminare -->
-                    <div class="form-group" label="task-form" id="task-form">
+                    <!-- <div class="form-group" label="task-form" id="task-form">
 
                     </div>
                     <div class="form-group" label="gateway-form" id="gateway-form">
@@ -173,7 +172,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Example textarea</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
+                    </div> -->
                     <!-- TODO fine eliminare -->
                 </form>
             </div>

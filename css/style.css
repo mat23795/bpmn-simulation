@@ -95,13 +95,50 @@ label{
     margin-right: 1%;
     margin-left: 1%;
 }
+.button-calculate{
+    margin: 3%;
+}
+.btn-primary{
+    background-color: darkcyan;
+    font-weight: bold;
+    border-color: darkcyan; 
+}
+.btn-primary:hover{
+    background-color: darkcyan;
+    border-color: darkcyan;
+    filter: brightness(90%);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active{
+    background-color: darkcyan;
+    border-color: darkcyan;
+    filter: brightness(90%);
+}
+.btn-primary:focus{
+    box-shadow: 0 0 0 0;
+}
+.btn:focus{
+    box-shadow: 0 0 0 0;
+}
+
+.btn-primary:after{
+    background-color: darkcyan;
+    border-color: darkcyan;
+    /* filter: brightness(90%); */
+}
+
 .label-new-element{
     width: 100%;
     font-weight: bold;
     
 }
-#wrapper{
+.orizzontal-wrapper{
     display: flex;
+}
+.vertical-wrapper{
+    text-align: center;
+    display: block;
+    flex: 0 0 60%;
 }
 #js-drop-zone{
     height: 500px;

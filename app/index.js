@@ -19,6 +19,11 @@ const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
 var container = $('#js-drop-zone');
+var dataTreeGlobal;
+var dataTreeObjGlobal;
+var xmlGlobal;
+var bpsimPrefixGlobal;
+var bpmnPrefixGlobal;
 
 
 var viewer = new BpmnJS({
@@ -27,9 +32,9 @@ var viewer = new BpmnJS({
 });
 
 
-function openDiagram(xml) {
+function openDiagram() {
 
-    viewer.importXML(xml, function (err) {
+    viewer.importXML(xmlGlobal, function (err) {
 
 
         //TODO gestire errore caricamento
@@ -52,25 +57,85 @@ function openDiagram(xml) {
         $('.djs-container').css('overflow', 'auto');
         // $('.djs-container').css('height', '700px');
 
+
+        // xmlGlobal=xml;
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
-        xml = xml.replace(regExpRemoveComments,"");
+        xmlGlobal = xmlGlobal.replace(regExpRemoveComments,"");
 
         //TODO creare qui la funzine che produce una sola volta l'obj e lo passiamo alle altre funzioni
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xmlGlobal, "text/xml");
 
-        // * creare dal XML il form field
-        createFormFields(xml);
+        // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
+        let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+
+        // * elemento XML delle definizioni
+        let definitionsTagXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
+
+        // * prefisso bpmn (es. semantic, bpmn)
+        bpmnPrefixGlobal = definitionsTagXML[0].prefix;
+        
+        bpsimPrefixGlobal = "bpsim"; // * default
+
+        if (extensionElementXML.length == 0) {
+            
+
+            // TODO gestire questione bpsim non esistente
+
+            //TODO scrivere xml in base a dati della struttura presi da form fields
+            //TODO 1) field2emptytree 2) tree2xml
+        }else{
+            // * Fase 1 xml2tree
+            bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
+    
+            // * Leggere bpsim e inserirlo nella struttura dati
+            dataTreeGlobal = xml2tree(extensionElementXML[0]);
+            dataTreeObjGlobal = dataTreeGlobal[1];
+
+            // * creare dal XML il form field
+            createFormFields();
+
+            // lo visualizzo
+
+            // lo modifico
+
+            // lo salvo
+
+            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+            console.log("XML fase ricopiamento");//TODO remove
+            console.log(xmlDoc);//TODO remove
+
+            // console.log(extensionElementXML);
+            
+            // * aggiunta evento al bottone che calcola il bpsim per far generare l'xml 'aggiornato'
+            $('#generate-bpsim')
+                .on("click", function() {
+
+                    let scenarioSelected = $('#scenario-picker').val();
+                    saveDataTreeStructure(scenarioSelected);
+
+                    extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+                    console.log("XML fase modifica");//TODO remove
+                    console.log(xmlDoc);//TODO remove
+
+                });
+    
+        }
+
+
+        
 
         // * funzione per parsare l'XML
-        xmlParsing(xml);
+        // xmlParsing();
 
     });
 }
 
 // * Funzione per creare il form in base all' XML
-function createFormFields(xml) {
+function createFormFields() {
     let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xml, "text/xml");
+    let xmlDoc = parser.parseFromString(xmlGlobal, "text/xml");
 
     // const bpmnPrefix = definitionsTag[0].prefix;
 
@@ -115,7 +180,8 @@ function createFormFields(xml) {
 
         // * avvaloramento variabile che contiene solo gli eventi
         for (let j = 0; j < nodes.length; j++) {
-            if (nodes[j].localName.toLowerCase().includes("event")){
+            if (nodes[j].localName.toLowerCase().includes("event")
+            && ! nodes[j].localName.toLowerCase().includes("definition")){
 
                 nodesEvent.push(nodes[j]);
             }
@@ -153,6 +219,8 @@ function createFormFields(xml) {
 
     // * elemento HTML contenente la sezione degli element parameter
     let elementParameterHTML = $('#element-parameter-section-haveInner');
+    let buttonElementParameterHTML = $('#elem-par-btn');
+    buttonElementParameterHTML.data('clicked', false);
     
     
 
@@ -181,18 +249,30 @@ function createFormFields(xml) {
         text: 'Gateway',
         id: 'button-gateway'
     });
+    buttonGateway.data('clicked', false);
     let divGateway = jQuery('<div/>', {
         class: 'content',
         label: 'element-parameter-gateway-form',
         id: 'div-gateway'
     });
+    
+    let buttonEvent = jQuery('<button/>', {
+        class: 'collapsible button-collapsible-style',
+        type: 'button',
+        text: 'Event',
+        id: 'button-event'
+    });
+    buttonEvent.data('clicked', false);
+    let divEvent = jQuery('<div/>', {
+        class: 'content',
+        label: 'element-parameter-event-form',
+        id: 'div-event'
+    });
 
 
     
-    
 
-
-    //TODO rimuovere questi due for seguenti
+    // for che creano gli elementi grafici per ogni task, in base a quanti task sono presenti nel BPMN
     for(let counter = 0; counter<nodesTask.length; counter++){
 
         let labelElementRef;
@@ -212,12 +292,8 @@ function createFormFields(xml) {
                 style: 'margin-top:15%'
             });
         }
-        
-        
         divTask.append(labelElementRef);
         
-
-
 
 
         let labelId = jQuery('<label/>', {
@@ -235,61 +311,111 @@ function createFormFields(xml) {
         divTask.append(inputId);
 
 
-
-        let labelVendor = jQuery('<label/>', {
-            for: 'task'+(counter+1)+'-vendor-input',
-            text: 'Vendor Extention'
-        });
+        //TODO eliminare
+        // let labelVendor = jQuery('<label/>', {
+        //     for: 'task'+(counter+1)+'-vendor-input',
+        //     text: 'Vendor Extension'
+        // });
         
-        let inputVendor = jQuery('<input/>', {
-            type: 'text',
-            class: 'form-control form-control-input',
-            id: 'task'+(counter+1)+'-vendor-input',
-            placeholder: 'Vendor DA FARE'
-        });
-        divTask.append(labelVendor);
-        divTask.append(inputVendor);
+        // let inputVendor = jQuery('<input/>', {
+        //     type: 'text',
+        //     class: 'form-control form-control-input',
+        //     id: 'task'+(counter+1)+'-vendor-input',
+        //     placeholder: 'Vendor DA FARE'
+        // });
+        // divTask.append(labelVendor);
+        // divTask.append(inputVendor);
 
 
 
         
     }
 
-
+    // TODO creare gli elementi corretti per i gateway
     for(let counter = 0; counter<nodesGateway.length; counter++){
 
-        let labelId = 'vendor'+(counter+1);
-        let label1 = jQuery('<label/>', {
-            for: labelId,
-            text: labelId
+        let labelElementRef;
+        let elRef = nodesGateway[counter].id;
+        if(counter==0){
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+elRef,
+            });
+
+        }else{
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+nodesGateway[counter].id,
+                style: 'margin-top:15%'
+            });
+        }
+        divGateway.append(labelElementRef);
+        
+
+
+        let labelId = jQuery('<label/>', {
+            for: 'gateway'+(counter+1)+'-id-input',
+            text: 'ID'
         });
         
-        let input1 = jQuery('<input/>', {
+        let inputId = jQuery('<input/>', {
             type: 'text',
-            class: 'form-control form-control-input',
-            id: labelId,
-            value: 'Caputo & Lazazzera'
+            class: 'gateway-control form-control-input',
+            id: 'gateway'+(counter+1)+'-id-input-'+elRef,
+            placeholder: 'Gateway Id'
         });
-
-        divGateway.append(label1);
-        divGateway.append(input1);
-
-
-
-        
-
+        divGateway.append(labelId);
+        divGateway.append(inputId);
 
 
     }
 
+    // TODO creare gli elementi corretti per gli eventi
+    for(let counter = 0; counter<nodesEvent.length; counter++){
 
+    let labelElementRef;
+    let elRef = nodesEvent[counter].id;
+    if(counter==0){
+        labelElementRef = jQuery('<label/>', {
+            class: 'label-new-element',
+            // id: elRef,
+            text: 'Element Ref: '+elRef,
+        });
 
+    }else{
+        labelElementRef = jQuery('<label/>', {
+            class: 'label-new-element',
+            // id: elRef,
+            text: 'Element Ref: '+nodesEvent[counter].id,
+            style: 'margin-top:15%'
+        });
+    }
+    divEvent.append(labelElementRef);
+    
+    let labelId = jQuery('<label/>', {
+        for: 'event'+(counter+1)+'-id-input',
+        text: 'ID'
+    });
+    
+    let inputId = jQuery('<input/>', {
+        type: 'text',
+        class: 'form-control form-control-input',
+        id: 'event'+(counter+1)+'-id-input-'+elRef,
+        placeholder: 'Event Id'
+    });
+    divEvent.append(labelId);
+    divEvent.append(inputId);
 
+    }
 
     divElementParameter.append(buttonTask);
     divElementParameter.append(divTask);
     divElementParameter.append(buttonGateway);
     divElementParameter.append(divGateway);
+    divElementParameter.append(buttonEvent);
+    divElementParameter.append(divEvent);
 
     // let buttonTaskHTML = $('#button-task');
 
@@ -331,65 +457,20 @@ function createFormFields(xml) {
         });
     }
 
-
-
     
-
-
-
     
-
-
-
-
-    
-    // // * elemnto HTML contenente la sezione dei task
-    // let taskForm = $('#task-form');
-
-    // // * settaggio del task-form 'visibile'. Di default è settato a none
-    // taskForm.css('display', 'block');
-
-    // // * modo1 creazione label
-    // let label1 = jQuery('<label/>', {
-    //     for: 'vendor1',
-    //     text: 'Vendor1'
-    // });
-    // // * modo1 creazione input field
-    // let input1 = jQuery('<input/>', {
-    //     type: 'text',
-    //     class: 'form-control form-control-input',
-    //     id: 'vendor1',
-    //     value: 'Caputo & Lazazzera'
-    // });
-
-    // taskForm.append(label1);
-    // taskForm.append(input1);
-
-    //TODO rimuovere modi seguenti
-    // * modo2 creazione label
-    // let label2 = $("<label for=\"vendor2\">Vendor2</label>");
-    // * modo2 creazione input field
-    // let input2 = $("<input type=\"text\" class=\"form-control form-control-input\" id=\"vendor2\" value=\"Caputo & Lazazzera\">");
-    // taskForm.append(label2);
-    // taskForm.append(input2);
-
-
-
-
-
-    // parte completamento form con dati esistenti
+    // * parte completamento form con dati esistenti
     // let parser = new DOMParser();
     // let xmlDoc = parser.parseFromString(xml, "text/xml");
 
     // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
-    let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
-    let dataTree; // * variabile che contiene la struttura dati
+    // let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+    // let dataTree; // * variabile che contiene la struttura dati
 
-    dataTree = xml2tree(extensionElementXML[0]);
-    let dataTreeObj = dataTree[1];
+    // dataTree = xml2tree(extensionElementXML[0]);
+    // let dataTreeObj = dataTree[1];
 
-    let scenarios = dataTreeObj.scenario;
-
+    let scenarios = dataTreeObjGlobal.scenario;
     let numScenarios = scenarios.length;
 
     for(let i = 0; i < numScenarios; i++) {
@@ -404,12 +485,18 @@ function createFormFields(xml) {
     //     text: 2
     // }));
 
-    refreshFormFieds(scenarios);
+    let scenarioSelected = $('#scenario-picker').val();
+    refreshFormFieds(scenarios, scenarioSelected);
+    
 
 
     $('#scenario-picker')
         .on('change', function () {
-            refreshFormFieds(scenarios);
+            let scenarioSelected = $('#scenario-picker').val();
+            
+            saveDataTreeStructure(scenarioSelected);
+            let scenariosTemp = dataTreeObjGlobal.scenario;
+            refreshFormFieds(scenariosTemp, scenarioSelected);
         });
 
 
@@ -425,10 +512,9 @@ function setField(inputElement, valueToSet){
     }
 }
 
-// * Funzione che aggiorna i campi in base allo scenario selezionato
-function refreshFormFieds(scenarios){
-    let scenarioSelected = $('#scenario-picker').val();
-
+// * Funzione di supporto per popolare gli attributi di Scenario
+function populateScenarioAttributesForm(scenarios, scenarioSelected){
+    
     //TODO gestire caso in cui si debba creare bspim da zero
     if(scenarioSelected != "" ){
 
@@ -472,68 +558,55 @@ function refreshFormFieds(scenarios){
 
         let inheritsScenarioInput = $('#scenario-inherits-input');
         let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
-        setField(inheritsScenarioInput, inheritsScenarioVal);
-
-        
+        setField(inheritsScenarioInput, inheritsScenarioVal);     
     
     }else{
         //TODO valutare se settare defaults e considerare aggiunta scenario
     }
-
-
-
 }
 
-// * Funzione per parsare l'XML ed eseguire le azioni sugli elementi della simulazione
-function xmlParsing(xml){
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xml, "text/xml");
+// * Funzione di supporto per popolare gli attributi di Scenario
+function populateScenarioElementsForm(scenarios, scenarioSelected){
+    
+    //TODO gestire caso in cui si debba creare bspim da zero
+    if(scenarioSelected != "" ){
+        scenarioSelected=scenarioSelected-1;
 
-    // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
-    let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+        let elementParametersSelected = scenarios[scenarioSelected].elementParameters;
 
-    // * elemento XML delle definizioni
-    let definitionsTagXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
+        elementParametersSelected[0].id = "giovanni"; //! TODO remove
 
-    // * prefisso bpmn (es. semantic, bpmn)
-    const bpmnPrefix = definitionsTagXML[0].prefix;
-    let bpsimPrefix = "bpsim"; // * default
+        for(let i=0;i<elementParametersSelected.length;i++){
+            let elemRef = elementParametersSelected[i].elementRef;
+            let idTaskInput = $( "input[id*='"+elemRef+"']" );
+            let idTaskVal = elementParametersSelected[i].id;
+            setField(idTaskInput, idTaskVal);
+        }
 
-    let dataTree; // * variabile che contiene la struttura dati
-
-    if (extensionElementXML.length == 0) {
-        //TODO scrivere xml in base a dati della struttura presi da form fields
-        //TODO 1) field2emptytree 2) tree2xml
-    }else{
-        // * Fase 1 xml2tree
-        bpsimPrefix = extensionElementXML[0].childNodes[1].prefix;
-
-        // * Leggere bpsim e inserirlo nella struttura dati
-        dataTree = xml2tree(extensionElementXML[0])
-        // console.log("Struttura ad albero"); //TODO REMOVE
-        // console.log(dataTree); //TODO REMOVE
-
-        // * Fase 2 field2tree
-
-
-        // * rimozione vecchio BPSimData
-        // extensionElementXML[0].removeChild(xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData")[0]);
-
+        
     }
+}
 
-    // * Fase 3 tree2xml (comune per entrambi i casi sia che ci sia simulazione che senza)
-    let dataTreeObj = dataTree[1];
-
-    console.log(extensionElementXML);
-    extensionElementXML[0].appendChild(dataTreeObj.toXMLelement(bpsimPrefix));
-
-    console.log(xmlDoc);
-
-    // console.log(extensionElementXML);
-
-
+// * Funzione che aggiorna i campi in base allo scenario selezionato
+function refreshFormFieds(scenarios, scenarioSelected){
+  
+    populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
+    populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
 
 }
+
+// * Funziona che salva la struttura dati
+function saveDataTreeStructure(scenarioSelected){
+    let idScenarioInput = $('#scenario-id-input');
+    let idScenarioVal = idScenarioInput.val();
+    dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
+
+    // let idScenarioInput = $('#scenario-id-input');
+    // let idScenarioVal = idScenarioInput.val();  
+
+    // dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
+}
+
 
 // * Funzione che parsa il file .bpmn e popola una struttura dati con le info della simulazione
 function xml2tree(bpsimDataXML) {
@@ -656,79 +729,6 @@ function isArrayAttribute(attribute){
     return attributes.includes(attribute);
 }
 
-//! TODO RIMUOVERE QUESTA FUNZIONE
-// function xmlParsing(xml) {
-//     let parser = new DOMParser();
-//     let xmlDoc = parser.parseFromString(xml, "text/xml");
-
-//     const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
-//     const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
-
-
-//     let bpsimNS = xmlDoc.getElementsByTagNameNS(bpsimNamespaceURI, "BPSimData");
-//     //VA FATTO FOREACH PER OGNI SCENARIO
-
-//     //ci colleghiamo al tag definitions bpmn
-//     let definitionsTag = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "definitions");
-
-//     //prefisso bpmn (es. semantic, bpmn)
-//     const bpmnPrefix = definitionsTag[0].prefix;
-//     let bpsimPrefix = "bpsim"; //default
-
-
-//     if (bpsimNS.length == 0) {
-//         //Aggiungere namespace bpsim al namespace
-//         definitionsTag[0].setAttribute("xlmns:" + bpsimPrefix, bpsimNamespaceURI);
-
-//         //Aggiunta bpmn:relationship
-//         let relationship = xmlDoc.createElement(bpmnPrefix + ":relationship");
-//         relationship.setAttribute("type", "BPSimData");
-//         definitionsTag[0].appendChild(relationship);
-
-//         //Aggiunta bpmn:extensionElements
-//         let extensionElements = xmlDoc.createElement(bpmnPrefix + ":extensionElements");
-//         relationship.appendChild(extensionElements);
-
-//         //Aggiunta bpsim:BPSimData
-//         let bpsimData = xmlDoc.createElement(bpsimPrefix + ":BPSimData");
-//         extensionElements.appendChild(bpsimData);
-
-//         //Aggiunta bpsim:Scenario
-//         let scenario = xmlDoc.createElement(bpsimPrefix + ":Scenario");
-//         // scenario.setAttribute("id", $('#id').val());
-//         // scenario.setAttribute("name", $('#name').val());
-//         // scenario.setAttribute("description", $('#description').val());
-//         //CREATED
-//         //MODIFIED
-//         // scenario.setAttribute("author", $('#author').val());
-//         // scenario.setAttribute("vendor", $('#vendor').val());
-//         // scenario.setAttribute("version", $('#version').val());
-
-//         bpsimData.appendChild(scenario);
-
-//         console.log(bpsimData);
-//     } else {
-//         //TODO inserire nuovi valori del xml letto
-//         bpsimPrefix = bpsimNS[0].prefix;
-//         console.log("ciao " + bpsimPrefix);
-//     }
-//     console.log(xmlDoc);
-
-//     // AGGIUNGERE TAG IN SCRITTURA XML
-//     // prova = xmlDoc.createElement("rel");
-//     // bpsimNS = xmlDoc.getElementsByTagNameNS("http://www.omg.org/spec/BPMN/20100524/MODEL", "definitions");
-//     // bpsimNS[0].appendChild(prova);
-//     // console.log(bpsimNS[0]);
-
-
-//     //prova per leggere un valore di un attributo e settare uno nuovo o lo stesso
-//     // bpsimNS = xmlDoc.getElementsByTagNameNS("http://www.bpsim.org/schemas/1.0", "DurationParameter");
-//     // console.log(bpsimNS);
-//     // bpsimNS[0].setAttribute("value", "PROVA")
-//     // console.log(bpsimNS[0].getAttribute("value"));
-//     // console.log(bpsimNS[0]);
-// }
-
 // * Funzione che si mette in 'ascolto' della drop-zone
 function registerFileDrop(container, callback) {
 
@@ -753,7 +753,8 @@ function registerFileDrop(container, callback) {
             $('#js-canvas').css('display', 'block');
 
             // * richiama la funzione openDiagram
-            callback(xml);
+            xmlGlobal=xml;
+            callback();
         };
 
         reader.readAsText(file);
@@ -794,15 +795,15 @@ if (!window.FileList || !window.FileReader) {
     $('#js-canvas').css('display', 'block');
 
     
-    // openDiagram(firstdiagramXML);
-    // openDiagram(bpmn_example1);
-    // openDiagram(bpmn_example2);
-    // openDiagram(bpmn_example3);
-    // openDiagram(bpmn_example4);
-    // openDiagram(bpmn_example5);
-    // openDiagram(bpmn_example6);
-    openDiagram(bpmn_example7);
-
+    // xmlGlobal=firstdiagramXML;
+    // xmlGlobal=bpmn_example1;
+    // xmlGlobal=bpmn_example2;
+    // xmlGlobal=bpmn_example3;
+    // xmlGlobal=bpmn_example4;
+    // xmlGlobal=bpmn_example5;
+    // xmlGlobal=bpmn_example6;
+    xmlGlobal=bpmn_example7;
+    openDiagram();
     // * END Remove
 
 
@@ -834,30 +835,38 @@ events.forEach(function (event) {
             //Front Office
             let elemRefClicked = e.element.id;
             
-            
-            
             if(e.element.type.toLowerCase().includes("task")){
-                // console.log("attenzione qui");
-
-                // console.log($("#button-task"));
-                console.log("qua   "+$("#button-task").data('clicked'));
-            
-                if($("#button-task").data('clicked') == false ){
+                // * gestione dell'apertura dei bottoni
+                if($("#elem-par-btn").data('clicked') == false ){
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
+                }
+                
+                if($("#button-task").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-task").click();
-                }else{
-                    console.log("non lo facciooooo");
+                }
+            } else if(e.element.type.toLowerCase().includes("gateway")){
+                // * gestione dell'apertura dei bottoni
+                if($("#elem-par-btn").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#elem-par-btn").click();
+                }
+                if($("#button-gateway").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#button-gateway").click();
+                }
+            } else if(e.element.type.toLowerCase().includes("event")){
+                // * gestione dell'apertura dei bottoni
+                if($("#elem-par-btn").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#elem-par-btn").click();
+                }
+                if($("#button-event").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#button-event").click();
                 }
             }
-            // else if(e.element.type.toLowerCase().includes("gateway")){
-            //     $("#elem-par-btn").click();      
-            //     $("#button-gateway").click();
-            // }
-            // else if(e.element.type.toLowerCase().includes("event")){
-            //     $("#elem-par-btn").click();
-            //     $("#button-event").click();
-            // }
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
@@ -870,12 +879,11 @@ events.forEach(function (event) {
             // non selezioniamo con un rettangolo blu le label dei task, ma gli altri elementi si
             if (e.element.id.includes("label")) {
                 $('.djs-element.selected .djs-outline').css("stroke-width", "0px");
-                // console.log(event + 'on' + e.element.id);
+                console.log(event + 'on' + e.element.id);
             } else {
                 $('.djs-element.selected .djs-outline').css("stroke-width", "8px");
-
             }
-
+            console.log(event + 'on' + e.element.id);
         }
     });
 
