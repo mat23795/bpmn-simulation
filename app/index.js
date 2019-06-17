@@ -21,6 +21,7 @@ const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 var container = $('#js-drop-zone');
 var dataTreeGlobal;
 var dataTreeObjGlobal;
+var currentScenario;
 var xmlGlobal;
 var bpsimPrefixGlobal;
 var bpmnPrefixGlobal;
@@ -201,26 +202,27 @@ function createFormFields() {
         
     }
 
-    console.log("Array di soli task"); //TODO REMOVE
-    console.log(nodesTask); //TODO REMOVE
+    // console.log("Array di soli task"); //TODO REMOVE
+    // console.log(nodesTask); //TODO REMOVE
 
-    console.log("Array di soli gateway"); //TODO REMOVE
-    console.log(nodesGateway); //TODO REMOVE
+    // console.log("Array di soli gateway"); //TODO REMOVE
+    // console.log(nodesGateway); //TODO REMOVE
 
-    console.log("Array di soli eventi"); //TODO REMOVE
-    console.log(nodesEvent); //TODO REMOVE
+    // console.log("Array di soli eventi"); //TODO REMOVE
+    // console.log(nodesEvent); //TODO REMOVE
 
-    console.log("Array di soli eventi"); //TODO REMOVE
-    console.log(nodesArrow); //TODO REMOVE
+    // console.log("Array di sole frecce"); //TODO REMOVE
+    // console.log(nodesArrow); //TODO REMOVE
 
-
-
+    
 
 
     // * elemento HTML contenente la sezione degli element parameter
     let elementParameterHTML = $('#element-parameter-section-haveInner');
     let buttonElementParameterHTML = $('#elem-par-btn');
     buttonElementParameterHTML.data('clicked', false);
+    $('#scen-par-btn').data('clicked', false);
+    $('#calendar-btn').data('clicked', false);
     
     
 
@@ -310,25 +312,6 @@ function createFormFields() {
         divTask.append(labelId);
         divTask.append(inputId);
 
-
-        //TODO eliminare
-        // let labelVendor = jQuery('<label/>', {
-        //     for: 'task'+(counter+1)+'-vendor-input',
-        //     text: 'Vendor Extension'
-        // });
-        
-        // let inputVendor = jQuery('<input/>', {
-        //     type: 'text',
-        //     class: 'form-control form-control-input',
-        //     id: 'task'+(counter+1)+'-vendor-input',
-        //     placeholder: 'Vendor DA FARE'
-        // });
-        // divTask.append(labelVendor);
-        // divTask.append(inputVendor);
-
-
-
-        
     }
 
     // TODO creare gli elementi corretti per i gateway
@@ -485,18 +468,55 @@ function createFormFields() {
     //     text: 2
     // }));
 
+    // $('#scenario-picker').val(3);
+
     let scenarioSelected = $('#scenario-picker').val();
+    currentScenario = scenarioSelected;
     refreshFormFieds(scenarios, scenarioSelected);
     
 
 
     $('#scenario-picker')
         .on('change', function () {
+
+            if($("#elem-par-btn").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#elem-par-btn").click();
+            }
+            if($("#button-task").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#button-task").click();
+            }
+            if($("#button-gateway").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#button-gateway").click();
+            }
+            if($("#button-event").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#button-event").click();
+            }
+            if($("#scen-par-btn").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#scen-par-btn").click();
+            }
+            if($("#calendar-btn").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#calendar-btn").click();
+            }
+
+
+
+
+
             let scenarioSelected = $('#scenario-picker').val();
             
-            saveDataTreeStructure(scenarioSelected);
+
+            saveDataTreeStructure(currentScenario);
+            currentScenario = scenarioSelected;
+
             let scenariosTemp = dataTreeObjGlobal.scenario;
             refreshFormFieds(scenariosTemp, scenarioSelected);
+
         });
 
 
@@ -518,7 +538,7 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected){
     //TODO gestire caso in cui si debba creare bspim da zero
     if(scenarioSelected != "" ){
 
-        scenarioSelected=scenarioSelected-1;
+        scenarioSelected -= 1;
         
         let idScenarioInput = $('#scenario-id-input');
         let idScenarioVal = scenarios[scenarioSelected].id;
@@ -568,35 +588,135 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected){
 // * Funzione di supporto per popolare gli attributi di Scenario
 function populateScenarioElementsForm(scenarios, scenarioSelected){
     
-    //TODO gestire caso in cui si debba creare bspim da zero
     if(scenarioSelected != "" ){
-        scenarioSelected=scenarioSelected-1;
+        scenarioSelected -= 1;
+        populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
 
-        let elementParametersSelected = scenarios[scenarioSelected].elementParameters;
+        populateCalendarForm(scenarios[scenarioSelected].calendar);
 
-        elementParametersSelected[0].id = "giovanni"; //! TODO remove
 
-        for(let i=0;i<elementParametersSelected.length;i++){
-            let elemRef = elementParametersSelected[i].elementRef;
-            let idTaskInput = $( "input[id*='"+elemRef+"']" );
-            let idTaskVal = elementParametersSelected[i].id;
-            setField(idTaskInput, idTaskVal);
-        }
+        // let elementParametersSelected = scenarios[scenarioSelected].elementParameters;
 
-        
+        // elementParametersSelected[0].id = "giovanni"; //! TODO remove
+
+        // for(let i=0;i<elementParametersSelected.length;i++){
+        //     let elemRef = elementParametersSelected[i].elementRef;
+        //     let idTaskInput = $( "input[id*='"+elemRef+"']" );
+        //     let idTaskVal = elementParametersSelected[i].id;
+        //     console.log(idTaskInput + " PROVA " + idTaskVal);
+        //     setField(idTaskInput, idTaskVal);
+        // }
+      
+    }else{
+        //TODO gestire caso in cui si debba creare bspim da zero
     }
+}
+
+function populateElementParametersForm(elementParameters){
+    // elementParameters[0].id = "giovanni"; //! TODO remove
+
+    for(let i=0;i<elementParameters.length;i++){
+        let elemRef = elementParameters[i].elementRef;
+        let idTaskInput = $( "input[id*='"+elemRef+"']" );
+        let idTaskVal = elementParameters[i].id;
+        // console.log(idTaskInput + " PROVA " + idTaskVal);
+        setField(idTaskInput, idTaskVal);
+    }
+}
+
+function populateCalendarForm(calendars){
+    
+    let htmlCalendarSection = $('#calendar-section');
+
+    htmlCalendarSection.empty();
+
+    let buttonTask = jQuery('<button/>', {
+        class: 'btn btn-primary btn-lg  button-calculate',
+        type: 'button',
+        text: 'Create New Calendar',
+        id: 'create-calendar-btn',
+        style: 'margin-right:auto; margin-left:auto; width:100%'
+    });
+
+    htmlCalendarSection.append(buttonTask);
+
+    for(let i=0; i<calendars.length; i++){
+        //per ogni calendar esistente si crea l'oggetto html 
+        let calId = calendars[i].id;
+        let calName = calendars[i].name;
+        let calContent= calendars[i].calendar;
+        
+
+
+        let labelCalID = jQuery('<label/>', {
+        //     // for: 'event'+(counter+1)+'-id-input',
+            text: 'Calendar ID',
+            style: 'margin-top:10%'
+        });
+        
+        let inputCalID = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-'+calId,
+            val: calId
+        });
+        htmlCalendarSection.append(labelCalID);
+        htmlCalendarSection.append(inputCalID);
+
+
+        let labelCalName = jQuery('<label/>', {
+            // for: 'event'+(counter+1)+'-id-input',
+            text: 'Calendar Name'
+        });
+        
+        let inputCalName = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-'+calName,
+            val: calName
+        });
+        htmlCalendarSection.append(labelCalName);
+        htmlCalendarSection.append(inputCalName);
+
+
+        let labelCalContent = jQuery('<label/>', {
+            // for: 'event'+(counter+1)+'-id-input',
+            text: 'Calendar Content'
+        });
+        
+        let inputCalContent = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-'+calContent,
+            val: calContent
+        });
+        htmlCalendarSection.append(labelCalContent);
+        htmlCalendarSection.append(inputCalContent);
+
+    }
+    buttonTask.on("click", function() {
+        // window.alert();
+        let labelCalID = jQuery('<label/>', {
+            //     // for: 'event'+(counter+1)+'-id-input',
+                text: 'Calendar ID',
+                style: 'margin-top:10%'
+        });
+        htmlCalendarSection.append(labelCalID);
+    });
+
+    
+    
 }
 
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFieds(scenarios, scenarioSelected){
-  
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
-
 }
 
 // * Funziona che salva la struttura dati
 function saveDataTreeStructure(scenarioSelected){
+    scenarioSelected -= 1;
     let idScenarioInput = $('#scenario-id-input');
     let idScenarioVal = idScenarioInput.val();
     dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
@@ -866,15 +986,17 @@ events.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-event").click();
                 }
+
+
             }
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
-
-            $( "input[id*='"+elemRefClicked+"']" ).focus();
+            
+            $("input[id*='"+elemRefClicked+"']").focus();
+            //$("input[id*='"+elemRefClicked+"']").focus();
            
-        
-
+    
 
             // non selezioniamo con un rettangolo blu le label dei task, ma gli altri elementi si
             if (e.element.id.includes("label")) {
