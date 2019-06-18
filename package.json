@@ -25,6 +25,7 @@
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "xml-loader": "^1.2.1"
+    "xml-loader": "^1.2.1",
+    "npx": "^10.2.0"
   }
 }

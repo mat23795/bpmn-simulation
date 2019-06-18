@@ -14,6 +14,7 @@ import {factory} from "./types/factory";
 import {ResultType} from "./types/parameter_type/ResultType";
 import {Parameter} from "./types/parameter_type/Parameter";
 import {PropertyType} from "./types/parameters/PropertyType";
+import {Calendar} from './types/calendar/Calendar';
 
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
@@ -21,7 +22,8 @@ const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 var container = $('#js-drop-zone');
 var dataTreeGlobal;
 var dataTreeObjGlobal;
-var currentScenario;
+var currentScenarioGlobal;
+var calendarsCreatedIDCounterGlobal = 0; //serve per tenere id univoci per i calendar creati
 var xmlGlobal;
 var bpsimPrefixGlobal;
 var bpmnPrefixGlobal;
@@ -222,7 +224,7 @@ function createFormFields() {
     let buttonElementParameterHTML = $('#elem-par-btn');
     buttonElementParameterHTML.data('clicked', false);
     $('#scen-par-btn').data('clicked', false);
-    $('#calendar-btn').data('clicked', false);
+    $('#calendar-btn-haveInne').data('clicked', false);
     
     
 
@@ -420,23 +422,29 @@ function createFormFields() {
             $(this).data('clicked', !$(this).data('clicked'));
             // console.log("dopo");
             // console.log(this.clicked);
+
+            
+
             this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            var haveInner = content.id.includes("haveInner");
-            var scrollHeightInner = 0;
-            if(haveInner){
-                var contentChildren = content.childNodes[0].childNodes;
-                for(let i = 0; i<contentChildren.length; i++){
-                    if( i%2 != 0){
-                        scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
-                    }
-                }
-            }
-            if (content.style.maxHeight){
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-            } 
+
+            // var content = this.nextElementSibling;
+            // var haveInner = content.id.includes("haveInner");
+            // var scrollHeightInner = 0;
+            // if(haveInner){
+            //     var contentChildren = content.childNodes[0].childNodes;
+            //     for(let i = 0; i<contentChildren.length; i++){
+            //         if( i%2 != 0){
+            //             scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
+            //         }
+            //     }
+            // }
+            // if (content.style.maxHeight){
+            //     content.style.maxHeight = null;
+            // } else {
+            //     content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+            // } 
+            
+            refreshDimension(this);
         });
     }
 
@@ -471,7 +479,7 @@ function createFormFields() {
     // $('#scenario-picker').val(3);
 
     let scenarioSelected = $('#scenario-picker').val();
-    currentScenario = scenarioSelected;
+    currentScenarioGlobal = scenarioSelected;
     refreshFormFieds(scenarios, scenarioSelected);
     
 
@@ -504,24 +512,40 @@ function createFormFields() {
                 $("#calendar-btn").click();
             }
 
-
-
-
-
             let scenarioSelected = $('#scenario-picker').val();
-            
 
-            saveDataTreeStructure(currentScenario);
-            currentScenario = scenarioSelected;
+            saveDataTreeStructure(currentScenarioGlobal);
+            currentScenarioGlobal = scenarioSelected;
 
             let scenariosTemp = dataTreeObjGlobal.scenario;
             refreshFormFieds(scenariosTemp, scenarioSelected);
 
         });
-
-
 }
 
+function refreshDimension(btn, isCalendar=false){
+    // btn.classList.toggle("active");
+    var content = btn.nextElementSibling;
+    var haveInner = content.id.includes("haveInner");
+    var scrollHeightInner = 0;
+    if(haveInner){
+        var contentChildren = content.childNodes[0].childNodes;
+        for(let i = 0; i<contentChildren.length; i++){
+            if( i%2 != 0){
+                scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
+            }
+        }
+    }
+    if(isCalendar){
+        content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+    }else{
+        if (content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+        }
+    }
+}
 
 // * Funzione di supporto per settare i valori nel form se presenti, altrimenti viene messo undefined 
 function setField(inputElement, valueToSet){
@@ -593,19 +617,6 @@ function populateScenarioElementsForm(scenarios, scenarioSelected){
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
 
         populateCalendarForm(scenarios[scenarioSelected].calendar);
-
-
-        // let elementParametersSelected = scenarios[scenarioSelected].elementParameters;
-
-        // elementParametersSelected[0].id = "giovanni"; //! TODO remove
-
-        // for(let i=0;i<elementParametersSelected.length;i++){
-        //     let elemRef = elementParametersSelected[i].elementRef;
-        //     let idTaskInput = $( "input[id*='"+elemRef+"']" );
-        //     let idTaskVal = elementParametersSelected[i].id;
-        //     console.log(idTaskInput + " PROVA " + idTaskVal);
-        //     setField(idTaskInput, idTaskVal);
-        // }
       
     }else{
         //TODO gestire caso in cui si debba creare bspim da zero
@@ -629,8 +640,9 @@ function populateCalendarForm(calendars){
     let htmlCalendarSection = $('#calendar-section');
 
     htmlCalendarSection.empty();
+    calendarsCreatedIDCounterGlobal = 0; // settato a zero ogni volta che si cambia scenario
 
-    let buttonTask = jQuery('<button/>', {
+    let buttonCreateCalendar = jQuery('<button/>', {
         class: 'btn btn-primary btn-lg  button-calculate',
         type: 'button',
         text: 'Create New Calendar',
@@ -638,18 +650,15 @@ function populateCalendarForm(calendars){
         style: 'margin-right:auto; margin-left:auto; width:100%'
     });
 
-    htmlCalendarSection.append(buttonTask);
+    htmlCalendarSection.append(buttonCreateCalendar);
 
     for(let i=0; i<calendars.length; i++){
         //per ogni calendar esistente si crea l'oggetto html 
         let calId = calendars[i].id;
         let calName = calendars[i].name;
         let calContent= calendars[i].calendar;
-        
-
 
         let labelCalID = jQuery('<label/>', {
-        //     // for: 'event'+(counter+1)+'-id-input',
             text: 'Calendar ID',
             style: 'margin-top:10%'
         });
@@ -657,7 +666,7 @@ function populateCalendarForm(calendars){
         let inputCalID = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calId,
+            id: 'calendar-id-'+i,
             val: calId
         });
         htmlCalendarSection.append(labelCalID);
@@ -672,7 +681,7 @@ function populateCalendarForm(calendars){
         let inputCalName = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calName,
+            id: 'calendar-name-'+i,
             val: calName
         });
         htmlCalendarSection.append(labelCalName);
@@ -687,24 +696,69 @@ function populateCalendarForm(calendars){
         let inputCalContent = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calContent,
+            id: 'calendar-content-'+i,
             val: calContent
         });
         htmlCalendarSection.append(labelCalContent);
         htmlCalendarSection.append(inputCalContent);
 
     }
-    buttonTask.on("click", function() {
-        // window.alert();
+
+    buttonCreateCalendar.on("click", function() {
+
+        let calendarSection = $('#calendar-section');
         let labelCalID = jQuery('<label/>', {
-            //     // for: 'event'+(counter+1)+'-id-input',
                 text: 'Calendar ID',
                 style: 'margin-top:10%'
         });
-        htmlCalendarSection.append(labelCalID);
-    });
+        let inputCalID = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-created-id-'+calendarsCreatedIDCounterGlobal,
+            placeholder: "Calendar ID"
+        });
+        calendarSection.append(labelCalID);
+        calendarSection.append(inputCalID);
 
-    
+        let labelCalName = jQuery('<label/>', {
+            text: 'Calendar Name'
+        });
+        let inputCalName = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+               id: 'calendar-created-name-'+calendarsCreatedIDCounterGlobal,
+            placeholder: "Calendar name"
+        });
+        calendarSection.append(labelCalName);
+        calendarSection.append(inputCalName);
+
+        let labelCalContent = jQuery('<label/>', {
+            text: 'Calendar Content'
+        });
+        
+        let inputCalContent = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-created-content-'+calendarsCreatedIDCounterGlobal,
+            placeholder: "Calendar content"
+        });
+        calendarSection.append(labelCalContent);
+        calendarSection.append(inputCalContent);
+
+        //* double click per fare un refresh e aggiornare le dimensioni del div
+        // $('#calendar-btn').click();
+        // $('#calendar-btn').click();
+        // refreshDimension(this);
+        // console.log($('#calendar-btn'));
+        //true perché il bottone è calendar e non va collassato ed espando
+       
+        refreshDimension($('#calendar-btn')[0], true);
+
+        //focus sull'id del nuovo calendar creato
+        focusDelayed(inputCalID);
+
+        calendarsCreatedIDCounterGlobal += 1;
+    });    
     
 }
 
@@ -719,13 +773,67 @@ function saveDataTreeStructure(scenarioSelected){
     scenarioSelected -= 1;
     let idScenarioInput = $('#scenario-id-input');
     let idScenarioVal = idScenarioInput.val();
+
+    // TODO salvare tutto
     dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
+    // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendars);
+    console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendar);
 
-    // let idScenarioInput = $('#scenario-id-input');
-    // let idScenarioVal = idScenarioInput.val();  
-
-    // dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
+    saveCalendar(scenarioSelected);
+    
 }
+
+function saveCalendar(scenarioSelected){
+    // console.log(scenarioSelected);
+    let calendars = dataTreeObjGlobal.scenario[scenarioSelected].calendar
+    
+    //per ognuno dei calendari esistenti aggiorniamo il valore quando salviamo
+    for(let i=0; i<calendars.length; i++){
+        let idCalendarInput = $('#calendar-id-'+i);
+        let idCalendarVal = idCalendarInput.val();
+        calendars[i].id = idCalendarVal;
+
+        let nameCalendarInput = $('#calendar-name-'+i);
+        let nameCalendarVal = nameCalendarInput.val();
+        calendars[i].name = nameCalendarVal;
+
+        let contentCalendarInput = $('#calendar-content-'+i);
+        let contentCalendarVal = contentCalendarInput.val();
+        calendars[i].calendar = contentCalendarVal;
+    }
+
+    let newCalendars = [];
+    for(let i=0; i< calendarsCreatedIDCounterGlobal; i++){
+        console.log(calendarsCreatedIDCounterGlobal);
+        
+        let calendarCreated = new Calendar();
+
+        let idCalendarInput = $('#calendar-created-id-'+i);
+        let idCalendarVal = idCalendarInput.val();
+        calendarCreated.id = idCalendarVal;
+
+        let nameCalendarInput = $('#calendar-created-name-'+i);
+        let nameCalendarVal = nameCalendarInput.val();
+        calendarCreated.name = nameCalendarVal;
+
+        let contentCalendarInput = $('#calendar-created-content-'+i);
+        let contentCalendarVal = contentCalendarInput.val();
+        calendarCreated.calendar = contentCalendarVal;
+        
+        //almeno l'id deve essere avvalorato per salvare il calendario appena creato
+        console.log(idCalendarVal=="");
+        if(idCalendarVal != ""){
+            newCalendars.push(calendarCreated);
+        }
+    }
+
+    console.newCalendars;
+
+    dataTreeObjGlobal.scenario[scenarioSelected].calendar = newCalendars;
+    
+    
+}
+
 
 
 // * Funzione che parsa il file .bpmn e popola una struttura dati con le info della simulazione
@@ -829,6 +937,12 @@ function buildDataTree(nodo, nodoObject) {
     nodo_nodoObj.push(nodo);
     nodo_nodoObj.push(nodoObject);
     return nodo_nodoObj;
+}
+
+function focusDelayed(obj, num=100){
+    setTimeout(function() {
+        obj.focus();
+    }, num);
 }
 
 // * Funzione di appoggio per scoprire se un campo è di tipo Parameter
@@ -993,8 +1107,7 @@ events.forEach(function (event) {
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
             
-            $("input[id*='"+elemRefClicked+"']").focus();
-            //$("input[id*='"+elemRefClicked+"']").focus();
+            focusDelayed($("input[id*='"+elemRefClicked+"']"));
            
     
 
