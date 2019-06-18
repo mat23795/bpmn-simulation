@@ -50,7 +50,7 @@
 		<xs:attribute name="baseCurrencyUnit" type="xs:string" default="USD"/>
 		<xs:attribute name="baseResultFrequency" type="xs:duration"/>
 		<xs:attribute name="baseResultFrequencyCumul" type="xs:boolean" default="false"/>
-		<xs:attribute name="traceOutput" type="xs:boolean" default="false"/>
+		<xs:attribute name="traceOutput" type="xs:boolean" default="false"/>Attribute
 		<xs:attribute name="traceFormat" type="xs:string" default="XES"/>
 	</xs:complexType>
 	<xs:complexType name="VendorExtension">

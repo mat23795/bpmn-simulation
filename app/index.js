@@ -15,6 +15,8 @@ import {ResultType} from "./types/parameter_type/ResultType";
 import {Parameter} from "./types/parameter_type/Parameter";
 import {PropertyType} from "./types/parameters/PropertyType";
 import {Calendar} from './types/calendar/Calendar';
+import {ElementParameters} from './types/parameters/ElementParameters';
+
 
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
@@ -27,6 +29,7 @@ var calendarsCreatedIDCounterGlobal = 0; //serve per tenere id univoci per i cal
 var xmlGlobal;
 var bpsimPrefixGlobal;
 var bpmnPrefixGlobal;
+var saved=false
 
 
 var viewer = new BpmnJS({
@@ -59,6 +62,7 @@ function openDiagram() {
         // TODO vedere scrollbar
         $('.djs-container').css('overflow', 'auto');
         // $('.djs-container').css('height', '700px');
+
 
 
         // xmlGlobal=xml;
@@ -97,6 +101,7 @@ function openDiagram() {
             dataTreeObjGlobal = dataTreeGlobal[1];
 
             // * creare dal XML il form field
+        
             createFormFields();
 
             // lo visualizzo
@@ -116,7 +121,9 @@ function openDiagram() {
                 .on("click", function() {
 
                     let scenarioSelected = $('#scenario-picker').val();
-                    saveDataTreeStructure(scenarioSelected);
+                    
+                    console.log("riattivare salvataggio")//TODO 
+                    //saveDataTreeStructure(scenarioSelected);
 
                     extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
                     console.log("XML fase modifica");//TODO remove
@@ -144,77 +151,89 @@ function createFormFields() {
 
 
     // * elemento XML "process" che contiene tutti gli elementi del diagramma
-    let bpmnElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "process");
+    let bpmnElementProcessXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "process");
+    let bpmnElementCollaborationXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "collaboration");
     // console.log("Elementi del bpmn"); //TODO REMOVE
     // console.log(bpmnElementXML[0]); //TODO REMOVE
 
 
-    let nodesTask = [];
-    let nodesGateway = [];
-    let nodesEvent = [];
-    let nodesArrow = [];
+    let nodesActivities = [];
+    let nodesGateways = [];
+    let nodesEvents = [];
+    let nodesConnectingObjects = [];
 
-    for(let i = 0; i<bpmnElementXML.length; i++){
+    for(let i = 0; i<bpmnElementProcessXML.length; i++){
 
         // * array di tutti gli elementi presenti in "process"
-        let nodes = Array.prototype.slice.call(bpmnElementXML[i].getElementsByTagName("*"), 0);
+        let nodesProcess = Array.prototype.slice.call(bpmnElementProcessXML[i].getElementsByTagName("*"), 0);
+        
         // console.log("Array di elementi del bpmn"); //TODO REMOVE
         // console.log(nodes); //TODO REMOVE
 
         // * avvaloramento variabile che contiene solo i task
-        for (let j = 0; j < nodes.length; j++) {
-            if (nodes[j].localName.toLowerCase().includes("task")) {
+        for (let j = 0; j < nodesProcess.length; j++) {
+            if (nodesProcess[j].localName.toLowerCase().includes("task")) {
 
-                nodesTask.push(nodes[j]);
+                nodesActivities.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
         
 
         // * avvaloramento variabile che contiene solo i gateway
-        for (let j = 0; j < nodes.length; j++) {
-            if (nodes[j].localName.toLowerCase().includes("gateway")){
+        for (let j = 0; j < nodesProcess.length; j++) {
+            if (nodesProcess[j].localName.toLowerCase().includes("gateway")){
 
-                nodesGateway.push(nodes[j]);
+                nodesGateways.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
         
 
         // * avvaloramento variabile che contiene solo gli eventi
-        for (let j = 0; j < nodes.length; j++) {
-            if (nodes[j].localName.toLowerCase().includes("event")
-            && ! nodes[j].localName.toLowerCase().includes("definition")){
+        for (let j = 0; j < nodesProcess.length; j++) {
+            if (nodesProcess[j].localName.toLowerCase().includes("event")
+            && ! nodesProcess[j].localName.toLowerCase().includes("definition")){
 
-                nodesEvent.push(nodes[j]);
+                nodesEvents.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
         
 
         // * avvaloramento variabile che contiene solo le freccie
-        for (let j = 0; j < nodes.length; j++) {
-            if (nodes[j].localName.toLowerCase().includes("outgoing")||
-                nodes[j].localName.toLowerCase().includes("incoming")){
+        for (let j = 0; j < nodesProcess.length; j++) {
+            if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")){
 
-                nodesArrow.push(nodes[j]);
+                nodesConnectingObjects.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
         
     }
+    for(let i = 0; i<bpmnElementCollaborationXML.length; i++){
+        let nodesCollaboration = Array.prototype.slice.call(bpmnElementCollaborationXML[i].getElementsByTagName("*"), 0);
+        for (let j = 0; j < nodesCollaboration.length; j++) {
+            if (nodesCollaboration[j].localName.toLowerCase().includes("messageflow")){
+
+                nodesConnectingObjects.push(nodesCollaboration[j]);
+            }
+            // console.log(nodes[j].localName);
+        }
+    }
+
 
     // console.log("Array di soli task"); //TODO REMOVE
-    // console.log(nodesTask); //TODO REMOVE
+    // console.log(nodesActivities); //TODO REMOVE
 
     // console.log("Array di soli gateway"); //TODO REMOVE
-    // console.log(nodesGateway); //TODO REMOVE
+    // console.log(nodesGateways); //TODO REMOVE
 
     // console.log("Array di soli eventi"); //TODO REMOVE
-    // console.log(nodesEvent); //TODO REMOVE
+    // console.log(nodesEvents); //TODO REMOVE
 
     // console.log("Array di sole frecce"); //TODO REMOVE
-    // console.log(nodesArrow); //TODO REMOVE
+    // console.log(nodesConnectingObjects); //TODO REMOVE
 
     
 
@@ -234,53 +253,67 @@ function createFormFields() {
     });
 
 
-    let buttonTask = jQuery('<button/>', {
+    let buttonActivities = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
-        text: 'Task',
-        id: 'button-task'
+        text: 'Activities',
+        id: 'button-activities'
     });
-    buttonTask.data('clicked', false);
-    let divTask = jQuery('<div/>', {
+    buttonActivities.data('clicked', false);
+    let divActivities = jQuery('<div/>', {
         class: 'content',
-        label: 'element-parameter-task-form',
-        id: 'div-task'
+        label: 'element-parameter-activities-form',
+        id: 'div-activities'
     });
 
-    let buttonGateway = jQuery('<button/>', {
+    let buttonGateways = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
-        text: 'Gateway',
-        id: 'button-gateway'
+        text: 'Gateways',
+        id: 'button-gateways'
     });
-    buttonGateway.data('clicked', false);
-    let divGateway = jQuery('<div/>', {
+    buttonGateways.data('clicked', false);
+    let divGateways = jQuery('<div/>', {
         class: 'content',
-        label: 'element-parameter-gateway-form',
-        id: 'div-gateway'
+        label: 'element-parameter-gateways-form',
+        id: 'div-gateways'
     });
     
-    let buttonEvent = jQuery('<button/>', {
+    let buttonEvents = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
-        text: 'Event',
-        id: 'button-event'
+        text: 'Events',
+        id: 'button-events'
     });
-    buttonEvent.data('clicked', false);
-    let divEvent = jQuery('<div/>', {
+    buttonEvents.data('clicked', false);
+    let divEvents = jQuery('<div/>', {
         class: 'content',
-        label: 'element-parameter-event-form',
-        id: 'div-event'
+        label: 'element-parameter-events-form',
+        id: 'div-events'
+    });
+
+    let buttonConnectingObjects = jQuery('<button/>', {
+        class: 'collapsible button-collapsible-style',
+        type: 'button',
+        text: 'Connecting Objects',
+        id: 'button-connectingObjects'
+    });
+    buttonConnectingObjects.data('clicked', false);
+    let divConnectingObjects = jQuery('<div/>', {
+        class: 'content',
+        label: 'element-parameter-connectingObjects-form',
+        id: 'div-connectingObjects'
     });
 
 
     
 
     // for che creano gli elementi grafici per ogni task, in base a quanti task sono presenti nel BPMN
-    for(let counter = 0; counter<nodesTask.length; counter++){
+    // TODO creare gli elementi corretti per i activities
+    for(let counter = 0; counter<nodesActivities.length; counter++){
 
         let labelElementRef;
-        let elRef = nodesTask[counter].id;
+        let elRef = nodesActivities[counter].id;
         if(counter==0){
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
@@ -292,35 +325,68 @@ function createFormFields() {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+nodesTask[counter].id,
+                text: 'Element Ref: '+nodesActivities[counter].id,
                 style: 'margin-top:15%'
             });
         }
-        divTask.append(labelElementRef);
+        divActivities.append(labelElementRef);
         
 
 
         let labelId = jQuery('<label/>', {
-            for: 'task'+(counter+1)+'-id-input',
+            for: 'activity-id-input$$'+elRef+'$$',
             text: 'ID'
         });
         
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'task'+(counter+1)+'-id-input-'+elRef,
-            placeholder: 'Task Id'
+            id: 'activity-id-input$$'+elRef+'$$',
+            placeholder: 'Activity ID'
         });
-        divTask.append(labelId);
-        divTask.append(inputId);
+
+        // * settaggio funzione salvataggio singola variabile all'interno della struttura globale
+        // inputId.on('change', function () {
+        //     console.log(2);
+        // });
+        // TODO vedere se usare change o input
+        inputId.on('input', function () {
+            saveOrCreateSingleFieldInElementParameters(this);
+            // let value = this.value;
+            // //prendo la ref che so essere circondata da doppio $
+            // let elRef = this.id.split("$$")[1];
+            // //della prima parte mi prendo il secondo elemento che indica il campo da modificare
+            // let fieldName = this.id.split("$$")[0].split("-")[1];
+
+            // let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters;
+            // let found = false;
+            // for(let i = 0; i < elementParameters.length; i++){
+            //     if(elementParameters[i].elementRef == elRef){
+            //         found = true;
+            //         elementParameters[i][fieldName] = value;
+
+            //     }
+            // }
+            // if(!found){
+            //     let elementParametersToAdd = [];
+            //     let elemPar = new ElementParameters();
+            //     elemPar[fieldName] = value;
+            //     elemPar.elementRef = elRef;
+            //     elementParametersToAdd.push(elemPar);
+            //     dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters = elementParametersToAdd;
+            // }
+        });
+
+
+        divActivities.append(labelId);
+        divActivities.append(inputId);
 
     }
 
     // TODO creare gli elementi corretti per i gateway
-    for(let counter = 0; counter<nodesGateway.length; counter++){
-
+    for(let counter = 0; counter<nodesGateways.length; counter++){
         let labelElementRef;
-        let elRef = nodesGateway[counter].id;
+        let elRef = nodesGateways[counter].id;
         if(counter==0){
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
@@ -332,36 +398,36 @@ function createFormFields() {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+nodesGateway[counter].id,
+                text: 'Element Ref: '+nodesGateways[counter].id,
                 style: 'margin-top:15%'
             });
         }
-        divGateway.append(labelElementRef);
+        divGateways.append(labelElementRef);
         
 
 
         let labelId = jQuery('<label/>', {
-            for: 'gateway'+(counter+1)+'-id-input',
+            id: 'gateway-id-input$$'+elRef+'$$',
             text: 'ID'
         });
         
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'gateway-control form-control-input',
-            id: 'gateway'+(counter+1)+'-id-input-'+elRef,
-            placeholder: 'Gateway Id'
+            id: 'gateway-id-input$$'+elRef+'$$',
+            placeholder: 'Gateway ID'
         });
-        divGateway.append(labelId);
-        divGateway.append(inputId);
+        divGateways.append(labelId);
+        divGateways.append(inputId);
 
 
     }
 
-    // TODO creare gli elementi corretti per gli eventi
-    for(let counter = 0; counter<nodesEvent.length; counter++){
+    // TODO creare gli elementi corretti per gli events
+    for(let counter = 0; counter<nodesEvents.length; counter++){
 
     let labelElementRef;
-    let elRef = nodesEvent[counter].id;
+    let elRef = nodesEvents[counter].id;
     if(counter==0){
         labelElementRef = jQuery('<label/>', {
             class: 'label-new-element',
@@ -373,44 +439,89 @@ function createFormFields() {
         labelElementRef = jQuery('<label/>', {
             class: 'label-new-element',
             // id: elRef,
-            text: 'Element Ref: '+nodesEvent[counter].id,
+            text: 'Element Ref: '+nodesEvents[counter].id,
             style: 'margin-top:15%'
         });
     }
-    divEvent.append(labelElementRef);
+    divEvents.append(labelElementRef);
     
     let labelId = jQuery('<label/>', {
-        for: 'event'+(counter+1)+'-id-input',
+        for: 'events-id-input$$'+elRef+'$$',
         text: 'ID'
     });
     
     let inputId = jQuery('<input/>', {
         type: 'text',
         class: 'form-control form-control-input',
-        id: 'event'+(counter+1)+'-id-input-'+elRef,
-        placeholder: 'Event Id'
+        id: 'events-id-input$$'+elRef+'$$',
+        placeholder: 'Event ID'
     });
-    divEvent.append(labelId);
-    divEvent.append(inputId);
+    divEvents.append(labelId);
+    divEvents.append(inputId);
 
     }
 
-    divElementParameter.append(buttonTask);
-    divElementParameter.append(divTask);
-    divElementParameter.append(buttonGateway);
-    divElementParameter.append(divGateway);
-    divElementParameter.append(buttonEvent);
-    divElementParameter.append(divEvent);
 
-    // let buttonTaskHTML = $('#button-task');
+    // TODO creare gli elementi corretti per gli arrow
+    for(let counter = 0; counter<nodesConnectingObjects.length; counter++){
 
-    // buttonTaskHTML.toggle("active");
+        let labelElementRef;
+        let elRef = nodesConnectingObjects[counter].id;
+        if(counter==0){
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+elRef,
+            });
+    
+        }else{
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: '+nodesConnectingObjects[counter].id,
+                style: 'margin-top:15%'
+            });
+        }
+        divConnectingObjects.append(labelElementRef);
+        
+        let labelId = jQuery('<label/>', {
+            for: 'connectingObject-id-input$$'+elRef+'$$',
+            text: 'ID'
+        });
+        
+        let inputId = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'connectingObject-id-input$$'+elRef+'$$',
+            placeholder: 'Connecting Object ID'
+        });
+        divConnectingObjects.append(labelId);
+        divConnectingObjects.append(inputId);
+    
+    }
+
+
+
+
+
+    divElementParameter.append(buttonActivities);
+    divElementParameter.append(divActivities);
+    divElementParameter.append(buttonGateways);
+    divElementParameter.append(divGateways);
+    divElementParameter.append(buttonEvents);
+    divElementParameter.append(divEvents);
+    divElementParameter.append(buttonConnectingObjects);
+    divElementParameter.append(divConnectingObjects);
+
+    // let buttonActivitiesHTML = $('#button-activities');
+
+    // buttonActivitiesHTML.toggle("active");
 
 
     elementParameterHTML.append(divElementParameter);
 
-    // elementParameterHTML.append(buttonTask);
-    // elementParameterHTML.append(divTask);
+    // elementParameterHTML.append(buttonActivities);
+    // elementParameterHTML.append(divActivities);
 
 
     // costruzione buttons in scenario
@@ -480,7 +591,7 @@ function createFormFields() {
 
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
-    refreshFormFieds(scenarios, scenarioSelected);
+    refreshFormFields(scenarios, scenarioSelected);
     
 
 
@@ -491,17 +602,21 @@ function createFormFields() {
                 //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                 $("#elem-par-btn").click();
             }
-            if($("#button-task").data('clicked') == true ){
+            if($("#button-activities").data('clicked') == true ){
                 //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-task").click();
+                $("#button-activities").click();
             }
-            if($("#button-gateway").data('clicked') == true ){
+            if($("#button-gateways").data('clicked') == true ){
                 //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-gateway").click();
+                $("#button-gateways").click();
             }
-            if($("#button-event").data('clicked') == true ){
+            if($("#button-events").data('clicked') == true ){
                 //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-event").click();
+                $("#button-events").click();
+            }
+            if($("#button-connectingObjects").data('clicked') == true ){
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#button-connectingObjects").click();
             }
             if($("#scen-par-btn").data('clicked') == true ){
                 //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
@@ -513,14 +628,43 @@ function createFormFields() {
             }
 
             let scenarioSelected = $('#scenario-picker').val();
-
-            saveDataTreeStructure(currentScenarioGlobal);
+            
+            
+            console.log("riattivare salvataggio")//TODO 
+            // saveDataTreeStructure(currentScenarioGlobal);
+            
             currentScenarioGlobal = scenarioSelected;
 
             let scenariosTemp = dataTreeObjGlobal.scenario;
-            refreshFormFieds(scenariosTemp, scenarioSelected);
+            refreshFormFields(scenariosTemp, scenarioSelected);
 
         });
+}
+
+function saveOrCreateSingleFieldInElementParameters(field){
+    let value = field.value;
+    //prendo la ref che so essere circondata da doppio $
+    let elRef = field.id.split("$$")[1];
+    //della prima parte mi prendo il secondo elemento che indica il campo da modificare
+    let fieldName = field.id.split("$$")[0].split("-")[1];
+
+    let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters;
+    let found = false;
+    for(let i = 0; i < elementParameters.length; i++){
+        if(elementParameters[i].elementRef == elRef){
+            found = true;
+            elementParameters[i][fieldName] = value;
+
+        }
+    }
+    if(!found){
+        let elementParametersToAdd = [];
+        let elemPar = new ElementParameters();
+        elemPar[fieldName] = value;
+        elemPar.elementRef = elRef;
+        elementParametersToAdd.push(elemPar);
+        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters = elementParametersToAdd;
+    }
 }
 
 function refreshDimension(btn, isCalendar=false){
@@ -628,8 +772,9 @@ function populateElementParametersForm(elementParameters){
 
     for(let i=0;i<elementParameters.length;i++){
         let elemRef = elementParameters[i].elementRef;
-        let idTaskInput = $( "input[id*='"+elemRef+"']" );
+        let idTaskInput = $( "input[id*='$$"+elemRef+"$$']" );
         let idTaskVal = elementParameters[i].id;
+        // console.log(idTaskInput);
         // console.log(idTaskInput + " PROVA " + idTaskVal);
         setField(idTaskInput, idTaskVal);
     }
@@ -674,7 +819,7 @@ function populateCalendarForm(calendars){
 
 
         let labelCalName = jQuery('<label/>', {
-            // for: 'event'+(counter+1)+'-id-input',
+            // for: 'events'+(counter+1)+'-id-input',
             text: 'Calendar Name'
         });
         
@@ -689,7 +834,7 @@ function populateCalendarForm(calendars){
 
 
         let labelCalContent = jQuery('<label/>', {
-            // for: 'event'+(counter+1)+'-id-input',
+            // for: 'events'+(counter+1)+'-id-input',
             text: 'Calendar Content'
         });
         
@@ -763,7 +908,7 @@ function populateCalendarForm(calendars){
 }
 
 // * Funzione che aggiorna i campi in base allo scenario selezionato
-function refreshFormFieds(scenarios, scenarioSelected){
+function refreshFormFields(scenarios, scenarioSelected){
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
 }
@@ -777,7 +922,7 @@ function saveDataTreeStructure(scenarioSelected){
     // TODO salvare tutto
     dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
     // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendars);
-    console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendar);
+    // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendar);
 
     saveCalendar(scenarioSelected);
     
@@ -804,7 +949,7 @@ function saveCalendar(scenarioSelected){
 
     let newCalendars = [];
     for(let i=0; i< calendarsCreatedIDCounterGlobal; i++){
-        console.log(calendarsCreatedIDCounterGlobal);
+        // console.log(calendarsCreatedIDCounterGlobal);
         
         let calendarCreated = new Calendar();
 
@@ -821,13 +966,15 @@ function saveCalendar(scenarioSelected){
         calendarCreated.calendar = contentCalendarVal;
         
         //almeno l'id deve essere avvalorato per salvare il calendario appena creato
-        console.log(idCalendarVal=="");
+        // console.log(idCalendarVal=="");
         if(idCalendarVal != ""){
             newCalendars.push(calendarCreated);
         }
     }
 
-    console.newCalendars;
+    calendarsCreatedIDCounterGlobal = 0;
+
+    // console.newCalendars;
 
     dataTreeObjGlobal.scenario[scenarioSelected].calendar = newCalendars;
     
@@ -968,7 +1115,7 @@ function registerFileDrop(container, callback) {
 
     function handleFileSelect(e) {
         e.stopPropagation();
-        e.preventDefault();
+        e.preventsDefault();
 
         var files = e.dataTransfer.files;
 
@@ -996,7 +1143,7 @@ function registerFileDrop(container, callback) {
 
     function handleDragOver(e) {
         e.stopPropagation();
-        e.preventDefault();
+        e.preventsDefault();
 
         e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
@@ -1048,7 +1195,7 @@ if (!window.FileList || !window.FileReader) {
 var eventBus = viewer.get('eventBus');
 
 // * you may hook into any of the following events
-var events = [
+var event = [
     'element.hover',
     'element.out',
     'element.click',
@@ -1057,7 +1204,7 @@ var events = [
     'element.mouseup'
 ];
 
-events.forEach(function (event) {
+event.forEach(function (event) {
 
     eventBus.on(event, function (e) {
         // e.element = the model element
@@ -1076,9 +1223,9 @@ events.forEach(function (event) {
                     $("#elem-par-btn").click();
                 }
                 
-                if($("#button-task").data('clicked') == false ){
+                if($("#button-activities").data('clicked') == false ){
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-task").click();
+                    $("#button-activities").click();
                 }
             } else if(e.element.type.toLowerCase().includes("gateway")){
                 // * gestione dell'apertura dei bottoni
@@ -1086,9 +1233,9 @@ events.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if($("#button-gateway").data('clicked') == false ){
+                if($("#button-gateways").data('clicked') == false ){
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-gateway").click();
+                    $("#button-gateways").click();
                 }
             } else if(e.element.type.toLowerCase().includes("event")){
                 // * gestione dell'apertura dei bottoni
@@ -1096,9 +1243,9 @@ events.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if($("#button-event").data('clicked') == false ){
+                if($("#button-events").data('clicked') == false ){
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-event").click();
+                    $("#button-events").click();
                 }
 
 
@@ -1107,7 +1254,8 @@ events.forEach(function (event) {
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
             
-            focusDelayed($("input[id*='"+elemRefClicked+"']"));
+            focusDelayed($("input[id*='$$"+elemRefClicked+"$$']"));
+            // console.log($("input[id*='"+elemRefClicked+"']"));
            
     
 
