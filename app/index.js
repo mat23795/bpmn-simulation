@@ -16,6 +16,8 @@ import {Parameter} from "./types/parameter_type/Parameter";
 import {PropertyType} from "./types/parameters/PropertyType";
 import {Calendar} from './types/calendar/Calendar';
 import {ElementParameters} from './types/parameters/ElementParameters';
+import {TimeUnit} from "./types/scenario/TimeUnit";
+
 
 
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
@@ -574,6 +576,11 @@ function createFormFields() {
         saveScenarioAtrribute(this);
     });
 
+    //salvataggio delle modifiche per ogni attributo semplice di scenarioParameter
+    $( "input[id*='scenarioParametersAttribute-']" ).on('input', function(){
+        saveScenarioParameterAtrribute(this);
+    });
+
     //TODO utilizzare quando bisogna aggiungere uno scenario
     // $('#scenario-picker').append($('<option>', {
     //     value: 2,
@@ -581,10 +588,23 @@ function createFormFields() {
     // }));
 
     //serve a fare prove con un determinato scenario
-    $('#scenario-picker').val(3);
+    // $('#scenario-picker').val(3);
+    // console.log(TimeUnit[2]);
+
+    for(let timeUnit in TimeUnit) {
+        $('#scenarioParameters-baseTimeUnit-picker').append($('<option>', {
+            value: timeUnit,
+            text: timeUnit
+        }));
+    }
+    $('#scenarioParameters-baseTimeUnit-picker').val('minutes');
+
+    $('#scenarioParametersAttribute-traceOutput-input').val('false');
+    
 
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
+    
     refreshFormFields(scenarios, scenarioSelected);
     
 
@@ -640,147 +660,6 @@ function createFormFields() {
         });
 }
 
-//* salva nella struttura dati il singolo attributo di scenario cambiato
-function saveScenarioAtrribute(field){
-    let value = field.value;
-    let fieldName = field.id.split("-")[1];
-    dataTreeObjGlobal.scenario[currentScenarioGlobal-1][fieldName] = value;
-}
-
-// * salva nella struttura dati il singolo element parameter oppure crea l'oggetto
-function saveOrCreateSingleFieldInElementParameters(field){
-    let value = field.value;
-    //prendo la ref che so essere circondata da doppio $
-    let elRef = field.id.split("$$")[1];
-    //della prima parte mi prendo il secondo elemento che indica il campo da modificare
-    let fieldName = field.id.split("$$")[0].split("-")[1];
-
-    let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters;
-    let found = false;
-    for(let i = 0; i < elementParameters.length; i++){
-        if(elementParameters[i].elementRef == elRef){
-            found = true;
-            elementParameters[i][fieldName] = value;
-        }
-    }
-    if(!found){
-        let elementParametersToAdd = [];
-        let elemPar = new ElementParameters();
-        elemPar[fieldName] = value;
-        elemPar.elementRef = elRef;
-        elementParametersToAdd.push(elemPar);
-        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters = elementParametersToAdd;
-    }
-}
-
-//* salva nella struttura dati il singolo calendar già esistente cambiato
-function saveCalendarField(field, isNew){
-    let value = field.value;
-    let calendarID = field.id.split("-")[1];
-    let fieldName = field.id.split("-")[2];
-
-    let calendarsExisting = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar;
-    let calendarsNew = calendarsCreatedGlobal;
-    console.log(calendarsExisting);
-    console.log(calendarsNew);
-
-    let flagIdUsed = false;
-
-    for(let i=0; i<calendarsExisting.length; i++){
-        if(calendarsExisting[i].id == calendarID){
-            //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
-            for(let j=0; j<calendarsExisting.length; j++){
-                if(i!=j){
-                    if(calendarsExisting[j].id == value){
-                        //silly timeout per far apparire l'errore in scrittura sull'input field
-                        setTimeout(function(){
-                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
-                        },1);
-                        flagIdUsed = true;
-                    }
-                }
-            }
-        }
-    }
-
-    for(let i=0; i<calendarsNew.length; i++){
-        if(calendarsNew[i].id == calendarID){
-            //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
-            for(let j=0; j<calendarsNew.length; j++){
-                if(i!=j){
-                    if(calendarsNew[j].id == value){
-                        //silly timeout per far apparire l'errore in scrittura sull'input field
-                        setTimeout(function(){
-                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
-                        },1);
-                        flagIdUsed = true;
-                    }
-                }
-            }
-        }
-    }
-
-    if(!flagIdUsed){
-        if(isNew){
-            for(let i=0; i<calendarsNew.length; i++){
-                if(calendarsNew[i].id == calendarID){
-                    calendarsNew[i][fieldName] = value;
-                }
-            }
-        }else{
-            for(let i=0; i<calendarsExisting.length; i++){
-                if(calendarsExisting[i].id == calendarID){
-                    calendarsExisting[i][fieldName] = value;
-                }
-            } 
-        }
-        if(fieldName=="id"){
-            $('#calendar-'+calendarID+'-id-input').attr('id','calendar-'+value+'-id-input');
-            $('#calendar-'+calendarID+'-name-input').attr('id','calendar-'+value+'-name-input');
-            $('#calendar-'+calendarID+'-calendar-input').attr('id','calendar-'+value+'-calendar-input');
-        }
-    }
-}
-
-function saveCreatedCalendar(field){
-    let value = field.value;
-    let calendarID = field.id.split("-")[1];
-    let fieldName = field.id.split("-")[2];
-
-    let newCalendar = new Calendar();
-
-
-
-
-    
-    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = newCalendars;
-    
-}
-
-function refreshDimension(btn, isCalendar=false){
-    // btn.classList.toggle("active");
-    var content = btn.nextElementSibling;
-    var haveInner = content.id.includes("haveInner");
-    var scrollHeightInner = 0;
-    if(haveInner){
-        var contentChildren = content.childNodes[0].childNodes;
-        for(let i = 0; i<contentChildren.length; i++){
-            if( i%2 != 0){
-                scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
-            }
-        }
-    }
-    if(isCalendar){
-        content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-    }else{
-        if (content.style.maxHeight){
-            content.style.maxHeight = null;
-        } else {
-            content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-        }
-    }
-}
-
 // * Funzione di supporto per settare i valori nel form se presenti, altrimenti viene messo undefined 
 function setField(inputElement, valueToSet){
     if(valueToSet != undefined){
@@ -790,9 +669,14 @@ function setField(inputElement, valueToSet){
     }
 }
 
+// * Funzione che aggiorna i campi in base allo scenario selezionato
+function refreshFormFields(scenarios, scenarioSelected){
+    populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
+    populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
+}
+
 // * Funzione di supporto per popolare gli attributi di Scenario
 function populateScenarioAttributesForm(scenarios, scenarioSelected){
-    
     
     //TODO gestire caso in cui si debba creare bspim da zero
     if(scenarioSelected != "" ){
@@ -850,7 +734,7 @@ function populateScenarioElementsForm(scenarios, scenarioSelected){
     if(scenarioSelected != "" ){
         scenarioSelected -= 1;
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
-
+        populateScenarioParametersForm(scenarios[scenarioSelected].scenarioParameters);
         populateCalendarForm(scenarios[scenarioSelected].calendar);
       
     }else{
@@ -865,10 +749,62 @@ function populateElementParametersForm(elementParameters){
         let elemRef = elementParameters[i].elementRef;
         let idTaskInput = $( "input[id*='$$"+elemRef+"$$']" );
         let idTaskVal = elementParameters[i].id;
-        // console.log(idTaskInput);
-        // console.log(idTaskInput + " PROVA " + idTaskVal);
         setField(idTaskInput, idTaskVal);
     }
+}
+
+function populateScenarioParametersForm(scenarioParameters){
+    //TODO start, duration, warmup non sappiamo cosa farne perché sono Parameters
+
+    // let startScenParInput = $('#scenarioParameters-start-input');
+    // let startScenParVal = scenarioParameters.start;
+    // setField(startScenParInput, startScenParVal);
+
+    // let durationScenParInput = $('#scenarioParameters-duration-input');
+    // let durationScenParVal = scenarioParameters.duration;
+    // setField(durationScenParInput, durationScenParVal);
+
+    // let warmupScenParInput = $('#scenarioParameters-warmup-input');
+    // let warmupScenParVal = scenarioParameters.warmup;
+    // setField(warmupScenParInput, warmupScenParVal);
+
+    let replicationScenParInput = $('#scenarioParametersAttribute-replication-input');
+    let replicationScenParVal = scenarioParameters.replication;
+    setField(replicationScenParInput, replicationScenParVal);
+
+    let seedScenParInput = $('#scenarioParametersAttribute-seed-input');
+    let seedScenParVal = scenarioParameters.seed;
+    setField(seedScenParInput, seedScenParVal);
+
+    let baseTimeUnitScenParInput = $('#scenarioParameters-baseTimeUnit-picker');
+    let baseTimeUnitScenParVal = scenarioParameters.baseTimeUnit;
+    for(let timeUnit in TimeUnit){
+        if(TimeUnit[timeUnit] == baseTimeUnitScenParVal){
+            setField(baseTimeUnitScenParInput, timeUnit);
+        }
+    }
+
+    let baseCurrencyUnitScenParInput = $('#scenarioParametersAttribute-baseCurrencyUnit-input');
+    let baseCurrencyUnitScenParVal = scenarioParameters.baseCurrencyUnit;
+    setField(baseCurrencyUnitScenParInput, baseCurrencyUnitScenParVal);
+
+    // let baseResultFrequencyScenParInput = $('#scenarioParameters-baseResultFrequency-input');
+    // let baseResultFrequencyScenParVal = scenarioParameters.baseResultFrequency;
+    // setField(baseResultFrequencyScenParInput, baseResultFrequencyScenParVal);
+
+    let baseResultFrequencyCumulScenParInput = $('#scenarioParametersAttribute-baseResultFrequencyCumul-input');
+    let baseResultFrequencyCumulScenParVal = scenarioParameters.baseResultFrequencyCumul;
+    setField(baseResultFrequencyCumulScenParInput, baseResultFrequencyCumulScenParVal);
+
+    let traceOutputScenParInput = $('#scenarioParametersAttribute-traceOutput-input');
+    let traceOutputScenParVal = scenarioParameters.traceOutput;
+    setField(traceOutputScenParInput, traceOutputScenParVal);
+
+    let traceFormatScenParInput = $('#scenarioParametersAttribute-traceFormat-input');
+    let traceFormatScenParVal = scenarioParameters.traceFormat;
+    setField(traceFormatScenParInput, traceFormatScenParVal);
+
+    //TODO fare PropertyParameter
 }
 
 function populateCalendarForm(calendars){
@@ -1027,11 +963,140 @@ function populateCalendarForm(calendars){
     
 }
 
-// * Funzione che aggiorna i campi in base allo scenario selezionato
-function refreshFormFields(scenarios, scenarioSelected){
-    populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
-    populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
+//* salva nella struttura dati il singolo attributo di scenario cambiato
+function saveScenarioAtrribute(field){
+    let value = field.value;
+    let fieldName = field.id.split("-")[1];
+    dataTreeObjGlobal.scenario[currentScenarioGlobal-1][fieldName] = value;
 }
+
+function saveScenarioParameterAtrribute(field){
+    let value = field.value;
+    let fieldName = field.id.split("-")[1];
+    console.log(fieldName);
+    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = value;
+}
+
+// * salva nella struttura dati il singolo element parameter oppure crea l'oggetto
+function saveOrCreateSingleFieldInElementParameters(field){
+    let value = field.value;
+    //prendo la ref che so essere circondata da doppio $
+    let elRef = field.id.split("$$")[1];
+    //della prima parte mi prendo il secondo elemento che indica il campo da modificare
+    let fieldName = field.id.split("$$")[0].split("-")[1];
+
+    let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters;
+    let found = false;
+    for(let i = 0; i < elementParameters.length; i++){
+        if(elementParameters[i].elementRef == elRef){
+            found = true;
+            elementParameters[i][fieldName] = value;
+        }
+    }
+    if(!found){
+        let elementParametersToAdd = [];
+        let elemPar = new ElementParameters();
+        elemPar[fieldName] = value;
+        elemPar.elementRef = elRef;
+        elementParametersToAdd.push(elemPar);
+        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters = elementParametersToAdd;
+    }
+}
+
+//* salva nella struttura dati il singolo calendar già esistente cambiato
+function saveCalendarField(field, isNew){
+    let value = field.value;
+    let calendarID = field.id.split("-")[1];
+    let fieldName = field.id.split("-")[2];
+
+    let calendarsExisting = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar;
+    let calendarsNew = calendarsCreatedGlobal;
+    console.log(calendarsExisting);
+    console.log(calendarsNew);
+
+    let flagIdUsed = false;
+
+    for(let i=0; i<calendarsExisting.length; i++){
+        if(calendarsExisting[i].id == calendarID){
+            //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
+            for(let j=0; j<calendarsExisting.length; j++){
+                if(i!=j){
+                    if(calendarsExisting[j].id == value){
+                        //silly timeout per far apparire l'errore in scrittura sull'input field
+                        setTimeout(function(){
+                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
+                        },1);
+                        flagIdUsed = true;
+                    }
+                }
+            }
+        }
+    }
+
+    for(let i=0; i<calendarsNew.length; i++){
+        if(calendarsNew[i].id == calendarID){
+            //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
+            for(let j=0; j<calendarsNew.length; j++){
+                if(i!=j){
+                    if(calendarsNew[j].id == value){
+                        //silly timeout per far apparire l'errore in scrittura sull'input field
+                        setTimeout(function(){
+                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
+                        },1);
+                        flagIdUsed = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if(!flagIdUsed){
+        if(isNew){
+            for(let i=0; i<calendarsNew.length; i++){
+                if(calendarsNew[i].id == calendarID){
+                    calendarsNew[i][fieldName] = value;
+                }
+            }
+        }else{
+            for(let i=0; i<calendarsExisting.length; i++){
+                if(calendarsExisting[i].id == calendarID){
+                    calendarsExisting[i][fieldName] = value;
+                }
+            } 
+        }
+        if(fieldName=="id"){
+            $('#calendar-'+calendarID+'-id-input').attr('id','calendar-'+value+'-id-input');
+            $('#calendar-'+calendarID+'-name-input').attr('id','calendar-'+value+'-name-input');
+            $('#calendar-'+calendarID+'-calendar-input').attr('id','calendar-'+value+'-calendar-input');
+        }
+    }
+}
+
+function refreshDimension(btn, isCalendar=false){
+    // btn.classList.toggle("active");
+    var content = btn.nextElementSibling;
+    var haveInner = content.id.includes("haveInner");
+    var scrollHeightInner = 0;
+    if(haveInner){
+        var contentChildren = content.childNodes[0].childNodes;
+        for(let i = 0; i<contentChildren.length; i++){
+            if( i%2 != 0){
+                scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
+            }
+        }
+    }
+    if(isCalendar){
+        content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+    }else{
+        if (content.style.maxHeight){
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+        }
+    }
+}
+
+
 
 // * Funziona che salva la struttura dati
 function saveDataTreeStructure(scenarioSelected){

@@ -7,8 +7,6 @@ export class Parameter{
     protected _resultRequest: ResultType[] = [];
 
     constructor(){}
-    
-
 
     get value(): ParameterValue[] {
         return this._value;

@@ -94,7 +94,42 @@
 
                         <button class="collapsible button-collapsible-style" type="button", id="scen-par-btn">Scenario Parameters</button>
                         <div class="content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <label for="scenarioParameters-start-input">Start</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParameters-start-input" placeholder="Start time of the scenario">
+    
+                            <label for="scenarioParameters-duration-input">Duration</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParameters-duration-input" placeholder="Duration of the scenario">
+                       
+                            <label for="scenarioParameters-warmup-input">Warmup</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParameters-warmup-input" placeholder="Warmup">
+
+                            <label for="scenarioParametersAttribute-replication-input">Replications</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-replication-input" value = "1">
+    
+                            <label for="scenarioParametersAttribute-seed-input">Seed</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-seed-input" placeholder="Seed">
+                            
+                            <label for="scenarioParameters-baseTimeUnit-picker" style="width: -webkit-fill-available">Base Time Unit</label>
+                            <select class = "scenario-picker" id="scenarioParameters-baseTimeUnit-picker"></select>
+                            
+                            <label for="scenarioParametersAttribute-baseCurrencyUnit-input" style="width: -webkit-fill-available">Base Currency Unit</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseCurrencyUnit-input" value="USD">
+                        
+                            <label for="scenarioParameters-baseResultFrequency-input"> Base Result Frequency</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParameters-baseResultFrequency-input" placeholder="Base Result Frequency">
+                        
+                            <label for="scenarioParametersAttribute-baseResultFrequencyCumul-input"> Base Result Frequency Cumul</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" value="false">
+
+                            <label for="scenarioParametersAttribute-traceOutput-input">Trace Output</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceOutput-input" value = "false">
+                        
+                            <label for="scenarioParametersAttribute-traceFormat-input">Trace Format</label>
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceFormat-input" value ="XES">
+
+                            <label for="scenarioParameters-propertyParameters">Property Parameters</label>
+
+                            
                         </div>
 
                         <button class="collapsible button-collapsible-style" type="button", id="calendar-btn">Calendar</button>
