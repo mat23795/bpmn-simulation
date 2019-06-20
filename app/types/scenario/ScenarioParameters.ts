@@ -13,8 +13,8 @@ export class ScenarioParameters {
     private _baseTimeUnit: TimeUnit = TimeUnit.minutes;
     private _baseCurrencyUnit: string = "USD";
     private _baseResultFrequency: Duration;
-    private _baseResultFrequencyCumul: boolean = false;
-    private _traceOutput: boolean = false;
+    private _baseResultFrequencyCumul: string = "false";
+    private _traceOutput: string = "false";
     private _traceFormat: string = "XES";
     private _propertyParameters: PropertyParameters[] = [];
 
@@ -84,19 +84,19 @@ export class ScenarioParameters {
         this._baseResultFrequency = value;
     }
 
-    get baseResultFrequencyCumul(): boolean {
+    get baseResultFrequencyCumul(): string {
         return this._baseResultFrequencyCumul;
     }
 
-    set baseResultFrequencyCumul(value: boolean) {
+    set baseResultFrequencyCumul(value: string) {
         this._baseResultFrequencyCumul = value;
     }
 
-    get traceOutput(): boolean {
+    get traceOutput(): string {
         return this._traceOutput;
     }
 
-    set traceOutput(value: boolean) {
+    set traceOutput(value: string) {
         this._traceOutput = value;
     }
 

@@ -95,6 +95,13 @@ function openDiagram() {
 
             //TODO scrivere xml in base a dati della struttura presi da form fields
             //TODO 1) field2emptytree 2) tree2xml
+            //TODO forse poter usare bottone crea nuovo scenario?
+            let bpsimData = new BPSimData();
+            let scenario = new Scenario();
+            scenario.id = "new Scenario";
+            bpsimData.addScenario(scenario);
+            dataTreeObjGlobal = bpsimData;
+            createFormFields();
         }else{
             // * Fase 1 xml2tree
             bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
@@ -120,43 +127,66 @@ function openDiagram() {
             // console.log(extensionElementXML);
             
             // * aggiunta evento al bottone che calcola il bpsim per far generare l'xml 'aggiornato'
-            $('#generate-bpsim')
-                .on("click", function() {
+            $('#generate-bpsim').on("click", function() {
                     
-                    // ! DELETE THIS START 
-                    setTimeout(function(){
-                        $('#scenario-picker').val(1).trigger('change');;
-                    },10);
-                    setTimeout(function(){
-                        $('#scenario-picker').val(2).trigger('change');;
-                    },10);
-                    setTimeout(function(){
-                        $('#scenario-picker').val(3).trigger('change');;
-                    },10);
-                    // ! DELETE THIS STOP
+                // // ! DELETE THIS START 
+                // setTimeout(function(){
+                //     $('#scenario-picker').val(1).trigger('change');;
+                // },10);
+                // setTimeout(function(){
+                //     $('#scenario-picker').val(2).trigger('change');;
+                // },10);
+                // setTimeout(function(){
+                //     $('#scenario-picker').val(3).trigger('change');;
+                // },10);
+                // // ! DELETE THIS STOP
 
 
-                    let scenarioSelected = $('#scenario-picker').val();
-                    
-                    console.log("riattivare salvataggio")//TODO 
-                   
-                    //salvo i calendari 
-                    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
-                    calendarsCreatedGlobal = [];
-                    calendarsCreatedIDCounterGlobal = 0;
-                    
-                    //saveDataTreeStructure(scenarioSelected);
+                let scenarioSelected = $('#scenario-picker').val();
+                
+                console.log("riattivare salvataggio")//TODO 
+                
+                //salvo i calendari 
+                dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
+                calendarsCreatedGlobal = [];
+                calendarsCreatedIDCounterGlobal = 0;
+                
+                //saveDataTreeStructure(scenarioSelected);
 
-                    extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
-                    console.log("XML fase modifica");//TODO remove
-                    console.log(xmlDoc);//TODO remove
+                extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+                console.log("XML fase modifica");//TODO remove
+                console.log(xmlDoc);//TODO remove
+                console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
 
-                });
-    
+            });
+
+            // * aggiunta evento al bottone che elimina lo scenario corrente
+            $('#delete-scenario').on("click", function() {
+                closeCollapsibleButton();
+                dataTreeObjGlobal.scenario.splice(currentScenarioGlobal-1, 1);
+                // console.log(dataTreeObjGlobal.scenario);
+                if(dataTreeObjGlobal.scenario.length > 0){
+                    createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
+                }else{
+                    $('#create-scenario').click();
+                }
+            });
+
+            // * aggiunta evento al bottone che crea un nuovo scenario
+            $('#create-scenario').on("click", function() {
+                closeCollapsibleButton();
+                let newScenario = new Scenario();
+                newScenario.id = "new S"+(dataTreeObjGlobal.scenario.length+1);
+                let tempArrayScenario = [];
+                tempArrayScenario.push(newScenario);
+                dataTreeObjGlobal.scenario = tempArrayScenario;
+                saveLocalCalendars();
+                // console.log(dataTreeObjGlobal.scenario);
+                createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
+                currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
+                $('#scenario-picker').val(currentScenarioGlobal).trigger('change');
+            });
         }
-
-
-        
 
         // * funzione per parsare l'XML
         // xmlParsing();
@@ -165,7 +195,7 @@ function openDiagram() {
 }
 
 // * Funzione per creare il form in base all' XML
-function createFormFields() {
+function createFormFields(firstTime=true) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlGlobal, "text/xml");
 
@@ -262,10 +292,14 @@ function createFormFields() {
 
     // * elemento HTML contenente la sezione degli element parameter
     let elementParameterHTML = $('#element-parameter-section-haveInner');
+
+    elementParameterHTML.empty();
+
+
     let buttonElementParameterHTML = $('#elem-par-btn');
     buttonElementParameterHTML.data('clicked', false);
     $('#scen-par-btn').data('clicked', false);
-    $('#calendar-btn-haveInne').data('clicked', false);
+    $('#calendar-btn').data('clicked', false);
     
     
 
@@ -541,11 +575,13 @@ function createFormFields() {
     // costruzione buttons in scenario
     var coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            $(this).data('clicked', !$(this).data('clicked'));
-            this.classList.toggle("active");            
-            refreshDimension(this);
-        });
+        if(coll[i].id != "elem-par-btn" && coll[i].id != "scen-par-btn"  && coll[i].id != "calendar-btn" || firstTime){
+            coll[i].addEventListener("click", function() {
+                $(this).data('clicked', !$(this).data('clicked'));
+                this.classList.toggle("active");            
+                refreshDimension(this);
+            });
+        }
     }
 
     
@@ -563,24 +599,26 @@ function createFormFields() {
 
     let scenarios = dataTreeObjGlobal.scenario;
     let numScenarios = scenarios.length;
+    $('#scenario-picker').empty();
 
     for(let i = 0; i < numScenarios; i++) {
         $('#scenario-picker').append($('<option>', {
             value: i+1,
-            text: i+1
+            text: scenarios[i].id
         }));
     }
+    
+    if(firstTime){
+        //salvataggio delle modifiche per ogni attributo di scenario
+        $( "input[id*='scenario-']" ).on('input', function(){
+            saveScenarioAtrribute(this);
+        });
 
-    //salvataggio delle modifiche per ogni attributo di scenario
-    $( "input[id*='scenario-']" ).on('input', function(){
-        saveScenarioAtrribute(this);
-    });
-
-    //salvataggio delle modifiche per ogni attributo semplice di scenarioParameter
-    $( "input[id*='scenarioParametersAttribute-']" ).on('input', function(){
-        saveScenarioParameterAtrribute(this);
-    });
-
+        //salvataggio delle modifiche per ogni attributo semplice di scenarioParameter
+        $( "input[id*='scenarioParametersAttribute-']" ).on('input', function(){
+            saveScenarioParameterAtrribute(this);
+        });
+    }
     //TODO utilizzare quando bisogna aggiungere uno scenario
     // $('#scenario-picker').append($('<option>', {
     //     value: 2,
@@ -590,17 +628,16 @@ function createFormFields() {
     //serve a fare prove con un determinato scenario
     // $('#scenario-picker').val(3);
     // console.log(TimeUnit[2]);
-
-    for(let timeUnit in TimeUnit) {
-        $('#scenarioParameters-baseTimeUnit-picker').append($('<option>', {
-            value: timeUnit,
-            text: timeUnit
-        }));
+    if(firstTime){
+        for(let timeUnit in TimeUnit) {
+            $('#scenarioParameters-baseTimeUnit-picker').append($('<option>', {
+                value: timeUnit,
+                text: timeUnit
+            }));
+        }
     }
-    $('#scenarioParameters-baseTimeUnit-picker').val('minutes');
 
-    $('#scenarioParametersAttribute-traceOutput-input').val('false');
-    
+    $('#scenarioParameters-baseTimeUnit-picker').val('minutes');    
 
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
@@ -608,56 +645,67 @@ function createFormFields() {
     refreshFormFields(scenarios, scenarioSelected);
     
 
-
-    $('#scenario-picker')
-        .on('change', function () {
+    if(firstTime){
+        $('#scenario-picker').on('change', function () {
 
             // * serie di if che servono a chiudere i menù a tendina quando si cambia scenario
-            //TODO inserire tuttoin una funzione
-            if($("#elem-par-btn").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#elem-par-btn").click();
-            }
-            if($("#button-activities").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-activities").click();
-            }
-            if($("#button-gateways").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-gateways").click();
-            }
-            if($("#button-events").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-events").click();
-            }
-            if($("#button-connectingObjects").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#button-connectingObjects").click();
-            }
-            if($("#scen-par-btn").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#scen-par-btn").click();
-            }
-            if($("#calendar-btn").data('clicked') == true ){
-                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                $("#calendar-btn").click();
-            }
+            closeCollapsibleButton();
 
             let scenarioSelected = $('#scenario-picker').val();
             
             
             console.log("riattivare salvataggio")//TODO 
-            // saveDataTreeStructure(currentScenarioGlobal);
-            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
-            calendarsCreatedGlobal = [];
-            calendarsCreatedIDCounterGlobal = 0;
 
+            // saveDataTreeStructure(currentScenarioGlobal);
+
+            saveLocalCalendars();
+            
             currentScenarioGlobal = scenarioSelected;
 
             let scenariosTemp = dataTreeObjGlobal.scenario;
             refreshFormFields(scenariosTemp, scenarioSelected);
 
         });
+    }
+}
+
+function saveLocalCalendars(){
+    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
+    calendarsCreatedGlobal = [];
+    calendarsCreatedIDCounterGlobal = 0;
+}
+
+// * Funzione che chiude tutti i bottoni se aperti al cambio di scenario
+function closeCollapsibleButton(){
+    //TODO inserire tuttoin una funzione
+    if($("#elem-par-btn").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#elem-par-btn").click();
+    }
+    if($("#button-activities").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#button-activities").click();
+    }
+    if($("#button-gateways").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#button-gateways").click();
+    }
+    if($("#button-events").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#button-events").click();
+    }
+    if($("#button-connectingObjects").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#button-connectingObjects").click();
+    }
+    if($("#scen-par-btn").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#scen-par-btn").click();
+    }
+    if($("#calendar-btn").data('clicked') == true ){
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#calendar-btn").click();
+    }
 }
 
 // * Funzione di supporto per settare i valori nel form se presenti, altrimenti viene messo undefined 
@@ -794,11 +842,19 @@ function populateScenarioParametersForm(scenarioParameters){
 
     let baseResultFrequencyCumulScenParInput = $('#scenarioParametersAttribute-baseResultFrequencyCumul-input');
     let baseResultFrequencyCumulScenParVal = scenarioParameters.baseResultFrequencyCumul;
-    setField(baseResultFrequencyCumulScenParInput, baseResultFrequencyCumulScenParVal);
+    if(baseResultFrequencyCumulScenParVal=="true"){
+        baseResultFrequencyCumulScenParInput.prop('checked', true);
+    }else{
+        baseResultFrequencyCumulScenParInput.prop('checked', false);
+    }
 
     let traceOutputScenParInput = $('#scenarioParametersAttribute-traceOutput-input');
     let traceOutputScenParVal = scenarioParameters.traceOutput;
-    setField(traceOutputScenParInput, traceOutputScenParVal);
+    if(traceOutputScenParVal=="true"){
+        traceOutputScenParInput.prop('checked', true);
+    }else {
+        traceOutputScenParInput.prop('checked', false);
+    }
 
     let traceFormatScenParInput = $('#scenarioParametersAttribute-traceFormat-input');
     let traceFormatScenParVal = scenarioParameters.traceFormat;
@@ -812,6 +868,7 @@ function populateCalendarForm(calendars){
     let htmlCalendarSection = $('#calendar-section');
 
     htmlCalendarSection.empty();
+    
     calendarsCreatedIDCounterGlobal = 0; // settato a zero ogni volta che si cambia scenario
 
     let buttonCreateCalendar = jQuery('<button/>', {
@@ -967,14 +1024,46 @@ function populateCalendarForm(calendars){
 function saveScenarioAtrribute(field){
     let value = field.value;
     let fieldName = field.id.split("-")[1];
-    dataTreeObjGlobal.scenario[currentScenarioGlobal-1][fieldName] = value;
+    
+    //cambia l'id nel picker in automatico se l'utente sta modificando l'id dello scenario (solo se id nuovo != id esistenti)
+    let validName=true;
+    if(fieldName=="id"){
+        let options = document.getElementById("scenario-picker").options;
+        for(let i = 0; i < options.length; i++){
+            if(options[i].innerHTML == value && i != currentScenarioGlobal-1){
+                setTimeout(function(){
+                    window.alert("ERROR: There exists a scenario with the following ID: "+ value)
+                },10);
+                validName=false;
+            }
+        }
+    }
+    
+    if(validName){
+        dataTreeObjGlobal.scenario[currentScenarioGlobal-1][fieldName] = value;
+        if(fieldName=="id"){
+            document.getElementById("scenario-picker").options[currentScenarioGlobal-1].innerHTML = value;
+        }
+    }
 }
 
 function saveScenarioParameterAtrribute(field){
     let value = field.value;
     let fieldName = field.id.split("-")[1];
-    console.log(fieldName);
-    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = value;
+    // console.log(field.type);
+    if(field.type == "checkbox"){
+        //salvo il cambimento della checkbox
+        if(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] == "true"){
+            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = "false";
+        }else{
+            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = "true";
+        }
+    }else{
+        if(value == ""){
+            value=undefined;
+        }
+        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = value;
+    }
 }
 
 // * salva nella struttura dati il singolo element parameter oppure crea l'oggetto
@@ -1011,8 +1100,8 @@ function saveCalendarField(field, isNew){
 
     let calendarsExisting = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar;
     let calendarsNew = calendarsCreatedGlobal;
-    console.log(calendarsExisting);
-    console.log(calendarsNew);
+    // console.log(calendarsExisting);
+    // console.log(calendarsNew);
 
     let flagIdUsed = false;
 
@@ -1377,8 +1466,15 @@ event.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-events").click();
                 }
-
-
+            } else if(e.element.type.toLowerCase().includes("flow")){
+                if($("#elem-par-btn").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#elem-par-btn").click();
+                }
+                if($("#button-connectingObjects").data('clicked') == false ){
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#button-connectingObjects").click();
+                }
             }
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato

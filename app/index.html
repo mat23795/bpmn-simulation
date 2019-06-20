@@ -51,6 +51,11 @@
                     </select>
                 </div>
 
+                <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="create-scenario">Create new scenario</button>
+
+                <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="delete-scenario" style="background: firebrick">Delete current scenario</button>
+
+
                 <form>
                     <div class="form-group" label="scenario-form">
                         <h2 class="form-title">Scenario</h2>
@@ -75,7 +80,7 @@
                         <input type="text" class="form-control form-control-input" id="scenario-author-input" placeholder="Your Company">
 
                         <label for="scenario-vendor-input">Vendor</label>
-                        <input type="text" class="form-control form-control-input" id="scenario-vendor-input" value="Caputo & Lazazzera">
+                        <input type="text" class="form-control form-control-input" id="scenario-vendor-input" value="Caputo & Lazazzera" readonly>
 
                         <label for="scenario-version-input">Version</label>
                         <input type="text" class="form-control form-control-input" id="scenario-version-input" placeholder="1.0">
@@ -104,7 +109,7 @@
                             <input type="text" class="form-control form-control-input" id="scenarioParameters-warmup-input" placeholder="Warmup">
 
                             <label for="scenarioParametersAttribute-replication-input">Replications</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-replication-input" value = "1">
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-replication-input" value = "1" placeholder="Number of replications">
     
                             <label for="scenarioParametersAttribute-seed-input">Seed</label>
                             <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-seed-input" placeholder="Seed">
@@ -113,19 +118,36 @@
                             <select class = "scenario-picker" id="scenarioParameters-baseTimeUnit-picker"></select>
                             
                             <label for="scenarioParametersAttribute-baseCurrencyUnit-input" style="width: -webkit-fill-available">Base Currency Unit</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseCurrencyUnit-input" value="USD">
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseCurrencyUnit-input" value="USD" placeholder="Currency">
                         
                             <label for="scenarioParameters-baseResultFrequency-input"> Base Result Frequency</label>
                             <input type="text" class="form-control form-control-input" id="scenarioParameters-baseResultFrequency-input" placeholder="Base Result Frequency">
                         
                             <label for="scenarioParametersAttribute-baseResultFrequencyCumul-input"> Base Result Frequency Cumul</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" value="false">
+                            <!-- <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" value="false"> -->
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" checked>
+                                <label class="onoffswitch-label" for="scenarioParametersAttribute-baseResultFrequencyCumul-input">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            
+
 
                             <label for="scenarioParametersAttribute-traceOutput-input">Trace Output</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceOutput-input" value = "false">
+                            <!-- <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceOutput-input" value = "false"> -->
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-traceOutput-input" checked>
+                                <label class="onoffswitch-label" for="scenarioParametersAttribute-traceOutput-input">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            
                         
                             <label for="scenarioParametersAttribute-traceFormat-input">Trace Format</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceFormat-input" value ="XES">
+                            <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceFormat-input" value ="XES" placeholder="XES">
 
                             <label for="scenarioParameters-propertyParameters">Property Parameters</label>
 

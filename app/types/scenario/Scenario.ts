@@ -17,7 +17,7 @@ export class Scenario {
     private _result: Scenario;
     private _inherits: Scenario;
     private _elementParameters: ElementParameters[] = [];
-    private _scenarioParameters: ScenarioParameters;
+    private _scenarioParameters: ScenarioParameters = new ScenarioParameters();
     private _vendorExtensions: VendorExtension[] = [];
     private _calendar : Calendar[] = [];
 
