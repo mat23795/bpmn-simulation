@@ -31,13 +31,14 @@ var calendarsCreatedIDCounterGlobal = 0; //serve per tenere id univoci per i cal
 var calendarsCreatedGlobal = [];
 var xmlGlobal;
 var bpsimPrefixGlobal;
+var scaleGlobal = 1.0
 var bpmnPrefixGlobal;
 var saved=false
 
 
 var viewer = new BpmnJS({
     container: $('#js-canvas'),
-    height: "695px" // poco minore di 700 per lasciare uno spazio prima del bordo finale
+    height: "700px",
 });
 
 
@@ -63,7 +64,17 @@ function openDiagram() {
 
         viewer.get('canvas').zoom('fit-viewport'); //TODO Vedere se mantenere zoom
         // TODO vedere scrollbar
-        $('.djs-container').css('overflow', 'auto');
+        $('.djs-container').css('transform-origin', '0% 0% 0px');
+        $('.djs-container').css('transform', 'scale(1)'); //TODO REMOVE
+        $('#js-canvas').css('overflow', 'overlay');
+
+        $('#js-canvas').on("wheel", function (ev){
+            let e = window.event
+            let num = e.wheelDelta / 1000
+            scaleGlobal += num;
+            $('.djs-container').css('transform', 'scale('+scaleGlobal+')'); 
+        });
+
         // $('.djs-container').css('height', '700px');
 
 
