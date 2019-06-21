@@ -67,13 +67,54 @@ function openDiagram() {
         $('.djs-container').css('transform-origin', '0% 0% 0px');
         $('.djs-container').css('transform', 'scale(1)'); //TODO REMOVE
         $('#js-canvas').css('overflow', 'overlay');
+        
+        let imgAhref = $(".bjs-powered-by");
+        imgAhref.css('position', 'fixed');
+        imgAhref.css('right', 'auto');
+        imgAhref.css('left', '15px');
+        
 
-        $('#js-canvas').on("wheel", function (ev){
-            let e = window.event
-            let num = e.wheelDelta / 1000
+
+        $('#js-canvas').on("wheel", function (){
+            let e = window.event;
+            let num = e.wheelDelta / 1000;
             scaleGlobal += num;
             $('.djs-container').css('transform', 'scale('+scaleGlobal+')'); 
+            
         });
+
+
+        // $('#js-canvas').hover(function (){
+        //     let e = window.event;
+        //     if(e.altKey){
+        //         console.log("ciao");
+        //         window.alert("eee");
+        //     }
+            
+        // });
+
+
+        // $('#js-canvas').on("mouseover",function() {
+        //     $(document).bind("keydown",function(e) {
+        //         var originator = e.keyCode || e.which;
+        //         if(e.ctrlKey){
+        //             console.log("ciao");
+        //             window.alert("eee");
+        //         }
+        //         // $("#key").append(originator + ",");
+        //     });
+
+        // }).on("mouseout",function()
+        // {
+        //     $(document).unbind("keydown");
+        // });
+        
+        
+    
+
+
+        
+
 
         // $('.djs-container').css('height', '700px');
 
