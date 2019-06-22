@@ -458,7 +458,7 @@ function createFormFields(firstTime=true) {
         //     console.log(2);
         // });
         // TODO vedere se usare change o input
-        inputId.on('input', function () {
+        inputId.on('change', function () {
             saveOrCreateSingleFieldInElementParameters(this);
         });
 
@@ -503,7 +503,7 @@ function createFormFields(firstTime=true) {
             placeholder: 'Gateway ID'
         });
         
-        inputId.on('input', function () {
+        inputId.on('change', function () {
             saveOrCreateSingleFieldInElementParameters(this);
         });
 
@@ -547,7 +547,7 @@ function createFormFields(firstTime=true) {
         placeholder: 'Event ID'
     });
 
-    inputId.on('input', function () {
+    inputId.on('change', function () {
         saveOrCreateSingleFieldInElementParameters(this);
     });
 
@@ -591,7 +591,7 @@ function createFormFields(firstTime=true) {
             placeholder: 'Connecting Object ID'
         });
 
-        inputId.on('input',  function () {
+        inputId.on('change',  function () {
             saveOrCreateSingleFieldInElementParameters(this);
         });
 
@@ -662,7 +662,7 @@ function createFormFields(firstTime=true) {
     
     if(firstTime){
         //salvataggio delle modifiche per ogni attributo di scenario
-        $( "input[id*='scenario-']" ).on('input', function(){
+        $( "input[id*='scenario-']" ).on('change', function(){
             saveScenarioAtrribute(this);
         });
 
@@ -888,9 +888,10 @@ function populateScenarioParametersForm(scenarioParameters){
     let baseCurrencyUnitScenParVal = scenarioParameters.baseCurrencyUnit;
     setField(baseCurrencyUnitScenParInput, baseCurrencyUnitScenParVal);
 
-    // let baseResultFrequencyScenParInput = $('#scenarioParameters-baseResultFrequency-input');
-    // let baseResultFrequencyScenParVal = scenarioParameters.baseResultFrequency;
-    // setField(baseResultFrequencyScenParInput, baseResultFrequencyScenParVal);
+    //TODO vedere se fare controlli qui
+    let baseResultFrequencyScenParInput = $('#scenarioParameters-baseResultFrequency-input');
+    let baseResultFrequencyScenParVal = scenarioParameters.baseResultFrequency;
+    setField(baseResultFrequencyScenParInput, baseResultFrequencyScenParVal);
 
     let baseResultFrequencyCumulScenParInput = $('#scenarioParametersAttribute-baseResultFrequencyCumul-input');
     let baseResultFrequencyCumulScenParVal = scenarioParameters.baseResultFrequencyCumul;
@@ -953,7 +954,7 @@ function populateCalendarForm(calendars){
             val: calId
         });
 
-        inputCalID.on('input', function(){
+        inputCalID.on('change', function(){
             saveCalendarField(this, false);
         });
         htmlCalendarSection.append(labelCalID);
@@ -1013,7 +1014,7 @@ function populateCalendarForm(calendars){
             id: 'calendar-newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)+'-id-input',
             value: 'newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)
         });
-        inputCalID.on('input', function(){
+        inputCalID.on('change', function(){
             saveCalendarField(this, true);
         });
         calendarSection.append(labelCalID);
@@ -1087,6 +1088,8 @@ function saveScenarioAtrribute(field){
                     window.alert("ERROR: There exists a scenario with the following ID: "+ value)
                 },10);
                 validName=false;
+                console.log(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].id);
+                $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].id); //reset scenario id
             }
         }
     }
@@ -1168,6 +1171,8 @@ function saveCalendarField(field, isNew){
                             window.alert("ERROR: There exists a calendar with the following ID: "+ value)
                         },1);
                         flagIdUsed = true;
+                        $('#calendar-'+calendarID+'-id-input').val(calendarsExisting[i][fieldName]); //reset value in iput
+
                     }
                 }
             }
@@ -1185,6 +1190,7 @@ function saveCalendarField(field, isNew){
                             window.alert("ERROR: There exists a calendar with the following ID: "+ value)
                         },1);
                         flagIdUsed = true;
+                        $('#calendar-'+calendarID+'-id-input').val(calendarsNew[i][fieldName]); //reset value in input
                     }
                 }
             }

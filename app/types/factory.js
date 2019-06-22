@@ -110,11 +110,7 @@ export var factory = {
     "ResultTimeStamp": DateTime,
     "FixedCost": Parameter,
     "UnitCost": Parameter,
-    
-
-    //TODO vedere qui quale usare
-    "Duration": Parameter
-    // "Duration": Duration
-
+    "Duration": Parameter,
+    // "BaseResultFrequency": Duration
 
 }

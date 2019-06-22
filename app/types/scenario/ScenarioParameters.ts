@@ -1,7 +1,6 @@
 import {TimeUnit} from "./TimeUnit";
 import {Parameter} from "../parameter_type/Parameter";
 import {PropertyParameters} from "../parameters/PropertyParameters";
-import {Duration} from "../parameter_type/ConstantParameter";
 
 export class ScenarioParameters {
 
@@ -12,7 +11,7 @@ export class ScenarioParameters {
     private _seed: number;
     private _baseTimeUnit: TimeUnit = TimeUnit.minutes;
     private _baseCurrencyUnit: string = "USD";
-    private _baseResultFrequency: Duration;
+    private _baseResultFrequency: string;
     private _baseResultFrequencyCumul: string = "false";
     private _traceOutput: string = "false";
     private _traceFormat: string = "XES";
@@ -76,11 +75,11 @@ export class ScenarioParameters {
         this._baseCurrencyUnit = value;
     }
 
-    get baseResultFrequency(): Duration {
+    get baseResultFrequency(): string {
         return this._baseResultFrequency;
     }
 
-    set baseResultFrequency(value: Duration) {
+    set baseResultFrequency(value: string) {
         this._baseResultFrequency = value;
     }
 
@@ -144,7 +143,6 @@ export class ScenarioParameters {
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "replication", this._replication);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "seed", this._seed);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseTimeUnit", this._baseTimeUnit);
-        //TODO controllare questo che è Duration e non parametro semplice
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseCurrencyUnit", this._baseCurrencyUnit);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequency", this._baseResultFrequency);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "baseResultFrequencyCumul", this._baseResultFrequencyCumul);

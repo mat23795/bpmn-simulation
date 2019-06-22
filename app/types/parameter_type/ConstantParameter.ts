@@ -158,21 +158,6 @@ export class DateTimeParameter extends ConstantParameter {
     }
 }
 
-export class Duration{
-    private _value: string;
-
-    constructor() {
-    }
-
-    get value(): string {
-        return this._value;
-    }
-
-    set value(value: string) {
-        this._value = value;
-    }
-}
-
 export class DateTime{
     private _date: string;
 
