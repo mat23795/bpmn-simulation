@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../css/diagram-js.css">
 
@@ -43,18 +44,23 @@
             <div class="sim-parameter-section div-vertical-border" id="js-simulation">
                 <h1 class="centered-title-sim-section">BPSim Parameters</h1>
 
-
-                <div class="div-scenario-picker">
-                    <label for="scenario-picker">Select Scenario </label>
-                    <select class = "scenario-picker" id="scenario-picker">
-                        <!-- <option></option> -->
-                    </select>
+                <div id="scenario-option-section" style="text-align: center">
+                    <div style="display: block" style = "display: inline-flex">
+                        <div class="div-scenario-picker" style = "display: inline-block">
+                            <label for="scenario-picker">Select Scenario </label>
+                            <select class = "scenario-picker" id="scenario-picker">
+                                <!-- <option></option> -->
+                            </select>
+                            
+                        </div>
+                        <div id="scenario-button">
+                            <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="create-scenario">Create new scenario</button> -->
+                            <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="create-scenario"><i class="fa fa-plus" id="create-scenario"></i></button>
+                            <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="delete-scenario" style="background: firebrick">Delete current scenario</button> -->
+                            <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="delete-scenario"><i class="fa fa-trash" id="delete-scenario"></i></button>
+                        </div>
+                    </div>
                 </div>
-
-                <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="create-scenario">Create new scenario</button>
-
-                <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="delete-scenario" style="background: firebrick">Delete current scenario</button>
-
 
                 <form>
                     <div class="form-group" label="scenario-form">
