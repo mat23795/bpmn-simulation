@@ -1003,10 +1003,29 @@ function populateCalendarForm(calendars){
     buttonCreateCalendar.on("click", function() {
         let calendarTemp = new Calendar();
 
+        
+        
+        
+        let btnTrash = jQuery('<button/>',{
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            role: 'button" aria-pressed="true',
+            id: 'delete-scenario'
+
+        });
+        
+
+        let iEl = jQuery('<i/>', {
+            class: 'fa fa-trash', 
+            id: 'delete-scenario'
+        });
+
+        btnTrash.append(iEl);
+        
+        
         let calendarSection = $('#calendar-section');
         let labelCalID = jQuery('<label/>', {
                 text: 'Calendar ID',
-                style: 'margin-top:10%'
+                style: 'margin-top:10%; margin-right: 20%; white-space: nowrap',
         });
         let inputCalID = jQuery('<input/>', {
             type: 'text',
@@ -1017,7 +1036,17 @@ function populateCalendarForm(calendars){
         inputCalID.on('change', function(){
             saveCalendarField(this, true);
         });
-        calendarSection.append(labelCalID);
+
+        let div = jQuery('<div/>', {
+            style: 'display: inline-flex'
+        });
+
+        div.append(labelCalID);
+        div.append(btnTrash);
+
+        calendarSection.append(div);
+        // calendarSection.append(inputCalID);
+        // calendarSection.append(btnTrash);
         calendarSection.append(inputCalID);
 
         let labelCalName = jQuery('<label/>', {

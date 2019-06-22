@@ -318,6 +318,8 @@ label{
     padding: 12px 16px;
     font-size: 16px;
     cursor: pointer;
+    height: fit-content;
+    width: fit-content;
   }
   
   /* Darker background on mouse-over */
