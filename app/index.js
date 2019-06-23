@@ -7,16 +7,16 @@ import bpmn_example5 from '../resources/5_TechnicalSupportProcessV1.bpmn';
 import bpmn_example6 from '../resources/6_TechnicalSupportProcessV1_1.bpmn';
 import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2.bpmn';
 
-import {DateTime, DurationParameter} from "./types/parameter_type/ConstantParameter";
-import {BPSimData} from "./types/scenario/BPSimData";
-import {Scenario} from "./types/scenario/Scenario";
-import {factory} from "./types/factory";
-import {ResultType} from "./types/parameter_type/ResultType";
-import {Parameter} from "./types/parameter_type/Parameter";
-import {PropertyType} from "./types/parameters/PropertyType";
-import {Calendar} from './types/calendar/Calendar';
-import {ElementParameters} from './types/parameters/ElementParameters';
-import {TimeUnit} from "./types/scenario/TimeUnit";
+import { DateTime, DurationParameter } from "./types/parameter_type/ConstantParameter";
+import { BPSimData } from "./types/scenario/BPSimData";
+import { Scenario } from "./types/scenario/Scenario";
+import { factory } from "./types/factory";
+import { ResultType } from "./types/parameter_type/ResultType";
+import { Parameter } from "./types/parameter_type/Parameter";
+import { PropertyType } from "./types/parameters/PropertyType";
+import { Calendar } from './types/calendar/Calendar';
+import { ElementParameters } from './types/parameters/ElementParameters';
+import { TimeUnit } from "./types/scenario/TimeUnit";
 
 
 
@@ -33,7 +33,7 @@ var xmlGlobal;
 var bpsimPrefixGlobal;
 var scaleGlobal = 1.0
 var bpmnPrefixGlobal;
-var saved=false
+var saved = false
 
 
 var viewer = new BpmnJS({
@@ -67,20 +67,20 @@ function openDiagram() {
         $('.djs-container').css('transform-origin', '0% 0% 0px');
         $('.djs-container').css('transform', 'scale(1)'); //TODO REMOVE
         $('#js-canvas').css('overflow', 'overlay');
-        
+
         let imgAhref = $(".bjs-powered-by");
         imgAhref.css('position', 'fixed');
         imgAhref.css('right', 'auto');
         imgAhref.css('left', '15px');
-        
 
 
-        $('#js-canvas').on("wheel", function (){
+
+        $('#js-canvas').on("wheel", function () {
             let e = window.event;
             let num = e.wheelDelta / 1000;
             scaleGlobal += num;
-            $('.djs-container').css('transform', 'scale('+scaleGlobal+')'); 
-            
+            $('.djs-container').css('transform', 'scale(' + scaleGlobal + ')');
+
         });
 
 
@@ -90,7 +90,7 @@ function openDiagram() {
         //         console.log("ciao");
         //         window.alert("eee");
         //     }
-            
+
         // });
 
 
@@ -108,12 +108,12 @@ function openDiagram() {
         // {
         //     $(document).unbind("keydown");
         // });
-        
-        
-    
 
 
-        
+
+
+
+
 
 
         // $('.djs-container').css('height', '700px');
@@ -123,7 +123,7 @@ function openDiagram() {
         // xmlGlobal=xml;
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
-        xmlGlobal = xmlGlobal.replace(regExpRemoveComments,"");
+        xmlGlobal = xmlGlobal.replace(regExpRemoveComments, "");
 
         //TODO creare qui la funzine che produce una sola volta l'obj e lo passiamo alle altre funzioni
         let parser = new DOMParser();
@@ -137,11 +137,11 @@ function openDiagram() {
 
         // * prefisso bpmn (es. semantic, bpmn)
         bpmnPrefixGlobal = definitionsTagXML[0].prefix;
-        
+
         bpsimPrefixGlobal = "bpsim"; // * default
 
         if (extensionElementXML.length == 0) {
-            
+
 
             // TODO gestire questione bpsim non esistente
 
@@ -154,16 +154,16 @@ function openDiagram() {
             bpsimData.addScenario(scenario);
             dataTreeObjGlobal = bpsimData;
             createFormFields();
-        }else{
+        } else {
             // * Fase 1 xml2tree
             bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
-    
+
             // * Leggere bpsim e inserirlo nella struttura dati
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
 
             // * creare dal XML il form field
-        
+
             createFormFields();
 
             // lo visualizzo
@@ -177,10 +177,10 @@ function openDiagram() {
             console.log(xmlDoc);//TODO remove
 
             // console.log(extensionElementXML);
-            
+
             // * aggiunta evento al bottone che calcola il bpsim per far generare l'xml 'aggiornato'
-            $('#generate-bpsim').on("click", function() {
-                    
+            $('#generate-bpsim').on("click", function () {
+
                 // // ! DELETE THIS START 
                 // setTimeout(function(){
                 //     $('#scenario-picker').val(1).trigger('change');;
@@ -195,14 +195,14 @@ function openDiagram() {
 
 
                 let scenarioSelected = $('#scenario-picker').val();
-                
+
                 console.log("riattivare salvataggio")//TODO 
-                
+
                 //salvo i calendari 
-                dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
+                dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
                 calendarsCreatedGlobal = [];
                 calendarsCreatedIDCounterGlobal = 0;
-                
+
                 //saveDataTreeStructure(scenarioSelected);
 
                 extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
@@ -213,22 +213,22 @@ function openDiagram() {
             });
 
             // * aggiunta evento al bottone che elimina lo scenario corrente
-            $('#delete-scenario').on("click", function() {
+            $('#delete-scenario').on("click", function () {
                 closeCollapsibleButton();
-                dataTreeObjGlobal.scenario.splice(currentScenarioGlobal-1, 1);
+                dataTreeObjGlobal.scenario.splice(currentScenarioGlobal - 1, 1);
                 // console.log(dataTreeObjGlobal.scenario);
-                if(dataTreeObjGlobal.scenario.length > 0){
+                if (dataTreeObjGlobal.scenario.length > 0) {
                     createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-                }else{
+                } else {
                     $('#create-scenario').click();
                 }
             });
 
             // * aggiunta evento al bottone che crea un nuovo scenario
-            $('#create-scenario').on("click", function() {
+            $('#create-scenario').on("click", function () {
                 closeCollapsibleButton();
                 let newScenario = new Scenario();
-                newScenario.id = "new S"+(dataTreeObjGlobal.scenario.length+1);
+                newScenario.id = "new S" + (dataTreeObjGlobal.scenario.length + 1);
                 let tempArrayScenario = [];
                 tempArrayScenario.push(newScenario);
                 dataTreeObjGlobal.scenario = tempArrayScenario;
@@ -247,7 +247,7 @@ function openDiagram() {
 }
 
 // * Funzione per creare il form in base all' XML
-function createFormFields(firstTime=true) {
+function createFormFields(firstTime = true) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xmlGlobal, "text/xml");
 
@@ -266,11 +266,11 @@ function createFormFields(firstTime=true) {
     let nodesEvents = [];
     let nodesConnectingObjects = [];
 
-    for(let i = 0; i<bpmnElementProcessXML.length; i++){
+    for (let i = 0; i < bpmnElementProcessXML.length; i++) {
 
         // * array di tutti gli elementi presenti in "process"
         let nodesProcess = Array.prototype.slice.call(bpmnElementProcessXML[i].getElementsByTagName("*"), 0);
-        
+
         // console.log("Array di elementi del bpmn"); //TODO REMOVE
         // console.log(nodes); //TODO REMOVE
 
@@ -282,43 +282,43 @@ function createFormFields(firstTime=true) {
             }
             // console.log(nodes[j].localName);
         }
-        
+
 
         // * avvaloramento variabile che contiene solo i gateway
         for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("gateway")){
+            if (nodesProcess[j].localName.toLowerCase().includes("gateway")) {
 
                 nodesGateways.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
-        
+
 
         // * avvaloramento variabile che contiene solo gli eventi
         for (let j = 0; j < nodesProcess.length; j++) {
             if (nodesProcess[j].localName.toLowerCase().includes("event")
-            && ! nodesProcess[j].localName.toLowerCase().includes("definition")){
+                && !nodesProcess[j].localName.toLowerCase().includes("definition")) {
 
                 nodesEvents.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
-        
+
 
         // * avvaloramento variabile che contiene solo le freccie
         for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")){
+            if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")) {
 
                 nodesConnectingObjects.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
-        
+
     }
-    for(let i = 0; i<bpmnElementCollaborationXML.length; i++){
+    for (let i = 0; i < bpmnElementCollaborationXML.length; i++) {
         let nodesCollaboration = Array.prototype.slice.call(bpmnElementCollaborationXML[i].getElementsByTagName("*"), 0);
         for (let j = 0; j < nodesCollaboration.length; j++) {
-            if (nodesCollaboration[j].localName.toLowerCase().includes("messageflow")){
+            if (nodesCollaboration[j].localName.toLowerCase().includes("messageflow")) {
 
                 nodesConnectingObjects.push(nodesCollaboration[j]);
             }
@@ -327,19 +327,19 @@ function createFormFields(firstTime=true) {
     }
 
 
-    // console.log("Array di soli task"); //TODO REMOVE
-    // console.log(nodesActivities); //TODO REMOVE
+    console.log("Array di sole activities"); //TODO REMOVE
+    console.log(nodesActivities); //TODO REMOVE
 
-    // console.log("Array di soli gateway"); //TODO REMOVE
-    // console.log(nodesGateways); //TODO REMOVE
+    console.log("Array di soli gateway"); //TODO REMOVE
+    console.log(nodesGateways); //TODO REMOVE
 
-    // console.log("Array di soli eventi"); //TODO REMOVE
-    // console.log(nodesEvents); //TODO REMOVE
+    console.log("Array di soli eventi"); //TODO REMOVE
+    console.log(nodesEvents); //TODO REMOVE
 
-    // console.log("Array di sole frecce"); //TODO REMOVE
-    // console.log(nodesConnectingObjects); //TODO REMOVE
+    console.log("Array di soli connecting obj"); //TODO REMOVE
+    console.log(nodesConnectingObjects); //TODO REMOVE
 
-    
+
 
 
     // * elemento HTML contenente la sezione degli element parameter
@@ -352,8 +352,8 @@ function createFormFields(firstTime=true) {
     buttonElementParameterHTML.data('clicked', false);
     $('#scen-par-btn').data('clicked', false);
     $('#calendar-btn').data('clicked', false);
-    
-    
+
+
 
     let divElementParameter = jQuery('<div/>', {
         class: 'form-group',
@@ -386,7 +386,7 @@ function createFormFields(firstTime=true) {
         label: 'element-parameter-gateways-form',
         id: 'div-gateways'
     });
-    
+
     let buttonEvents = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
@@ -414,42 +414,42 @@ function createFormFields(firstTime=true) {
     });
 
 
-    
+
 
     // for che creano gli elementi grafici per ogni task, in base a quanti task sono presenti nel BPMN
     // TODO creare gli elementi corretti per i activities
-    for(let counter = 0; counter<nodesActivities.length; counter++){
+    for (let counter = 0; counter < nodesActivities.length; counter++) {
 
         let labelElementRef;
         let elRef = nodesActivities[counter].id;
-        if(counter==0){
+        if (counter == 0) {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+elRef,
+                text: 'Element Ref: ' + elRef,
             });
 
-        }else{
+        } else {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+nodesActivities[counter].id,
+                text: 'Element Ref: ' + nodesActivities[counter].id,
                 style: 'margin-top:15%'
             });
         }
         divActivities.append(labelElementRef);
-        
+
 
 
         let labelId = jQuery('<label/>', {
-            for: 'activity-id-input$$'+elRef+'$$',
+            for: 'activity-id-input$$' + elRef + '$$',
             text: 'ID'
         });
-        
+
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'activity-id-input$$'+elRef+'$$',
+            id: 'activity-id-input$$' + elRef + '$$',
             placeholder: 'Activity ID'
         });
 
@@ -469,40 +469,40 @@ function createFormFields(firstTime=true) {
     }
 
     // TODO creare gli elementi corretti per i gateway
-    for(let counter = 0; counter<nodesGateways.length; counter++){
+    for (let counter = 0; counter < nodesGateways.length; counter++) {
         let labelElementRef;
         let elRef = nodesGateways[counter].id;
-        if(counter==0){
+        if (counter == 0) {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+elRef,
+                text: 'Element Ref: ' + elRef,
             });
 
-        }else{
+        } else {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+nodesGateways[counter].id,
+                text: 'Element Ref: ' + nodesGateways[counter].id,
                 style: 'margin-top:15%'
             });
         }
         divGateways.append(labelElementRef);
-        
+
 
 
         let labelId = jQuery('<label/>', {
-            id: 'gateway-id-input$$'+elRef+'$$',
+            for: 'gateway-id-input$$' + elRef + '$$',
             text: 'ID'
         });
-        
+
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'gateway-control form-control-input',
-            id: 'gateway-id-input$$'+elRef+'$$',
+            id: 'gateway-id-input$$' + elRef + '$$',
             placeholder: 'Gateway ID'
         });
-        
+
         inputId.on('change', function () {
             saveOrCreateSingleFieldInElementParameters(this);
         });
@@ -514,90 +514,90 @@ function createFormFields(firstTime=true) {
     }
 
     // TODO creare gli elementi corretti per gli events
-    for(let counter = 0; counter<nodesEvents.length; counter++){
+    for (let counter = 0; counter < nodesEvents.length; counter++) {
 
-    let labelElementRef;
-    let elRef = nodesEvents[counter].id;
-    if(counter==0){
-        labelElementRef = jQuery('<label/>', {
-            class: 'label-new-element',
-            // id: elRef,
-            text: 'Element Ref: '+elRef,
+        let labelElementRef;
+        let elRef = nodesEvents[counter].id;
+        if (counter == 0) {
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: ' + elRef,
+            });
+
+        } else {
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: ' + nodesEvents[counter].id,
+                style: 'margin-top:15%'
+            });
+        }
+        divEvents.append(labelElementRef);
+
+        let labelId = jQuery('<label/>', {
+            for: 'events-id-input$$' + elRef + '$$',
+            text: 'ID'
         });
 
-    }else{
-        labelElementRef = jQuery('<label/>', {
-            class: 'label-new-element',
-            // id: elRef,
-            text: 'Element Ref: '+nodesEvents[counter].id,
-            style: 'margin-top:15%'
+        let inputId = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'events-id-input$$' + elRef + '$$',
+            placeholder: 'Event ID'
         });
-    }
-    divEvents.append(labelElementRef);
-    
-    let labelId = jQuery('<label/>', {
-        for: 'events-id-input$$'+elRef+'$$',
-        text: 'ID'
-    });
-    
-    let inputId = jQuery('<input/>', {
-        type: 'text',
-        class: 'form-control form-control-input',
-        id: 'events-id-input$$'+elRef+'$$',
-        placeholder: 'Event ID'
-    });
 
-    inputId.on('change', function () {
-        saveOrCreateSingleFieldInElementParameters(this);
-    });
+        inputId.on('change', function () {
+            saveOrCreateSingleFieldInElementParameters(this);
+        });
 
-    divEvents.append(labelId);
-    divEvents.append(inputId);
+        divEvents.append(labelId);
+        divEvents.append(inputId);
 
     }
 
 
     // TODO creare gli elementi corretti per gli arrow
-    for(let counter = 0; counter<nodesConnectingObjects.length; counter++){
+    for (let counter = 0; counter < nodesConnectingObjects.length; counter++) {
 
         let labelElementRef;
         let elRef = nodesConnectingObjects[counter].id;
-        if(counter==0){
+        if (counter == 0) {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+elRef,
+                text: 'Element Ref: ' + elRef,
             });
-    
-        }else{
+
+        } else {
             labelElementRef = jQuery('<label/>', {
                 class: 'label-new-element',
                 // id: elRef,
-                text: 'Element Ref: '+nodesConnectingObjects[counter].id,
+                text: 'Element Ref: ' + nodesConnectingObjects[counter].id,
                 style: 'margin-top:15%'
             });
         }
         divConnectingObjects.append(labelElementRef);
-        
+
         let labelId = jQuery('<label/>', {
-            for: 'connectingObject-id-input$$'+elRef+'$$',
+            for: 'connectingObject-id-input$$' + elRef + '$$',
             text: 'ID'
         });
-        
+
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'connectingObject-id-input$$'+elRef+'$$',
+            id: 'connectingObject-id-input$$' + elRef + '$$',
             placeholder: 'Connecting Object ID'
         });
 
-        inputId.on('change',  function () {
+        inputId.on('change', function () {
             saveOrCreateSingleFieldInElementParameters(this);
         });
 
         divConnectingObjects.append(labelId);
         divConnectingObjects.append(inputId);
-    
+
     }
 
 
@@ -627,17 +627,17 @@ function createFormFields(firstTime=true) {
     // costruzione buttons in scenario
     var coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
-        if(coll[i].id != "elem-par-btn" && coll[i].id != "scen-par-btn"  && coll[i].id != "calendar-btn" || firstTime){
-            coll[i].addEventListener("click", function() {
+        if (coll[i].id != "elem-par-btn" && coll[i].id != "scen-par-btn" && coll[i].id != "calendar-btn" || firstTime) {
+            coll[i].addEventListener("click", function () {
                 $(this).data('clicked', !$(this).data('clicked'));
-                this.classList.toggle("active");            
+                this.classList.toggle("active");
                 refreshDimension(this);
             });
         }
     }
 
-    
-    
+
+
     // * parte completamento form con dati esistenti
     // let parser = new DOMParser();
     // let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -653,21 +653,21 @@ function createFormFields(firstTime=true) {
     let numScenarios = scenarios.length;
     $('#scenario-picker').empty();
 
-    for(let i = 0; i < numScenarios; i++) {
+    for (let i = 0; i < numScenarios; i++) {
         $('#scenario-picker').append($('<option>', {
-            value: i+1,
+            value: i + 1,
             text: scenarios[i].id
         }));
     }
-    
-    if(firstTime){
+
+    if (firstTime) {
         //salvataggio delle modifiche per ogni attributo di scenario
-        $( "input[id*='scenario-']" ).on('change', function(){
+        $("input[id*='scenario-']").on('change', function () {
             saveScenarioAtrribute(this);
         });
 
         //salvataggio delle modifiche per ogni attributo semplice di scenarioParameter
-        $( "input[id*='scenarioParametersAttribute-']" ).on('input', function(){
+        $("input[id*='scenarioParametersAttribute-']").on('input', function () {
             saveScenarioParameterAtrribute(this);
         });
     }
@@ -680,8 +680,8 @@ function createFormFields(firstTime=true) {
     //serve a fare prove con un determinato scenario
     // $('#scenario-picker').val(3);
     // console.log(TimeUnit[2]);
-    if(firstTime){
-        for(let timeUnit in TimeUnit) {
+    if (firstTime) {
+        for (let timeUnit in TimeUnit) {
             $('#scenarioParameters-baseTimeUnit-picker').append($('<option>', {
                 value: timeUnit,
                 text: timeUnit
@@ -689,29 +689,29 @@ function createFormFields(firstTime=true) {
         }
     }
 
-    $('#scenarioParameters-baseTimeUnit-picker').val('minutes');    
+    $('#scenarioParameters-baseTimeUnit-picker').val('minutes');
 
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
-    
-    refreshFormFields(scenarios, scenarioSelected);
-    
 
-    if(firstTime){
+    refreshFormFields(scenarios, scenarioSelected);
+
+
+    if (firstTime) {
         $('#scenario-picker').on('change', function () {
 
             // * serie di if che servono a chiudere i menù a tendina quando si cambia scenario
             closeCollapsibleButton();
 
             let scenarioSelected = $('#scenario-picker').val();
-            
-            
+
+
             console.log("riattivare salvataggio")//TODO 
 
             // saveDataTreeStructure(currentScenarioGlobal);
 
             saveLocalCalendars();
-            
+
             currentScenarioGlobal = scenarioSelected;
 
             let scenariosTemp = dataTreeObjGlobal.scenario;
@@ -721,68 +721,68 @@ function createFormFields(firstTime=true) {
     }
 }
 
-function saveLocalCalendars(){
-    dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar = calendarsCreatedGlobal;
+function saveLocalCalendars() {
+    dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
     calendarsCreatedGlobal = [];
     calendarsCreatedIDCounterGlobal = 0;
 }
 
 // * Funzione che chiude tutti i bottoni se aperti al cambio di scenario
-function closeCollapsibleButton(){
+function closeCollapsibleButton() {
     //TODO inserire tuttoin una funzione
-    if($("#elem-par-btn").data('clicked') == true ){
+    if ($("#elem-par-btn").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#elem-par-btn").click();
     }
-    if($("#button-activities").data('clicked') == true ){
+    if ($("#button-activities").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-activities").click();
     }
-    if($("#button-gateways").data('clicked') == true ){
+    if ($("#button-gateways").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-gateways").click();
     }
-    if($("#button-events").data('clicked') == true ){
+    if ($("#button-events").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-events").click();
     }
-    if($("#button-connectingObjects").data('clicked') == true ){
+    if ($("#button-connectingObjects").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-connectingObjects").click();
     }
-    if($("#scen-par-btn").data('clicked') == true ){
+    if ($("#scen-par-btn").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#scen-par-btn").click();
     }
-    if($("#calendar-btn").data('clicked') == true ){
+    if ($("#calendar-btn").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#calendar-btn").click();
     }
 }
 
 // * Funzione di supporto per settare i valori nel form se presenti, altrimenti viene messo undefined 
-function setField(inputElement, valueToSet){
-    if(valueToSet != undefined){
+function setField(inputElement, valueToSet) {
+    if (valueToSet != undefined) {
         inputElement.val(valueToSet);
-    }else{
+    } else {
         inputElement.val(undefined);
     }
 }
 
 // * Funzione che aggiorna i campi in base allo scenario selezionato
-function refreshFormFields(scenarios, scenarioSelected){
+function refreshFormFields(scenarios, scenarioSelected) {
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
 }
 
 // * Funzione di supporto per popolare gli attributi di Scenario
-function populateScenarioAttributesForm(scenarios, scenarioSelected){
-    
+function populateScenarioAttributesForm(scenarios, scenarioSelected) {
+
     //TODO gestire caso in cui si debba creare bspim da zero
-    if(scenarioSelected != "" ){
+    if (scenarioSelected != "") {
 
         scenarioSelected -= 1;
-        
+
         let idScenarioInput = $('#scenario-id-input');
         let idScenarioVal = scenarios[scenarioSelected].id;
         setField(idScenarioInput, idScenarioVal);
@@ -794,7 +794,7 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected){
         let descriptionScenarioInput = $('#scenario-description-input');
         let descriptionScenarioVal = scenarios[scenarioSelected].description;
         setField(descriptionScenarioInput, descriptionScenarioVal);
-        
+
         let createdScenarioInput = $('#scenario-created-input');
         let createdScenarioVal = scenarios[scenarioSelected].created;
         setField(createdScenarioInput, createdScenarioVal);
@@ -821,39 +821,39 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected){
 
         let inheritsScenarioInput = $('#scenario-inherits-input');
         let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
-        setField(inheritsScenarioInput, inheritsScenarioVal);     
-    
-    }else{
+        setField(inheritsScenarioInput, inheritsScenarioVal);
+
+    } else {
         //TODO valutare se settare defaults e considerare aggiunta scenario
     }
 }
 
 // * Funzione di supporto per popolare gli attributi di Scenario
-function populateScenarioElementsForm(scenarios, scenarioSelected){
-    
-    if(scenarioSelected != "" ){
+function populateScenarioElementsForm(scenarios, scenarioSelected) {
+
+    if (scenarioSelected != "") {
         scenarioSelected -= 1;
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
         populateScenarioParametersForm(scenarios[scenarioSelected].scenarioParameters);
         populateCalendarForm(scenarios[scenarioSelected].calendar);
-      
-    }else{
+
+    } else {
         //TODO gestire caso in cui si debba creare bspim da zero
     }
 }
 
-function populateElementParametersForm(elementParameters){
+function populateElementParametersForm(elementParameters) {
     // elementParameters[0].id = "giovanni"; //! TODO remove
 
-    for(let i=0;i<elementParameters.length;i++){
+    for (let i = 0; i < elementParameters.length; i++) {
         let elemRef = elementParameters[i].elementRef;
-        let idTaskInput = $( "input[id*='$$"+elemRef+"$$']" );
+        let idTaskInput = $("input[id*='$$" + elemRef + "$$']");
         let idTaskVal = elementParameters[i].id;
         setField(idTaskInput, idTaskVal);
     }
 }
 
-function populateScenarioParametersForm(scenarioParameters){
+function populateScenarioParametersForm(scenarioParameters) {
     //TODO start, duration, warmup non sappiamo cosa farne perché sono Parameters
 
     // let startScenParInput = $('#scenarioParameters-start-input');
@@ -878,8 +878,8 @@ function populateScenarioParametersForm(scenarioParameters){
 
     let baseTimeUnitScenParInput = $('#scenarioParameters-baseTimeUnit-picker');
     let baseTimeUnitScenParVal = scenarioParameters.baseTimeUnit;
-    for(let timeUnit in TimeUnit){
-        if(TimeUnit[timeUnit] == baseTimeUnitScenParVal){
+    for (let timeUnit in TimeUnit) {
+        if (TimeUnit[timeUnit] == baseTimeUnitScenParVal) {
             setField(baseTimeUnitScenParInput, timeUnit);
         }
     }
@@ -895,17 +895,17 @@ function populateScenarioParametersForm(scenarioParameters){
 
     let baseResultFrequencyCumulScenParInput = $('#scenarioParametersAttribute-baseResultFrequencyCumul-input');
     let baseResultFrequencyCumulScenParVal = scenarioParameters.baseResultFrequencyCumul;
-    if(baseResultFrequencyCumulScenParVal=="true"){
+    if (baseResultFrequencyCumulScenParVal == "true") {
         baseResultFrequencyCumulScenParInput.prop('checked', true);
-    }else{
+    } else {
         baseResultFrequencyCumulScenParInput.prop('checked', false);
     }
 
     let traceOutputScenParInput = $('#scenarioParametersAttribute-traceOutput-input');
     let traceOutputScenParVal = scenarioParameters.traceOutput;
-    if(traceOutputScenParVal=="true"){
+    if (traceOutputScenParVal == "true") {
         traceOutputScenParInput.prop('checked', true);
-    }else {
+    } else {
         traceOutputScenParInput.prop('checked', false);
     }
 
@@ -916,12 +916,12 @@ function populateScenarioParametersForm(scenarioParameters){
     //TODO fare PropertyParameter
 }
 
-function populateCalendarForm(calendars){
-    
+function populateCalendarForm(calendars) {
+
     let htmlCalendarSection = $('#calendar-section');
 
     htmlCalendarSection.empty();
-    
+
     calendarsCreatedIDCounterGlobal = 0; // settato a zero ogni volta che si cambia scenario
 
     let buttonCreateCalendar = jQuery('<button/>', {
@@ -936,25 +936,25 @@ function populateCalendarForm(calendars){
 
 
     // * for per creare gli elementi html dei calendar esistenti o quantomeno salvati
-    for(let i=0; i<calendars.length; i++){
+    for (let i = 0; i < calendars.length; i++) {
         //per ogni calendar esistente si crea l'oggetto html 
         let calId = calendars[i].id;
         let calName = calendars[i].name;
-        let calCalendar= calendars[i].calendar;
+        let calCalendar = calendars[i].calendar;
 
         let labelCalID = jQuery('<label/>', {
             text: 'Calendar ID',
             style: 'margin-top:10%'
         });
-        
+
         let inputCalID = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calId+'-id-input',
+            id: 'calendar-' + calId + '-id-input',
             val: calId
         });
 
-        inputCalID.on('change', function(){
+        inputCalID.on('change', function () {
             saveCalendarField(this, false);
         });
         htmlCalendarSection.append(labelCalID);
@@ -965,14 +965,14 @@ function populateCalendarForm(calendars){
             // for: 'events'+(counter+1)+'-id-input',
             text: 'Calendar Name'
         });
-        
+
         let inputCalName = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calId+'-name-input',
+            id: 'calendar-' + calId + '-name-input',
             val: calName
         });
-        inputCalName.on('input', function(){
+        inputCalName.on('input', function () {
             saveCalendarField(this, false);
         });
         htmlCalendarSection.append(labelCalName);
@@ -983,14 +983,14 @@ function populateCalendarForm(calendars){
             // for: 'events'+(counter+1)+'-id-input',
             text: 'Calendar Content'
         });
-        
+
         let inputCalCalendar = jQuery('<textarea/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-'+calId+'-calendar-input',
+            id: 'calendar-' + calId + '-calendar-input',
             val: calCalendar
         });
-        inputCalCalendar.on('input', function(){
+        inputCalCalendar.on('input', function () {
             saveCalendarField(this, false);
         });
         htmlCalendarSection.append(labelCalCalendar);
@@ -1000,40 +1000,40 @@ function populateCalendarForm(calendars){
 
 
 
-    buttonCreateCalendar.on("click", function() {
+    buttonCreateCalendar.on("click", function () {
         let calendarTemp = new Calendar();
 
-        
-        
-        
-        let btnTrash = jQuery('<button/>',{
+
+
+
+        let btnTrash = jQuery('<button/>', {
             class: 'btn btn-primary btn-lg button-calculate btn-icon',
             role: 'button" aria-pressed="true',
             id: 'delete-scenario'
 
         });
-        
+
 
         let iEl = jQuery('<i/>', {
-            class: 'fa fa-trash', 
+            class: 'fa fa-trash',
             id: 'delete-scenario'
         });
 
         btnTrash.append(iEl);
-        
-        
+
+
         let calendarSection = $('#calendar-section');
         let labelCalID = jQuery('<label/>', {
-                text: 'Calendar ID',
-                style: 'margin-top:10%; margin-right: 20%; white-space: nowrap',
+            text: 'Calendar ID',
+            style: 'margin-top:10%; margin-right: 20%; white-space: nowrap',
         });
         let inputCalID = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)+'-id-input',
-            value: 'newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)
+            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-id-input',
+            value: 'newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1)
         });
-        inputCalID.on('change', function(){
+        inputCalID.on('change', function () {
             saveCalendarField(this, true);
         });
 
@@ -1055,10 +1055,10 @@ function populateCalendarForm(calendars){
         let inputCalName = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)+'-name-input',
+            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-name-input',
             placeholder: "Calendar name"
         });
-        inputCalName.on('input', function(){
+        inputCalName.on('input', function () {
             saveCalendarField(this, true);
         });
         calendarSection.append(labelCalName);
@@ -1067,14 +1067,14 @@ function populateCalendarForm(calendars){
         let labelCalCalendar = jQuery('<label/>', {
             text: 'Calendar Content'
         });
-        
+
         let inputCalCalendar = jQuery('<textarea/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC'+dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.length+'_'+(calendarsCreatedIDCounterGlobal+1)+'-calendar-input',
+            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-calendar-input',
             placeholder: "Calendar content"
         });
-        inputCalCalendar.on('input', function(){
+        inputCalCalendar.on('input', function () {
             saveCalendarField(this, true);
         });
         calendarSection.append(labelCalCalendar);
@@ -1086,121 +1086,133 @@ function populateCalendarForm(calendars){
         // refreshDimension(this);
         // console.log($('#calendar-btn'));
         //true perché il bottone è calendar e non va collassato ed espando
-       
+
         refreshDimension($('#calendar-btn')[0], true);
 
         //focus sull'id del nuovo calendar creato
         focusDelayed(inputCalID);
-        
+
         calendarTemp.id = inputCalID.val();
         calendarTemp.name = inputCalName.val();
         calendarTemp.calendar = inputCalCalendar.val();
-        
+
         calendarsCreatedGlobal.push(calendarTemp);
         calendarsCreatedIDCounterGlobal += 1;
-    });    
-    
+    });
+
 }
 
 //* salva nella struttura dati il singolo attributo di scenario cambiato
-function saveScenarioAtrribute(field){
+function saveScenarioAtrribute(field) {
     let value = field.value;
     let fieldName = field.id.split("-")[1];
-    
+
     //cambia l'id nel picker in automatico se l'utente sta modificando l'id dello scenario (solo se id nuovo != id esistenti)
-    let validName=true;
-    if(fieldName=="id"){
+    let validName = true;
+    if (fieldName == "id") {
         let options = document.getElementById("scenario-picker").options;
-        for(let i = 0; i < options.length; i++){
-            if(options[i].innerHTML == value && i != currentScenarioGlobal-1){
-                setTimeout(function(){
-                    window.alert("ERROR: There exists a scenario with the following ID: "+ value)
-                },10);
-                validName=false;
-                console.log(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].id);
-                $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].id); //reset scenario id
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].innerHTML == value && i != currentScenarioGlobal - 1) {
+                setTimeout(function () {
+                    window.alert("ERROR: There exists a scenario with the following ID: " + value)
+                }, 10);
+                validName = false;
+                console.log(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id);
+                $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id); //reset scenario id
             }
         }
     }
-    
-    if(validName){
-        dataTreeObjGlobal.scenario[currentScenarioGlobal-1][fieldName] = value;
-        if(fieldName=="id"){
-            document.getElementById("scenario-picker").options[currentScenarioGlobal-1].innerHTML = value;
+
+    if (validName) {
+        dataTreeObjGlobal.scenario[currentScenarioGlobal - 1][fieldName] = value;
+        if (fieldName == "id") {
+            document.getElementById("scenario-picker").options[currentScenarioGlobal - 1].innerHTML = value;
         }
     }
 }
 
-function saveScenarioParameterAtrribute(field){
+function saveScenarioParameterAtrribute(field) {
     let value = field.value;
     let fieldName = field.id.split("-")[1];
     // console.log(field.type);
-    if(field.type == "checkbox"){
+    if (field.type == "checkbox") {
         //salvo il cambimento della checkbox
-        if(dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] == "true"){
-            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = "false";
-        }else{
-            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = "true";
+        if (dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] == "true") {
+            dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "false";
+        } else {
+            dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "true";
         }
-    }else{
-        if(value == ""){
-            value=undefined;
+    } else {
+        if (value == "") {
+            value = undefined;
         }
-        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters[fieldName] = value;
+        dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = value;
     }
 }
 
 // * salva nella struttura dati il singolo element parameter oppure crea l'oggetto
-function saveOrCreateSingleFieldInElementParameters(field){
+function saveOrCreateSingleFieldInElementParameters(field) {
     let value = field.value;
     //prendo la ref che so essere circondata da doppio $
     let elRef = field.id.split("$$")[1];
     //della prima parte mi prendo il secondo elemento che indica il campo da modificare
     let fieldName = field.id.split("$$")[0].split("-")[1];
 
-    let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters;
+    let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].elementParameters;
     let found = false;
-    for(let i = 0; i < elementParameters.length; i++){
-        if(elementParameters[i].elementRef == elRef){
+
+    // evito id uguali negli elem param
+    for (let i = 0; i < elementParameters.length; i++) {
+        if (elementParameters[i].id == value) {
+            setTimeout(function () {
+                window.alert("ERROR: There exists an element with the following ID: " + value)
+            }, 10);
+            $(document.getElementById(field.id)).val(undefined); //TODO reset value in input (o undefined o vecchio valore)
+            return;
+        }
+    }
+
+    for (let i = 0; i < elementParameters.length; i++) {
+        if (elementParameters[i].elementRef == elRef) {
             found = true;
             elementParameters[i][fieldName] = value;
         }
     }
-    if(!found){
+    if (!found) {
         let elementParametersToAdd = [];
         let elemPar = new ElementParameters();
         elemPar[fieldName] = value;
         elemPar.elementRef = elRef;
         elementParametersToAdd.push(elemPar);
-        dataTreeObjGlobal.scenario[currentScenarioGlobal-1].elementParameters = elementParametersToAdd;
+        dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].elementParameters = elementParametersToAdd;
     }
 }
 
 //* salva nella struttura dati il singolo calendar già esistente cambiato
-function saveCalendarField(field, isNew){
+function saveCalendarField(field, isNew) {
     let value = field.value;
     let calendarID = field.id.split("-")[1];
     let fieldName = field.id.split("-")[2];
 
-    let calendarsExisting = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar;
+    let calendarsExisting = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar;
     let calendarsNew = calendarsCreatedGlobal;
     // console.log(calendarsExisting);
     // console.log(calendarsNew);
 
     let flagIdUsed = false;
 
-    for(let i=0; i<calendarsExisting.length; i++){
-        if(calendarsExisting[i].id == calendarID){
+    for (let i = 0; i < calendarsExisting.length; i++) {
+        if (calendarsExisting[i].id == calendarID) {
             //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
-            for(let j=0; j<calendarsExisting.length; j++){
-                if(i!=j){
-                    if(calendarsExisting[j].id == value){
+            for (let j = 0; j < calendarsExisting.length; j++) {
+                if (i != j) {
+                    if (calendarsExisting[j].id == value) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
-                        setTimeout(function(){
-                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
-                        },1);
+                        setTimeout(function () {
+                            window.alert("ERROR: There exists a calendar with the following ID: " + value)
+                        }, 1);
                         flagIdUsed = true;
-                        $('#calendar-'+calendarID+'-id-input').val(calendarsExisting[i][fieldName]); //reset value in iput
+                        $('#calendar-' + calendarID + '-id-input').val(calendarsExisting[i][fieldName]); //reset value in iput
 
                     }
                 }
@@ -1208,63 +1220,64 @@ function saveCalendarField(field, isNew){
         }
     }
 
-    for(let i=0; i<calendarsNew.length; i++){
-        if(calendarsNew[i].id == calendarID){
+    for (let i = 0; i < calendarsNew.length; i++) {
+        if (calendarsNew[i].id == calendarID) {
             //TODO salviamo il name anche se ID uguale a uno esistente, vedere cosa fare
-            for(let j=0; j<calendarsNew.length; j++){
-                if(i!=j){
-                    if(calendarsNew[j].id == value){
+            for (let j = 0; j < calendarsNew.length; j++) {
+                if (i != j) {
+                    if (calendarsNew[j].id == value) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
-                        setTimeout(function(){
-                            window.alert("ERROR: There exists a calendar with the following ID: "+ value)
-                        },1);
+                        setTimeout(function () {
+                            window.alert("ERROR: There exists a calendar with the following ID: " + value)
+                        }, 1);
                         flagIdUsed = true;
-                        $('#calendar-'+calendarID+'-id-input').val(calendarsNew[i][fieldName]); //reset value in input
+                        $('#calendar-' + calendarID + '-id-input').val(calendarsNew[i][fieldName]); //reset value in input
+                        return;
                     }
                 }
             }
         }
     }
 
-    if(!flagIdUsed){
-        if(isNew){
-            for(let i=0; i<calendarsNew.length; i++){
-                if(calendarsNew[i].id == calendarID){
+    if (!flagIdUsed) {
+        if (isNew) {
+            for (let i = 0; i < calendarsNew.length; i++) {
+                if (calendarsNew[i].id == calendarID) {
                     calendarsNew[i][fieldName] = value;
                 }
             }
-        }else{
-            for(let i=0; i<calendarsExisting.length; i++){
-                if(calendarsExisting[i].id == calendarID){
+        } else {
+            for (let i = 0; i < calendarsExisting.length; i++) {
+                if (calendarsExisting[i].id == calendarID) {
                     calendarsExisting[i][fieldName] = value;
                 }
-            } 
+            }
         }
-        if(fieldName=="id"){
-            $('#calendar-'+calendarID+'-id-input').attr('id','calendar-'+value+'-id-input');
-            $('#calendar-'+calendarID+'-name-input').attr('id','calendar-'+value+'-name-input');
-            $('#calendar-'+calendarID+'-calendar-input').attr('id','calendar-'+value+'-calendar-input');
+        if (fieldName == "id") {
+            $('#calendar-' + calendarID + '-id-input').attr('id', 'calendar-' + value + '-id-input');
+            $('#calendar-' + calendarID + '-name-input').attr('id', 'calendar-' + value + '-name-input');
+            $('#calendar-' + calendarID + '-calendar-input').attr('id', 'calendar-' + value + '-calendar-input');
         }
     }
 }
 
-function refreshDimension(btn, isCalendar=false){
+function refreshDimension(btn, isCalendar = false) {
     // btn.classList.toggle("active");
     var content = btn.nextElementSibling;
     var haveInner = content.id.includes("haveInner");
     var scrollHeightInner = 0;
-    if(haveInner){
+    if (haveInner) {
         var contentChildren = content.childNodes[0].childNodes;
-        for(let i = 0; i<contentChildren.length; i++){
-            if( i%2 != 0){
+        for (let i = 0; i < contentChildren.length; i++) {
+            if (i % 2 != 0) {
                 scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
             }
         }
     }
-    if(isCalendar){
+    if (isCalendar) {
         content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-    }else{
-        if (content.style.maxHeight){
+    } else {
+        if (content.style.maxHeight) {
             content.style.maxHeight = null;
         } else {
             content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
@@ -1275,7 +1288,7 @@ function refreshDimension(btn, isCalendar=false){
 
 
 // * Funziona che salva la struttura dati
-function saveDataTreeStructure(scenarioSelected){
+function saveDataTreeStructure(scenarioSelected) {
     scenarioSelected -= 1;
     let idScenarioInput = $('#scenario-id-input');
     let idScenarioVal = idScenarioInput.val();
@@ -1286,7 +1299,7 @@ function saveDataTreeStructure(scenarioSelected){
     // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendar);
 
     // saveCalendar(scenarioSelected);
-    
+
 }
 
 // * Funzione che parsa il file .bpmn e popola una struttura dati con le info della simulazione
@@ -1307,11 +1320,11 @@ function createObj(node) {
         // console.log(isParameter(node.localName)+"   "+node.localName); //TODO remove
         for (let j = 0; j < node.attributes.length; j++) {
             // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
-            if(node.attributes[j].localName === "validFor"){
+            if (node.attributes[j].localName === "validFor") {
                 let tempArray = [];
                 tempArray.push(node.attributes[j].value);
                 nodeObject[node.attributes[j].localName] = tempArray;
-            }else{
+            } else {
                 nodeObject[node.attributes[j].localName] = node.attributes[j].value;
             }
         }
@@ -1324,7 +1337,7 @@ function createObj(node) {
         // }
 
         // if per salvare il contenuto di testo del tag xml calendar
-        if(node.localName === "Calendar"){
+        if (node.localName === "Calendar") {
             nodeObject["calendar"] = node.textContent;
         }
     }
@@ -1338,11 +1351,11 @@ function buildDataTree(nodo, nodoObject) {
     let numFigli = nodo.childElementCount;
     let nodoFiglio;
 
-    let childNodes=nodo.childNodes;
-    let temp=[];
-    for(let i = 0; i<childNodes.length;i++){
+    let childNodes = nodo.childNodes;
+    let temp = [];
+    for (let i = 0; i < childNodes.length; i++) {
         // * togliamo dai figli quelli che hanno campo "#text" poiche sarebbero gli invii dell'XML
-        if(childNodes[i].nodeName != '#text'){
+        if (childNodes[i].nodeName != '#text') {
             temp.push(childNodes[i]);
         }
     }
@@ -1352,13 +1365,13 @@ function buildDataTree(nodo, nodoObject) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-       
+
         // creare un Parameter con value avvalorato correttamente
-        if(isParameter(nodoFiglio[0].localName)){
+        if (isParameter(nodoFiglio[0].localName)) {
             let parameterFieldsToDelete = [];
-            for(let i = 0; i < Object.keys(nodoFiglio[1]).length; i++){
+            for (let i = 0; i < Object.keys(nodoFiglio[1]).length; i++) {
                 // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
-                if(Object.keys(nodoFiglio[1])[i].charAt(0) != "_"){
+                if (Object.keys(nodoFiglio[1])[i].charAt(0) != "_") {
                     let temp = nodoFiglio[1][Object.keys(nodoFiglio[1])[i]];
                     parameterFieldsToDelete.push(temp);
                 }
@@ -1367,19 +1380,19 @@ function buildDataTree(nodo, nodoObject) {
             nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
             nodoFiglio[1].resultRequest = tempResultRequest;
             nodoFiglio[1].value = parameterFieldsToDelete;
-            if(isArrayAttribute(nodoFiglio[0].localName)){
+            if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
-            } else{  
+            } else {
                 nodoObject[nameAttr] = nodoFiglio[1];
             }
-        }else{
-            if(isArrayAttribute(nodoFiglio[0].localName)){
+        } else {
+            if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
-            } else{
+            } else {
                 nodoObject[nameAttr] = nodoFiglio[1];
             }
         }
@@ -1392,14 +1405,14 @@ function buildDataTree(nodo, nodoObject) {
     return nodo_nodoObj;
 }
 
-function focusDelayed(obj, num=100){
-    setTimeout(function() {
+function focusDelayed(obj, num = 100) {
+    setTimeout(function () {
         obj.focus();
     }, num);
 }
 
 // * Funzione di appoggio per scoprire se un campo è di tipo Parameter
-function isParameter(field){
+function isParameter(field) {
     let fields = ["TriggerCount", "InterTriggerTimer", "Probability", "Condition", "Start", "Warmup", "ElapsedTime",
         "TransferTime", "QueueTime", "WaitTime", "ProcessingTime", "ValidationTime", "ReworkTime", "LagTime",
         "Availability", "Quantity", "Selection", "Role", "Interruptible", "Priority", "QueueLength", "FixedCost",
@@ -1409,9 +1422,9 @@ function isParameter(field){
 }
 
 // * Funzione di appoggio che permette di capire se un attributo è di tipo array
-function isArrayAttribute(attribute){
+function isArrayAttribute(attribute) {
     let attributes = ["Scenario", "ElementParameters", "VendorExtensions", "PropertyParameters", "ParameterValue",
-    "Calendar", "UserDistributionDataPoint", "ConstantParameter", "Property", "Role", "ResultRequest"];
+        "Calendar", "UserDistributionDataPoint", "ConstantParameter", "Property", "Role", "ResultRequest"];
 
     return attributes.includes(attribute);
 }
@@ -1440,7 +1453,7 @@ function registerFileDrop(container, callback) {
             $('#js-canvas').css('display', 'block');
 
             // * richiama la funzione openDiagram
-            xmlGlobal=xml;
+            xmlGlobal = xml;
             callback();
         };
 
@@ -1481,7 +1494,7 @@ if (!window.FileList || !window.FileReader) {
     $('#js-drop-zone').css('display', 'none');
     $('#js-canvas').css('display', 'block');
 
-    
+
     // xmlGlobal=firstdiagramXML;
     // xmlGlobal=bpmn_example1;
     // xmlGlobal=bpmn_example2;
@@ -1489,7 +1502,7 @@ if (!window.FileList || !window.FileReader) {
     // xmlGlobal=bpmn_example4;
     // xmlGlobal=bpmn_example5;
     // xmlGlobal=bpmn_example6;
-    xmlGlobal=bpmn_example7;
+    xmlGlobal = bpmn_example7;
     openDiagram();
     // * END Remove
 
@@ -1521,44 +1534,44 @@ event.forEach(function (event) {
         if (event == 'element.click') {
             //Front Office
             let elemRefClicked = e.element.id;
-            
-            if(e.element.type.toLowerCase().includes("task")){
+
+            if (e.element.type.toLowerCase().includes("task")) {
                 // * gestione dell'apertura dei bottoni
-                if($("#elem-par-btn").data('clicked') == false ){
+                if ($("#elem-par-btn").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                
-                if($("#button-activities").data('clicked') == false ){
+
+                if ($("#button-activities").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-activities").click();
                 }
-            } else if(e.element.type.toLowerCase().includes("gateway")){
+            } else if (e.element.type.toLowerCase().includes("gateway")) {
                 // * gestione dell'apertura dei bottoni
-                if($("#elem-par-btn").data('clicked') == false ){
+                if ($("#elem-par-btn").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if($("#button-gateways").data('clicked') == false ){
+                if ($("#button-gateways").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-gateways").click();
                 }
-            } else if(e.element.type.toLowerCase().includes("event")){
+            } else if (e.element.type.toLowerCase().includes("event")) {
                 // * gestione dell'apertura dei bottoni
-                if($("#elem-par-btn").data('clicked') == false ){
+                if ($("#elem-par-btn").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if($("#button-events").data('clicked') == false ){
+                if ($("#button-events").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-events").click();
                 }
-            } else if(e.element.type.toLowerCase().includes("flow")){
-                if($("#elem-par-btn").data('clicked') == false ){
+            } else if (e.element.type.toLowerCase().includes("flow")) {
+                if ($("#elem-par-btn").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if($("#button-connectingObjects").data('clicked') == false ){
+                if ($("#button-connectingObjects").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#button-connectingObjects").click();
                 }
@@ -1566,11 +1579,11 @@ event.forEach(function (event) {
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
-            
-            focusDelayed($("input[id*='$$"+elemRefClicked+"$$']"));
+
+            focusDelayed($("input[id*='$$" + elemRefClicked + "$$']"));
             // console.log($("input[id*='"+elemRefClicked+"']"));
-           
-    
+
+
 
             // non selezioniamo con un rettangolo blu le label dei task, ma gli altri elementi si
             if (e.element.id.includes("label")) {
@@ -1584,4 +1597,4 @@ event.forEach(function (event) {
     });
 
 })
-;
+    ;
