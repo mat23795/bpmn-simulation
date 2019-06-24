@@ -29,6 +29,7 @@ var dataTreeObjGlobal;
 var currentScenarioGlobal;
 var calendarsCreatedIDCounterGlobal = 0; //serve per tenere id univoci per i calendar creati
 var calendarsCreatedGlobal = [];
+var idListGlobal = [];
 var xmlGlobal;
 var bpsimPrefixGlobal;
 var scaleGlobal = 1.0
@@ -161,9 +162,11 @@ function openDiagram() {
             // * Leggere bpsim e inserirlo nella struttura dati
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
-
+            
+            // * popoliamo la lista di id globali perché ogni id deve essere univoco
+            populateIdList();
+            
             // * creare dal XML il form field
-
             createFormFields();
 
             // lo visualizzo
@@ -220,13 +223,15 @@ function openDiagram() {
                 if (dataTreeObjGlobal.scenario.length > 0) {
                     createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
                 } else {
-                    $('#create-scenario').click();
+                    $('#scenario-displayed').hide();
+                    $('#scenario-picker').empty();
                 }
             });
 
             // * aggiunta evento al bottone che crea un nuovo scenario
             $('#create-scenario').on("click", function () {
                 closeCollapsibleButton();
+                $('#scenario-displayed').show();
                 let newScenario = new Scenario();
                 newScenario.id = "new S" + (dataTreeObjGlobal.scenario.length + 1);
                 let tempArrayScenario = [];
@@ -244,6 +249,22 @@ function openDiagram() {
         // xmlParsing();
 
     });
+}
+
+function populateIdList(){
+    dataTreeObjGlobal.scenario.forEach(function(scenario){
+        idListGlobal.push(scenario.id);
+        scenario.elementParameters.forEach(function(elem){
+            if(elem.id != undefined){
+                idListGlobal.push(elem.id);
+            }
+        });
+        scenario.calendar.forEach(function(calendar){
+            idListGlobal.push(calendar.id);
+        });
+    });
+    console.log("id globali")
+    console.log(idListGlobal);
 }
 
 // * Funzione per creare il form in base all' XML
@@ -327,17 +348,17 @@ function createFormFields(firstTime = true) {
     }
 
 
-    console.log("Array di sole activities"); //TODO REMOVE
-    console.log(nodesActivities); //TODO REMOVE
+    // console.log("Array di sole activities"); //TODO REMOVE
+    // console.log(nodesActivities); //TODO REMOVE
 
-    console.log("Array di soli gateway"); //TODO REMOVE
-    console.log(nodesGateways); //TODO REMOVE
+    // console.log("Array di soli gateway"); //TODO REMOVE
+    // console.log(nodesGateways); //TODO REMOVE
 
-    console.log("Array di soli eventi"); //TODO REMOVE
-    console.log(nodesEvents); //TODO REMOVE
+    // console.log("Array di soli eventi"); //TODO REMOVE
+    // console.log(nodesEvents); //TODO REMOVE
 
-    console.log("Array di soli connecting obj"); //TODO REMOVE
-    console.log(nodesConnectingObjects); //TODO REMOVE
+    // console.log("Array di soli connecting obj"); //TODO REMOVE
+    // console.log(nodesConnectingObjects); //TODO REMOVE
 
 
 
@@ -775,6 +796,7 @@ function refreshFormFields(scenarios, scenarioSelected) {
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
 }
 
+
 // * Funzione di supporto per popolare gli attributi di Scenario
 function populateScenarioAttributesForm(scenarios, scenarioSelected) {
 
@@ -843,13 +865,12 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
 }
 
 function populateElementParametersForm(elementParameters) {
-    // elementParameters[0].id = "giovanni"; //! TODO remove
-
     for (let i = 0; i < elementParameters.length; i++) {
         let elemRef = elementParameters[i].elementRef;
-        let idTaskInput = $("input[id*='$$" + elemRef + "$$']");
-        let idTaskVal = elementParameters[i].id;
-        setField(idTaskInput, idTaskVal);
+        let idElementInput = $("input[id*='$$" + elemRef + "$$']");
+        let idElementVal = elementParameters[i].id;
+        setField(idElementInput, idElementVal);
+        
     }
 }
 
@@ -942,9 +963,15 @@ function populateCalendarForm(calendars) {
         let calName = calendars[i].name;
         let calCalendar = calendars[i].calendar;
 
+
+        let divCalendarSection = jQuery('<div/>', {
+            id: calId
+            // style: 'display: inline-flex'
+        });
+
         let labelCalID = jQuery('<label/>', {
             text: 'Calendar ID',
-            style: 'margin-top:10%'
+            style: 'margin-top:10%; margin-right: 20%; white-space: nowrap',
         });
 
         let inputCalID = jQuery('<input/>', {
@@ -957,8 +984,45 @@ function populateCalendarForm(calendars) {
         inputCalID.on('change', function () {
             saveCalendarField(this, false);
         });
-        htmlCalendarSection.append(labelCalID);
-        htmlCalendarSection.append(inputCalID);
+
+
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-delete-calendar' + calId
+
+        });
+      
+        let iEl = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'icon-btn-delete-calendar' + calId
+        });
+
+        btnTrash.append(iEl);
+
+        btnTrash.on('click', function(){
+            let positionToEliminate=0;
+            for(let i=0; i<calendars.length; i++){
+                if(calendars[i].id == calId){
+                    positionToEliminate = i;
+                }
+            }
+            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar.splice(positionToEliminate,1);
+            $(document.getElementById(calId)).remove();
+        });
+
+        let div = jQuery('<div/>', {
+            style: 'display: inline-flex'
+        });
+
+        div.append(labelCalID);
+        div.append(btnTrash);
+
+        divCalendarSection.append(div);
+
+
+        // htmlCalendarSection.append(labelCalID);
+        divCalendarSection.append(inputCalID);
 
 
         let labelCalName = jQuery('<label/>', {
@@ -975,8 +1039,8 @@ function populateCalendarForm(calendars) {
         inputCalName.on('input', function () {
             saveCalendarField(this, false);
         });
-        htmlCalendarSection.append(labelCalName);
-        htmlCalendarSection.append(inputCalName);
+        divCalendarSection.append(labelCalName);
+        divCalendarSection.append(inputCalName);
 
 
         let labelCalCalendar = jQuery('<label/>', {
@@ -993,9 +1057,9 @@ function populateCalendarForm(calendars) {
         inputCalCalendar.on('input', function () {
             saveCalendarField(this, false);
         });
-        htmlCalendarSection.append(labelCalCalendar);
-        htmlCalendarSection.append(inputCalCalendar);
-
+        divCalendarSection.append(labelCalCalendar);
+        divCalendarSection.append(inputCalCalendar);
+        htmlCalendarSection.append(divCalendarSection);
     }
 
 
@@ -1003,39 +1067,41 @@ function populateCalendarForm(calendars) {
     buttonCreateCalendar.on("click", function () {
         let calendarTemp = new Calendar();
 
+        let newCalId = 'newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1);
 
-
-
-        let btnTrash = jQuery('<button/>', {
-            class: 'btn btn-primary btn-lg button-calculate btn-icon',
-            role: 'button" aria-pressed="true',
-            id: 'delete-scenario'
-
+        let divCalendarSection = jQuery('<div/>', {
+            id: newCalId
+            // style: 'display: inline-flex'
         });
-
-
-        let iEl = jQuery('<i/>', {
-            class: 'fa fa-trash',
-            id: 'delete-scenario'
-        });
-
-        btnTrash.append(iEl);
-
 
         let calendarSection = $('#calendar-section');
         let labelCalID = jQuery('<label/>', {
             text: 'Calendar ID',
-            style: 'margin-top:10%; margin-right: 20%; white-space: nowrap',
+            style: 'margin-top:10%; margin-right: 20%; white-space: nowrap'
         });
         let inputCalID = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-id-input',
-            value: 'newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1)
+            id: 'calendar-newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1) + '-id-input',
+            value: 'newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1)
         });
         inputCalID.on('change', function () {
             saveCalendarField(this, true);
         });
+
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-delete-calendar-newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1)
+
+        });
+
+        let iEl = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'icon-btn-delete-calendar-newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1)
+        });
+
+        btnTrash.append(iEl);
 
         let div = jQuery('<div/>', {
             style: 'display: inline-flex'
@@ -1044,10 +1110,22 @@ function populateCalendarForm(calendars) {
         div.append(labelCalID);
         div.append(btnTrash);
 
-        calendarSection.append(div);
+        btnTrash.on('click', function(){
+            let positionToEliminate=0;
+            for(let i=0; i<calendarsCreatedGlobal.length; i++){
+                if(calendarsCreatedGlobal[i].id == newCalId){
+                    positionToEliminate = i;
+                }
+            }
+            calendarsCreatedGlobal.splice(positionToEliminate,1);
+            $(document.getElementById(newCalId)).remove();
+            calendarsCreatedIDCounterGlobal-=1;
+        });
+
+        divCalendarSection.append(div);
+
         // calendarSection.append(inputCalID);
-        // calendarSection.append(btnTrash);
-        calendarSection.append(inputCalID);
+        divCalendarSection.append(inputCalID);
 
         let labelCalName = jQuery('<label/>', {
             text: 'Calendar Name'
@@ -1055,14 +1133,14 @@ function populateCalendarForm(calendars) {
         let inputCalName = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-name-input',
+            id: 'calendar-newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1) + '-name-input',
             placeholder: "Calendar name"
         });
         inputCalName.on('input', function () {
             saveCalendarField(this, true);
         });
-        calendarSection.append(labelCalName);
-        calendarSection.append(inputCalName);
+        divCalendarSection.append(labelCalName);
+        divCalendarSection.append(inputCalName);
 
         let labelCalCalendar = jQuery('<label/>', {
             text: 'Calendar Content'
@@ -1071,22 +1149,17 @@ function populateCalendarForm(calendars) {
         let inputCalCalendar = jQuery('<textarea/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'calendar-newC' + dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length + '_' + (calendarsCreatedIDCounterGlobal + 1) + '-calendar-input',
+            id: 'calendar-newC' + (calendars.length+calendarsCreatedIDCounterGlobal+1) + '-calendar-input',
             placeholder: "Calendar content"
         });
         inputCalCalendar.on('input', function () {
             saveCalendarField(this, true);
         });
-        calendarSection.append(labelCalCalendar);
-        calendarSection.append(inputCalCalendar);
+        divCalendarSection.append(labelCalCalendar);
+        divCalendarSection.append(inputCalCalendar);
+        calendarSection.append(divCalendarSection);
 
-        //* double click per fare un refresh e aggiornare le dimensioni del div
-        // $('#calendar-btn').click();
-        // $('#calendar-btn').click();
-        // refreshDimension(this);
-        // console.log($('#calendar-btn'));
-        //true perché il bottone è calendar e non va collassato ed espando
-
+        // * si aggiorna la dimensione massima del della sezione calendar
         refreshDimension($('#calendar-btn')[0], true);
 
         //focus sull'id del nuovo calendar creato
@@ -1110,11 +1183,11 @@ function saveScenarioAtrribute(field) {
     //cambia l'id nel picker in automatico se l'utente sta modificando l'id dello scenario (solo se id nuovo != id esistenti)
     let validName = true;
     if (fieldName == "id") {
-        let options = document.getElementById("scenario-picker").options;
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].innerHTML == value && i != currentScenarioGlobal - 1) {
+        // let options = document.getElementById("scenario-picker").options;
+        for (let i = 0; i < idListGlobal.length; i++) {
+            if (idListGlobal[i] == value) {
                 setTimeout(function () {
-                    window.alert("ERROR: There exists a scenario with the following ID: " + value)
+                    window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
                 }, 10);
                 validName = false;
                 console.log(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id);
@@ -1124,6 +1197,12 @@ function saveScenarioAtrribute(field) {
     }
 
     if (validName) {
+        let oldValue = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1][fieldName];
+        for(let i=0; i<idListGlobal.length; i++){
+            if(idListGlobal[i] == oldValue){
+                idListGlobal[i] = value;
+            }
+        }
         dataTreeObjGlobal.scenario[currentScenarioGlobal - 1][fieldName] = value;
         if (fieldName == "id") {
             document.getElementById("scenario-picker").options[currentScenarioGlobal - 1].innerHTML = value;
@@ -1160,32 +1239,61 @@ function saveOrCreateSingleFieldInElementParameters(field) {
 
     let elementParameters = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].elementParameters;
     let found = false;
+    let validName = true;
 
     // evito id uguali negli elem param
-    for (let i = 0; i < elementParameters.length; i++) {
-        if (elementParameters[i].id == value) {
+    for (let i = 0; i < idListGlobal.length; i++) {
+        if (idListGlobal[i] == value) {
             setTimeout(function () {
-                window.alert("ERROR: There exists an element with the following ID: " + value)
+                window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
             }, 10);
-            $(document.getElementById(field.id)).val(undefined); //TODO reset value in input (o undefined o vecchio valore)
-            return;
+            validName = false;
+            // $(document.getElementById(field.id)).val(undefined); //TODO reset value in input (o undefined o vecchio valore)
         }
     }
 
-    for (let i = 0; i < elementParameters.length; i++) {
-        if (elementParameters[i].elementRef == elRef) {
-            found = true;
-            elementParameters[i][fieldName] = value;
+    if(validName){
+        for (let i = 0; i < elementParameters.length; i++) {
+            if (elementParameters[i].elementRef == elRef) {
+                found = true;
+                let oldValue = elementParameters[i][fieldName];
+                elementParameters[i][fieldName] = value;
+                if(oldValue == undefined){
+                    idListGlobal.push(value);
+                }else{
+                    for(let j=0; j<idListGlobal.length; j++){
+                        if(idListGlobal[j] == oldValue){
+                            idListGlobal[j] = value;
+                        }
+                    }
+                }
+            }
+        }
+        if (!found) {
+            let elementParametersToAdd = [];
+            let elemPar = new ElementParameters();
+            elemPar[fieldName] = value;
+            elemPar.elementRef = elRef;
+            elementParametersToAdd.push(elemPar);
+            dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].elementParameters = elementParametersToAdd;
+            idListGlobal.push(value);
+        }
+
+    }else{
+        let found = false;
+        for (let i = 0; i < elementParameters.length; i++) {
+            if (elementParameters[i].elementRef == elRef) {
+                found = true;
+                let oldValue = elementParameters[i][fieldName];
+                console.log(oldValue);
+                $(document.getElementById(field.id)).val(oldValue); //TODO reset value in input (o undefined o vecchio valore)
+            }
+        }
+        if(!found){
+            $(document.getElementById(field.id)).val(undefined); //TODO reset value in input (o undefined o vecchio valore)
         }
     }
-    if (!found) {
-        let elementParametersToAdd = [];
-        let elemPar = new ElementParameters();
-        elemPar[fieldName] = value;
-        elemPar.elementRef = elRef;
-        elementParametersToAdd.push(elemPar);
-        dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].elementParameters = elementParametersToAdd;
-    }
+    console.log(idListGlobal); //TODO REMOVE
 }
 
 //* salva nella struttura dati il singolo calendar già esistente cambiato
@@ -1209,7 +1317,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsExisting[j].id == value) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: There exists a calendar with the following ID: " + value)
+                            window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsExisting[i][fieldName]); //reset value in iput
@@ -1228,7 +1336,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsNew[j].id == value) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: There exists a calendar with the following ID: " + value)
+                            window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsNew[i][fieldName]); //reset value in input
@@ -1261,6 +1369,7 @@ function saveCalendarField(field, isNew) {
     }
 }
 
+// * funzione che cambia 
 function refreshDimension(btn, isCalendar = false) {
     // btn.classList.toggle("active");
     var content = btn.nextElementSibling;
