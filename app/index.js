@@ -839,6 +839,7 @@ function setField(inputElement, valueToSet) {
 function refreshFormFields(scenarios, scenarioSelected) {
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
+
 }
 
 
@@ -889,6 +890,7 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
         let inheritsScenarioInput = $('#scenario-inherits-input');
         let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
         setField(inheritsScenarioInput, inheritsScenarioVal);
+        
 
     } else {
         //TODO valutare se settare defaults e considerare aggiunta scenario
@@ -1267,7 +1269,24 @@ function saveScenarioAtrribute(field) {
         }
     }
 
-    if (validName) {
+    let inheritsOk = false;
+    if (fieldName == "inherits"){
+        validName = false; //per far funzionare l'if di sotto
+        for(let i=0; i<dataTreeObjGlobal.scenario.length; i++){
+            if(dataTreeObjGlobal.scenario[i].id == value){
+                //TODO gestire caso di ereditarietà da te stesso CHE VA EVITATA
+                inheritsOk = true;
+            }
+        }
+        if(!inheritsOk){
+            setTimeout(function () {
+                window.alert("ERROR:No scenario with the following ID: " + value);
+            }, 10);
+            $('#scenario-inherits-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].inherits);
+        }
+    }
+
+    if (validName || inheritsOk) {
         let oldValue = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1][fieldName];
         for (let i = 0; i < idListGlobal.length; i++) {
             if (idListGlobal[i] == oldValue) {
@@ -1279,6 +1298,8 @@ function saveScenarioAtrribute(field) {
             document.getElementById("scenario-picker").options[currentScenarioGlobal - 1].innerHTML = value;
         }
     }
+
+
 }
 
 function saveScenarioParameterAtrribute(field) {
