@@ -413,19 +413,10 @@ function createFormFields(firstTime = true) {
     
     
     // * elemento HTML contenente la sezione degli element parameter
-    let elementParameterHTML = $('#element-parameter-section-haveInner');
+    let elementParameterHTML = $('#element-parameter-section');
     elementParameterHTML.empty();
 
     
-    // console.log("ElPar");
-    // console.log($(document.getElementById('div-activities')));
-    
-    // console.log(document.getElementById("element-parameter-section-haveInner").children());
-
-    // document.getElementById("element-parameter-section-haveInner").children
-    
-    // $('#activity-id-input$$_10-42$$').empty(); //TODO REMOVE
-
 
     let buttonElementParameterHTML = $('#elem-par-btn');
     buttonElementParameterHTML.data('clicked', false);
@@ -806,6 +797,8 @@ function createFormFields(firstTime = true) {
 function setParameterStart(){
     let scenarioParameterStartSection = $('#scenarioParameters-start-div');
 
+    scenarioParameterStartSection.empty();
+
     let startValueLabel = jQuery('<label/>', {
         text: 'Value',
     });   
@@ -813,13 +806,13 @@ function setParameterStart(){
     let btnAdd = jQuery('<button/>', {
         class: 'btn btn-primary btn-lg button-calculate btn-icon',
         type: 'button',
-        id: 'btn-crete-start-value'
+        id: 'btn-create-start-value'
 
     });
 
     let iElForPlus = jQuery('<i/>', {
         class: 'fa fa-plus',
-        id: 'btn-crete-start-value'
+        id: 'btn-create-start-value'
     });
 
     btnAdd.append(iElForPlus);
@@ -1481,7 +1474,7 @@ function populateCalendarForm(calendars) {
             calendarSection.append(divCalendarSection);
 
             // * si aggiorna la dimensione massima del della sezione calendar
-            refreshDimension($('#calendar-btn')[0], true);
+            // refreshDimension($('#calendar-btn')[0], true);
 
             //focus sull'id del nuovo calendar creato
             focusDelayed(inputCalID);
@@ -1727,27 +1720,30 @@ function saveCalendarField(field, isNew) {
 function refreshDimension(btn, isCalendar = false) {
     // btn.classList.toggle("active");
     var content = btn.nextElementSibling;
-    var haveInner = content.id.includes("haveInner");
-    var scrollHeightInner = 0;
-    if (haveInner) {
-        var contentChildren = content.childNodes[0].childNodes;
-        for (let i = 0; i < contentChildren.length; i++) {
-            if (i % 2 != 0) {
-                scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
-            }
-        }
-    }
+    // var haveInner = content.id.includes("haveInner");
+    // var scrollHeightInner = 0;
+    // if (haveInner) {
+    //     var contentChildren = content.childNodes[0].childNodes;
+    //     for (let i = 0; i < contentChildren.length; i++) {
+    //         if (i % 2 != 0) {
+    //             scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
+    //         }
+    //     }
+    // }
 
     //TODO provare con maxHeight unset
-    if (isCalendar) {
-        content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-    } else {
+    // if (isCalendar) {
+    //     content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+    // } else {
         if (content.style.maxHeight) {
+            // console.log("si")
             content.style.maxHeight = null;
         } else {
-            content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
+            // console.log("no");
+            content.style.maxHeight = "unset"
+            // content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
         }
-    }
+    // }
 }
 
 
