@@ -731,9 +731,15 @@ function createFormFields(firstTime = true) {
             saveScenarioAtrribute(this);
         });
 
-        //salvataggio delle modifiche per ogni attributo semplice di scenarioParameter
+        //salvataggio delle modifiche per ogni attributo semplice (no baseTimeUnit) di scenarioParameters
         $("input[id*='scenarioParametersAttribute-']").on('input', function () {
             saveScenarioParameterAtrribute(this);
+        });
+
+        //salvataggio delle modifiche sul picker di baseTimeUnit di scenarioParameters
+        $('#scenarioParameters-baseTimeUnit-picker').on('change', function(){
+            let baseTimeValue = $('#scenarioParameters-baseTimeUnit-picker').val();
+            dataTreeObjGlobal.scenario[currentScenarioGlobal-1].scenarioParameters.baseTimeUnit = TimeUnit[baseTimeValue];
         });
     }
     //TODO utilizzare quando bisogna aggiungere uno scenario
@@ -1273,15 +1279,22 @@ function saveScenarioAtrribute(field) {
     if (fieldName == "inherits"){
         validName = false; //per far funzionare l'if di sotto
         for(let i=0; i<dataTreeObjGlobal.scenario.length; i++){
-            if(dataTreeObjGlobal.scenario[i].id == value){
-                //TODO gestire caso di ereditarietà da te stesso CHE VA EVITATA
+            // console.log("scenario "+dataTreeObjGlobal.scenario[i].id );
+            // console.log("inherits " + dataTreeObjGlobal.scenario[i].inherits );
+            if(dataTreeObjGlobal.scenario[i].id == value && dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id != value){
                 inheritsOk = true;
             }
         }
         if(!inheritsOk){
-            setTimeout(function () {
-                window.alert("ERROR:No scenario with the following ID: " + value);
-            }, 10);
+            if(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id == value){
+                setTimeout(function () {
+                    window.alert("ERROR: You can not inherit from the same scenario " + value);
+                }, 10);
+            }else{
+                setTimeout(function () {
+                    window.alert("ERROR: No scenario with the following ID: " + value);
+                }, 10);
+            }
             $('#scenario-inherits-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].inherits);
         }
     }
@@ -1305,7 +1318,6 @@ function saveScenarioAtrribute(field) {
 function saveScenarioParameterAtrribute(field) {
     let value = field.value;
     let fieldName = field.id.split("-")[1];
-    // console.log(field.type);
     if (field.type == "checkbox") {
         //salvo il cambimento della checkbox
         if (dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] == "true") {
