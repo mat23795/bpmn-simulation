@@ -679,10 +679,6 @@ function createFormFields(firstTime = true) {
 
     }
 
-
-
-
-
     divElementParameter.append(buttonActivities);
     divElementParameter.append(divActivities);
     divElementParameter.append(buttonGateways);
@@ -811,235 +807,222 @@ function setParameterStart(){
     let scenarioParameterStartSection = $('#scenarioParameters-start-div');
 
     let startValueLabel = jQuery('<label/>', {
-        style: 'width: 100%',
-        // id: elRef,
         text: 'Value',
+    });   
+
+    let btnAdd = jQuery('<button/>', {
+        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+        type: 'button',
+        id: 'btn-crete-start-value'
+
     });
 
-    let valueDiv = jQuery('<div/>', {
-        id: "value-div-1",
-        style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+    let iElForPlus = jQuery('<i/>', {
+        class: 'fa fa-plus',
+        id: 'btn-crete-start-value'
     });
 
-    let startValuePicker = jQuery('<select/>', {
-        class: "scenario-picker",
-        id: "start-value-picker-1" 
-    });
+    btnAdd.append(iElForPlus);
 
-    let startParameterPossibleTimeArray = ["Constant Parameter", "Enum Parameter", "Distribution Parameter", "Expression Parameter"];
+    btnAdd.on("click", function(){
+        let valuesSection = $('#values-section');
 
-    startValuePicker.append($('<option>', {
-        value: "",
-        text: ""
-    }));
+        let valueDiv = jQuery('<div/>', {
+            id: "value-div-1",
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+        });
 
-    for (let i = 0; i<startParameterPossibleTimeArray.length; i++) {
+        let startValuePicker = jQuery('<select/>', {
+            class: "scenario-picker",
+            id: "start-value-picker-1" 
+        });
+
+        let startParameterPossibleTimeArray = ["Constant Parameter", "Enum Parameter", "Distribution Parameter", "Expression Parameter"];
+
         startValuePicker.append($('<option>', {
-            value: startParameterPossibleTimeArray[i].split(" ")[0]+startParameterPossibleTimeArray[i].split(" ")[1],
-            text: startParameterPossibleTimeArray[i]
+            value: "",
+            text: ""
         }));
-    }
 
-    // startValuePicker.append($('<option>', {
-    //     value: "ConstantParameter",
-    //     text: "Constant Parameter"
-    // }));
-
-    // startValuePicker.append($('<option>', {
-    //     value: "EnumParameter",
-    //     text: "Enum Parameter"
-    // }));
-
-    // startValuePicker.append($('<option>', {
-    //     value: "DistributionParameter",
-    //     text: "Distribution Parametvalueer"
-    // })); 
-
-    // startValuePicker.append($('<option>', {
-    //     value: "ExpressionParameter",
-    //     text: "Expression Parameter"
-    // }));
-
-    startValuePicker.on('change', function () {
-        $('#value-content-div-1').empty();
-        if(this.value != ""){
-            let valueValidForLabel = jQuery('<label/>', {
-                for: 'value-validFor-input-1',
-                text: 'Valid For'
-            });
-
-            let valueValidForInput = jQuery('<input/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'value-validFor-input-1',
-                placeholder: 'Valid for'
-            });
-            $('#value-content-div-1').append(valueValidForLabel);
-            $('#value-content-div-1').append(valueValidForInput);
-
-            let valueInstanceLabel = jQuery('<label/>', {
-                for: 'value-instance-input-1',
-                text: 'Instance'
-            });
-
-            let valueInstanceInput = jQuery('<input/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'value-instance-input-1',
-                placeholder: 'Instance value'
-            });
-            $('#value-content-div-1').append(valueInstanceLabel);
-            $('#value-content-div-1').append(valueInstanceInput);
-
-            let valueResultLabel = jQuery('<label/>', {
-                style: 'width: 100%',
-                for: 'value-result-input-1',
-                text: 'Result'
-            });
-
-            let valueResultPicker = jQuery('<select/>', {
-                // type: 'text',
-                // class: 'form-control form-control-input',
-                class: 'scenario-picker',
-                id: 'value-result-picker-1'
-                // style: "width: 100%"
-                // placeholder: 'Result Request value'
-            });
-            
-            for (let resultType in ResultType) {
-                valueResultPicker.append($('<option>', {
-                    value: resultType,
-                    text: resultType
-                }));
-            }
-
-            $('#value-content-div-1').append(valueResultLabel);
-            $('#value-content-div-1').append(valueResultPicker);
-
-            let valueResultTimeStampLabel = jQuery('<label/>', {
-                style: 'width: 100%',
-                for: 'value-resultTimeStamp-input-1',
-                text: 'Result Time Stamp'
-            });
-
-            let valueResultTimeStampInput = jQuery('<input/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'value-resultTimeStamp-input-1',
-                placeholder: 'Result Time Stamp value'
-            });
-            $('#value-content-div-1').append(valueResultTimeStampLabel);
-            $('#value-content-div-1').append(valueResultTimeStampInput);
+        for (let i = 0; i<startParameterPossibleTimeArray.length; i++) {
+            startValuePicker.append($('<option>', {
+                value: startParameterPossibleTimeArray[i].split(" ")[0]+startParameterPossibleTimeArray[i].split(" ")[1],
+                text: startParameterPossibleTimeArray[i]
+            }));
         }
-        switch(this.value) {
-            case "ConstantParameter":{
-                let valueValueLabel = jQuery('<label/>', {
-                    for: 'value-constantParameterValue-input-1',
-                    text: 'Value'
+
+        startValuePicker.on('change', function () {
+            $('#value-content-div-1').empty();
+            if(this.value != ""){
+                let valueValidForLabel = jQuery('<label/>', {
+                    for: 'value-validFor-input-1',
+                    text: 'Valid For'
                 });
-    
-                let valueValueInput = jQuery('<input/>', {
+
+                let valueValidForInput = jQuery('<input/>', {
                     type: 'text',
                     class: 'form-control form-control-input',
-                    id: 'value-constantParameterValue-input-1',
-                    placeholder: 'Value value'
+                    id: 'value-validFor-input-1',
+                    placeholder: 'Valid for'
                 });
-                $('#value-content-div-1').append(valueValueLabel);
-                $('#value-content-div-1').append(valueValueInput);
-                break;
-            }
-            case "EnumParameter":{
-                break;
-            }
-            case "DistributionParameter":{
-                let valueTimeUnitLabel = jQuery('<label/>', {
-                    for: 'value-timeUnit-picker-1',
-                    text: 'Time Unit',
-                    style: "width: 100%"
+                $('#value-content-div-1').append(valueValidForLabel);
+                $('#value-content-div-1').append(valueValidForInput);
+
+                let valueInstanceLabel = jQuery('<label/>', {
+                    for: 'value-instance-input-1',
+                    text: 'Instance'
                 });
-    
-                let valueTimeUnitPicker = jQuery('<select/>', {
-                    // type: 'text',
-                    // class: 'form-control form-control-input',
+
+                let valueInstanceInput = jQuery('<input/>', {
+                    type: 'text',
+                    class: 'form-control form-control-input',
+                    id: 'value-instance-input-1',
+                    placeholder: 'Instance value'
+                });
+                $('#value-content-div-1').append(valueInstanceLabel);
+                $('#value-content-div-1').append(valueInstanceInput);
+
+                let valueResultLabel = jQuery('<label/>', {
+                    style: 'width: 100%',
+                    for: 'value-result-input-1',
+                    text: 'Result'
+                });
+
+                let valueResultPicker = jQuery('<select/>', {
                     class: 'scenario-picker',
-                    id: 'value-timeUnit-picker-1'
-                    // placeholder: 'Result Request value'
+                    id: 'value-result-picker-1'
                 });
                 
-                for (let timeUnit in TimeUnit) {
-                    valueTimeUnitPicker.append($('<option>', {
-                        value: timeUnit,
-                        text: timeUnit
+                for (let resultType in ResultType) {
+                    valueResultPicker.append($('<option>', {
+                        value: resultType,
+                        text: resultType
                     }));
                 }
 
+                $('#value-content-div-1').append(valueResultLabel);
+                $('#value-content-div-1').append(valueResultPicker);
 
-                // let valueTimeUnitInput = jQuery('<input/>', {
-                //     type: 'text',
-                //     class: 'form-control form-control-input',
-                //     id: 'value-timeUnit-input',
-                //     placeholder: 'Time Unit value'
-                // });
-                $('#value-content-div-1').append(valueTimeUnitLabel);
-                $('#value-content-div-1').append(valueTimeUnitPicker);
-                break;
-            }
-            case "ExpressionParameter":{
-                let valueValueLabel = jQuery('<label/>', {
-                    for: 'value-expressionParameterValue-input-1',
-                    text: 'Value'
+                let valueResultTimeStampLabel = jQuery('<label/>', {
+                    style: 'width: 100%',
+                    for: 'value-resultTimeStamp-input-1',
+                    text: 'Result Time Stamp'
                 });
-    
-                let valueValueInput = jQuery('<input/>', {
+
+                let valueResultTimeStampInput = jQuery('<input/>', {
                     type: 'text',
                     class: 'form-control form-control-input',
-                    id: 'value-expressionParameterValue-input-1',
-                    placeholder: 'Value value'
+                    id: 'value-resultTimeStamp-input-1',
+                    placeholder: 'Result Time Stamp value'
                 });
-                $('#value-content-div-1').append(valueValueLabel);
-                $('#value-content-div-1').append(valueValueInput);
-                break;
+                $('#value-content-div-1').append(valueResultTimeStampLabel);
+                $('#value-content-div-1').append(valueResultTimeStampInput);
             }
-        }      
+            switch(this.value) {
+                case "ConstantParameter":{
+                    let valueValueLabel = jQuery('<label/>', {
+                        for: 'value-constantParameterValue-input-1',
+                        text: 'Value'
+                    });
+        
+                    let valueValueInput = jQuery('<input/>', {
+                        type: 'text',
+                        class: 'form-control form-control-input',
+                        id: 'value-constantParameterValue-input-1',
+                        placeholder: 'Value value'
+                    });
+                    $('#value-content-div-1').append(valueValueLabel);
+                    $('#value-content-div-1').append(valueValueInput);
+                    break;
+                }
+                case "EnumParameter":{
+                    break;
+                }
+                case "DistributionParameter":{
+                    let valueTimeUnitLabel = jQuery('<label/>', {
+                        for: 'value-timeUnit-picker-1',
+                        text: 'Time Unit',
+                        style: "width: 100%"
+                    });
+        
+                    let valueTimeUnitPicker = jQuery('<select/>', {
+                        class: 'scenario-picker',
+                        id: 'value-timeUnit-picker-1'
+                    });
+                    
+                    for (let timeUnit in TimeUnit) {
+                        valueTimeUnitPicker.append($('<option>', {
+                            value: timeUnit,
+                            text: timeUnit
+                        }));
+                    }
+
+                    $('#value-content-div-1').append(valueTimeUnitLabel);
+                    $('#value-content-div-1').append(valueTimeUnitPicker);
+                    break;
+                }
+                case "ExpressionParameter":{
+                    let valueValueLabel = jQuery('<label/>', {
+                        for: 'value-expressionParameterValue-input-1',
+                        text: 'Value'
+                    });
+        
+                    let valueValueInput = jQuery('<input/>', {
+                        type: 'text',
+                        class: 'form-control form-control-input',
+                        id: 'value-expressionParameterValue-input-1',
+                        placeholder: 'Value value'
+                    });
+                    $('#value-content-div-1').append(valueValueLabel);
+                    $('#value-content-div-1').append(valueValueInput);
+                    break;
+                }
+            }      
+        });
+
+        let valueContentDiv = jQuery('<div/>', {
+            id: "value-content-div-1"
+        });
+
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-delete-start-value-1'
+
+        });
+
+        let iElforTrash = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'btn-delete-start-value-1'
+        });
+
+        btnTrash.append(iElforTrash);
+
+        valueDiv.append(startValuePicker);
+        valueDiv.append(btnTrash);
+        valueDiv.append(valueContentDiv);
+
+        valuesSection.append(valueDiv);
     });
 
-    let valueContentDiv = jQuery('<div/>', {
-        id: "value-content-div-1"//,
-        // style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+    scenarioParameterStartSection.append(startValueLabel); 
+    scenarioParameterStartSection.append(btnAdd);
+
+    let valuesSection = jQuery('<div/>',{
+        id: 'values-section'
     });
 
-    let btnTrash = jQuery('<button/>', {
-        class: 'btn btn-primary btn-lg button-calculate btn-icon',
-        type: 'button',
-        id: 'btn-delete-start-value-1'
+    scenarioParameterStartSection.append(valuesSection);
 
-    });
-
-    let iEl = jQuery('<i/>', {
-        class: 'fa fa-trash',
-        id: 'btn-delete-start-value-1'
-    });
-
-    btnTrash.append(iEl);
-
-    valueDiv.append(startValuePicker);
-    valueDiv.append(btnTrash);
-    valueDiv.append(valueContentDiv);
-
-    scenarioParameterStartSection.append(startValueLabel);
-    scenarioParameterStartSection.append(valueDiv);
-
+    
     let startResultRequestLabel = jQuery('<label/>', {
         style: 'width: 100%',
-        // for: 'start-resultRequest-input',
         text: 'Result Request'
     });
 
     let startResultRequestPicker = jQuery('<select/>', {
-        // type: 'text',
         class: 'scenario-picker',
         id: 'start-resultRequest-picker'
-        // placeholder: 'Result Request value'
     });
     
     for (let resultType in ResultType) {
@@ -1754,6 +1737,8 @@ function refreshDimension(btn, isCalendar = false) {
             }
         }
     }
+
+    //TODO provare con maxHeight unset
     if (isCalendar) {
         content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
     } else {
@@ -1778,7 +1763,7 @@ function saveDataTreeStructure(scenarioSelected) {
     // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendars);
     // console.log(dataTreeObjGlobal.scenario[scenarioSelected].calendar);
 
-    // saveCalendar(scenarioSelected);
+    // saveCalendar(scenarioSelectedkhtml);
 
 }
 

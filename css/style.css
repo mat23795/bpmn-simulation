@@ -327,3 +327,13 @@ label{
   .btn:hover {
     background-color: RoyalBlue;
   }
+
+  .djs-container{
+      -webkit-user-select: none;
+      -webkit-user-drag: auto;
+      -khtml-user-select: none;
+      -MOZ-user-select: none;
+      -o-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+  }
