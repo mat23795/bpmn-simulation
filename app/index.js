@@ -409,6 +409,39 @@ function createFormFields(firstTime = true) {
 
 
 
+    
+    let scenarioParameterStartSection = $('#scenarioParameters-start-div');
+
+    let startValueLabel = jQuery('<label/>', {
+        style: 'width: 100%',
+        // id: elRef,
+        text: 'Value',
+    });
+
+    let valuePicker = jQuery('<select/>', {
+        // class: "scenario-picker",
+        id: "start-value-picker" 
+    });
+
+    scenarioParameterStartSection.append(startValueLabel);
+    scenarioParameterStartSection.append(valuePicker);
+
+    let startResultRequestLabel = jQuery('<label/>', {
+        style: 'width: 100%',
+        for: 'start-resultRequest-input',
+        text: 'Result Request'
+    });
+
+    let startResultRequestInput = jQuery('<input/>', {
+        type: 'text',
+        class: 'form-control form-control-input',
+        id: 'start-resultRequest-input',
+        placeholder: 'Result Request value'
+    });
+
+    scenarioParameterStartSection.append(startResultRequestLabel);
+    scenarioParameterStartSection.append(startResultRequestInput);
+
 
     // * elemento HTML contenente la sezione degli element parameter
     let elementParameterHTML = $('#element-parameter-section-haveInner');
