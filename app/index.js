@@ -33,8 +33,10 @@ var idListGlobal = [];
 var xmlGlobal;
 var bpsimPrefixGlobal;
 var scaleGlobal = 1.0
+var pageXGlobal = 0;
+var pageYGlobal = 0;
 var bpmnPrefixGlobal;
-var saved = false
+var saved = false;
 
 
 var viewer = new BpmnJS({
@@ -67,7 +69,7 @@ function openDiagram() {
         // TODO vedere scrollbar
         $('.djs-container').css('transform-origin', '0% 0% 0px');
         $('.djs-container').css('transform', 'scale(1)'); //TODO REMOVE
-        $('#js-canvas').css('overflow', 'overlay');
+        $('#js-canvas').css('overflow', 'hidden');
 
         let imgAhref = $(".bjs-powered-by");
         imgAhref.css('position', 'fixed');
@@ -80,19 +82,29 @@ function openDiagram() {
             let e = window.event;
             let num = e.wheelDelta / 1000;
             scaleGlobal += num;
-            $('.djs-container').css('transform', 'scale(' + scaleGlobal + ')');
+            $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate('+(pageXGlobal)+'px,'+(pageYGlobal)+'px)');
 
         });
 
+        
+        let pageX = 0;
+        let pageY = 0;
+        $('#js-canvas').mousedown(function (event){
+            pageX = event.pageX;
+            pageY = event.pageY;
+            console.log("px = "+ pageX + " --- py = "+ pageY);
+        });
 
-        // $('#js-canvas').hover(function (){
-        //     let e = window.event;
-        //     if(e.altKey){
-        //         console.log("ciao");
-        //         window.alert("eee");
-        //     }
+        $('#js-canvas').mouseup(function (event){
+            pageXGlobal += event.pageX-pageX
+            pageYGlobal += event.pageY-pageY
+            console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
+            $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate('+(pageXGlobal)+'px,'+(pageYGlobal)+'px)');
+        });
 
-        // });
+        
+
+
 
 
         // $('#js-canvas').on("mouseover",function() {
