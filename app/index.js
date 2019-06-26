@@ -35,6 +35,8 @@ var bpsimPrefixGlobal;
 var scaleGlobal = 1.0
 var pageXGlobal = 0;
 var pageYGlobal = 0;
+var parameterValueDivCounterGlobal = 0;
+
 var bpmnPrefixGlobal;
 var saved = false;
 
@@ -409,7 +411,11 @@ function createFormFields(firstTime = true) {
 
 
     // TODO farla generica per tutti e per value aggiungere tanti e le 'i' negli id
-    setParameterStart();
+    setParameter($('#scenarioParameters-start-div'));
+    setParameter($('#scenarioParameters-duration-div'));
+    setParameter($('#scenarioParameters-warmup-div'));
+
+
     
     
     // * elemento HTML contenente la sezione degli element parameter
@@ -733,7 +739,7 @@ function createFormFields(firstTime = true) {
         });
 
         //salvataggio delle modifiche per ogni attributo semplice (no baseTimeUnit) di scenarioParameters
-        $("input[id*='scenarioParametersAttribute-']").on('input', function () {
+        $("input[id*='scenarioParametersAttribute-']").on('change', function () {
             saveScenarioParameterAtrribute(this);
         });
 
@@ -794,96 +800,134 @@ function createFormFields(firstTime = true) {
     }
 }
 
-function setParameterStart(){
-    let scenarioParameterStartSection = $('#scenarioParameters-start-div');
+function setParameter(parameter){
 
-    scenarioParameterStartSection.empty();
+    // console.log(parameter);
+    
+    let parameterName =  parameter[0].id.split("-")[1];
+    parameter.empty();
 
-    let startValueLabel = jQuery('<label/>', {
+    let nameLabel = jQuery('<label/>', {
+        style: "font-size: large; width:100%",
+        text: parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
+    });
+
+    parameter.append(nameLabel);
+
+    let valueLabel = jQuery('<label/>', {
         text: 'Value',
     });   
 
     let btnAdd = jQuery('<button/>', {
         class: 'btn btn-primary btn-lg button-calculate btn-icon',
         type: 'button',
-        id: 'btn-create-start-value'
+        id: 'btn-create-'+parameterName+'-value'
 
     });
 
     let iElForPlus = jQuery('<i/>', {
         class: 'fa fa-plus',
-        id: 'btn-create-start-value'
+        id: 'btn-create-'+parameterName+'-value'
     });
 
     btnAdd.append(iElForPlus);
 
     btnAdd.on("click", function(){
-        let valuesSection = $('#values-section');
+        let superclassOptions = ["Constant Parameters", "Distribution Parameters", "Enum Parameters", "Expression Parameters"];
+        let singleOptionMatrix = [ 
+        ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter", 
+        "String Parameter"], 
+        ["Beta Distribution", "Binomial Distribution", "Erlang Distribution", 
+        "Gamma Distribution", "Log Normal Distribution", "Negative Exponential Distribution", "Normal Distribution", 
+        "Poisson Distribution", "Triangular Distribution", "Truncated Normal Distribution", "Uniform Distribution", 
+        "User Distribution", "Weibull Distribution"],
+        ["Enum Parameter"], 
+        ["Expression Parameter"] ];
 
+        parameterValueDivCounterGlobal+=1;
+        
+        let valuesSection = $('#'+parameterName+'-values-section');
+        
+        //aggiunta divs
         let valueDiv = jQuery('<div/>', {
-            id: "value-div-1",
+            id: parameterName+"-value-div-"+parameterValueDivCounterGlobal,
             style: "border-radius: 10px; border: solid 1px black; padding: 2%"
         });
 
-        let startValuePicker = jQuery('<select/>', {
+        let parameterValuePicker = jQuery('<select/>', {
             class: "scenario-picker",
-            id: "start-value-picker-1" 
+            id: parameterName+"-value-picker-"+parameterValueDivCounterGlobal 
         });
 
-        let startParameterPossibleTimeArray = ["Constant Parameter", "Enum Parameter", "Distribution Parameter", "Expression Parameter"];
-
-        startValuePicker.append($('<option>', {
+        parameterValuePicker.append($('<option>', {
             value: "",
             text: ""
         }));
 
-        for (let i = 0; i<startParameterPossibleTimeArray.length; i++) {
-            startValuePicker.append($('<option>', {
-                value: startParameterPossibleTimeArray[i].split(" ")[0]+startParameterPossibleTimeArray[i].split(" ")[1],
-                text: startParameterPossibleTimeArray[i]
-            }));
+        //creazione picker con tutti i possibili valori di ParameterValue
+        for (let i = 0; i<superclassOptions.length; i++) {
+            let subGroup= $('<optgroup>', {
+                label: superclassOptions[i]
+            });
+            for(let j=0; j<singleOptionMatrix[i].length; j++){
+                let singleNames = singleOptionMatrix[i][j].split(" ");
+                let nameSplittedWithoutSpace="";
+                for(let k=0;k<singleNames.length; k++){
+                    nameSplittedWithoutSpace += singleNames[k];
+                }
+                subGroup.append($('<option>', {
+                    value: nameSplittedWithoutSpace,
+                    text: singleOptionMatrix[i][j]
+                }));
+            }
+            parameterValuePicker.append(subGroup);
         }
 
-        startValuePicker.on('change', function () {
-            $('#value-content-div-1').empty();
+        parameterValuePicker.on('change', function () {
+            // console.log(this.id);
+            let idElementsLocal = this.id.split("-")[3];
+            let contentDiv = $('#'+parameterName+'-value-content-div-'+idElementsLocal);
+
+            contentDiv.empty();
+            
             if(this.value != ""){
                 let valueValidForLabel = jQuery('<label/>', {
-                    for: 'value-validFor-input-1',
+                    for: parameterName+'-value-validFor-input-'+idElementsLocal,
                     text: 'Valid For'
                 });
 
                 let valueValidForInput = jQuery('<input/>', {
                     type: 'text',
                     class: 'form-control form-control-input',
-                    id: 'value-validFor-input-1',
+                    id: parameterName+'-value-validFor-input-'+idElementsLocal,
                     placeholder: 'Valid for'
                 });
-                $('#value-content-div-1').append(valueValidForLabel);
-                $('#value-content-div-1').append(valueValidForInput);
+                contentDiv.append(valueValidForLabel);
+                contentDiv.append(valueValidForInput);
 
                 let valueInstanceLabel = jQuery('<label/>', {
-                    for: 'value-instance-input-1',
+                    for: parameterName+'-value-instance-input-'+idElementsLocal,
                     text: 'Instance'
                 });
 
                 let valueInstanceInput = jQuery('<input/>', {
                     type: 'text',
                     class: 'form-control form-control-input',
-                    id: 'value-instance-input-1',
+                    id: parameterName+'-value-instance-input-'+idElementsLocal,
                     placeholder: 'Instance value'
                 });
-                $('#value-content-div-1').append(valueInstanceLabel);
-                $('#value-content-div-1').append(valueInstanceInput);
+                contentDiv.append(valueInstanceLabel);
+                contentDiv.append(valueInstanceInput);
 
                 let valueResultLabel = jQuery('<label/>', {
                     style: 'width: 100%',
-                    for: 'value-result-input-1',
+                    for: parameterName+'-value-result-input-'+idElementsLocal,
                     text: 'Result'
                 });
 
                 let valueResultPicker = jQuery('<select/>', {
                     class: 'scenario-picker',
-                    id: 'value-result-picker-1'
+                    id: parameterName+'-value-result-picker-'+idElementsLocal
                 });
                 
                 for (let resultType in ResultType) {
@@ -893,54 +937,57 @@ function setParameterStart(){
                     }));
                 }
 
-                $('#value-content-div-1').append(valueResultLabel);
-                $('#value-content-div-1').append(valueResultPicker);
+                contentDiv.append(valueResultLabel);
+                contentDiv.append(valueResultPicker);
 
                 let valueResultTimeStampLabel = jQuery('<label/>', {
                     style: 'width: 100%',
-                    for: 'value-resultTimeStamp-input-1',
+                    for: parameterName+'-value-resultTimeStamp-input-'+idElementsLocal,
                     text: 'Result Time Stamp'
                 });
 
                 let valueResultTimeStampInput = jQuery('<input/>', {
-                    type: 'text',
+                    type: 'datetime-local',
                     class: 'form-control form-control-input',
-                    id: 'value-resultTimeStamp-input-1',
+                    id: parameterName+'-value-resultTimeStamp-input-'+idElementsLocal,
                     placeholder: 'Result Time Stamp value'
                 });
-                $('#value-content-div-1').append(valueResultTimeStampLabel);
-                $('#value-content-div-1').append(valueResultTimeStampInput);
+                contentDiv.append(valueResultTimeStampLabel);
+                contentDiv.append(valueResultTimeStampInput);
             }
             switch(this.value) {
-                case "ConstantParameter":{
+                case "ExpressionParameter":{
                     let valueValueLabel = jQuery('<label/>', {
-                        for: 'value-constantParameterValue-input-1',
+                        for: parameterName+'+value-expressionParameterValue-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let valueValueInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: 'value-constantParameterValue-input-1',
-                        placeholder: 'Value value'
+                        id: parameterName+'-value-expressionParameterValue-input-'+idElementsLocal,
+                        placeholder: 'The XPATH expression'
                     });
-                    $('#value-content-div-1').append(valueValueLabel);
-                    $('#value-content-div-1').append(valueValueInput);
+                    contentDiv.append(valueValueLabel);
+                    contentDiv.append(valueValueInput);
                     break;
                 }
                 case "EnumParameter":{
                     break;
                 }
-                case "DistributionParameter":{
+                /**
+                 * Sezione Distribution
+                 */
+                case "Parameter":{
                     let valueTimeUnitLabel = jQuery('<label/>', {
-                        for: 'value-timeUnit-picker-1',
+                        for: 'value-timeUnit-picker-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let valueTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: 'value-timeUnit-picker-1'
+                        id: 'value-timeUnit-picker-'+idElementsLocal
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -950,83 +997,242 @@ function setParameterStart(){
                         }));
                     }
 
-                    $('#value-content-div-1').append(valueTimeUnitLabel);
-                    $('#value-content-div-1').append(valueTimeUnitPicker);
+                    contentDiv.append(valueTimeUnitLabel);
+                    contentDiv.append(valueTimeUnitPicker);
                     break;
                 }
-                case "ExpressionParameter":{
+                /**
+                 * Sezione constant parameter
+                 */
+                 
+                case "BooleanParameter":{
+                    let valueBooleanLabel = jQuery('<label/>', {
+                        for: parameterName+'-value-BooleanParameterValue-input-'+idElementsLocal,
+                        text: 'Value'
+                    });
+
+                    let divBoolean = jQuery('<div/>', {
+                        class: "onoffswitch"
+                    });
+
+                    // <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-traceOutput-input" checked></input>
+                    let booleanCheckBox = jQuery('<input/>', {
+                        type: "checkbox",
+                        name: "onoffswitch",
+                        class: "onoffswitch-checkbox",
+                        id: parameterName+'-value-BooleanParameterValue-input-'+idElementsLocal
+                        // checked
+                    });
+                    divBoolean.append(booleanCheckBox);
+
+                    let spanInner = jQuery('<span/>', {
+                        class: "onoffswitch-inner"
+                    });
+                    
+                    let spanSwitch = jQuery('<span/>', {
+                        class: "onoffswitch-switch"
+                    });
+
+                    let labelOnOffSwitch = jQuery('<label/>', {
+                        class: "onoffswitch-label",
+                        for: parameterName+'-value-BooleanParameterValue-input-'+idElementsLocal
+                    });
+                    labelOnOffSwitch.append(spanInner);
+                    labelOnOffSwitch.append(spanSwitch);
+
+                    divBoolean.append(labelOnOffSwitch);
+                    
+                    // let valueValueInput = jQuery('<input/>', {
+                    //     type: 'checkbox',
+                    //     class: 'form-control form-control-input',
+                    //     id: parameterName+'-value-BooleanParameterValue-input-'+idElementsLocal,
+                    //     placeholder: 'Value value'
+                    // });
+                    contentDiv.append(valueBooleanLabel);
+                    contentDiv.append(divBoolean);
+                    break;
+                }
+                case "StringParameter":{
                     let valueValueLabel = jQuery('<label/>', {
-                        for: 'value-expressionParameterValue-input-1',
+                        for: parameterName+'+value-stringParameterValue-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let valueValueInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: 'value-expressionParameterValue-input-1',
-                        placeholder: 'Value value'
+                        id: parameterName+'-value-stringParameterValue-input-'+idElementsLocal,
+                        placeholder: 'String value'
                     });
-                    $('#value-content-div-1').append(valueValueLabel);
-                    $('#value-content-div-1').append(valueValueInput);
+                    contentDiv.append(valueValueLabel);
+                    contentDiv.append(valueValueInput);
+                    break;
+
+                }
+                case "DurationParameter":{
+                    let durationLabel = jQuery('<label/>', {
+                        for: parameterName+'+value-durationParameterValue-input-'+idElementsLocal,
+                        text: 'Value'
+                    });
+        
+                    let durationInput = jQuery('<input/>', {
+                        type: 'text',
+                        class: 'form-control form-control-input',
+                        id: parameterName+'-value-durationParameterValue-input-'+idElementsLocal,
+                        placeholder: 'Duration value'
+                    });
+                    contentDiv.append(durationLabel);
+                    contentDiv.append(durationInput);
+                    break;
+
+                }
+                case "DateTimeParameter":{
+                    let dateTimeLabel = jQuery('<label/>', {
+                        for: parameterName+'+value-dateTimeParameterValue-input-'+idElementsLocal,
+                        text: 'Value'
+                    });
+        
+                    let dateTimeInput = jQuery('<input/>', {
+                        type: 'datetime-local',
+                        class: 'form-control form-control-input',
+                        id: parameterName+'-value-dateTimeParameterValue-input-'+idElementsLocal,
+                        // placeholder: ' value'
+                    });
+                    contentDiv.append(dateTimeLabel);
+                    contentDiv.append(dateTimeInput);
+                    break;
+                }
+                case "FloatingParameter":{
+                    let floatingLabel = jQuery('<label/>', {
+                        for: parameterName+'+value-floatingParameterValue-input-'+idElementsLocal,
+                        text: 'Value'
+                    });
+        
+                    let floatingInput = jQuery('<input/>', {
+                        type: 'text',
+                        class: 'form-control form-control-input',
+                        id: parameterName+'-value-floatingParameterValue-input-'+idElementsLocal,
+                        placeholder: 'Float value'
+                    });
+                    contentDiv.append(floatingLabel);
+                    contentDiv.append(floatingInput);
+
+                    let floatingTimeUnitLabel = jQuery('<label/>', {
+                        for: 'value-floatingParameterTimeUnit-picker-'+idElementsLocal,
+                        text: 'Time Unit',
+                        style: "width: 100%"
+                    });
+        
+                    let floatingTimeUnitPicker = jQuery('<select/>', {
+                        class: 'scenario-picker',
+                        id: 'value-floatingParameterTimeUnit-picker-'+idElementsLocal
+                    });
+                    
+                    for (let timeUnit in TimeUnit) {
+                        floatingTimeUnitPicker.append($('<option>', {
+                            value: timeUnit,
+                            text: timeUnit
+                        }));
+                    }
+
+                    contentDiv.append(floatingTimeUnitLabel);
+                    contentDiv.append(floatingTimeUnitPicker);
+                    break;
+                }
+                case "NumericParameter":{
+                    let numericLabel = jQuery('<label/>', {
+                        for: parameterName+'+value-numericParameterValue-input-'+idElementsLocal,
+                        text: 'Value'
+                    });
+        
+                    let numericInput = jQuery('<input/>', {
+                        type: 'text',
+                        class: 'form-control form-control-input',
+                        id: parameterName+'-value-numericParameterValue-input-'+idElementsLocal,
+                        placeholder: 'Int value'
+                    });
+                    contentDiv.append(numericLabel);
+                    contentDiv.append(numericInput);
+
+                    let numericTimeUnitLabel = jQuery('<label/>', {
+                        for: 'value-numericParameterTimeUnit-picker-'+idElementsLocal,
+                        text: 'Time Unit',
+                        style: "width: 100%"
+                    });
+        
+                    let numericTimeUnitPicker = jQuery('<select/>', {
+                        class: 'scenario-picker',
+                        id: 'value-numericParameterTimeUnit-picker-'+idElementsLocal
+                    });
+                    
+                    for (let timeUnit in TimeUnit) {
+                        numericTimeUnitPicker.append($('<option>', {
+                            value: timeUnit,
+                            text: timeUnit
+                        }));
+                    }
+
+                    contentDiv.append(numericTimeUnitLabel);
+                    contentDiv.append(numericTimeUnitPicker);
                     break;
                 }
             }      
         });
 
         let valueContentDiv = jQuery('<div/>', {
-            id: "value-content-div-1"
+            id: parameterName+"-value-content-div-"+parameterValueDivCounterGlobal
         });
 
         let btnTrash = jQuery('<button/>', {
             class: 'btn btn-primary btn-lg button-calculate btn-icon',
             type: 'button',
-            id: 'btn-delete-start-value-1'
+            id: 'btn-delete-'+parameterName+'-value-'+parameterValueDivCounterGlobal
 
         });
 
         let iElforTrash = jQuery('<i/>', {
             class: 'fa fa-trash',
-            id: 'btn-delete-start-value-1'
+            id: 'btn-delete-'+parameterName+'-value-'+parameterValueDivCounterGlobal
         });
 
         btnTrash.append(iElforTrash);
 
-        valueDiv.append(startValuePicker);
+        valueDiv.append(parameterValuePicker);
         valueDiv.append(btnTrash);
         valueDiv.append(valueContentDiv);
 
         valuesSection.append(valueDiv);
     });
 
-    scenarioParameterStartSection.append(startValueLabel); 
-    scenarioParameterStartSection.append(btnAdd);
+    parameter.append(valueLabel); 
+    parameter.append(btnAdd);
 
     let valuesSection = jQuery('<div/>',{
-        id: 'values-section'
+        id: parameterName+'-values-section'
     });
 
-    scenarioParameterStartSection.append(valuesSection);
+    parameter.append(valuesSection);
 
     
-    let startResultRequestLabel = jQuery('<label/>', {
+    let resultRequestLabel = jQuery('<label/>', {
         style: 'width: 100%',
         text: 'Result Request'
     });
 
-    let startResultRequestPicker = jQuery('<select/>', {
+    let resultRequestPicker = jQuery('<select/>', {
         class: 'scenario-picker',
-        id: 'start-resultRequest-picker'
+        id: parameterName+'-resultRequest-picker'
     });
     
     for (let resultType in ResultType) {
-        startResultRequestPicker.append($('<option>', {
+        resultRequestPicker.append($('<option>', {
             value: resultType,
             text: resultType
         }));
     }
 
-    scenarioParameterStartSection.append(startResultRequestLabel);
-    scenarioParameterStartSection.append(startResultRequestPicker);
+    parameter.append(resultRequestLabel);
+    parameter.append(resultRequestPicker);
 }
 
 function saveLocalCalendars() {
@@ -1562,11 +1768,27 @@ function saveScenarioParameterAtrribute(field) {
             dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "true";
         }
     } else {
+        let notNumber=false;
+        if(fieldName == "replication"){
+            if(Number.isNaN(parseInt(value,10))){
+                setTimeout(function () {
+                    window.alert("ERROR: You must insert a numeric value in replications");
+                }, 10);
+                $('#scenarioParametersAttribute-replication-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters.replication);
+                notNumber = true;
+            }else{
+                value = parseInt(value,10);
+            }
+        }
         if (value == "") {
             value = undefined;
         }
-        dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = value;
+        if(! notNumber){
+            dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = value;
+        }
+        
     }
+    
 }
 
 // * salva nella struttura dati il singolo element parameter oppure crea l'oggetto
