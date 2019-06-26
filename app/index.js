@@ -103,37 +103,7 @@ function openDiagram() {
             console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
             $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate('+(pageXGlobal)+'px,'+(pageYGlobal)+'px)');
         });
-
-        
-
-
-
-
-        // $('#js-canvas').on("mouseover",function() {
-        //     $(document).bind("keydown",function(e) {
-        //         var originator = e.keyCode || e.which;
-        //         if(e.ctrlKey){
-        //             console.log("ciao");
-        //             window.alert("eee");
-        //         }
-        //         // $("#key").append(originator + ",");
-        //     });
-
-        // }).on("mouseout",function()
-        // {
-        //     $(document).unbind("keydown");
-        // });
-
-
-
-
-
-
-
-
         // $('.djs-container').css('height', '700px');
-
-
 
         // xmlGlobal=xml;
         // * rimozione commenti dal xml perché creano problemi con il parsing
@@ -289,9 +259,9 @@ function openDiagram() {
 
                     console.log(idListGlobal); //TODO REMOVE
                 }
-
-                
             });
+            
+           
         }
 
         // * funzione per parsare l'XML
@@ -410,12 +380,12 @@ function createFormFields(firstTime = true) {
     // console.log(nodesConnectingObjects); //TODO REMOVE
 
 
-    // TODO farla generica per tutti e per value aggiungere tanti e le 'i' negli id
     setParameter($('#scenarioParameters-start-div'));
     setParameter($('#scenarioParameters-duration-div'));
     setParameter($('#scenarioParameters-warmup-div'));
 
-
+    
+   
     
     
     // * elemento HTML contenente la sezione degli element parameter
@@ -1490,16 +1460,23 @@ function setParameter(parameter){
         let btnTrash = jQuery('<button/>', {
             class: 'btn btn-primary btn-lg button-calculate btn-icon',
             type: 'button',
-            id: 'btn-delete-'+parameterName+'-value-'+parameterValueDivCounterGlobal
+            id: 'btn-deleteParameter-'+parameterName+'-value-'+parameterValueDivCounterGlobal
 
         });
 
         let iElforTrash = jQuery('<i/>', {
             class: 'fa fa-trash',
-            id: 'btn-delete-'+parameterName+'-value-'+parameterValueDivCounterGlobal
+            id: 'btn-deleteParameter-'+parameterName+'-value-'+parameterValueDivCounterGlobal
         });
 
         btnTrash.append(iElforTrash);
+
+        let idLocal = parameterValueDivCounterGlobal;
+        console.log(idLocal);
+
+        btnTrash.on('click', function(){
+            $('div[id*='+parameterName+'-value-div-'+idLocal+']').remove();
+        });
 
         valueDiv.append(parameterValuePicker);
         valueDiv.append(btnTrash);
