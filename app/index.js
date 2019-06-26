@@ -927,23 +927,99 @@ function setParameter(parameter){
             }
             switch(this.value) {
                 case "ExpressionParameter":{
-                    let valueValueLabel = jQuery('<label/>', {
+                    let expressionLabel = jQuery('<label/>', {
                         for: parameterName+'+value-expressionParameterValue-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
-                    let valueValueInput = jQuery('<input/>', {
+                    let expressionInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
                         id: parameterName+'-value-expressionParameterValue-input-'+idElementsLocal,
                         placeholder: 'The XPATH expression'
                     });
-                    contentDiv.append(valueValueLabel);
-                    contentDiv.append(valueValueInput);
+                    contentDiv.append(expressionLabel);
+                    contentDiv.append(expressionInput);
                     break;
                 }
                 case "EnumParameter":{
-                    //TODO 
+                    let enumValuesLabel = jQuery('<label/>', {
+                        for: parameterName+'+value-expressionParameterValue-input-'+idElementsLocal,
+                        text: 'Values'
+                    });
+        
+                    let btnAddEnumValues = jQuery('<button/>', {
+                        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                        type: 'button',
+                        id: 'btn-create-'+parameterName+'-value-enumerParameter-values-'+idElementsLocal
+                
+                    });
+                
+                    let iElForPlusEnumValues = jQuery('<i/>', {
+                        class: 'fa fa-plus',
+                        id: 'btn-create-'+parameterName+'-value-enumerParameter-values-'+idElementsLocal
+                    });
+                
+                    btnAddEnumValues.append(iElForPlusEnumValues);
+                    btnAddEnumValues.on("click", function(){
+                        let idElementsEnumLocal = this.id.split("-")[6];
+                        let contentEnumValues= $('#'+parameterName+"-value-enum-values-content-div-"+idElementsEnumLocal);
+
+                        let constantParameterValues = ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter", "String Parameter"];
+
+                        
+                        let enumValuePicker = jQuery('<select/>', {
+                            class: "scenario-picker",
+                            id: parameterName+"-value-enum-values-picker-"+idElementsEnumLocal
+                        });
+
+
+                        enumValuePicker.append($('<option>', {
+                            value: "",
+                            text: ""
+                        }));
+
+                        enumValuePicker.append($('<optgroup>', {
+                            label: "Constant Parameter"
+                        }));
+
+
+                        for (let i = 0; i<constantParameterValues.length; i++) {
+                            let singleNames = constantParameterValues[i].split(" ");
+                            let nameSplittedWithoutSpace="";
+                            for(let j=0;j<singleNames.length; j++){
+                                nameSplittedWithoutSpace += singleNames[j];
+                            }
+                            enumValuePicker.append($('<option>', {
+                                value: nameSplittedWithoutSpace,
+                                text: constantParameterValues[i]
+                            }));
+                        }
+
+                        // parameterValuePicker.on('change', function () {
+
+
+
+
+                        let enumDiv = jQuery('<div/>', {
+                            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+                            id: parameterName+'+value-expressionParameter-div-'+idElementsEnumLocal
+                        });
+
+                        enumDiv.append(enumValuePicker);
+
+                        
+                        contentEnumValues.append(enumDiv);
+                    });
+
+                    let divContentEnumValues = jQuery('<div/>', {
+                        id: parameterName+"-value-enum-values-content-div-"+idElementsLocal
+                    });
+
+                    contentDiv.append(enumValuesLabel);
+                    contentDiv.append(btnAddEnumValues);
+                    contentDiv.append(divContentEnumValues);
+                    
                     break;
                 }
                 /**
@@ -2565,5 +2641,4 @@ event.forEach(function (event) {
         }
     });
 
-})
-    ;
+});
