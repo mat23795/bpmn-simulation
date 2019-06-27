@@ -568,35 +568,37 @@ function createFormFields(firstTime = true) {
         console.log(connectingObj);
         for(let i=0; i<connectingObj.length; i++){
             // TODO controllare se è incoming o outgoing
-            console.log(connectingObj[i]);
-            // let element = $("input[id*='$$" + connectingObj[1].textContent + "$$']");
-            // console.log(element);
-            let labelFlowLink = jQuery('<label/>', {
-                // for: 'gateway-id-input$$' + elRef + '$$',
-                style: 'color: blue',
-                text: connectingObj[i].textContent//,
-                // href: '#'+element.id
-            });
+            if(connectingObj[i].localName != "incoming"){
+                console.log(connectingObj[i]);
+                // let element = $("input[id*='$$" + connectingObj[1].textContent + "$$']");
+                // console.log(element);
+                let labelFlowLink = jQuery('<label/>', {
+                    // for: 'gateway-id-input$$' + elRef + '$$',
+                    style: 'color: blue',
+                    text: connectingObj[i].textContent//,
+                    // href: '#'+element.id
+                });
 
-            labelFlowLink.hover(
-                function(){
-                    this.setAttribute('style', 'text-decoration: underline; color: blue; cursor: pointer');
-                }
-                ,
-                function(){
-                    this.setAttribute('style', 'text-decoration: none; color: blue; cursor: default');
-                }            
-            );
+                labelFlowLink.hover(
+                    function(){
+                        this.setAttribute('style', 'text-decoration: underline; color: blue; cursor: pointer');
+                    }
+                    ,
+                    function(){
+                        this.setAttribute('style', 'text-decoration: none; color: blue; cursor: default');
+                    }            
+                );
 
-            labelFlowLink.on("click", function(){
-                if ($("#button-connectingObjects").data('clicked') == false) {
-                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-connectingObjects").click();
-                }
-                focusDelayed($("input[id*='$$" + connectingObj[i].textContent + "$$']"));
-            });
+                labelFlowLink.on("click", function(){
+                    if ($("#button-connectingObjects").data('clicked') == false) {
+                        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                        $("#button-connectingObjects").click();
+                    }
+                    focusDelayed($("input[id*='$$" + connectingObj[i].textContent + "$$']"));
+                });
 
-            divGateways.append(labelFlowLink);
+                divGateways.append(labelFlowLink);
+            }
         }
         console.log(nodesGateways[counter].children);
         
