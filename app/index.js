@@ -943,29 +943,34 @@ function setParameter(parameter){
                     break;
                 }
                 case "EnumParameter":{
+                    
                     let enumValuesLabel = jQuery('<label/>', {
-                        for: parameterName+'+value-expressionParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'+value-enumParameterValue-input-'+idElementsLocal,
                         text: 'Values'
                     });
         
                     let btnAddEnumValues = jQuery('<button/>', {
                         class: 'btn btn-primary btn-lg button-calculate btn-icon',
                         type: 'button',
-                        id: 'btn-create-'+parameterName+'-value-enumerParameter-values-'+idElementsLocal
+                        id: 'btn-create-'+parameterName+'-value-enumParameter-values-'+idElementsLocal
                 
                     });
                 
                     let iElForPlusEnumValues = jQuery('<i/>', {
                         class: 'fa fa-plus',
-                        id: 'btn-create-'+parameterName+'-value-enumerParameter-values-'+idElementsLocal
+                        id: 'btn-create-'+parameterName+'-value-enumParameter-values-'+idElementsLocal
                     });
                 
                     btnAddEnumValues.append(iElForPlusEnumValues);
                     btnAddEnumValues.on("click", function(){
+
+                        parameterValueDivCounterGlobal+=1;
+
                         let idElementsEnumLocal = this.id.split("-")[6];
                         let contentEnumValues= $('#'+parameterName+"-value-enum-values-content-div-"+idElementsEnumLocal);
 
-                        let constantParameterValues = ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter", "String Parameter"];
+                        let constantParameterValues = ["Boolean Parameter", "DateTime Parameter", "Duration Parameter",
+                         "Floating Parameter", "Numeric Parameter", "String Parameter"];
 
                         
                         let enumValuePicker = jQuery('<select/>', {
@@ -996,20 +1001,218 @@ function setParameter(parameter){
                             }));
                         }
 
-                        // parameterValuePicker.on('change', function () {
-
-
-
-
                         let enumDiv = jQuery('<div/>', {
                             style: "border-radius: 10px; border: solid 1px black; padding: 2%",
-                            id: parameterName+'+value-expressionParameter-div-'+idElementsEnumLocal
+                            id: 'enumParameter-'+parameterName+'-value-div-'+idElementsEnumLocal+'-'+parameterValueDivCounterGlobal
                         });
 
                         enumDiv.append(enumValuePicker);
 
-                        
                         contentEnumValues.append(enumDiv);
+
+                        let btnTrash = jQuery('<button/>', {
+                            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                            type: 'button',
+                            id: 'btn-deleteValue-'+parameterName+'-value-'+idElementsEnumLocal+'-'+parameterValueDivCounterGlobal
+                
+                        });
+                
+                        let iElforTrash = jQuery('<i/>', {
+                            class: 'fa fa-trash',
+                            id: 'btn-deleteValue-'+parameterName+'-value-'+idElementsEnumLocal+'-'+parameterValueDivCounterGlobal
+                        });
+                
+                        btnTrash.append(iElforTrash);
+                
+                        let idLocal = parameterValueDivCounterGlobal;
+                
+                        btnTrash.on('click', function(){
+                            $('div[id*='+parameterName+'-value-div-'+idElementsEnumLocal+'-'+idLocal+']').remove();
+                        });
+
+                        enumDiv.append(btnTrash);
+
+                        let enumContentDiv = jQuery('<div/>', {
+                            id: 'enumParameter-'+parameterName+'-content-div-'+idElementsEnumLocal+'-'+parameterValueDivCounterGlobal
+                        });
+
+                        enumDiv.append(enumContentDiv);
+
+                        //gestione onchange del picker di enum
+                        enumValuePicker.on('change', function(){
+                            enumContentDiv.empty();
+                            
+                            switch(this.value){
+                                case "BooleanParameter":{
+                                    let valueBooleanLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-booleanParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                
+                                    let divBoolean = jQuery('<div/>', {
+                                        class: "onoffswitch"
+                                    });
+                
+                                    // <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-traceOutput-input" checked></input>
+                                    let booleanCheckBox = jQuery('<input/>', {
+                                        type: "checkbox",
+                                        name: "onoffswitch",
+                                        class: "onoffswitch-checkbox",
+                                        id: 'enumParameter-'+parameterName+'-value-booleanParameterValue-input-'+idElementsEnumLocal+'-'+idLocal
+                                    });
+                                    divBoolean.append(booleanCheckBox);
+                
+                                    let spanInner = jQuery('<span/>', {
+                                        class: "onoffswitch-inner"
+                                    });
+                                    
+                                    let spanSwitch = jQuery('<span/>', {
+                                        class: "onoffswitch-switch"
+                                    });
+                
+                                    let labelOnOffSwitch = jQuery('<label/>', {
+                                        class: "onoffswitch-label",
+                                        for: 'enumParameter-'+parameterName+'-value-booleanParameterValue-input-'+idElementsEnumLocal+'-'+idLocal
+                                    });
+
+                                    labelOnOffSwitch.append(spanInner);
+                                    labelOnOffSwitch.append(spanSwitch);
+                
+                                    divBoolean.append(labelOnOffSwitch);
+                                    
+                                    enumContentDiv.append(valueBooleanLabel);
+                                    enumContentDiv.append(divBoolean);
+                                    
+                                    break;
+                                }
+                                case "DateTimeParameter":{
+                                    let dateTimeLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-dateTimeParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                        
+                                    let dateTimeInput = jQuery('<input/>', {
+                                        type: 'text',
+                                        class: 'form-control form-control-input',
+                                        id: 'enumParameter-'+parameterName+'-value-dateTimeParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        placeholder: 'DateTime value'
+                                    });
+                                    enumContentDiv.append(dateTimeLabel);
+                                    enumContentDiv.append(dateTimeInput);
+                                    break;
+                                }
+                                case "DurationParameter":{
+                                    let durationLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-durationParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                        
+                                    let durationInput = jQuery('<input/>', {
+                                        type: 'text',
+                                        class: 'form-control form-control-input',
+                                        id: 'enumParameter-'+parameterName+'-value-durationParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        placeholder: 'Duration value'
+                                    });
+                                    enumContentDiv.append(durationLabel);
+                                    enumContentDiv.append(durationInput);
+                                    break;
+                                }
+                                case "FloatingParameter":{
+                                    let floatingLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-floatingParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                        
+                                    let floatingInput = jQuery('<input/>', {
+                                        type: 'text',
+                                        class: 'form-control form-control-input',
+                                        id: 'enumParameter-'+parameterName+'-value-floatingParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        placeholder: 'Floating value'
+                                    });
+
+                                    enumContentDiv.append(floatingLabel);
+                                    enumContentDiv.append(floatingInput);
+
+                                    let floatingTimeUnitLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-value-floatingParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Time Unit',
+                                        style: "width: 100%"
+                                    });
+                        
+                                    let floatingTimeUnitPicker = jQuery('<select/>', {
+                                        class: 'scenario-picker',
+                                        id: 'enumParameter-value-floatingParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal
+                                    });
+                                    
+                                    for (let timeUnit in TimeUnit) {
+                                        floatingTimeUnitPicker.append($('<option>', {
+                                            value: timeUnit,
+                                            text: timeUnit
+                                        }));
+                                    }
+                
+                                    enumContentDiv.append(floatingTimeUnitLabel);
+                                    enumContentDiv.append(floatingTimeUnitPicker);
+
+                                    break;
+                                }
+                                case "NumericParameter":{
+                                    let numericLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-numericParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                        
+                                    let numericInput = jQuery('<input/>', {
+                                        type: 'text',
+                                        class: 'form-control form-control-input',
+                                        id: 'enumParameter-'+parameterName+'-value-numericParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        placeholder: 'Int value'
+                                    });
+
+                                    enumContentDiv.append(numericLabel);
+                                    enumContentDiv.append(numericInput);
+
+                                    let numericTimeUnitLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-value-numericParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Time Unit',
+                                        style: "width: 100%"
+                                    });
+                        
+                                    let numericTimeUnitPicker = jQuery('<select/>', {
+                                        class: 'scenario-picker',
+                                        id: 'enumParameter-value-numericParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal
+                                    });
+                                    
+                                    for (let timeUnit in TimeUnit) {
+                                        numericTimeUnitPicker.append($('<option>', {
+                                            value: timeUnit,
+                                            text: timeUnit
+                                        }));
+                                    }
+                
+                                    enumContentDiv.append(numericTimeUnitLabel);
+                                    enumContentDiv.append(numericTimeUnitPicker);
+
+                                    break;
+                                }
+                                case "StringParameter":{
+                                    let stringLabel = jQuery('<label/>', {
+                                        for: 'enumParameter-'+parameterName+'-value-stringParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        text: 'Value'
+                                    });
+                        
+                                    let stringInput = jQuery('<input/>', {
+                                        type: 'text',
+                                        class: 'form-control form-control-input',
+                                        id: 'enumParameter-'+parameterName+'-value-stringParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        placeholder: 'String value'
+                                    });
+                                    enumContentDiv.append(stringLabel);
+                                    enumContentDiv.append(stringInput);
+                                    break;
+                                }
+                            }
+                        });
                     });
 
                     let divContentEnumValues = jQuery('<div/>', {
@@ -1019,7 +1222,7 @@ function setParameter(parameter){
                     contentDiv.append(enumValuesLabel);
                     contentDiv.append(btnAddEnumValues);
                     contentDiv.append(divContentEnumValues);
-                    
+
                     break;
                 }
                 /**
@@ -1403,19 +1606,19 @@ function setParameter(parameter){
                     break;
                 }
                 case "StringParameter":{
-                    let valueValueLabel = jQuery('<label/>', {
+                    let stringLabel = jQuery('<label/>', {
                         for: parameterName+'-value-stringParameterValue-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
-                    let valueValueInput = jQuery('<input/>', {
+                    let stringInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
                         id: parameterName+'-value-stringParameterValue-input-'+idElementsLocal,
                         placeholder: 'String value'
                     });
-                    contentDiv.append(valueValueLabel);
-                    contentDiv.append(valueValueInput);
+                    contentDiv.append(stringLabel);
+                    contentDiv.append(stringInput);
                     break;
 
                 }
@@ -1548,7 +1751,6 @@ function setParameter(parameter){
         btnTrash.append(iElforTrash);
 
         let idLocal = parameterValueDivCounterGlobal;
-        console.log(idLocal);
 
         btnTrash.on('click', function(){
             $('div[id*='+parameterName+'-value-div-'+idLocal+']').remove();
