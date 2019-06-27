@@ -5,7 +5,7 @@ import bpmn_example3 from '../resources/3_LoanProcessV1.bpmn';
 import bpmn_example4 from '../resources/4_LoanProcessV2.bpmn';
 import bpmn_example5 from '../resources/5_TechnicalSupportProcessV1.bpmn';
 import bpmn_example6 from '../resources/6_TechnicalSupportProcessV1_1.bpmn';
-import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2.bpmn';
+import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2-prova.bpmn';
 
 import { DateTime, DurationParameter } from "./types/parameter_type/ConstantParameter";
 import { BPSimData } from "./types/scenario/BPSimData";
@@ -555,6 +555,51 @@ function createFormFields(firstTime = true) {
 
         divGateways.append(labelId);
         divGateways.append(inputId);
+
+        
+        let connectingObj = nodesGateways[counter].children;
+
+        let labelConnectingObj = jQuery('<label/>', {
+            // for: 'gateway-id-input$$' + elRef + '$$',
+            text: 'Connecting object',
+            style: 'width: 100%'
+        });
+        divGateways.append(labelConnectingObj);
+        console.log(connectingObj);
+        for(let i=0; i<connectingObj.length; i++){
+            // TODO controllare se è incoming o outgoing
+            console.log(connectingObj[i]);
+            // let element = $("input[id*='$$" + connectingObj[1].textContent + "$$']");
+            // console.log(element);
+            let labelFlowLink = jQuery('<label/>', {
+                // for: 'gateway-id-input$$' + elRef + '$$',
+                style: 'color: blue',
+                text: connectingObj[i].textContent//,
+                // href: '#'+element.id
+            });
+
+            labelFlowLink.hover(
+                function(){
+                    this.setAttribute('style', 'text-decoration: underline; color: blue; cursor: pointer');
+                }
+                ,
+                function(){
+                    this.setAttribute('style', 'text-decoration: none; color: blue; cursor: default');
+                }            
+            );
+
+            labelFlowLink.on("click", function(){
+                if ($("#button-connectingObjects").data('clicked') == false) {
+                    //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                    $("#button-connectingObjects").click();
+                }
+                focusDelayed($("input[id*='$$" + connectingObj[i].textContent + "$$']"));
+            });
+
+            divGateways.append(labelFlowLink);
+        }
+        console.log(nodesGateways[counter].children);
+        
 
 
     }
