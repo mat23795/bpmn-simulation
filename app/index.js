@@ -94,13 +94,13 @@ function openDiagram() {
         $('#js-canvas').mousedown(function (event){
             pageX = event.pageX;
             pageY = event.pageY;
-            console.log("px = "+ pageX + " --- py = "+ pageY);
+            // console.log("px = "+ pageX + " --- py = "+ pageY);
         });
 
         $('#js-canvas').mouseup(function (event){
             pageXGlobal += event.pageX-pageX
             pageYGlobal += event.pageY-pageY
-            console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
+            // console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
             $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate('+(pageXGlobal)+'px,'+(pageYGlobal)+'px)');
         });
         // $('.djs-container').css('height', '700px');
@@ -282,8 +282,8 @@ function populateIdList() {
             idListGlobal.push(calendar.id);
         });
     });
-    console.log("id globali")
-    console.log(idListGlobal);
+    // console.log("id globali")
+    // console.log(idListGlobal);
 }
 
 // * Funzione per creare il form in base all' XML
@@ -411,20 +411,20 @@ function createFormFields(firstTime = true) {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Activities',
-        id: 'button-activities'
+        id: 'button-activity'
     });
     buttonActivities.data('clicked', false);
     let divActivities = jQuery('<div/>', {
         class: 'content',
         label: 'element-parameter-activities-form',
-        id: 'div-activities'
+        id: 'div-activity'
     });
 
     let buttonGateways = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Gateways',
-        id: 'button-gateways'
+        id: 'button-gateway'
     });
     buttonGateways.data('clicked', false);
     let divGateways = jQuery('<div/>', {
@@ -437,7 +437,7 @@ function createFormFields(firstTime = true) {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Events',
-        id: 'button-events'
+        id: 'button-event'
     });
     buttonEvents.data('clicked', false);
     let divEvents = jQuery('<div/>', {
@@ -561,17 +561,13 @@ function createFormFields(firstTime = true) {
 
         let labelConnectingObj = jQuery('<label/>', {
             // for: 'gateway-id-input$$' + elRef + '$$',
-            text: 'Connecting object',
+            text: 'Connecting objects',
             style: 'width: 100%'
         });
         divGateways.append(labelConnectingObj);
-        console.log(connectingObj);
+        // console.log(connectingObj);
         for(let i=0; i<connectingObj.length; i++){
-            // TODO controllare se è incoming o outgoing
             if(connectingObj[i].localName != "incoming"){
-                console.log(connectingObj[i]);
-                // let element = $("input[id*='$$" + connectingObj[1].textContent + "$$']");
-                // console.log(element);
                 let labelFlowLink = jQuery('<label/>', {
                     // for: 'gateway-id-input$$' + elRef + '$$',
                     style: 'color: blue',
@@ -600,7 +596,7 @@ function createFormFields(firstTime = true) {
                 divGateways.append(labelFlowLink);
             }
         }
-        console.log(nodesGateways[counter].children);
+        // console.log(nodesGateways[counter].children); //TODO REMOVE
         
 
 
@@ -629,14 +625,14 @@ function createFormFields(firstTime = true) {
         divEvents.append(labelElementRef);
 
         let labelId = jQuery('<label/>', {
-            for: 'events-id-input$$' + elRef + '$$',
+            for: 'event-id-input$$' + elRef + '$$',
             text: 'ID'
         });
 
         let inputId = jQuery('<input/>', {
             type: 'text',
             class: 'form-control form-control-input',
-            id: 'events-id-input$$' + elRef + '$$',
+            id: 'event-id-input$$' + elRef + '$$',
             placeholder: 'Event ID'
         });
 
@@ -691,6 +687,49 @@ function createFormFields(firstTime = true) {
         divConnectingObjects.append(labelId);
         divConnectingObjects.append(inputId);
 
+
+
+        let labelConnectingObj = jQuery('<label/>', {
+            // for: 'gateway-id-input$$' + elRef + '$$',
+            text: 'Parent',
+            style: 'width: 100%'
+        });
+        divConnectingObjects.append(labelConnectingObj);
+
+        // console.log(nodesConnectingObjects);
+        let elRefLink = "";
+        if(nodesConnectingObjects[counter].localName == "sequenceFlow"){
+            elRefLink = nodesConnectingObjects[counter].attributes[0].textContent;
+        }else{
+            elRefLink = nodesConnectingObjects[counter].attributes[2].textContent;
+        }
+        let labelFlowLink = jQuery('<label/>', {
+            // for: 'gateway-id-input$$' + elRef + '$$',
+            style: 'color: blue',
+            text: elRefLink//,
+            // href: '#'+element.id
+        });
+
+        labelFlowLink.hover(
+            function(){
+                this.setAttribute('style', 'text-decoration: underline; color: blue; cursor: pointer');
+            }
+            ,
+            function(){
+                this.setAttribute('style', 'text-decoration: none; color: blue; cursor: default');
+            }            
+        );
+
+        labelFlowLink.on("click", function(){
+            let divName = $("input[id*='$$" + elRefLink + "$$']")[0].id.split('-')[0];
+            if ($("#button-"+divName).data('clicked') == false) {
+                //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+                $("#button-"+divName).click();
+            }
+            focusDelayed($("input[id*='$$" + elRefLink + "$$']"));
+        });
+
+        divConnectingObjects.append(labelFlowLink);
     }
 
     divElementParameter.append(buttonActivities);
@@ -2836,9 +2875,9 @@ event.forEach(function (event) {
                     $("#elem-par-btn").click();
                 }
 
-                if ($("#button-activities").data('clicked') == false) {
+                if ($("#button-activity").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-activities").click();
+                    $("#button-activity").click();
                 }
             } else if (e.element.type.toLowerCase().includes("gateway")) {
                 // * gestione dell'apertura dei bottoni
@@ -2846,9 +2885,9 @@ event.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if ($("#button-gateways").data('clicked') == false) {
+                if ($("#button-gateway").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-gateways").click();
+                    $("#button-gateway").click();
                 }
             } else if (e.element.type.toLowerCase().includes("event")) {
                 // * gestione dell'apertura dei bottoni
@@ -2856,9 +2895,9 @@ event.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if ($("#button-events").data('clicked') == false) {
+                if ($("#button-event").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-events").click();
+                    $("#button-event").click();
                 }
             } else if (e.element.type.toLowerCase().includes("flow")) {
                 if ($("#elem-par-btn").data('clicked') == false) {
