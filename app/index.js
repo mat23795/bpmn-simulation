@@ -384,43 +384,102 @@ function createFormFields(firstTime = true) {
     setParameter($('#scenarioParameters-duration-div'));
     setParameter($('#scenarioParameters-warmup-div'));
 
-    setParameter($('#scenarioParameters-property-propertyParameters-div'));
-    let labelPropertyName = jQuery('<label/>', {
-        for: 'scenarioParameters-property-propertyParameters-name',
-        text: 'Name',
-        width: '100%'
+    let btnAddProperty = jQuery('<button/>', {
+        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+        type: 'button',
+        id: 'btn-create-property'
+
     });
 
-    let inputPropertyName = jQuery('<input/>', {
-        type: 'text',
-        class: 'form-control form-control-input',
-        id: 'scenarioParameters-property-propertyParameters-name',
-        placeholder: 'Property Name'
+    let iElForPlus = jQuery('<i/>', {
+        class: 'fa fa-plus',
+        id: 'btn-create-property'
     });
 
-    $('#scenarioParameters-property-propertyParameters-div').append(labelPropertyName);
-    $('#scenarioParameters-property-propertyParameters-div').append(inputPropertyName);
+    btnAddProperty.append(iElForPlus);
+    let propertiesCounter = 0;
+    btnAddProperty.on('click',function(){
+        propertiesCounter += 1;
+        parameterValueDivCounterGlobal += 1;
+        //aggiunta div property
+        let propertyDiv = jQuery('<div/>', {
+            id: 'scenarioParameters-property'+propertiesCounter+'-div-'+parameterValueDivCounterGlobal,
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+        });
 
-    let propertyTypeLabel = jQuery('<label/>', {
-        style: 'width: 100%',
-        text: 'Property Type'
-    });
+        setParameter(propertyDiv);
 
-    let propertyTypePicker = jQuery('<select/>', {
-        class: 'scenario-picker',
-        id: 'propertyType-scenarioParameters-picker'
-    });
+        let labelPropertyName = jQuery('<label/>', {
+            for: 'scenarioParameters-property-propertyParameters-name-'+parameterValueDivCounterGlobal,
+            text: 'Name',
+            width: '100%'
+        });
     
-    for (let propertyType in PropertyType) {
-        propertyTypePicker.append($('<option>', {
-            value: propertyType,
-            text: propertyType
-        }));
-    }
+        let inputPropertyName = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'scenarioParameters-property-propertyParameters-name-'+parameterValueDivCounterGlobal,
+            placeholder: 'Property Name'
+        });
+    
+        propertyDiv.append(labelPropertyName);
+        propertyDiv.append(inputPropertyName);
+    
+        let propertyTypeLabel = jQuery('<label/>', {
+            style: 'width: 100%',
+            text: 'Property Type'
+        });
+    
+        let propertyTypePicker = jQuery('<select/>', {
+            class: 'scenario-picker',
+            id: 'propertyType-scenarioParameters-picker-'+parameterValueDivCounterGlobal,
+            width: '100%'
+        });
+        
+        for (let propertyType in PropertyType) {
+            propertyTypePicker.append($('<option>', {
+                value: propertyType,
+                text: propertyType
+            }));
+        }
+    
+        propertyDiv.append(propertyTypeLabel);
+        propertyDiv.append(propertyTypePicker);
 
-    $('#scenarioParameters-property-propertyParameters-div').append(propertyTypeLabel);
-    $('#scenarioParameters-property-propertyParameters-div').append(propertyTypePicker);
 
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+    
+        });
+    
+        let iElforTrash = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+        });
+    
+        btnTrash.append(iElforTrash);
+    
+        let idLocalRemoveProperty = parameterValueDivCounterGlobal;
+        let localPropertiesCounter = propertiesCounter;
+
+    
+        btnTrash.on('click', function(){
+            $('div[id*=scenarioParameters-property'+localPropertiesCounter+'-div-'+idLocalRemoveProperty+']').remove();
+        });
+    
+        propertyDiv.append(btnTrash);
+
+        $('#scenarioParameters-property-propertyParameters-div').append(propertyDiv);
+
+    
+    });
+    $('#scenarioParameters-property-propertyParameters-div').append(btnAddProperty);
+    
+    
+
+    
     setParameter($('#scenarioParameters-queue-propertyParameters-div'));
 
     
@@ -1899,7 +1958,7 @@ function setParameter(parameter){
 
     let resultRequestPicker = jQuery('<select/>', {
         class: 'scenario-picker',
-        id: parameterName+'-resultRequest-picker'
+        id: parameterName+'-resultRequest-picker-'+parameterValueDivCounterGlobal
     });
     
     for (let resultType in ResultType) {
