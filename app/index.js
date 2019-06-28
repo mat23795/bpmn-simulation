@@ -384,21 +384,54 @@ function createFormFields(firstTime = true) {
     setParameter($('#scenarioParameters-duration-div'));
     setParameter($('#scenarioParameters-warmup-div'));
 
+    setParameter($('#scenarioParameters-property-propertyParameters-div'));
+    let labelPropertyName = jQuery('<label/>', {
+        for: 'scenarioParameters-property-propertyParameters-name',
+        text: 'Name',
+        width: '100%'
+    });
+
+    let inputPropertyName = jQuery('<input/>', {
+        type: 'text',
+        class: 'form-control form-control-input',
+        id: 'scenarioParameters-property-propertyParameters-name',
+        placeholder: 'Property Name'
+    });
+
+    $('#scenarioParameters-property-propertyParameters-div').append(labelPropertyName);
+    $('#scenarioParameters-property-propertyParameters-div').append(inputPropertyName);
+
+    let propertyTypeLabel = jQuery('<label/>', {
+        style: 'width: 100%',
+        text: 'Property Type'
+    });
+
+    let propertyTypePicker = jQuery('<select/>', {
+        class: 'scenario-picker',
+        id: 'propertyType-scenarioParameters-picker'
+    });
     
-   
-    
+    for (let propertyType in PropertyType) {
+        propertyTypePicker.append($('<option>', {
+            value: propertyType,
+            text: propertyType
+        }));
+    }
+
+    $('#scenarioParameters-property-propertyParameters-div').append(propertyTypeLabel);
+    $('#scenarioParameters-property-propertyParameters-div').append(propertyTypePicker);
+
+    setParameter($('#scenarioParameters-queue-propertyParameters-div'));
+
     
     // * elemento HTML contenente la sezione degli element parameter
     let elementParameterHTML = $('#element-parameter-section');
     elementParameterHTML.empty();
 
-    
-
     let buttonElementParameterHTML = $('#elem-par-btn');
     buttonElementParameterHTML.data('clicked', false);
     $('#scen-par-btn').data('clicked', false);
     $('#calendar-btn').data('clicked', false);
-
 
 
     let divElementParameter = jQuery('<div/>', {
@@ -871,7 +904,7 @@ function setParameter(parameter){
     parameter.append(nameLabel);
 
     let valueLabel = jQuery('<label/>', {
-        text: 'Value',
+        text: "Value",
     });   
 
     let btnAdd = jQuery('<button/>', {
