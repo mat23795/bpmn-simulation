@@ -481,6 +481,11 @@ function createFormFields(firstTime = true) {
 
     
     setParameter($('#scenarioParameters-queue-propertyParameters-div'));
+    // rimozione result type non disponibili per queueLength di propertyParameters
+    let queueSelect = $('select[id*="queue-resultRequest"]');
+    queueSelect[0].removeChild(queueSelect[0].options[3]);
+    queueSelect[0].removeChild(queueSelect[0].options[3]);
+
 
     
     // * elemento HTML contenente la sezione degli element parameter
@@ -581,7 +586,7 @@ function createFormFields(firstTime = true) {
 
         let labelId = jQuery('<label/>', {
             for: 'activity-id-input$$' + elRef + '$$',
-            text: 'ID'
+            tBhoValueext: 'ID'
         });
 
         let inputId = jQuery('<input/>', {
@@ -603,6 +608,14 @@ function createFormFields(firstTime = true) {
 
         divActivities.append(labelId);
         divActivities.append(inputId);
+
+        let divActivitiesParameter = jQuery('<div/>', {
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            id: 'elementParameters-bho'+elRef+'-div'
+        });
+        divActivities.append(divActivitiesParameter);
+
+        setParameter(divActivitiesParameter);
 
     }
 
@@ -947,6 +960,8 @@ function createFormFields(firstTime = true) {
         });
     }
 }
+
+
 
 function setParameter(parameter){
 
@@ -1950,26 +1965,27 @@ function setParameter(parameter){
 
     parameter.append(valuesSection);
 
-    
-    let resultRequestLabel = jQuery('<label/>', {
-        style: 'width: 100%',
-        text: 'Result Request'
-    });
+    if(!parameterName.match(/property/g)){
+        let resultRequestLabel = jQuery('<label/>', {
+            style: 'width: 100%',
+            text: 'Result Request'
+        });
 
-    let resultRequestPicker = jQuery('<select/>', {
-        class: 'scenario-picker',
-        id: parameterName+'-resultRequest-picker-'+parameterValueDivCounterGlobal
-    });
-    
-    for (let resultType in ResultType) {
-        resultRequestPicker.append($('<option>', {
-            value: resultType,
-            text: resultType
-        }));
+        let resultRequestPicker = jQuery('<select/>', {
+            class: 'scenario-picker',
+            id: parameterName+'-resultRequest-picker-'+parameterValueDivCounterGlobal
+        });
+        
+        for (let resultType in ResultType) {
+            resultRequestPicker.append($('<option>', {
+                value: resultType,
+                text: resultType
+            }));
+        }
+
+        parameter.append(resultRequestLabel);
+        parameter.append(resultRequestPicker);
     }
-
-    parameter.append(resultRequestLabel);
-    parameter.append(resultRequestPicker);
 }
 
 function saveLocalCalendars() {
