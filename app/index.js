@@ -36,6 +36,7 @@ var scaleGlobal = 1.0
 var pageXGlobal = 0;
 var pageYGlobal = 0;
 var parameterValueDivCounterGlobal = 0;
+var elementParameterCounterGlobal = 0;
 
 var bpmnPrefixGlobal;
 var saved = false;
@@ -611,11 +612,12 @@ function createFormFields(firstTime = true) {
 
         let divActivitiesParameter = jQuery('<div/>', {
             style: "border-radius: 10px; border: solid 1px black; padding: 2%",
-            id: 'elementParameters-bho'+elRef+'-div'
+            id: 'activity-parameter-div-$$'+elRef+'$$'
         });
         divActivities.append(divActivitiesParameter);
 
-        setParameter(divActivitiesParameter);
+        // setParameter(divActivitiesParameter);
+        setElementParameter(divActivitiesParameter, "activities", elRef);
 
     }
 
@@ -961,7 +963,110 @@ function createFormFields(firstTime = true) {
     }
 }
 
+function setElementParameter(parameter, section, elRef){
 
+    let labelInitial = jQuery('<label/>', {
+        text: 'Add Parameter'
+    });
+    parameter.append(labelInitial);
+
+    let btnAdd = jQuery('<button/>', {
+        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+        type: 'button',
+        id: 'btn-create-elementParameter-$$'+elRef+'$$'
+    });
+
+    let iElForPlus = jQuery('<i/>', {
+        class: 'fa fa-plus',
+        id: 'btn-create-elementParameter-$$'+elRef+'$$'
+    });
+
+    btnAdd.append(iElForPlus);
+
+    btnAdd.on('click', function(){
+        elementParameterCounterGlobal+=1;
+
+        let div = jQuery('<div/>', {
+            id: 'div-parameter'+elementParameterCounterGlobal+'-$$'+elRef+'$$',
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+        });
+    
+        let elementParameterTypePicker = jQuery('<select/>', {
+            class: "scenario-picker",
+            id: 'select-parameter'+elementParameterCounterGlobal+'-$$'+elRef+'$$'
+        });
+
+        elementParameterTypePicker.append($('<option>', {
+            value: "",
+            text: ""
+        }));
+        elementParameterTypePicker.append($('<option>', {
+            value: "ciao",
+            text: "ciao"
+        }));
+
+
+        //inserire picker
+        div.append(elementParameterTypePicker);
+
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-deleteParameter'+elementParameterCounterGlobal+'-$$'+elRef+'$$'
+    
+        });
+    
+        let iElforTrash = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'btn-deleteParameter'+elementParameterCounterGlobal+'-$$'+elRef+'$$'
+        });
+    
+        btnTrash.append(iElforTrash);
+    
+        let localParametersCounter = elementParameterCounterGlobal;
+
+        btnTrash.on('click', function(){
+            document.getElementById('div-parameter'+localParametersCounter+'-$$'+elRef+'$$').remove();
+        });
+    
+        
+        div.append(btnTrash);
+
+
+        let divType = jQuery('<div/>', {
+            id: 'divType-parameter'+elementParameterCounterGlobal+'-$$'+elRef+'$$'
+            // style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+        });
+
+        div.append(divType);
+        //  TODO fare set parameter sull'on change del picker
+
+        elementParameterTypePicker.on('change', function(){
+            divType.empty();
+            if(this.value != ""){
+                setParameter(divType);
+
+            }
+
+        });
+
+
+        if(section == "activities"){
+
+        
+        }
+    
+        //TODO gestire nell'on change l'eliminazione delle option di resultRequest
+
+        
+        parameter.append(div);
+
+    });
+
+    parameter.append(btnAdd);
+    
+
+}
 
 function setParameter(parameter){
 
