@@ -1000,13 +1000,43 @@ function setElementParameter(parameter, section, elRef){
             value: "",
             text: ""
         }));
-        elementParameterTypePicker.append($('<option>', {
-            value: "ciao",
-            text: "ciao"
-        }));
-
-
+        
+        
+        // elementParameterTypePicker.append($('<option>', {
+        //     value: "ciao",
+        //     text: "ciao"
+        // }));
         //inserire picker
+        let superclassOptions;
+        let singleOptionMatrix;
+
+        if(section == "activities"){
+            superclassOptions = [];
+            singleOptionMatrix = [];
+        }
+
+
+        // TODO settare valori al picker
+        for (let i = 0; i<superclassOptions.length; i++) {
+            let subGroup= $('<optgroup>', {
+                label: superclassOptions[i]
+            });
+            for(let j=0; j<singleOptionMatrix[i].length; j++){
+                let singleNames = singleOptionMatrix[i][j].split(" ");
+                let nameSplittedWithoutSpace="";
+                for(let k=0;k<singleNames.length; k++){
+                    nameSplittedWithoutSpace += singleNames[k];
+                }
+                subGroup.append($('<option>', {
+                    value: nameSplittedWithoutSpace,
+                    text: singleOptionMatrix[i][j]
+                }));
+            }
+            elementParameterTypePicker.append(subGroup);
+        }
+
+
+
         div.append(elementParameterTypePicker);
 
         let btnTrash = jQuery('<button/>', {
