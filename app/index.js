@@ -317,8 +317,11 @@ function createFormFields(firstTime = true) {
 
         // * avvaloramento variabile che contiene solo i task
         for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("task")) {
-
+            if (nodesProcess[j].localName.toLowerCase().includes("task")||
+            nodesProcess[j].localName.toLowerCase().includes("subprocess") ||
+            nodesProcess[j].localName.toLowerCase().includes("transaction")||
+            nodesProcess[j].localName.toLowerCase().includes("callactivity") ||
+            nodesProcess[j].localName.toLowerCase().includes("eventsubprocess")) {
                 nodesActivities.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
@@ -563,7 +566,6 @@ function createFormFields(firstTime = true) {
     // for che creano gli elementi grafici per ogni task, in base a quanti task sono presenti nel BPMN
     // TODO creare gli elementi corretti per i activities
     for (let counter = 0; counter < nodesActivities.length; counter++) {
-
         let labelElementRef;
         let elRef = nodesActivities[counter].id;
         if (counter == 0) {
@@ -617,7 +619,9 @@ function createFormFields(firstTime = true) {
         divActivities.append(divActivitiesParameter);
 
         // setParameter(divActivitiesParameter);
-        setElementParameter(divActivitiesParameter, "activities", elRef);
+        let elementName = nodesActivities[counter].localName;
+        console.log(elRef + " " + elementName);
+        setElementParameter(divActivitiesParameter, "activities", elRef, elementName);
 
     }
 
@@ -701,10 +705,25 @@ function createFormFields(firstTime = true) {
                 });
 
                 divGateways.append(labelFlowLink);
+
+               
             }
         }
         // console.log(nodesGateways[counter].children); //TODO REMOVE
-        
+        let divGatewaysParameter = jQuery('<div/>', {
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            id: 'gateway-parameter-div-$$'+elRef+'$$'
+        });
+        divGateways.append(divGatewaysParameter);
+
+        // setParameter(divActivitiesParameter);
+        let elementName = nodesGateways[counter].localName;
+        console.log(elRef + " " + elementName);
+        if(elementName == "eventBasedGateway"){
+            setElementParameter(divGatewaysParameter, "gateways", elRef, elementName);
+        }else{
+            divGatewaysParameter.remove();
+        }
 
 
     }
@@ -750,12 +769,22 @@ function createFormFields(firstTime = true) {
         divEvents.append(labelId);
         divEvents.append(inputId);
 
+        let divEventsParameter = jQuery('<div/>', {
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            id: 'event-parameter-div-$$'+elRef+'$$'
+        });
+        divEvents.append(divEventsParameter);
+
+        // setParameter(divActivitiesParameter);
+        let elementName = nodesEvents[counter].localName;
+        console.log(elRef + " " + elementName);
+        setElementParameter(divEventsParameter, "events", elRef, elementName);
+
     }
 
 
     // TODO creare gli elementi corretti per gli arrow
     for (let counter = 0; counter < nodesConnectingObjects.length; counter++) {
-
         let labelElementRef;
         let elRef = nodesConnectingObjects[counter].id;
         if (counter == 0) {
@@ -837,6 +866,17 @@ function createFormFields(firstTime = true) {
         });
 
         divConnectingObjects.append(labelFlowLink);
+
+        let divConnectingObjectsParameter = jQuery('<div/>', {
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            id: 'connectingObject-parameter-div-$$'+elRef+'$$'
+        });
+        divConnectingObjects.append(divConnectingObjectsParameter);
+
+        // setParameter(divActivitiesParameter);
+        let elementName = nodesConnectingObjects[counter].localName;
+        console.log(elRef + " " + elementName);
+        setElementParameter(divConnectingObjectsParameter, "connectingObjects", elRef, elementName);
     }
 
     divElementParameter.append(buttonActivities);
@@ -963,7 +1003,7 @@ function createFormFields(firstTime = true) {
     }
 }
 
-function setElementParameter(parameter, section, elRef){
+function setElementParameter(parameter, section, elRef, elementName){
 
     let labelInitial = jQuery('<label/>', {
         text: 'Add Parameter'
@@ -1007,16 +1047,74 @@ function setElementParameter(parameter, section, elRef){
         //     text: "ciao"
         // }));
         //inserire picker
-        let superclassOptions;
-        let singleOptionMatrix;
+        let superclassOptions = [];
+        let singleOptionMatrix = [];
 
         if(section == "activities"){
-            superclassOptions = [];
-            singleOptionMatrix = [];
+            superclassOptions = ["Time Parameters", "Control Parameters", "Cost Parameters", "Property Parameters",
+                "Priority Parameters"];
+            singleOptionMatrix = [
+                ["Transfer Time", "Queue Time", "Wait Time", "Setup Time", "Processing Time", "Validation Time", 
+                "Rework Time"],
+                ["Inter Trigger Timer", "Trigger Count"], //TODO eventSubProcess ha anche probability e condition
+                ["Fixed Cost", "Unit Cost"],
+                ["Property", "Queue Length"],
+                ["Interruptible", "Priority"]
+            ];
+            
+        }else if(section == "events"){
+            if(elementName == "startEvent"){
+                superclassOptions = ["Control Parameters", "Property Parameters"];
+                singleOptionMatrix = [
+                    ["Inter Trigger Timer", "Trigger Count", "Probability", "Condition"], //TODO prob e cond da verificare
+                    ["Property"]
+                ]
+            }else if(elementName == "endEvent"){
+                superclassOptions = ["Property Parameters"];
+                singleOptionMatrix = [
+                    ["Property"]
+                ]
+            }else{
+                if(elementName == "intermediateCatchEvent"){
+                    superclassOptions = ["Control Parameters", "Property Parameters"];
+                    singleOptionMatrix = [
+                        ["Inter Trigger Timer"],
+                        ["Property"]
+                    ]
+                }else if(elementName == "boundaryEvent"){
+                    superclassOptions = ["Control Parameters", "Property Parameters"];
+                    singleOptionMatrix = [
+                        ["Probability", "Condition"],
+                        ["Property"]
+                    ]
+                }else{
+                    superclassOptions = ["Property Parameters"];
+                    singleOptionMatrix = [
+                        ["Property"]
+                    ]
+                }
+            }
+        }else if(section == "gateways"){
+            superclassOptions = ["Control Parameters"];
+            singleOptionMatrix = [["Inter Trigger Timer", "Trigger Count"]];
+
+        }else{
+            if(elementName == "sequenceFlow"){
+                superclassOptions = ["Control Parameters", "Property Parameters"];
+                singleOptionMatrix = [
+                    ["Probability", "Condition"], //solo per sequence flow
+                    ["Property"] //sia per sequence flow che per message flow
+                ]
+            }else{
+                superclassOptions = ["Property Parameters"];
+                singleOptionMatrix = [
+                    ["Property"] //sia per sequence flow che per message flow
+                ]
+            }
+            
         }
 
 
-        // TODO settare valori al picker
         for (let i = 0; i<superclassOptions.length; i++) {
             let subGroup= $('<optgroup>', {
                 label: superclassOptions[i]
@@ -1073,18 +1171,80 @@ function setElementParameter(parameter, section, elRef){
 
         elementParameterTypePicker.on('change', function(){
             divType.empty();
+            var selected_option = $(this).find(":selected"); // get selected option for the changed select only
+            var selected_value = selected_option.val();
+            var optgroup = selected_option.parent().attr('label');
+
             if(this.value != ""){
                 setParameter(divType);
+                let resultRequestPicker = $("[id*=parameter"+localParametersCounter+"-resultRequest]")[0];
+                let resultRequestLabel = $("[id*=parameter"+localParametersCounter+"-label-resultRequest]")[0]
+                switch(optgroup){
+                    case "Time Parameters":{
+                        //nothing to do
+                        //TODO Vedere se rimuovere perché non si deve fare nulla
+                        break;
+                    }
+                    case "Control Parameters":{
+                        console.log(selected_value);
+                        if(selected_value == "InterTriggerTimer"){
+                            //all but not count
+                            resultRequestPicker.removeChild(resultRequestPicker.options[3]);
+                        }else if (selected_value == "TriggerCount"){
+                            //only count
+                            resultRequestPicker.removeChild(resultRequestPicker.options[4]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[0]);
 
+                        }else{
+                            resultRequestLabel.remove();
+                            resultRequestPicker.remove();
+                        }
+                        break;
+                    }
+                    case "Resource Parameters":{
+                        if(selected_value != "Selection"){
+                            resultRequestLabel.remove();
+                            resultRequestPicker.remove();
+                        }else{
+                            //only min max
+                            resultRequestPicker.removeChild(resultRequestPicker.options[2]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[2]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[2]);
+                        }
+                        break;
+                    }
+                    case "Cost Parameters":{
+                        //only sum
+                        resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                        resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                        resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                        resultRequestPicker.removeChild(resultRequestPicker.options[0]);
+                        break;
+                    }
+                    case "Property Parameters":{
+                        if(selected_value == "Property"){
+                            resultRequestLabel.remove();
+                            resultRequestPicker.remove();
+                        }else{
+                            //all but not count and sum
+                            resultRequestPicker.removeChild(resultRequestPicker.options[3]);
+                            resultRequestPicker.removeChild(resultRequestPicker.options[3]);
+                        }
+                        break;
+                    }
+                    case "Priority Parameters":{
+                        resultRequestLabel.remove();
+                        resultRequestPicker.remove();
+
+                        break;
+                    }
+                }
             }
 
         });
 
-
-        if(section == "activities"){
-
-        
-        }
     
         //TODO gestire nell'on change l'eliminazione delle option di resultRequest
 
@@ -2103,7 +2263,8 @@ function setParameter(parameter){
     if(!parameterName.match(/property/g)){
         let resultRequestLabel = jQuery('<label/>', {
             style: 'width: 100%',
-            text: 'Result Request'
+            text: 'Result Request',
+            id: parameterName+'-label-resultRequest-picker-'+parameterValueDivCounterGlobal
         });
 
         let resultRequestPicker = jQuery('<select/>', {
@@ -3072,13 +3233,13 @@ if (!window.FileList || !window.FileReader) {
 
 
     // xmlGlobal=firstdiagramXML;
-    // xmlGlobal=bpmn_example1;
+    xmlGlobal=bpmn_example1;
     // xmlGlobal=bpmn_example2;
     // xmlGlobal=bpmn_example3;
     // xmlGlobal=bpmn_example4;
     // xmlGlobal=bpmn_example5;
     // xmlGlobal=bpmn_example6;
-    xmlGlobal = bpmn_example7;
+    // xmlGlobal = bpmn_example7;
     openDiagram();
     // * END Remove
 
@@ -3111,7 +3272,11 @@ event.forEach(function (event) {
             //Front Office
             let elemRefClicked = e.element.id;
 
-            if (e.element.type.toLowerCase().includes("task")) {
+            if (e.element.type.toLowerCase().includes("task") ||
+                e.element.type.toLowerCase().includes("subprocess") ||
+                e.element.type.toLowerCase().includes("transaction")||
+                e.element.type.toLowerCase().includes("callactivity") ||
+                e.element.type.toLowerCase().includes("eventsubprocess")) {
                 // * gestione dell'apertura dei bottoni
                 if ($("#elem-par-btn").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
