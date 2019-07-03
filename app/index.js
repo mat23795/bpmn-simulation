@@ -297,7 +297,10 @@ function createFormFields(firstTime = true) {
 
     // * elemento XML "process" che contiene tutti gli elementi del diagramma
     let bpmnElementProcessXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "process");
+
     let bpmnElementCollaborationXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "collaboration");
+
+    let bpmnElementResourceXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "resource");
     // console.log("Elementi del bpmn"); //TODO REMOVE
     // console.log(bpmnElementXML[0]); //TODO REMOVE
 
@@ -306,6 +309,7 @@ function createFormFields(firstTime = true) {
     let nodesGateways = [];
     let nodesEvents = [];
     let nodesConnectingObjects = [];
+    let nodesResources = [];
 
     for (let i = 0; i < bpmnElementProcessXML.length; i++) {
 
@@ -355,10 +359,12 @@ function createFormFields(firstTime = true) {
 
                 nodesConnectingObjects.push(nodesProcess[j]);
             }
-            // console.log(nodes[j].localName);
+            // console.log(nodesConnectingObjects[j].localName);
         }
 
+
     }
+
     for (let i = 0; i < bpmnElementCollaborationXML.length; i++) {
         let nodesCollaboration = Array.prototype.slice.call(bpmnElementCollaborationXML[i].getElementsByTagName("*"), 0);
         for (let j = 0; j < nodesCollaboration.length; j++) {
@@ -366,8 +372,13 @@ function createFormFields(firstTime = true) {
 
                 nodesConnectingObjects.push(nodesCollaboration[j]);
             }
-            // console.log(nodes[j].localName);
+            // console.log(nodesConnectingObjects[j].localName);
         }
+    }    
+
+
+    for (let i = 0; i < bpmnElementResourceXML.length; i++) {
+        nodesResources.push(bpmnElementResourceXML[i]);
     }
 
 
@@ -382,6 +393,10 @@ function createFormFields(firstTime = true) {
 
     // console.log("Array di soli connecting obj"); //TODO REMOVE
     // console.log(nodesConnectingObjects); //TODO REMOVE
+
+    console.log("Array di sole resources"); //TODO REMOVE
+    console.log(nodesResources); //TODO REMOVE
+
 
 
     setParameter($('#scenarioParameters-start-div'));
@@ -560,6 +575,19 @@ function createFormFields(firstTime = true) {
         id: 'div-connectingObjects'
     });
 
+    let buttonResources = jQuery('<button/>', {
+        class: 'collapsible button-collapsible-style',
+        type: 'button',
+        text: 'Resources',
+        id: 'button-resources'
+    });
+    buttonResources.data('clicked', false);
+    let divResources = jQuery('<div/>', {
+        class: 'content',
+        label: 'element-parameter-resources-form',
+        id: 'div-resources'
+    });
+
 
 
 
@@ -620,7 +648,7 @@ function createFormFields(firstTime = true) {
 
         // setParameter(divActivitiesParameter);
         let elementName = nodesActivities[counter].localName;
-        console.log(elRef + " " + elementName);
+        // console.log(elRef + " " + elementName);
         setElementParameter(divActivitiesParameter, "activities", elRef, elementName);
 
     }
@@ -718,7 +746,7 @@ function createFormFields(firstTime = true) {
 
         // setParameter(divActivitiesParameter);
         let elementName = nodesGateways[counter].localName;
-        console.log(elRef + " " + elementName);
+        // console.log(elRef + " " + elementName);
         if(elementName == "eventBasedGateway"){
             setElementParameter(divGatewaysParameter, "gateways", elRef, elementName);
         }else{
@@ -777,7 +805,7 @@ function createFormFields(firstTime = true) {
 
         // setParameter(divActivitiesParameter);
         let elementName = nodesEvents[counter].localName;
-        console.log(elRef + " " + elementName);
+        // console.log(elRef + " " + elementName);
         setElementParameter(divEventsParameter, "events", elRef, elementName);
 
     }
@@ -875,7 +903,7 @@ function createFormFields(firstTime = true) {
 
         // setParameter(divActivitiesParameter);
         let elementName = nodesConnectingObjects[counter].localName;
-        console.log(elRef + " " + elementName);
+        // console.log(elRef + " " + elementName);
         setElementParameter(divConnectingObjectsParameter, "connectingObjects", elRef, elementName);
     }
 
@@ -887,6 +915,8 @@ function createFormFields(firstTime = true) {
     divElementParameter.append(divEvents);
     divElementParameter.append(buttonConnectingObjects);
     divElementParameter.append(divConnectingObjects);
+    divElementParameter.append(buttonResources);
+    divElementParameter.append(divResources);
 
     // let buttonActivitiesHTML = $('#button-activities');
 
@@ -1177,6 +1207,7 @@ function setElementParameter(parameter, section, elRef, elementName){
 
             if(this.value != ""){
                 setParameter(divType);
+
                 let resultRequestPicker = $("[id*=parameter"+localParametersCounter+"-resultRequest]")[0];
                 let resultRequestLabel = $("[id*=parameter"+localParametersCounter+"-label-resultRequest]")[0]
                 switch(optgroup){
@@ -1225,8 +1256,105 @@ function setElementParameter(parameter, section, elRef, elementName){
                     }
                     case "Property Parameters":{
                         if(selected_value == "Property"){
-                            resultRequestLabel.remove();
-                            resultRequestPicker.remove();
+                            divType.empty();
+                            
+                            //TODO creare div per lista di property
+                            let btnAddProperty = jQuery('<button/>', {
+                                class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                                type: 'button',
+                                id: 'btn-create-property'
+                        
+                            });
+                        
+                            let iElForPlus = jQuery('<i/>', {
+                                class: 'fa fa-plus',
+                                id: 'btn-create-property'
+                            });
+                        
+                            btnAddProperty.append(iElForPlus);
+                            let propertiesCounter = 0;
+                            btnAddProperty.on('click',function(){
+                                propertiesCounter += 1;
+                                parameterValueDivCounterGlobal += 1;
+                                //aggiunta div property
+                                let propertyDiv = jQuery('<div/>', {
+                                    id: 'elementParameters-property'+propertiesCounter+'-div-'+parameterValueDivCounterGlobal,
+                                    style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+                                });
+                        
+                                setParameter(propertyDiv);
+                        
+                                let labelPropertyName = jQuery('<label/>', {
+                                    for: 'elementParameters-property-propertyParameters-name-'+parameterValueDivCounterGlobal,
+                                    text: 'Name',
+                                    width: '100%'
+                                });
+                            
+                                let inputPropertyName = jQuery('<input/>', {
+                                    type: 'text',
+                                    class: 'form-control form-control-input',
+                                    id: 'elementParameters-property-propertyParameters-name-'+parameterValueDivCounterGlobal,
+                                    placeholder: 'Property Name'
+                                });
+                            
+                                propertyDiv.append(labelPropertyName);
+                                propertyDiv.append(inputPropertyName);
+                            
+                                let propertyTypeLabel = jQuery('<label/>', {
+                                    style: 'width: 100%',
+                                    text: 'Property Type'
+                                });
+                            
+                                let propertyTypePicker = jQuery('<select/>', {
+                                    class: 'scenario-picker',
+                                    id: 'propertyType-elementParameters-picker-'+parameterValueDivCounterGlobal,
+                                    width: '100%'
+                                });
+                                
+                                for (let propertyType in PropertyType) {
+                                    propertyTypePicker.append($('<option>', {
+                                        value: propertyType,
+                                        text: propertyType
+                                    }));
+                                }
+                            
+                                propertyDiv.append(propertyTypeLabel);
+                                propertyDiv.append(propertyTypePicker);
+                        
+                        
+                                let btnTrash = jQuery('<button/>', {
+                                    class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                                    type: 'button',
+                                    id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+                            
+                                });
+                            
+                                let iElforTrash = jQuery('<i/>', {
+                                    class: 'fa fa-trash',
+                                    id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+                                });
+                            
+                                btnTrash.append(iElforTrash);
+                            
+                                let idLocalRemoveProperty = parameterValueDivCounterGlobal;
+                                let localPropertiesCounter = propertiesCounter;
+                        
+                            
+                                btnTrash.on('click', function(){
+                                    $('div[id*=elementParameters-property'+localPropertiesCounter+'-div-'+idLocalRemoveProperty+']').remove();
+                                });
+                            
+                                propertyDiv.append(btnTrash);
+                        
+                                divType.append(propertyDiv);
+                        
+                            
+                            });
+                            divType.append(btnAddProperty);
+                            
+                            
+                        
+
                         }else{
                             //all but not count and sum
                             resultRequestPicker.removeChild(resultRequestPicker.options[3]);
@@ -3233,13 +3361,13 @@ if (!window.FileList || !window.FileReader) {
 
 
     // xmlGlobal=firstdiagramXML;
-    xmlGlobal=bpmn_example1;
+    // xmlGlobal=bpmn_example1;
     // xmlGlobal=bpmn_example2;
     // xmlGlobal=bpmn_example3;
     // xmlGlobal=bpmn_example4;
     // xmlGlobal=bpmn_example5;
     // xmlGlobal=bpmn_example6;
-    // xmlGlobal = bpmn_example7;
+    xmlGlobal = bpmn_example7;
     openDiagram();
     // * END Remove
 
