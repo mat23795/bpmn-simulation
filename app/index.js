@@ -2734,8 +2734,13 @@ function setParameterField(inputElement, obj){
         if(obj.value.length > 0){
             for(let i in obj.value){
                 inputElement.childNodes[2].click();
-                inputElement.childNodes[3].childNodes[0];
-                console.log(inputElement.childNodes);
+                let picker = inputElement.childNodes[3].childNodes[0].childNodes[0];
+                let divCurrent = inputElement.childNodes[3].childNodes[0].childNodes[2];
+                picker.value = obj.value[i].getType();
+                $('#'+picker.id).change();
+                console.log(obj.value[i]);
+                console.log($('#'+divCurrent.id));
+
             }
         }
     
