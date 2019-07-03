@@ -8,14 +8,18 @@ export class EnumParameter extends ParameterValue{
         super();
     }
 
-    get values(): ConstantParameter[] {
+    get value(): ConstantParameter[] {
         return this._value;
     }
 
-    set values(value: ConstantParameter[]) {
+    set value(value: ConstantParameter[]) {
         for (let i = 0; i < value.length; i++) {
             this._value.push(value[i]);
         }    
+    }
+
+    getType(): string{
+        return "EnumParameter"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {

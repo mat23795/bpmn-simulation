@@ -7,7 +7,7 @@ import bpmn_example5 from '../resources/5_TechnicalSupportProcessV1.bpmn';
 import bpmn_example6 from '../resources/6_TechnicalSupportProcessV1_1.bpmn';
 import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2.bpmn';
 
-import { DateTime, DurationParameter } from "./types/parameter_type/ConstantParameter";
+import { DateTime, DurationParameter, DateTimeParameter } from "./types/parameter_type/ConstantParameter";
 import { BPSimData } from "./types/scenario/BPSimData";
 import { Scenario } from "./types/scenario/Scenario";
 import { factory } from "./types/factory";
@@ -394,14 +394,19 @@ function createFormFields(firstTime = true) {
     // console.log("Array di soli connecting obj"); //TODO REMOVE
     // console.log(nodesConnectingObjects); //TODO REMOVE
 
-    console.log("Array di sole resources"); //TODO REMOVE
-    console.log(nodesResources); //TODO REMOVE
+    // console.log("Array di sole resources"); //TODO REMOVE
+    // console.log(nodesResources); //TODO REMOVE
 
 
 
     setParameter($('#scenarioParameters-start-div'));
     setParameter($('#scenarioParameters-duration-div'));
     setParameter($('#scenarioParameters-warmup-div'));
+
+    let labelInitial = jQuery('<label/>', {
+        text: 'Add Property'
+    });
+    $('#scenarioParameters-property-propertyParameters-div').append(labelInitial);
 
     let btnAddProperty = jQuery('<button/>', {
         class: 'btn btn-primary btn-lg button-calculate btn-icon',
@@ -426,7 +431,39 @@ function createFormFields(firstTime = true) {
             style: "border-radius: 10px; border: solid 1px black; padding: 2%"
         });
 
+        
         setParameter(propertyDiv);
+        
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+    
+        });
+    
+        let iElforTrash = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
+        });
+    
+        btnTrash.append(iElforTrash);
+    
+        let idLocalRemoveProperty = parameterValueDivCounterGlobal;
+        let localPropertiesCounter = propertiesCounter;
+
+    
+        btnTrash.on('click', function(){
+            $('div[id*=scenarioParameters-property'+localPropertiesCounter+'-div-'+idLocalRemoveProperty+']').remove();
+        });
+
+        btnTrash.insertAfter(propertyDiv[0].childNodes[0].childNodes[0]);
+
+        // for(let i in propertyDiv[0].childNodes){
+        //     console.log(propertyDiv[0].childNodes[i]);
+        //     if(propertyDiv[0].childNodes[i].id == "delete-div-property"+propertiesCounter+"-"+localPropertiesCounter){
+        //         $('#'+propertyDiv[0].childNodes[i].id).append(btnTrash);
+        //     }
+        // }
 
         let labelPropertyName = jQuery('<label/>', {
             for: 'scenarioParameters-property-propertyParameters-name-'+parameterValueDivCounterGlobal,
@@ -464,32 +501,7 @@ function createFormFields(firstTime = true) {
     
         propertyDiv.append(propertyTypeLabel);
         propertyDiv.append(propertyTypePicker);
-
-
-        let btnTrash = jQuery('<button/>', {
-            class: 'btn btn-primary btn-lg button-calculate btn-icon',
-            type: 'button',
-            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
-    
-        });
-    
-        let iElforTrash = jQuery('<i/>', {
-            class: 'fa fa-trash',
-            id: 'btn-deleteProperty'+propertiesCounter+'-'+parameterValueDivCounterGlobal
-        });
-    
-        btnTrash.append(iElforTrash);
-    
-        let idLocalRemoveProperty = parameterValueDivCounterGlobal;
-        let localPropertiesCounter = propertiesCounter;
-
-    
-        btnTrash.on('click', function(){
-            $('div[id*=scenarioParameters-property'+localPropertiesCounter+'-div-'+idLocalRemoveProperty+']').remove();
-        });
-    
-        propertyDiv.append(btnTrash);
-
+        
         $('#scenarioParameters-property-propertyParameters-div').append(propertyDiv);
 
     
@@ -1311,61 +1323,68 @@ function setElementParameter(parameter, section, elRef, elementName){
                             if(selected_value == "Role"){
                                 divType.empty();
                             
-                            //TODO creare div per lista di property
-                            let btnAddRole = jQuery('<button/>', {
-                                class: 'btn btn-primary btn-lg button-calculate btn-icon',
-                                type: 'button',
-                                id: 'btn-create-role'
-                        
-                            });
-                        
-                            let iElForPlus = jQuery('<i/>', {
-                                class: 'fa fa-plus',
-                                id: 'btn-create-role'
-                            });
-                        
-                            btnAddRole.append(iElForPlus);
-                            let rolesCounter = 0;
-                            btnAddRole.on('click',function(){
-                                rolesCounter += 1;
-                                parameterValueDivCounterGlobal += 1;
-                                //aggiunta div property
-                                let roleDiv = jQuery('<div/>', {
-                                    id: 'elementParameters-role'+rolesCounter+'-div-'+parameterValueDivCounterGlobal,
-                                    style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+                                let labelInitial = jQuery('<label/>', {
+                                    text: 'Add Role'
                                 });
-                        
-                                setParameter(roleDiv);
-                            
-                                let btnTrash = jQuery('<button/>', {
+                                divType.append(labelInitial);
+                                    
+                                let btnAddRole = jQuery('<button/>', {
                                     class: 'btn btn-primary btn-lg button-calculate btn-icon',
                                     type: 'button',
-                                    id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                                    id: 'btn-create-role'
                             
                                 });
                             
-                                let iElforTrash = jQuery('<i/>', {
-                                    class: 'fa fa-trash',
-                                    id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                                let iElForPlus = jQuery('<i/>', {
+                                    class: 'fa fa-plus',
+                                    id: 'btn-create-role'
                                 });
                             
-                                btnTrash.append(iElforTrash);
+                                btnAddRole.append(iElForPlus);
+                                let rolesCounter = 0;
+                                btnAddRole.on('click',function(){
+                                    rolesCounter += 1;
+                                    parameterValueDivCounterGlobal += 1;
+                                    //aggiunta div property
+                                    let roleDiv = jQuery('<div/>', {
+                                        id: 'elementParameters-role'+rolesCounter+'-div-'+parameterValueDivCounterGlobal,
+                                        style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+                                    });
                             
-                                let idLocalRemoveRole = parameterValueDivCounterGlobal;
-                                let localRolesCounter = rolesCounter;
-                        
+                                    setParameter(roleDiv);
+                                
+                                    let btnTrash = jQuery('<button/>', {
+                                        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                                        type: 'button',
+                                        id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                                
+                                    });
+                                
+                                    let iElforTrash = jQuery('<i/>', {
+                                        class: 'fa fa-trash',
+                                        id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                                    });
+                                
+                                    
+
+                                    btnTrash.append(iElforTrash);
+                                
+                                    let idLocalRemoveRole = parameterValueDivCounterGlobal;
+                                    let localRolesCounter = rolesCounter;
                             
-                                btnTrash.on('click', function(){
-                                    $('div[id*=elementParameters-role'+localRolesCounter+'-div-'+idLocalRemoveRole+']').remove();
+                                
+                                    btnTrash.on('click', function(){
+                                        $('div[id*=elementParameters-role'+localRolesCounter+'-div-'+idLocalRemoveRole+']').remove();
+                                    });
+                                
+                                    // roleDiv.append(btnTrash);
+                                    btnTrash.insertAfter(roleDiv[0].childNodes[0].childNodes[0]);
+                            
+                                    divType.append(roleDiv);
+                            
+                                
                                 });
-                            
-                                roleDiv.append(btnTrash);
-                        
-                                divType.append(roleDiv);
-                        
-                            
-                            });
-                            divType.append(btnAddRole);
+                                divType.append(btnAddRole);
                             } 
                         }else{
                             //only min max
@@ -1386,6 +1405,11 @@ function setElementParameter(parameter, section, elRef, elementName){
                     case "Property Parameters":{
                         if(selected_value == "Property"){
                             divType.empty();
+
+                            let labelInitial = jQuery('<label/>', {
+                                text: 'Add Property'
+                            });
+                            divType.append(labelInitial);
                             
                             //TODO creare div per lista di property
                             let btnAddProperty = jQuery('<button/>', {
@@ -1473,7 +1497,7 @@ function setElementParameter(parameter, section, elRef, elementName){
                                     $('div[id*=elementParameters-property'+localPropertiesCounter+'-div-'+idLocalRemoveProperty+']').remove();
                                 });
                             
-                                propertyDiv.append(btnTrash);
+                                btnTrash.insertAfter(propertyDiv[0].childNodes[0].childNodes[0]);
                         
                                 divType.append(propertyDiv);
                         
@@ -1522,12 +1546,21 @@ function setParameter(parameter){
     let parameterName =  parameter[0].id.split("-")[1];
     parameter.empty();
 
+    
+
+    let divTemp = jQuery('<div/>', {
+        style: "width: 100%",
+        id: 'delete-div-'+parameterName+"-"+parameterValueDivCounterGlobal
+    });
+
     let nameLabel = jQuery('<label/>', {
-        style: "font-size: large; width:100%",
+        style: "font-size: large",
         text: parameterName.charAt(0).toUpperCase() + parameterName.slice(1)
     });
 
-    parameter.append(nameLabel);
+    divTemp.append(nameLabel);
+
+    parameter.append(divTemp);
 
     let valueLabel = jQuery('<label/>', {
         text: "Value",
@@ -2517,7 +2550,8 @@ function setParameter(parameter){
 
     parameter.append(valuesSection);
 
-    if(!parameterName.match(/property/g)){
+
+    if(!parameterName.match(/property/g) || parameter[0].id.split('-')[0] == "scenarioParameters"){
         let resultRequestLabel = jQuery('<label/>', {
             style: 'width: 100%',
             text: 'Result Request',
@@ -2656,8 +2690,10 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
     console.log("scenario numero " + scenarioSelected);
     if (scenarioSelected != "") {
         scenarioSelected -= 1;
-        populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
         populateScenarioParametersForm(scenarios[scenarioSelected].scenarioParameters);
+
+        populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
+        
         populateCalendarForm(scenarios[scenarioSelected].calendar);
 
     } else {
@@ -2689,20 +2725,43 @@ function populateElementParametersForm(elementParameters) {
     
 }
 
+function setParameterField(inputElement, obj){
+    
+    console.log(obj);
+    let childNodes = inputElement.childNodes;
+    console.log(childNodes);
+    if(obj != undefined){
+        if(obj.value.length > 0){
+            for(let i in obj.value){
+                inputElement.childNodes[2].click();
+                inputElement.childNodes[3].childNodes[0];
+                console.log(inputElement.childNodes);
+            }
+        }
+    
+        if(obj.resultRequest.length > 0){
+            childNodes[(childNodes.length)-1].value = obj.resultRequest[0];
+        }
+    }else{
+        childNodes[(childNodes.length)-1].value = "min"
+    }
+    
+}
+
 function populateScenarioParametersForm(scenarioParameters) {
     //TODO start, duration, warmup non sappiamo cosa farne perché sono Parameters
 
-    // let startScenParInput = $('#scenarioParameters-start-input');
-    // let startScenParVal = scenarioParameters.start;
-    // setField(startScenParInput, startScenParVal);
+    let startScenParInput = $('#scenarioParameters-start-div');
+    let startScenParVal = scenarioParameters.start;
+    setParameterField(startScenParInput[0], startScenParVal);
 
-    // let durationScenParInput = $('#scenarioParameters-duration-input');
-    // let durationScenParVal = scenarioParameters.duration;
-    // setField(durationScenParInput, durationScenParVal);
+    let durationScenParInput = $('#scenarioParameters-duration-div');
+    let durationScenParVal = scenarioParameters.duration;
+    // setParameterField(durationScenParInput[0], durationScenParVal);
 
-    // let warmupScenParInput = $('#scenarioParameters-warmup-input');
-    // let warmupScenParVal = scenarioParameters.warmup;
-    // setField(warmupScenParInput, warmupScenParVal);
+    let warmupScenParInput = $('#scenarioParameters-warmup-div');
+    let warmupScenParVal = scenarioParameters.warmup;
+    // setParameterField(warmupScenParInput[0], warmupScenParVal);
 
     let replicationScenParInput = $('#scenarioParametersAttribute-replication-input');
     let replicationScenParVal = scenarioParameters.replication;
@@ -3577,7 +3636,7 @@ event.forEach(function (event) {
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
-
+            console.log($("input[id*='$$" + elemRefClicked + "$$']"));
             focusDelayed($("input[id*='$$" + elemRefClicked + "$$']"));
             // console.log($("input[id*='"+elemRefClicked+"']"));
 

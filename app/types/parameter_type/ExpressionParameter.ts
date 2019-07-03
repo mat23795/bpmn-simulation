@@ -18,6 +18,10 @@ export class ExpressionParameter extends ParameterValue{
         this._value = value;
     }
 
+    getType(): string{
+        return "ExpressionParameter"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");

@@ -655,6 +655,7 @@
             </bpsim:Duration>
             <bpsim:Start>
               <bpsim:DateTimeParameter value="2016-01-01T06:00:00" />
+              <bpsim:ResultRequest>count</bpsim:ResultRequest>
             </bpsim:Start>
           </bpsim:ScenarioParameters>
           <bpsim:ElementParameters elementRef="_10-42">

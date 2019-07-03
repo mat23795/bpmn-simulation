@@ -16,12 +16,20 @@ export class ConstantParameter extends ParameterValue {
         this._value = value;
     }
 
+    getType(): string{
+        return "ConstantParameter"
+    }
+
 }
 
 export class StringParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    getType(): string{
+        return "StringParameter"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -51,6 +59,10 @@ export class NumericParameter extends ConstantParameter {
 
     set timeUnit(value: TimeUnit) {
         this._timeUnit = value;
+    }
+
+    getType(): string{
+        return "NumericParameter"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -83,6 +95,10 @@ export class FloatingParameter extends ConstantParameter {
         this._timeUnit = value;
     }
 
+    getType(): string{
+        return "FloatingParameter"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -102,6 +118,10 @@ export class BooleanParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    getType(): string{
+        return "BooleanParameter"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -124,6 +144,10 @@ export class DurationParameter extends ConstantParameter {
         super();
     }
 
+    getType(): string{
+        return "DurationParameter"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -142,6 +166,10 @@ export class DateTimeParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    getType(): string{
+        return "DateTimeParameter"
     }
     
     toXMLelement(bpsimPrefix: string, xml: any): any {

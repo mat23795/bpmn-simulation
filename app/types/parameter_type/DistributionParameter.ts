@@ -16,6 +16,10 @@ export class DistributionParameter extends ParameterValue{
         this._timeUnit = value;
     }
 
+    getType(): string{
+        return "DistributionParameter"
+    }
+
     protected addTimeUnitToSuperClassAttributesToXMLElement(elementXML: any){
         this.addSuperClassAttributesToXMLElement(elementXML);
         this.eventuallyAddAttribute(elementXML, "timeUnit", this._timeUnit);
@@ -70,6 +74,10 @@ export class BetaDistribution extends DistributionParameter{
         this._scale = value;
     }
 
+    getType(): string{
+        return "BetaDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -107,6 +115,10 @@ export class BinomialDistribution extends DistributionParameter{
 
     set trials(value: number) {
         this._trials = value;
+    }
+
+    getType(): string{
+        return "BinomialDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -148,6 +160,10 @@ export class WeibullDistribution extends DistributionParameter{
         this._scale = value;
     }
 
+    getType(): string{
+        return "WeibullDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -185,6 +201,10 @@ export class NormalDistribution extends DistributionParameter{
 
     set standardDeviation(value: number) {
         this._standardDeviation = value;
+    }
+
+    getType(): string{
+        return "NormalDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -227,6 +247,10 @@ export class LogNormalDistribution extends DistributionParameter{
         this._standardDeviation = value;
     }
 
+    getType(): string{
+        return "LogNormalDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -264,6 +288,10 @@ export class UniformDistribution extends DistributionParameter{
 
     set max(value: number) {
         this._max = value;
+    }
+
+    getType(): string{
+        return "UniformDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -312,6 +340,10 @@ export class TriangularDistribution extends DistributionParameter{
 
     set mode(value: number) {
         this._mode = value;
+    }
+
+    getType(): string{
+        return "TriangularDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -373,6 +405,10 @@ export class TruncatedNormalDistribution extends DistributionParameter{
         this._max = value;
     }
 
+    getType(): string{
+        return "TruncatedNormalDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -405,6 +441,10 @@ export class PoissonDistribution extends DistributionParameter{
         this._mean = value;
     }
 
+    getType(): string{
+        return "PoissonDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -432,6 +472,10 @@ export class NegativeExponentialDistribution extends DistributionParameter{
 
     set mean(value: number) {
         this._mean = value;
+    }
+
+    getType(): string{
+        return "NegativeExponentialDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -472,6 +516,10 @@ export class ErlangDistribution extends DistributionParameter{
         this._k = value;
     }
 
+    getType(): string{
+        return "ErlangDistribution"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -510,6 +558,10 @@ export class GammaDistribution extends DistributionParameter{
 
     set scale(value: number) {
         this._scale = value;
+    }
+
+    getType(): string{
+        return "GammaDistribution"
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
@@ -569,6 +621,9 @@ export class UserDistribution extends DistributionParameter{
 
         return userDistributionXMLelement;
 
+    }
+    getType(): string{
+        return "UserDistribution"
     }
 }
 
