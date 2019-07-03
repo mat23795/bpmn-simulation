@@ -617,7 +617,7 @@ function createFormFields(firstTime = true) {
 
         let labelId = jQuery('<label/>', {
             for: 'activity-id-input$$' + elRef + '$$',
-            tBhoValueext: 'ID'
+            text: 'ID'
         });
 
         let inputId = jQuery('<input/>', {
@@ -653,7 +653,6 @@ function createFormFields(firstTime = true) {
 
     }
 
-    // TODO creare gli elementi corretti per i gateway
     for (let counter = 0; counter < nodesGateways.length; counter++) {
         let labelElementRef;
         let elRef = nodesGateways[counter].id;
@@ -907,6 +906,68 @@ function createFormFields(firstTime = true) {
         setElementParameter(divConnectingObjectsParameter, "connectingObjects", elRef, elementName);
     }
 
+
+    for (let counter = 0; counter < nodesResources.length; counter++) {
+        let labelElementRef;
+        let elRef = nodesResources[counter].id;
+        if (counter == 0) {
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: ' + elRef,
+            });
+
+        } else {
+            labelElementRef = jQuery('<label/>', {
+                class: 'label-new-element',
+                // id: elRef,
+                text: 'Element Ref: ' + nodesResources[counter].id,
+                style: 'margin-top:15%'
+            });
+        }
+        divResources.append(labelElementRef);
+
+        // let idCurrentScenario = dataTreeGlobal.scenario[currentScenarioGlobal-1].id;
+
+        // let labelId = jQuery('<label/>', {
+        //     for: 'resource-id-input$$' + elRef + '$$',
+        //     text: 'ID'
+        // });
+
+        // let inputId = jQuery('<input/>', {
+        //     type: 'text',
+        //     class: 'form-control form-control-input',
+        //     id: 'resource-id-input$$' + elRef + '$$',
+        //     placeholder: 'Resource ID'
+        // });
+
+        // // * settaggio funzione salvataggio singola variabile all'interno della struttura globale
+        // // inputId.on('change', function () {
+        // //     console.log(2);
+        // // });
+        // // TODO vedere se usare change o input
+        // inputId.on('change', function () {
+        //     saveOrCreateSingleFieldInElementParameters(this);
+        // });
+
+
+        // divResources.append(labelId);
+        // divResources.append(inputId);
+
+        let divResourcesParameter = jQuery('<div/>', {
+            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            id: 'resource-parameter-div-$$'+elRef+'$$'
+        });
+        divResources.append(divResourcesParameter);
+
+        // setParameter(divActivitiesParameter);
+        let elementName = nodesResources[counter].localName;
+        // console.log(elRef + " " + elementName);
+        setElementParameter(divResourcesParameter, "resources", elRef, elementName);
+
+    }
+
+
     divElementParameter.append(buttonActivities);
     divElementParameter.append(divActivities);
     divElementParameter.append(buttonGateways);
@@ -915,8 +976,10 @@ function createFormFields(firstTime = true) {
     divElementParameter.append(divEvents);
     divElementParameter.append(buttonConnectingObjects);
     divElementParameter.append(divConnectingObjects);
-    divElementParameter.append(buttonResources);
-    divElementParameter.append(divResources);
+    if(nodesResources.length != 0){
+        divElementParameter.append(buttonResources);
+        divElementParameter.append(divResources);
+    }
 
     // let buttonActivitiesHTML = $('#button-activities');
 
@@ -1128,6 +1191,13 @@ function setElementParameter(parameter, section, elRef, elementName){
             superclassOptions = ["Control Parameters"];
             singleOptionMatrix = [["Inter Trigger Timer", "Trigger Count"]];
 
+        }else if(section == "resources"){
+            superclassOptions = ["Resource Parameters", "Cost Parameters"];
+            singleOptionMatrix = [
+                ["Availability", "Quantity", "Role", "Selection"],
+                ["Fixed Cost", "Unit Cost"]
+            ];
+
         }else{
             if(elementName == "sequenceFlow"){
                 superclassOptions = ["Control Parameters", "Property Parameters"];
@@ -1238,6 +1308,65 @@ function setElementParameter(parameter, section, elRef, elementName){
                         if(selected_value != "Selection"){
                             resultRequestLabel.remove();
                             resultRequestPicker.remove();
+                            if(selected_value == "Role"){
+                                divType.empty();
+                            
+                            //TODO creare div per lista di property
+                            let btnAddRole = jQuery('<button/>', {
+                                class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                                type: 'button',
+                                id: 'btn-create-role'
+                        
+                            });
+                        
+                            let iElForPlus = jQuery('<i/>', {
+                                class: 'fa fa-plus',
+                                id: 'btn-create-role'
+                            });
+                        
+                            btnAddRole.append(iElForPlus);
+                            let rolesCounter = 0;
+                            btnAddRole.on('click',function(){
+                                rolesCounter += 1;
+                                parameterValueDivCounterGlobal += 1;
+                                //aggiunta div property
+                                let roleDiv = jQuery('<div/>', {
+                                    id: 'elementParameters-role'+rolesCounter+'-div-'+parameterValueDivCounterGlobal,
+                                    style: "border-radius: 10px; border: solid 1px black; padding: 2%"
+                                });
+                        
+                                setParameter(roleDiv);
+                            
+                                let btnTrash = jQuery('<button/>', {
+                                    class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                                    type: 'button',
+                                    id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                            
+                                });
+                            
+                                let iElforTrash = jQuery('<i/>', {
+                                    class: 'fa fa-trash',
+                                    id: 'btn-deleteRole'+rolesCounter+'-'+parameterValueDivCounterGlobal
+                                });
+                            
+                                btnTrash.append(iElforTrash);
+                            
+                                let idLocalRemoveRole = parameterValueDivCounterGlobal;
+                                let localRolesCounter = rolesCounter;
+                        
+                            
+                                btnTrash.on('click', function(){
+                                    $('div[id*=elementParameters-role'+localRolesCounter+'-div-'+idLocalRemoveRole+']').remove();
+                                });
+                            
+                                roleDiv.append(btnTrash);
+                        
+                                divType.append(roleDiv);
+                        
+                            
+                            });
+                            divType.append(btnAddRole);
+                            } 
                         }else{
                             //only min max
                             resultRequestPicker.removeChild(resultRequestPicker.options[2]);
