@@ -2701,64 +2701,134 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
 }
 
 function populateElementParametersForm(elementParameters) {
-    
-    // console.log($("input[id*='$$']"));
     let fields = $("input[id*='$$']");
     
     for(let i = 0; i< fields.length; i++){
         let elRefTot = fields[i].id.split("$$")[1];
         let contained=false;
-        for (let i = 0; i < elementParameters.length; i++) {
-            if(elRefTot == elementParameters[i].elRef){
-                contained=true
-                let idElementVal = elementParameters[i].id;
+        for (let j = 0; j < elementParameters.length; j++) {
+            if(elRefTot == elementParameters[j].elementRef){
+                contained=true;
+                let idElementVal = elementParameters[j].id;
                 setField($(fields[i]), idElementVal);
+                // console.log("element Parameter");
+                // console.log(elementParameters[j]);
+                // setParameter()
+
+                // for(let key in elementParameters[j]) {
+                //     let value = elementParameters[j][key];
+                //     console.log(value);
+                // }
+
+                let keys =  Object.keys(elementParameters[j]);
+                let values = Object.values(elementParameters[j]);
+                
+                
+                let div = $("div[id*='$$"+elRefTot+"$$']");
+                // console.log(div);
+                // let childNodes = div[0].childNodes;
+                // let indexOfButton = childNodes.length - 1;
+
+                for(let k in keys){
+                    // console.log("elemento");
+                    // console.log(elementParameters[j][k]);
+                    if(keys[k] == "_controlParameters" || keys[k] == "_timeParameters" || keys[k] == "_costParameters" || 
+                    keys[k] == "_resourceParameters" || keys[k] == "_propertyParameters" || keys[k] == "_priorityParameters"){
+                        // console.log("vaffammoccccccc");
+                        // console.log(keys[k].split("_")[1]);
+                        let innerKeys = Object.keys(values[k])
+                        let innerValues =Object.values(values[k]);
+                        
+                        
+                        for(let key in innerKeys){
+                            // childNodes[indexOfButton].click();
+                            // console.log(childNodes);
+                            // console.log("div padre")
+                            // console.log(childNodes[(childNodes.length) - 1].childNodes);
+                            // console.log(innerValues[key]);
+                            setParameterField(div[0] ,innerValues[key], 1);                        
+                        }
+
+                        
+                        // console.log(Object.values(values[k]));
+                        // setParameterField(, values[k])
+                    }
+                }
             }
             //TODO viene fatto solo per l'id, continuare
         }
+
+    
+
         if(!contained){
             setField($(fields[i]), undefined);
-
+            // TODO fare scancellamento quando non esiste
         }
     }
+
+
+
+    
+
+
+    
     
 }
 
 function setPropertyField(inputElement, obj){
-    console.log("i figgh");
-    console.log(inputElement.childNodes);
     let childNodes = inputElement.childNodes;
-    console.log("o valor");
-    console.log(obj);
     if(obj.length > 0){
+        let indexOfButton = childNodes.length - 1;
         for(let i in obj){
-            childNodes[(childNodes.length)-1].click();
-            // setParameterField();
-            
+            childNodes[indexOfButton].click();
+            // console.log(obj[i]);
+            setParameterField(childNodes[childNodes.length-1],obj[i]);
         }
     }
 }
 
-function setParameterField(inputElement, obj){
+function setParameterField(inputElement, obj, offset = 0){
+    console.log("div in ingresso");
+    console.log(inputElement.childNodes);
     let childNodes = inputElement.childNodes;
     if(obj != undefined){
         if(obj.value.length > 0){
             for(let i in obj.value){
-                inputElement.childNodes[2].click();
-                let picker = inputElement.childNodes[3].childNodes[0].childNodes[0];
-                let divCurrent = inputElement.childNodes[3].childNodes[0].childNodes[2];
+
+                inputElement.childNodes[2-offset].click();
+                // let index = 0;
+                // for(let j in childNodes){
+                //     if(childNodes[j].localName == "button"){
+                //         index = j;
+                //     }
+                // }
+                // inputElement.childNodes[index].click();
+                
+                let picker = inputElement.childNodes[3-offset].childNodes[0];
+                let divCurrent = inputElement.childNodes[3-offset];
+                if(offset == 0){
+                    picker = picker.childNodes[0]
+                    divCurrent = divCurrent.childNodes[0].childNodes[2];
+                }else{
+                    divCurrent = divCurrent.childNodes[2]
+                }
+                console.log(picker);
+                console.log(divCurrent);
                 picker.value = obj.value[i].getType();
                 $('#'+picker.id).change();
                 // console.log(obj.value[i]);
                 // console.log($('#'+divCurrent.id)[0].childNodes);
+
+                // 
                 let divElements = $('#'+divCurrent.id)[0].childNodes;
+                console.log(divElements);
                 for(let i=1; i<divElements.length; i=i+2){ //skip labels
                     let attributeName = divElements[i].id.split('-')[2];
                     let value = obj.value[0][attributeName];
                     if(value != undefined){
                         divElements[i].value = value;
                     }
-                    console.log(attributeName+" -> "+value);
+                    // console.log(attributeName+" -> "+value);
                 }
             }
         }
@@ -2773,7 +2843,7 @@ function setParameterField(inputElement, obj){
 }
 
 function populateScenarioParametersForm(scenarioParameters) {
-    //TODO start, duration, warmup non sappiamo cosa farne perché sono Parameters
+    //TODO controllare al cambio del picker
 
     let startScenParDiv = $('#scenarioParameters-start-div');
     let startScenParVal = scenarioParameters.start;
@@ -3421,11 +3491,11 @@ function createObj(node) {
         }
 
         //TODO REMOVE
-        if(node.localName === "PropertyParameters"){
-            console.log(node);
-            console.log(node.childNodes);
-            console.log(nodeObject);
-        }
+        // if(node.localName === "PropertyParameters"){
+        //     console.log(node);
+        //     console.log(node.childNodes);
+        //     console.log(nodeObject);
+        // }
 
         // if(node.localName === "Scenario"){
         //     console.log(node.attributes);
@@ -3450,30 +3520,23 @@ function buildDataTree(nodo, nodoObject) {
 
     let childNodes = nodo.childNodes;
     let temp = [];
-
-    if(nodo.localName == "PropertyParameters"){
-        console.log("nodo "+nodo.localName);
-        console.log(nodo);
-        console.log("num figli ");
-        console.log(numFigli);
-        console.log(nodo.localName+" -> figliii");
-        console.log(childNodes);
-        console.log("temp");
-        console.log(temp)
-    }
+    // for (let i = 0; i < childNodes.length; i++) {
+    //     // * togliamo dai figli quelli che hanno campo "#text" poiche sarebbero gli invii dell'XML
+    //     if (childNodes[i].nodeName == '#text') {
+    //         nodo.removeChild(childNodes[i]);
+    //     }
+    // }
+    
+    // childNodes = Array.from(childNodes);
 
     for (let i = 0; i < childNodes.length; i++) {
         // * togliamo dai figli quelli che hanno campo "#text" poiche sarebbero gli invii dell'XML
         if (childNodes[i].nodeName != '#text') {
             temp.push(childNodes[i]);
-            if(nodo.localName == "PropertyParameters"){
-                console.log(temp)
-            }
         }
     }
-    
     childNodes = temp;
-    
+
     
     while (numFigli > 0) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
@@ -3502,8 +3565,6 @@ function buildDataTree(nodo, nodoObject) {
             }
         } else {
             if (isArrayAttribute(nodoFiglio[0].localName)) {
-                // console.log(nodoFiglio[0].localName); //TODO REMOVE
-                // console.log(nodoFiglio[1]); //TODO REMOVE
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
