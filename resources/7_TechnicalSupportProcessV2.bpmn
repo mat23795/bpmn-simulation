@@ -657,6 +657,24 @@
               <bpsim:DateTimeParameter value="2016-01-01T06:00:00" />
               <bpsim:ResultRequest>count</bpsim:ResultRequest>
             </bpsim:Start>
+
+            <!-- inizio modifica -->
+            <bpsim:PropertyParameters>
+              
+              <bpsim:Property name="noOfIssues">
+                <bpsim:TruncatedNormalDistribution max="1000" mean="2" min="1" standardDeviation="1"/>  
+              </bpsim:Property>
+              <bpsim:Property name="noOfIssues2">
+                <bpsim:ExpressionParameter value="getProperty('noOfIssues') -1"/>
+              </bpsim:Property>
+
+              <bpsim:QueueLength>
+                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
+              </bpsim:QueueLength>
+
+            </bpsim:PropertyParameters>
+            <!-- fine modifica -->
+
           </bpsim:ScenarioParameters>
           <bpsim:ElementParameters elementRef="_10-42">
             <bpsim:ControlParameters>

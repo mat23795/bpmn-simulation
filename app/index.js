@@ -511,9 +511,9 @@ function createFormFields(firstTime = true) {
     
 
     
-    setParameter($('#scenarioParameters-queue-propertyParameters-div'));
+    setParameter($('#scenarioParameters-queueLength-propertyParameters-div'));
     // rimozione result type non disponibili per queueLength di propertyParameters
-    let queueSelect = $('select[id*="queue-resultRequest"]');
+    let queueSelect = $('select[id*="queueLength-resultRequest"]');
     queueSelect[0].removeChild(queueSelect[0].options[3]);
     queueSelect[0].removeChild(queueSelect[0].options[3]);
 
@@ -1706,14 +1706,14 @@ function setParameter(parameter){
             switch(this.value) {
                 case "ExpressionParameter":{
                     let expressionLabel = jQuery('<label/>', {
-                        for: parameterName+'+value-expressionParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-expressionParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let expressionInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-expressionParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-expressionParameter-input-'+idElementsLocal,
                         placeholder: 'The XPATH expression'
                     });
                     contentDiv.append(expressionLabel);
@@ -1723,7 +1723,7 @@ function setParameter(parameter){
                 case "EnumParameter":{
                     
                     let enumValuesLabel = jQuery('<label/>', {
-                        for: parameterName+'+value-enumParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-enumParameterValue-input-'+idElementsLocal,
                         text: 'Values'
                     });
         
@@ -1755,7 +1755,6 @@ function setParameter(parameter){
                             class: "scenario-picker",
                             id: parameterName+"-value-enum-values-picker-"+idElementsEnumLocal
                         });
-
 
                         enumValuePicker.append($('<option>', {
                             value: "",
@@ -1865,14 +1864,14 @@ function setParameter(parameter){
                                 }
                                 case "DateTimeParameter":{
                                     let dateTimeLabel = jQuery('<label/>', {
-                                        for: 'enumParameter-'+parameterName+'-value-dateTimeParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        for: 'enumParameter-'+parameterName+'-value-value-dateTimeParameter-input-'+idElementsEnumLocal+'-'+idLocal,
                                         text: 'Value'
                                     });
                         
                                     let dateTimeInput = jQuery('<input/>', {
                                         type: 'text',
                                         class: 'form-control form-control-input',
-                                        id: 'enumParameter-'+parameterName+'-value-dateTimeParameterValue-input-'+idElementsEnumLocal+'-'+idLocal,
+                                        id: 'enumParameter-'+parameterName+'-value-value-dateTimeParameter-input-'+idElementsEnumLocal+'-'+idLocal,
                                         placeholder: 'DateTime value'
                                     });
                                     enumContentDiv.append(dateTimeLabel);
@@ -1912,14 +1911,14 @@ function setParameter(parameter){
                                     enumContentDiv.append(floatingInput);
 
                                     let floatingTimeUnitLabel = jQuery('<label/>', {
-                                        for: 'enumParameter-value-floatingParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal,
+                                        for: 'enumParameter-value-timeUnit-floatingParameter-picker-'+idElementsEnumLocal+'-'+idLocal,
                                         text: 'Time Unit',
                                         style: "width: 100%"
                                     });
                         
                                     let floatingTimeUnitPicker = jQuery('<select/>', {
                                         class: 'scenario-picker',
-                                        id: 'enumParameter-value-floatingParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal
+                                        id: 'enumParameter-value-timeUnit-floatingParameter-picker-'+idElementsEnumLocal+'-'+idLocal
                                     });
                                     
                                     for (let timeUnit in TimeUnit) {
@@ -1951,14 +1950,14 @@ function setParameter(parameter){
                                     enumContentDiv.append(numericInput);
 
                                     let numericTimeUnitLabel = jQuery('<label/>', {
-                                        for: 'enumParameter-value-numericParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal,
+                                        for: 'enumParameter-value-timeUnit-numericParameter-picker-'+idElementsEnumLocal+'-'+idLocal,
                                         text: 'Time Unit',
                                         style: "width: 100%"
                                     });
                         
                                     let numericTimeUnitPicker = jQuery('<select/>', {
                                         class: 'scenario-picker',
-                                        id: 'enumParameter-value-numericParameterTimeUnit-picker-'+idElementsEnumLocal+'-'+idLocal
+                                        id: 'enumParameter-value-timeUnit-numericParameter-picker-'+idElementsEnumLocal+'-'+idLocal
                                     });
                                     
                                     for (let timeUnit in TimeUnit) {
@@ -2013,14 +2012,14 @@ function setParameter(parameter){
                     let distributionName = this.value;
                     distributionName = distributionName.charAt(0).toLowerCase() + distributionName.slice(1);
                     let valueTimeUnitLabel = jQuery('<label/>', {
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let valueTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2034,28 +2033,28 @@ function setParameter(parameter){
 
                     let shapeLabel = jQuery('<label/>', {
                         width: "-webkit-fill-available",
-                        for: parameterName+'-shape-'+distributionName+'-input-'+idElementsLocal,
+                        for: parameterName+'-'+distributionName+'-shape-input-'+idElementsLocal,
                         text: 'Shape'
                     });
         
                     let shapeInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-shape-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-shape-input-'+idElementsLocal,
                         placeholder: 'Shape value'
                     });
                     contentDiv.append(shapeLabel);
                     contentDiv.append(shapeInput);
 
                     let scaleLabel = jQuery('<label/>', {
-                        for: parameterName+'-scale-'+distributionName+'-input-'+idElementsLocal,
+                        for: parameterName+'-'+distributionName+'-scale-input-'+idElementsLocal,
                         text: 'Scale'
                     });
         
                     let scaleInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-scale-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-scale-input-'+idElementsLocal,
                         placeholder: 'Scale value'
                     });
                     contentDiv.append(scaleLabel);
@@ -2075,14 +2074,14 @@ function setParameter(parameter){
                     let distributionName = this.value;
                     distributionName = distributionName.charAt(0).toLowerCase() + distributionName.slice(1);
                     let valueTimeUnitLabel = jQuery('<label/>', {
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let valueTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2102,14 +2101,14 @@ function setParameter(parameter){
                     this.value == "NegativeExponentialDistribution"){
                         let meanLabel = jQuery('<label/>', {
                             width: "-webkit-fill-available",
-                            for: parameterName+'-mean-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-mean-input-'+idElementsLocal,
                             text: 'Mean'
                         });
             
                         let meanInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-mean-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-mean-input-'+idElementsLocal,
                             placeholder: 'Mean value'
                         });
                         contentDiv.append(meanLabel);
@@ -2120,14 +2119,14 @@ function setParameter(parameter){
                     this.value == "LogNormalDistribution" ||
                     this.value == "TruncatedNormalDistribution"){
                         let standardDeviationLabel = jQuery('<label/>', {
-                            for: parameterName+'-standardDeviation-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-standardDeviation-input-'+idElementsLocal,
                             text: 'Standard Deviation'
                         });
             
                         let standardDeviationInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-standardDeviation-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-standardDeviation-input-'+idElementsLocal,
                             placeholder: 'Standard Deviation value'
                         });
                         contentDiv.append(standardDeviationLabel);
@@ -2139,14 +2138,14 @@ function setParameter(parameter){
                     this.value == "TruncatedNormalDistribution"){
                         let minLabel = jQuery('<label/>', {
                             width: "-webkit-fill-available",
-                            for: parameterName+'-min-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-min-input-'+idElementsLocal,
                             text: 'Min'
                         });
             
                         let minInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-min-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-min-input-'+idElementsLocal,
                             placeholder: 'Min value'
                         });
                         contentDiv.append(minLabel);
@@ -2157,14 +2156,14 @@ function setParameter(parameter){
                     this.value == "TriangularDistribution" ||
                     this.value == "TruncatedNormalDistribution"){
                         let maxLabel = jQuery('<label/>', {
-                            for: parameterName+'-max-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-max-input-'+idElementsLocal,
                             text: 'Max'
                         });
             
                         let maxInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-max-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-max-input-'+idElementsLocal,
                             placeholder: 'Max value'
                         });
                         contentDiv.append(maxLabel);
@@ -2173,14 +2172,14 @@ function setParameter(parameter){
 
                     if(this.value == "TriangularDistribution"){
                         let modeLabel = jQuery('<label/>', {
-                            for: parameterName+'-mode-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-mode-input-'+idElementsLocal,
                             text: 'Mode'
                         });
             
                         let modeInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-mode-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-mode-input-'+idElementsLocal,
                             placeholder: 'Mode value'
                         });
                         contentDiv.append(modeLabel);
@@ -2189,14 +2188,14 @@ function setParameter(parameter){
 
                     if(this.value == "ErlangDistribution"){
                         let kLabel = jQuery('<label/>', {
-                            for: parameterName+'-k-'+distributionName+'-input-'+idElementsLocal,
+                            for: parameterName+'-'+distributionName+'-k-input-'+idElementsLocal,
                             text: 'K'
                         });
             
                         let kInput = jQuery('<input/>', {
                             type: 'text',
                             class: 'form-control form-control-input',
-                            id: parameterName+'-k-'+distributionName+'-input-'+idElementsLocal,
+                            id: parameterName+'-'+distributionName+'-k-input-'+idElementsLocal,
                             placeholder: 'K value'
                         });
                         contentDiv.append(kLabel);
@@ -2209,14 +2208,14 @@ function setParameter(parameter){
                     let distributionName = this.value;
                     distributionName = distributionName.charAt(0).toLowerCase() + distributionName.slice(1);
                     let valueTimeUnitLabel = jQuery('<label/>', {
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let valueTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2230,28 +2229,28 @@ function setParameter(parameter){
 
                     let probabilityLabel = jQuery('<label/>', {
                         width: "-webkit-fill-available",
-                        for: parameterName+'-probability-'+distributionName+'-input-'+idElementsLocal,
+                        for: parameterName+'-'+distributionName+'-probability-input-'+idElementsLocal,
                         text: 'Probability'
                     });
         
                     let probabilityInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-probability-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-probability-input-'+idElementsLocal,
                         placeholder: 'Probability value'
                     });
                     contentDiv.append(probabilityLabel);
                     contentDiv.append(probabilityInput);
 
                     let trialsLabel = jQuery('<label/>', {
-                        for: parameterName+'-trials-'+distributionName+'-input-'+idElementsLocal,
+                        for: parameterName+'-'+distributionName+'-trials-input-'+idElementsLocal,
                         text: 'Trials'
                     });
         
                     let trialsInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-trials-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-trials-input-'+idElementsLocal,
                         placeholder: 'Trials value'
                     });
                     contentDiv.append(trialsLabel);
@@ -2263,14 +2262,14 @@ function setParameter(parameter){
                     let distributionName = this.value;
                     distributionName = distributionName.charAt(0).toLowerCase() + distributionName.slice(1);
                     let valueTimeUnitLabel = jQuery('<label/>', {
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let valueTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: parameterName+'-value-'+distributionName+'-input-'+idElementsLocal,
+                        id: parameterName+'-'+distributionName+'-timeUnit-input-'+idElementsLocal,
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2284,7 +2283,7 @@ function setParameter(parameter){
 
                     let discreteBooleanLabel = jQuery('<label/>', {
                         width: "-webkit-fill-available",
-                        for: parameterName+'-discrete-userDistribution-input-'+idElementsLocal,
+                        for: parameterName+'-userDistribution-discrete-input-'+idElementsLocal,
                         text: 'Discrete'
                     });
 
@@ -2297,7 +2296,7 @@ function setParameter(parameter){
                         type: "checkbox",
                         name: "onoffswitch",
                         class: "onoffswitch-checkbox",
-                        id: parameterName+'-discrete-userDistribution-input-'+idElementsLocal
+                        id: parameterName+'-userDistribution-discrete-input-'+idElementsLocal
                         // checked
                     });
                     divBoolean.append(booleanCheckBox);
@@ -2312,7 +2311,7 @@ function setParameter(parameter){
 
                     let labelOnOffSwitch = jQuery('<label/>', {
                         class: "onoffswitch-label",
-                        for: parameterName+'-discrete-userDistribution-input-'+idElementsLocal
+                        for: parameterName+'-userDistribution-discrete-input-'+idElementsLocal
                     });
                     labelOnOffSwitch.append(spanInner);
                     labelOnOffSwitch.append(spanSwitch);
@@ -2338,7 +2337,7 @@ function setParameter(parameter){
                  */
                 case "BooleanParameter":{
                     let valueBooleanLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-booleanParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-booleanParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
 
@@ -2351,7 +2350,7 @@ function setParameter(parameter){
                         type: "checkbox",
                         name: "onoffswitch",
                         class: "onoffswitch-checkbox",
-                        id: parameterName+'-value-booleanParameterValue-input-'+idElementsLocal
+                        id: parameterName+'-value-value-booleanParameter-input-'+idElementsLocal
                         // checked
                     });
                     divBoolean.append(booleanCheckBox);
@@ -2366,7 +2365,7 @@ function setParameter(parameter){
 
                     let labelOnOffSwitch = jQuery('<label/>', {
                         class: "onoffswitch-label",
-                        for: parameterName+'-value-booleanParameterValue-input-'+idElementsLocal
+                        for: parameterName+'-value-value-booleanParameter-input-'+idElementsLocal
                     });
                     labelOnOffSwitch.append(spanInner);
                     labelOnOffSwitch.append(spanSwitch);
@@ -2385,14 +2384,14 @@ function setParameter(parameter){
                 }
                 case "StringParameter":{
                     let stringLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-stringParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-stringParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let stringInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-stringParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-stringParameter-input-'+idElementsLocal,
                         placeholder: 'String value'
                     });
                     contentDiv.append(stringLabel);
@@ -2402,14 +2401,14 @@ function setParameter(parameter){
                 }
                 case "DurationParameter":{
                     let durationLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-durationParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-durationParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let durationInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-durationParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-durationParameter-input-'+idElementsLocal,
                         placeholder: 'Duration value'
                     });
                     contentDiv.append(durationLabel);
@@ -2419,14 +2418,14 @@ function setParameter(parameter){
                 }
                 case "DateTimeParameter":{
                     let dateTimeLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-dateTimeParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-dateTimeParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let dateTimeInput = jQuery('<input/>', {
                         type: 'datetime-local',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-dateTimeParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-dateTimeParameter-input-'+idElementsLocal,
                         // placeholder: ' value'
                     });
                     contentDiv.append(dateTimeLabel);
@@ -2435,28 +2434,28 @@ function setParameter(parameter){
                 }
                 case "FloatingParameter":{
                     let floatingLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-floatingParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-floatingParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let floatingInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-floatingParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-floatingParameter-input-'+idElementsLocal,
                         placeholder: 'Float value'
                     });
                     contentDiv.append(floatingLabel);
                     contentDiv.append(floatingInput);
 
                     let floatingTimeUnitLabel = jQuery('<label/>', {
-                        for: 'value-floatingParameterTimeUnit-picker-'+idElementsLocal,
+                        for: parameterName+'-value-timeUnit-picker-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let floatingTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: 'value-floatingParameterTimeUnit-picker-'+idElementsLocal
+                        id: parameterName+'-value-timeUnit-picker-'+idElementsLocal
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2472,28 +2471,28 @@ function setParameter(parameter){
                 }
                 case "NumericParameter":{
                     let numericLabel = jQuery('<label/>', {
-                        for: parameterName+'-value-numericParameterValue-input-'+idElementsLocal,
+                        for: parameterName+'-value-value-numericParameter-input-'+idElementsLocal,
                         text: 'Value'
                     });
         
                     let numericInput = jQuery('<input/>', {
                         type: 'text',
                         class: 'form-control form-control-input',
-                        id: parameterName+'-value-numericParameterValue-input-'+idElementsLocal,
+                        id: parameterName+'-value-value-numericParameter-input-'+idElementsLocal,
                         placeholder: 'Int value'
                     });
                     contentDiv.append(numericLabel);
                     contentDiv.append(numericInput);
 
                     let numericTimeUnitLabel = jQuery('<label/>', {
-                        for: 'value-numericParameterTimeUnit-picker-'+idElementsLocal,
+                        for: parameterName+'-value-timeUnit-picker-'+idElementsLocal,
                         text: 'Time Unit',
                         style: "width: 100%"
                     });
         
                     let numericTimeUnitPicker = jQuery('<select/>', {
                         class: 'scenario-picker',
-                        id: 'value-numericParameterTimeUnit-picker-'+idElementsLocal
+                        id: parameterName+'-value-timeUnit-picker-'+idElementsLocal
                     });
                     
                     for (let timeUnit in TimeUnit) {
@@ -2725,11 +2724,23 @@ function populateElementParametersForm(elementParameters) {
     
 }
 
-function setParameterField(inputElement, obj){
-    
-    console.log(obj);
+function setPropertyField(inputElement, obj){
+    console.log("i figgh");
+    console.log(inputElement.childNodes);
     let childNodes = inputElement.childNodes;
-    console.log(childNodes);
+    console.log("o valor");
+    console.log(obj);
+    if(obj.length > 0){
+        for(let i in obj){
+            childNodes[(childNodes.length)-1].click();
+            // setParameterField();
+            
+        }
+    }
+}
+
+function setParameterField(inputElement, obj){
+    let childNodes = inputElement.childNodes;
     if(obj != undefined){
         if(obj.value.length > 0){
             for(let i in obj.value){
@@ -2738,9 +2749,17 @@ function setParameterField(inputElement, obj){
                 let divCurrent = inputElement.childNodes[3].childNodes[0].childNodes[2];
                 picker.value = obj.value[i].getType();
                 $('#'+picker.id).change();
-                console.log(obj.value[i]);
-                console.log($('#'+divCurrent.id));
-
+                // console.log(obj.value[i]);
+                // console.log($('#'+divCurrent.id)[0].childNodes);
+                let divElements = $('#'+divCurrent.id)[0].childNodes;
+                for(let i=1; i<divElements.length; i=i+2){ //skip labels
+                    let attributeName = divElements[i].id.split('-')[2];
+                    let value = obj.value[0][attributeName];
+                    if(value != undefined){
+                        divElements[i].value = value;
+                    }
+                    console.log(attributeName+" -> "+value);
+                }
             }
         }
     
@@ -2756,17 +2775,17 @@ function setParameterField(inputElement, obj){
 function populateScenarioParametersForm(scenarioParameters) {
     //TODO start, duration, warmup non sappiamo cosa farne perché sono Parameters
 
-    let startScenParInput = $('#scenarioParameters-start-div');
+    let startScenParDiv = $('#scenarioParameters-start-div');
     let startScenParVal = scenarioParameters.start;
-    setParameterField(startScenParInput[0], startScenParVal);
+    setParameterField(startScenParDiv[0], startScenParVal);
 
-    let durationScenParInput = $('#scenarioParameters-duration-div');
+    let durationScenParDiv = $('#scenarioParameters-duration-div');
     let durationScenParVal = scenarioParameters.duration;
-    // setParameterField(durationScenParInput[0], durationScenParVal);
+    setParameterField(durationScenParDiv[0], durationScenParVal);
 
-    let warmupScenParInput = $('#scenarioParameters-warmup-div');
+    let warmupScenParDiv = $('#scenarioParameters-warmup-div');
     let warmupScenParVal = scenarioParameters.warmup;
-    // setParameterField(warmupScenParInput[0], warmupScenParVal);
+    setParameterField(warmupScenParDiv[0], warmupScenParVal);
 
     let replicationScenParInput = $('#scenarioParametersAttribute-replication-input');
     let replicationScenParVal = scenarioParameters.replication;
@@ -2813,7 +2832,20 @@ function populateScenarioParametersForm(scenarioParameters) {
     let traceFormatScenParVal = scenarioParameters.traceFormat;
     setField(traceFormatScenParInput, traceFormatScenParVal);
 
-    //TODO fare PropertyParameter
+
+    // * sezione property parameters
+    
+    let propertyScenParDiv = $('#scenarioParameters-property-propertyParameters-div');
+    let queueLengthScenParDiv = $('#scenarioParameters-queueLength-propertyParameters-div');
+    if(scenarioParameters.propertyParameters.length > 0){
+        let propertyScenParVal = scenarioParameters.propertyParameters[0].property;
+        setPropertyField(propertyScenParDiv[0],propertyScenParVal);
+
+        let queueLengthScenParVal = scenarioParameters.propertyParameters[0].queueLength;
+        setParameterField(queueLengthScenParDiv[0], queueLengthScenParVal);
+    }
+
+    
 }
 
 function populateCalendarForm(calendars) {
@@ -3375,6 +3407,7 @@ function createObj(node) {
         nodeObject = factory[node.localName][node.textContent];
     } else {
         nodeObject = new factory[node.localName]();
+        // console.log(node.localName);
         // console.log(isParameter(node.localName)+"   "+node.localName); //TODO remove
         for (let j = 0; j < node.attributes.length; j++) {
             // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
@@ -3388,6 +3421,12 @@ function createObj(node) {
         }
 
         //TODO REMOVE
+        if(node.localName === "PropertyParameters"){
+            console.log(node);
+            console.log(node.childNodes);
+            console.log(nodeObject);
+        }
+
         // if(node.localName === "Scenario"){
         //     console.log(node.attributes);
         //     console.log(node);
@@ -3411,19 +3450,35 @@ function buildDataTree(nodo, nodoObject) {
 
     let childNodes = nodo.childNodes;
     let temp = [];
+
+    if(nodo.localName == "PropertyParameters"){
+        console.log("nodo "+nodo.localName);
+        console.log(nodo);
+        console.log("num figli ");
+        console.log(numFigli);
+        console.log(nodo.localName+" -> figliii");
+        console.log(childNodes);
+        console.log("temp");
+        console.log(temp)
+    }
+
     for (let i = 0; i < childNodes.length; i++) {
         // * togliamo dai figli quelli che hanno campo "#text" poiche sarebbero gli invii dell'XML
         if (childNodes[i].nodeName != '#text') {
             temp.push(childNodes[i]);
+            if(nodo.localName == "PropertyParameters"){
+                console.log(temp)
+            }
         }
     }
+    
     childNodes = temp;
-
+    
+    
     while (numFigli > 0) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-
         // creare un Parameter con value avvalorato correttamente
         if (isParameter(nodoFiglio[0].localName)) {
             let parameterFieldsToDelete = [];
@@ -3447,6 +3502,8 @@ function buildDataTree(nodo, nodoObject) {
             }
         } else {
             if (isArrayAttribute(nodoFiglio[0].localName)) {
+                // console.log(nodoFiglio[0].localName); //TODO REMOVE
+                // console.log(nodoFiglio[1]); //TODO REMOVE
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
