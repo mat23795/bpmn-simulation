@@ -2752,6 +2752,7 @@ function populateElementParametersForm(elementParameters) {
                             console.log(elRefTot);
                             console.log(values);
                             console.log(childNodes);
+                            console.log("io so il problema")
                             pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
                             console.log("ciao");
 
@@ -2790,6 +2791,84 @@ function populateElementParametersForm(elementParameters) {
         }
     }
 
+    // * inizio fase controllo per sezione 'Resources'
+
+    let divResources = $('#div-resources');
+    // console.log("resources");
+    // console.log(divResources);
+    let singleResourcesDivs = [];
+    for(let i in divResources[0].childNodes){
+        if(i%2 == 1 ){
+            singleResourcesDivs.push(divResources[0].childNodes[i]);
+        }
+    }
+    for(let i in singleResourcesDivs){
+        // console.log(singleResourcesDivs[i])
+        // let contained=false;
+        let elRefTot = singleResourcesDivs[i].id.split('$$')[1];
+        for (let j in elementParameters) {
+            console.log(elementParameters[j].elementRef)
+            if(elRefTot == elementParameters[j].elementRef){
+                console.log("sta sta");
+                console.log(elementParameters[j])
+                
+                let keys =  Object.keys(elementParameters[j]);
+                let values = Object.values(elementParameters[j]);
+                
+                let div = $("div[id*='$$"+elRefTot+"$$']");
+                // console.log(div);
+                let childNodes = div[0].childNodes;
+                let indexOfButton = childNodes.length - 1;
+
+                for(let k in keys){
+                    if(keys[k] == "_controlParameters" || keys[k] == "_timeParameters" || keys[k] == "_costParameters" || 
+                    keys[k] == "_resourceParameters" || keys[k] == "_propertyParameters" || keys[k] == "_priorityParameters"){
+                        let innerKeys = Object.keys(values[k])
+                        let innerValues = Object.values(values[k]);
+                        
+                        for(let key = 0; key < innerKeys.length; key++){
+                            childNodes[indexOfButton].click();
+                            let pickerValue = innerKeys[key].split('_')[1];
+                            console.log("ciao");
+                            console.log(elRefTot);
+                            console.log(values);
+                            console.log(childNodes);
+                            console.log("io so il problema")
+                            console.log(pickerValue)
+                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
+                            console.log("ciao");
+
+                            let select = childNodes[childNodes.length-1].childNodes[0].id;
+                            if(select.includes("$$")){
+                                select = $.escapeSelector(select);
+                            }
+                            // console.log($('#'+select))
+                            $('#'+select).val(pickerValue);
+                            $('#'+select).change();
+                            let divToPassID = childNodes[childNodes.length-1].childNodes[2].id;
+                            if(divToPassID.includes("$$")){
+                                divToPassID = $.escapeSelector(divToPassID);
+                            }
+                            // console.log("divvvvv")
+                            // console.log(divToPassID)
+                            if(keys[k] == "_propertyParameters" && pickerValue == "Property"){
+                                setPropertyField($('#'+divToPassID)[0], innerValues[key]); 
+
+                            }else{
+                                setParameterField($('#'+divToPassID)[0], innerValues[key]); 
+                            }                       
+                        }
+
+                        
+                        // console.log(Object.values(values[k]));
+                        // setParameterField(, values[k])
+                    }
+                }
+
+            }
+        }
+
+    }
 
 
     
@@ -2815,6 +2894,8 @@ function setParameterField(inputElement, obj, offset = 0){
     console.log(inputElement.childNodes);
     let childNodes = inputElement.childNodes;
     if(obj != undefined){
+        console.log("oggetto")
+        console.log(obj);
         if(obj.value.length > 0){
             for(let i in obj.value){
                 inputElement.childNodes[2-offset].click();
@@ -2861,6 +2942,8 @@ function setParameterField(inputElement, obj, offset = 0){
         }
     
         if(obj.resultRequest.length > 0){
+            console.log("altro problema");
+            console.log(childNodes)
             childNodes[(childNodes.length)-1].value = obj.resultRequest[0];
         }
     }else{

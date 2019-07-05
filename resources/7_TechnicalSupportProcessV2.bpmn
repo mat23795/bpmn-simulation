@@ -892,6 +892,20 @@
               </bpsim:ProcessingTime>
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="resource_Front_Office">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="0"/>
+                <bpsim:NumericParameter validFor="C1" value="200"/>
+                <bpsim:NumericParameter validFor="C2" value="90"/>
+                <bpsim:NumericParameter validFor="C3" value="130"/>
+                <bpsim:NumericParameter validFor="C4" value="60"/>
+                <bpsim:NumericParameter validFor="C5" value="150"/>
+                <bpsim:NumericParameter validFor="C6" value="100"/>
+                <bpsim:NumericParameter validFor="C7" value="40"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
           <!-- <bpsim:ElementParameters elementRef="_10-219"> -->
             <!-- <bpsim:ControlParameters> -->
               <!-- <bpsim:TriggerCount> -->
