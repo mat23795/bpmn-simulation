@@ -2726,11 +2726,11 @@ function populateElementParametersForm(elementParameters) {
                 
                 let div = $("div[id*='$$"+elRefTot+"$$']");
                 // console.log(div);
-                // let childNodes = div[0].childNodes;
-                // let indexOfButton = childNodes.length - 1;
+                let childNodes = div[0].childNodes;
+                let indexOfButton = childNodes.length - 1;
 
                 for(let k in keys){
-                    // console.log("elemento");
+                    
                     // console.log(elementParameters[j][k]);
                     if(keys[k] == "_controlParameters" || keys[k] == "_timeParameters" || keys[k] == "_costParameters" || 
                     keys[k] == "_resourceParameters" || keys[k] == "_propertyParameters" || keys[k] == "_priorityParameters"){
@@ -2740,13 +2740,35 @@ function populateElementParametersForm(elementParameters) {
                         let innerValues =Object.values(values[k]);
                         
                         
-                        for(let key in innerKeys){
-                            // childNodes[indexOfButton].click();
-                            // console.log(childNodes);
-                            // console.log("div padre")
-                            // console.log(childNodes[(childNodes.length) - 1].childNodes);
-                            // console.log(innerValues[key]);
-                            setParameterField(div[0] ,innerValues[key], 1);                        
+                        for(let key = 0; key < innerKeys.length; key++){
+                            console.log("CONTANTORE");
+                            console.log(innerKeys[key]);
+                            childNodes[indexOfButton].click();
+                            console.log("$$$$$$$")
+                            let pickerValue = innerKeys[key].split('_')[1];
+                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1)
+                            // childNodes[2].childNodes[0].value = pickerValue;
+                            // console.log(childNodes[2].childNodes);
+                            let select = childNodes[childNodes.length-1].childNodes[0].id;
+                            if(select.includes("$$")){
+                                select = $.escapeSelector(select);
+                            }
+                            $('#'+select).val(pickerValue);
+                            $('#'+select).change();
+                            console.log(childNodes);
+                            console.log("$$$$$$$");
+                            let divToPassID = childNodes[childNodes.length-1].childNodes[2].id;
+                            if(divToPassID.includes("$$")){
+                                divToPassID = $.escapeSelector(divToPassID);
+                            }
+                            console.log(divToPassID);
+                            console.log($('#'+divToPassID));
+                            if(keys[k] == "_propertyParameters" && pickerValue == "Property"){
+                                setPropertyField($('#'+divToPassID)[0], innerValues[key]); 
+
+                            }else{
+                                setParameterField($('#'+divToPassID)[0], innerValues[key], 1); 
+                            }                       
                         }
 
                         
@@ -2810,17 +2832,28 @@ function setParameterField(inputElement, obj, offset = 0){
                     picker = picker.childNodes[0]
                     divCurrent = divCurrent.childNodes[0].childNodes[2];
                 }else{
-                    divCurrent = divCurrent.childNodes[2]
+                    // divCurrent = divCurrent.childNodes[2]
                 }
-                console.log(picker);
-                console.log(divCurrent);
+                // console.log(picker);
+                // console.log(divCurrent);
                 picker.value = obj.value[i].getType();
-                $('#'+picker.id).change();
-                // console.log(obj.value[i]);
-                // console.log($('#'+divCurrent.id)[0].childNodes);
+                console.log("########");
+                console.log(obj.value[i].getType());
+                console.log(picker.value);
+                console.log("########");
 
-                // 
-                let divElements = $('#'+divCurrent.id)[0].childNodes;
+                let pickerID = picker.id;
+                if(pickerID.includes("$$")){
+                    pickerID = $.escapeSelector(pickerID);
+                }
+                $('#'+pickerID).change();
+
+                // TODO CAPIRE COME MAI QUI DA PROBLEMI
+                let divCurrentID = divCurrent.id;
+                if(divCurrentID.includes('$$')){
+                    divCurrentID = $.escapeSelector(divCurrentID);
+                }
+                let divElements = $('#'+divCurrentID)[0].childNodes;
                 console.log(divElements);
                 for(let i=1; i<divElements.length; i=i+2){ //skip labels
                     let attributeName = divElements[i].id.split('-')[2];
