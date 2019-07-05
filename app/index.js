@@ -230,6 +230,8 @@ function openDiagram() {
                     $('#scenario-picker').empty();
                 }
 
+                resetParameterDivs();
+
             });
 
             // * aggiunta evento al bottone che crea un nuovo scenario
@@ -258,7 +260,8 @@ function openDiagram() {
                     currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
                     $('#scenario-picker').val(currentScenarioGlobal).trigger('change');
 
-                    console.log(idListGlobal); //TODO REMOVE
+                    resetParameterDivs();
+
                 }
             });
             
@@ -269,6 +272,19 @@ function openDiagram() {
         // xmlParsing();
 
     });
+}
+
+function resetParameterDivs(){
+    let properties = $("div[id*=scenarioParameters-property]");
+    for(let i=0; i<properties.length; i++){
+        if(/\d/g.test(properties[i].id)){
+            properties[i].remove();
+        }
+    }
+    let parameters = $("div[id^=div-parameter]");
+    for(let i=0; i<parameters.length; i++){
+        parameters[i].remove();
+    }
 }
 
 function populateIdList() {
@@ -1102,6 +1118,7 @@ function createFormFields(firstTime = true) {
 
             let scenariosTemp = dataTreeObjGlobal.scenario;
             // createFormFields()
+            resetParameterDivs();
             refreshFormFields(scenariosTemp, scenarioSelected);
 
         });
@@ -2695,6 +2712,8 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
         
         populateCalendarForm(scenarios[scenarioSelected].calendar);
 
+        // populateResource
+
     } else {
         //TODO gestire caso in cui si debba creare bspim da zero
     }
@@ -2711,18 +2730,9 @@ function populateElementParametersForm(elementParameters) {
                 contained=true;
                 let idElementVal = elementParameters[j].id;
                 setField($(fields[i]), idElementVal);
-                // console.log("element Parameter");
-                // console.log(elementParameters[j]);
-                // setParameter()
-
-                // for(let key in elementParameters[j]) {
-                //     let value = elementParameters[j][key];
-                //     console.log(value);
-                // }
 
                 let keys =  Object.keys(elementParameters[j]);
                 let values = Object.values(elementParameters[j]);
-                
                 
                 let div = $("div[id*='$$"+elRefTot+"$$']");
                 // console.log(div);
@@ -2730,44 +2740,36 @@ function populateElementParametersForm(elementParameters) {
                 let indexOfButton = childNodes.length - 1;
 
                 for(let k in keys){
-                    
-                    // console.log(elementParameters[j][k]);
                     if(keys[k] == "_controlParameters" || keys[k] == "_timeParameters" || keys[k] == "_costParameters" || 
                     keys[k] == "_resourceParameters" || keys[k] == "_propertyParameters" || keys[k] == "_priorityParameters"){
-                        // console.log("vaffammoccccccc");
-                        // console.log(keys[k].split("_")[1]);
                         let innerKeys = Object.keys(values[k])
                         let innerValues =Object.values(values[k]);
                         
-                        
                         for(let key = 0; key < innerKeys.length; key++){
-                            console.log("CONTANTORE");
-                            console.log(innerKeys[key]);
                             childNodes[indexOfButton].click();
-                            console.log("$$$$$$$")
                             let pickerValue = innerKeys[key].split('_')[1];
-                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1)
-                            // childNodes[2].childNodes[0].value = pickerValue;
-                            // console.log(childNodes[2].childNodes);
+                            console.log("ciao");
+                            console.log(elRefTot);
+                            console.log(values);
+                            console.log(childNodes);
+                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
+                            console.log("ciao");
+
                             let select = childNodes[childNodes.length-1].childNodes[0].id;
                             if(select.includes("$$")){
                                 select = $.escapeSelector(select);
                             }
                             $('#'+select).val(pickerValue);
                             $('#'+select).change();
-                            console.log(childNodes);
-                            console.log("$$$$$$$");
                             let divToPassID = childNodes[childNodes.length-1].childNodes[2].id;
                             if(divToPassID.includes("$$")){
                                 divToPassID = $.escapeSelector(divToPassID);
                             }
-                            console.log(divToPassID);
-                            console.log($('#'+divToPassID));
                             if(keys[k] == "_propertyParameters" && pickerValue == "Property"){
                                 setPropertyField($('#'+divToPassID)[0], innerValues[key]); 
 
                             }else{
-                                setParameterField($('#'+divToPassID)[0], innerValues[key], 1); 
+                                setParameterField($('#'+divToPassID)[0], innerValues[key]); 
                             }                       
                         }
 
@@ -2803,7 +2805,6 @@ function setPropertyField(inputElement, obj){
         let indexOfButton = childNodes.length - 1;
         for(let i in obj){
             childNodes[indexOfButton].click();
-            // console.log(obj[i]);
             setParameterField(childNodes[childNodes.length-1],obj[i]);
         }
     }
@@ -2816,15 +2817,7 @@ function setParameterField(inputElement, obj, offset = 0){
     if(obj != undefined){
         if(obj.value.length > 0){
             for(let i in obj.value){
-
                 inputElement.childNodes[2-offset].click();
-                // let index = 0;
-                // for(let j in childNodes){
-                //     if(childNodes[j].localName == "button"){
-                //         index = j;
-                //     }
-                // }
-                // inputElement.childNodes[index].click();
                 
                 let picker = inputElement.childNodes[3-offset].childNodes[0];
                 let divCurrent = inputElement.childNodes[3-offset];
@@ -2836,19 +2829,19 @@ function setParameterField(inputElement, obj, offset = 0){
                 }
                 // console.log(picker);
                 // console.log(divCurrent);
-                picker.value = obj.value[i].getType();
-                console.log("########");
-                console.log(obj.value[i].getType());
-                console.log(picker.value);
-                console.log("########");
+                // picker.value = obj.value[i].getType();
+                // console.log("########");
+                // console.log(obj.value[i].getType());
+                // console.log(picker.value);
+                // console.log("########");
 
                 let pickerID = picker.id;
                 if(pickerID.includes("$$")){
                     pickerID = $.escapeSelector(pickerID);
                 }
+                $('#'+pickerID).val(obj.value[i].getType());
                 $('#'+pickerID).change();
 
-                // TODO CAPIRE COME MAI QUI DA PROBLEMI
                 let divCurrentID = divCurrent.id;
                 if(divCurrentID.includes('$$')){
                     divCurrentID = $.escapeSelector(divCurrentID);
@@ -2858,10 +2851,11 @@ function setParameterField(inputElement, obj, offset = 0){
                 for(let i=1; i<divElements.length; i=i+2){ //skip labels
                     let attributeName = divElements[i].id.split('-')[2];
                     let value = obj.value[0][attributeName];
+                    console.log(attributeName+" -> "+value);
+
                     if(value != undefined){
                         divElements[i].value = value;
                     }
-                    // console.log(attributeName+" -> "+value);
                 }
             }
         }

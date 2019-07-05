@@ -764,34 +764,34 @@
               </bpsim:TriggerCount>
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-902">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-219">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-577">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-746">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
+          <!-- <bpsim:ElementParameters elementRef="_10-902"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-219"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-577"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-746"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
         </bpsim:Scenario>
         <bpsim:Scenario id="S2" inherits="S1" name="2 - Temporal perspective">
           <bpsim:ScenarioParameters>
@@ -892,27 +892,27 @@
               </bpsim:ProcessingTime>
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-219">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-577">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-746">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
+          <!-- <bpsim:ElementParameters elementRef="_10-219"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-577"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-746"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
         </bpsim:Scenario>
         <bpsim:Scenario id="S3" inherits="S2" name="3 - Resource perspective">
           <bpsim:ScenarioParameters baseResultFrequency="P1D" baseResultFrequencyCumul="false">
@@ -1085,11 +1085,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-235">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1107,11 +1107,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-138">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1129,11 +1129,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-303">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1151,11 +1151,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-458">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1173,11 +1173,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-380">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1195,11 +1195,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-526">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1217,11 +1217,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-670">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1239,11 +1239,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-617">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1261,11 +1261,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-794">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1283,11 +1283,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-847">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
