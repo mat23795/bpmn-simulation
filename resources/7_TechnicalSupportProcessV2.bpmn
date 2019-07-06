@@ -676,6 +676,17 @@
             <!-- fine modifica -->
 
           </bpsim:ScenarioParameters>
+          
+          <!-- inizio modifica -->
+          <bpsim:ElementParameters elementRef="_10-189">
+            <bpsim:ControlParameters>
+              <bpsim:Probability>
+                <bpsim:FloatingParameter value="40"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <!-- fine modifica -->
+
           <bpsim:ElementParameters elementRef="_10-42">
             <bpsim:ControlParameters>
               <bpsim:InterTriggerTimer>
@@ -1055,11 +1066,11 @@
           </bpsim:ElementParameters>
           <!-- Tasks resource assigment-->
           <bpsim:ElementParameters elementRef="_10-57">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
@@ -1077,11 +1088,11 @@
             </bpsim:TimeParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="_10-920">
-            <bpsim:ResourceParameters>
-              <bpsim:Selection>
-                <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" />
-              </bpsim:Selection>
-            </bpsim:ResourceParameters>
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Selection> -->
+                <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
+              <!-- </bpsim:Selection> -->
+            <!-- </bpsim:ResourceParameters> -->
             <bpsim:PropertyParameters>
               <bpsim:QueueLength>
                 <bpsim:ResultRequest>mean</bpsim:ResultRequest>
