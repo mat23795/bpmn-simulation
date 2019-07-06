@@ -43,6 +43,10 @@ export class ParameterValue{
         this._resultTimeStamp = value;
     }
 
+    getType(): string{
+        return "ParameterValue"
+    }
+
     protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
         if(value != undefined){
             elementXML.setAttribute(name, value);

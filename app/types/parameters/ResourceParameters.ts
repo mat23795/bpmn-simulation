@@ -42,6 +42,10 @@ export class ResourceParameters{
         }    
     }
 
+    getType(): string{
+        return "ResourceParameters";
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");

@@ -41,6 +41,10 @@ export class ControlParameters{
         this._condition = value;
     }
 
+    getType(): string{
+        return "ControlParameters"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");

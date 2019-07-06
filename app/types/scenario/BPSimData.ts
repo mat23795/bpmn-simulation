@@ -17,6 +17,10 @@ export class BPSimData{
 
     }
 
+    getType(): string{
+        return "BPSimData"
+    }
+
     addScenario(scenario: Scenario){
         this._scenario.push(scenario);
     }

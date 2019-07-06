@@ -117,6 +117,10 @@ export class ScenarioParameters {
         }
     }
 
+    getType(): string{
+        return "ScenarioParameters";
+    }
+
     private eventuallyAddAttribute(elementXML: any, name: string, value:any){
         if(value != undefined){
             elementXML.setAttribute(name, value);

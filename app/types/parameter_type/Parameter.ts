@@ -34,6 +34,10 @@ export class Parameter{
         }
     }
 
+    getType(): string{
+        return "Parameter"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any, nameTag: string): any {
         
         let parser = new DOMParser();

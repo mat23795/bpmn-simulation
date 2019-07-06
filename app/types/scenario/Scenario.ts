@@ -147,6 +147,10 @@ export class Scenario {
         }
     }
 
+    getType(): string{
+        return "Scenario"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any) : any{
 
         let parser = new DOMParser();

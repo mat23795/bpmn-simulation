@@ -21,6 +21,10 @@ export class VendorExtension {
         this._value = value;
     }
 
+    getType(): string{
+        return "VendorExtension"
+    }
+
     private eventuallyAddAttribute(elementXML: any, name: string, value:any){
         if(value != undefined){
             elementXML.setAttribute(name, value);

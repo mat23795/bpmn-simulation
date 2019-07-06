@@ -100,6 +100,9 @@ export class ElementParameters {
         }
     }
 
+    getType(): string{
+        return "ElementParameters"
+    }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();

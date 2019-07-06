@@ -110,11 +110,9 @@ function openDiagram() {
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
 
-        console.log("prima");
-        console.log(xmlGlobal);
+        // console.log(xmlGlobal);
         xmlGlobal = xmlGlobal.replace(regExpRemoveComments, "");
-        console.log("dopo");
-        console.log(xmlGlobal);
+        // console.log(xmlGlobal);
 
         //TODO creare qui la funzine che produce una sola volta l'obj e lo passiamo alle altre funzioni
         let parser = new DOMParser();
@@ -152,6 +150,9 @@ function openDiagram() {
             // * Leggere bpsim e inserirlo nella struttura dati
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
+
+            console.log("obj finale post parsing");
+            console.log(dataTreeObjGlobal);
 
             // * popoliamo la lista di id globali perché ogni id deve essere univoco
             populateIdList();
@@ -2782,7 +2783,6 @@ function populateElementParametersForm(elementParameters) {
                                     // console.log(elRefTot);
                                     // console.log(values);
                                     // console.log(childNodes);
-                                    console.log("io so il problema");
                                     console.log(pickerValue);
                                     pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
                                     // console.log("ciao");
@@ -2797,7 +2797,6 @@ function populateElementParametersForm(elementParameters) {
                                     if(divToPassID.includes("$$")){
                                         divToPassID = $.escapeSelector(divToPassID);
                                     }
-                                    console.log("divvvvv")
                                     console.log(divToPassID)
                                     if(keys[k] == "_propertyParameters" && pickerValue == "Property"){
                                         setPropertyField($('#'+divToPassID)[0], innerValues[key]); 
@@ -3552,7 +3551,6 @@ function saveCalendarField(field, isNew) {
                 }
             }
         } else {
-            console.log("non è new")
             for (let i = 0; i < idListGlobal.length; i++) {
                 if (idListGlobal[i] == calendarID) {
                     idListGlobal[i] = value
@@ -3642,6 +3640,7 @@ function createObj(node) {
         // console.log(node.localname);
         // console.log("node.textContent")
         // console.log(node.textContent);
+        
         nodeObject = factory[node.localName][node.textContent];
         // console.log("fine qui")
     } else {
@@ -3649,32 +3648,24 @@ function createObj(node) {
         // console.log("node.localname")
         // console.log(node);
         nodeObject = new factory[node.localName]();
+        
         // console.log("b")
         // console.log(node.localName);
         // console.log(isParameter(node.localName)+"   "+node.localName); //TODO remove
+
         for (let j = 0; j < node.attributes.length; j++) {
+
             // if seguente serve a creare un array di calendar poiché validFor pretende un array di calendar
-            if (node.attributes[j].localName === "validFor") {
+            if (node.attributes[j].localName === "validFor" || node.attributes[j].localName === "quantity") {
                 let tempArray = [];
                 tempArray.push(node.attributes[j].value);
                 nodeObject[node.attributes[j].localName] = tempArray;
             } else {
+                
                 nodeObject[node.attributes[j].localName] = node.attributes[j].value;
             }
         }
 
-        //TODO REMOVE
-        // if(node.localName === "PropertyParameters"){
-        //     console.log(node);
-        //     console.log(node.childNodes);
-        //     console.log(nodeObject);
-        // }
-
-        // if(node.localName === "Scenario"){
-        //     console.log(node.attributes);
-        //     console.log(node);
-        //     console.log(nodeObject);
-        // }
 
         // if per salvare il contenuto di testo del tag xml calendar
         if (node.localName === "Calendar") {
@@ -3709,14 +3700,33 @@ function buildDataTree(nodo, nodoObject) {
         }
     }
     childNodes = temp;
-
+    // if(nodo.nodeName == "bpsim:Quantity"){
+    //     console.log(nodo.nodeName);
+    //     console.log(Array.prototype.slice.call(childNodes));
+    // }
     
     while (numFigli > 0) {
+        
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
         // creare un Parameter con value avvalorato correttamente
+        // if(nameAttr.includes("Distribution")||
+        //     isConstantParameter(nameAttr)||
+        //     nameAttr.includes("Expression")||
+        //     nameAttr.includes("Enum")){
+        //         nameAttr = "value";
+        // }
+        
+        
+
         if (isParameter(nodoFiglio[0].localName)) {
+            if(nodoFiglio[0].localName=="Quantity"){
+                console.log("quantit");
+                console.log(childToPass)
+                console.log(nodoFiglio);
+                console.log(Object.keys(nodoFiglio[1]));
+            }
             let parameterFieldsToDelete = [];
             for (let i = 0; i < Object.keys(nodoFiglio[1]).length; i++) {
                 // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
@@ -3729,6 +3739,9 @@ function buildDataTree(nodo, nodoObject) {
             nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
             nodoFiglio[1].resultRequest = tempResultRequest;
             nodoFiglio[1].value = parameterFieldsToDelete;
+            if(nodoFiglio[0].localName=="Quantity"){
+                console.log(nodoFiglio[1]);
+            }
             if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
@@ -3742,7 +3755,27 @@ function buildDataTree(nodo, nodoObject) {
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
             } else {
-                nodoObject[nameAttr] = nodoFiglio[1];
+                console.log(nameAttr);
+                // if(nameAttr != "timeUnit" && nameAttr != "propertyType" && nameAttr != "resultType"){
+                if(nameAttr.includes("Distribution")||
+                isConstantParameter(nameAttr)||
+                nameAttr.includes("Expression")||
+                nameAttr.includes("Enum")){
+                    console.log("qui");
+                    console.log(nameAttr);
+                    console.log(nodoFiglio[1]);
+                    let tempArray = [];
+                    tempArray.push(nodoFiglio[1]);
+                    nodoObject[nameAttr] = tempArray;
+                    console.log(nodoObject);
+                }else{
+            
+                    nodoObject[nameAttr] = nodoFiglio[1];
+                }
+                // }else{
+                    // nodoObject[nameAttr] = nodoFiglio[1];
+
+                }
             }
         }
         numFigli--;
@@ -3752,6 +3785,13 @@ function buildDataTree(nodo, nodoObject) {
     nodo_nodoObj.push(nodo);
     nodo_nodoObj.push(nodoObject);
     return nodo_nodoObj;
+}
+
+function isConstantParameter(parameterName){
+    let constantParameters = ["stringParameter", "numericParameter", "floatingParameter", "booleanParameter", 
+    "durationParameter", "dateTimeParameter"];
+
+    return constantParameters.includes(parameterName);
 }
 
 function focusDelayed(obj, num = 100) {

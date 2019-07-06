@@ -27,6 +27,10 @@ export class PropertyParameters{
         this._queueLength = value;
     }
 
+    getType(): string{
+        return "PropertyParameters"
+    }
+
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");

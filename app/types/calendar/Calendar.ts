@@ -36,6 +36,9 @@ export class Calendar{
         }
     }
 
+    getType(): string{
+        return "Calendar";
+    }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
         let parser = new DOMParser();
