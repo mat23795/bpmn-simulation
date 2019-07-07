@@ -2971,12 +2971,17 @@ function setParameterField(inputElement, obj, offset = 0) {
                     pickerID = $.escapeSelector(pickerID);
                 }
 
-                // console.log("prima")
-                // console.log(dataTreeGlobal)
+                
+                console.log("oggetto in ingresso");
+                console.log(obj);
                 // console.log(obj.value[i].getType())
+                
+                
+                console.log("prima")
                 // a volte serve fare [0]
                 $('#' + pickerID).val(obj.value[i].getType());
-                // console.log("dopo")
+                console.log("dopo")
+
                 $('#' + pickerID).change();
 
                 let divCurrentID = divCurrent.id;
@@ -3722,15 +3727,15 @@ function buildDataTree(nodo, nodoObject) {
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
 
-        if (nodo.localName == "Quantity") {
-            console.log("ora");
-            console.log("io " + nodo.localName);
-            console.log("figlio " + nodoFiglio[0].localName)
+        // if (nodo.localName == "Quantity") {
+        //     console.log("ora");
+        //     console.log("io " + nodo.localName);
+        //     console.log("figlio " + nodoFiglio[0].localName)
             //     console.log("io sono quantity");
             //     console.log(nodo);
             //     console.log("mio figlio")
             //     console.log(nodoFiglio);
-        }
+        // }
 
 
         nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
@@ -3754,14 +3759,25 @@ function buildDataTree(nodo, nodoObject) {
                     parameterFieldsToDelete.push(temp);
                 }
             }
-            // if(nodoFiglio[0].localName=="Quantity"){
+            // fare controllo decentemente
+            if(nodoFiglio[0].localName=="Quantity"){
             //     console.log("il padre è ")
             //     console.log(nodo);
             //     console.log("il figlio è quantity");
             //     console.log(nodoFiglio);
             //     console.log("quelli temporanei sono")
             //     console.log(parameterFieldsToDelete);
-            // }
+                let newParameterFieldsToDelete = []
+                for(let i in parameterFieldsToDelete){
+                    for(let j in parameterFieldsToDelete[i]){
+                        newParameterFieldsToDelete.push(parameterFieldsToDelete[i][j]);
+                    }
+                }
+                parameterFieldsToDelete = newParameterFieldsToDelete;
+            }
+
+            
+
             let tempResultRequest = nodoFiglio[1].resultRequest;
             nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
             nodoFiglio[1].resultRequest = tempResultRequest;
@@ -3783,28 +3799,28 @@ function buildDataTree(nodo, nodoObject) {
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
             } else {
-                console.log(nameAttr);
+                // console.log(nameAttr);
                 // if(nameAttr != "timeUnit" && nameAttr != "propertyType" && nameAttr != "resultType"){
-               
-                if(nameAttr.includes("Distribution")||
-                isConstantParameter(nameAttr)||
-                nameAttr.includes("Expression")||
-                nameAttr.includes("Enum")){
-                    console.log("qui");
-                //     console.log(nodoObject.getType());
-                //     console.log(nameAttr);
-                //     console.log(nodoFiglio[1]);
 
-                //     let tempArray = [];
-                //     tempArray.push(nodoFiglio[1]);
-                //     // nodoObject["giovanni"] = tempArray;
-                //     // nodoObject["value"] = tempArray;
-                //     nodoObject[nameAttr] = tempArray;
-                //     console.log(nodoObject);
+                if (nameAttr.includes("Distribution") ||
+                    isConstantParameter(nameAttr) ||
+                    nameAttr.includes("Expression") ||
+                    nameAttr.includes("Enum")) {
+                    // console.log("qui");
+                    //     console.log(nodoObject.getType());
+                    //     console.log(nameAttr);
+                    //     console.log(nodoFiglio[1]);
+
+                    //     let tempArray = [];
+                    //     tempArray.push(nodoFiglio[1]);
+                    //     // nodoObject["giovanni"] = tempArray;
+                    //     // nodoObject["value"] = tempArray;
+                    //     nodoObject[nameAttr] = tempArray;
+                    //     console.log(nodoObject);
                     used = true;
                     tempArr.push([nameAttr, nodoFiglio[1]]);
-                }else{
-                    
+                } else {
+
                     nodoObject[nameAttr] = nodoFiglio[1];
                 }
 
@@ -3815,32 +3831,32 @@ function buildDataTree(nodo, nodoObject) {
         }
         numFigli--;
     }
-    if(used){
-        console.log("aoooooooooooo");
-        console.log(tempArr);
-        if(nodo.localName == "Start" || nodoObject.localName == "Start"){
-            console.log("mizzalovalova")
-        }
-        if(tempArr.length!=1){
+    if (used) {
+        // console.log("aoooooooooooo");
+        // console.log(tempArr);
+        // if(nodo.localName == "Start" || nodoObject.localName == "Start"){
+        //     console.log("mizzalovalova")
+        // }
+        if (tempArr.length != 1) {
 
-        
+
             nodoObject[tempArr[0][0]] = []
             nodoObject[tempArr[0][0]].push(tempArr[0][1])
-            for(let i in tempArr){
-                if(i !=0){
-                    if(tempArr[i][0] == tempArr[i-1][0]){
+            for (let i in tempArr) {
+                if (i != 0) {
+                    if (tempArr[i][0] == tempArr[i - 1][0]) {
                         nodoObject[tempArr[i][0]].push(tempArr[i][1])
-                    }else{
+                    } else {
                         nodoObject[tempArr[i][0]] = []
                         nodoObject[tempArr[i][0]].push(tempArr[i][1])
                     }
                 }
             }
-        }else{
+        } else {
             nodoObject[tempArr[0][0]] = tempArr[0][1]
             // nodoObject[nameAttr] = tempArr
         }
-        
+
     }
 
     if (nodo.localName == "Quantity") {
