@@ -640,7 +640,7 @@
         <di:waypoint x="1149.0" y="744.0"/>
         <bpmndi:BPMNLabel labelStyle="LS1399929387616"/>
       </bpmndi:BPMNEdge>
-    </bpmndi:BPMNPlane>
+    </bpmndi:BPMNPlane>n 
     <bpmndi:BPMNLabelStyle id="LS1399929387616">
       <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="8.0"/>
     </bpmndi:BPMNLabelStyle>
@@ -655,6 +655,8 @@
             </bpsim:Duration>
             <bpsim:Start>
               <bpsim:DateTimeParameter value="2016-01-01T06:00:00" />
+              <bpsim:DateTimeParameter value="2015-05-05T06:00:00" />
+              <bpsim:GammaDistribution shape="1" scale="4"/>  
               <bpsim:ResultRequest>count</bpsim:ResultRequest>
             </bpsim:Start>
 

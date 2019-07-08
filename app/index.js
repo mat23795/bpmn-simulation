@@ -151,8 +151,8 @@ function openDiagram() {
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
 
-            console.log("obj finale post parsing");
-            console.log(dataTreeObjGlobal);
+            // console.log("obj finale post parsing");
+            // console.log(dataTreeObjGlobal);
 
             // * popoliamo la lista di id globali perché ogni id deve essere univoco
             populateIdList();
@@ -291,6 +291,12 @@ function resetParameterDivs() {
     for (let i = 0; i < parameters.length; i++) {
         parameters[i].remove();
     }
+
+    $("div[id^=start-value-div").remove();
+    $("div[id^=duration-value-div").remove();
+    $("div[id^=warmup-value-div").remove();
+
+
 }
 
 function populateIdList() {
@@ -2626,6 +2632,10 @@ function closeCollapsibleButton() {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-connectingObjects").click();
     }
+    if ($("#button-resources").data('clicked') == true) {
+        //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
+        $("#button-resources").click();
+    }
     if ($("#scen-par-btn").data('clicked') == true) {
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#scen-par-btn").click();
@@ -2821,8 +2831,6 @@ function populateElementParametersForm(elementParameters) {
             //TODO viene fatto solo per l'id, continuare
         }
 
-
-
         if (!contained) {
             setField($(fields[i]), undefined);
             // TODO fare scancellamento quando non esiste
@@ -2839,6 +2847,9 @@ function populateElementParametersForm(elementParameters) {
             singleResourcesDivs.push(divResources[0].childNodes[i]);
         }
     }
+    // console.log("singoli div");
+    // console.log(singleResourcesDivs);
+
     for (let i in singleResourcesDivs) {
         // console.log(singleResourcesDivs[i])
         // let contained=false;
@@ -2846,25 +2857,29 @@ function populateElementParametersForm(elementParameters) {
         for (let j in elementParameters) {
             // console.log(elementParameters[j].elementRef)
             if (elRefTot == elementParameters[j].elementRef) {
+
                 // console.log("sta sta");
                 // console.log(elementParameters[j])
+
+                let div = $("div[id*='$$" + elRefTot + "$$']");
+
+                // console.log("div che cerco")
+                // console.log(div);
+                
+                let childNodes = div[0].childNodes;
+                let indexOfButton = childNodes.length - 1;
 
                 let keys = Object.keys(elementParameters[j]);
                 let values = Object.values(elementParameters[j]);
 
-                let div = $("div[id*='$$" + elRefTot + "$$']");
-                // console.log(div);
-                let childNodes = div[0].childNodes;
-                let indexOfButton = childNodes.length - 1;
-
                 for (let k in keys) {
-                    if (keys[k] == keys[k] == "_costParameters" || keys[k] == "_resourceParameters") {
+                    if (keys[k] == "_costParameters" || keys[k] == "_resourceParameters") {
                         let innerKeys = Object.keys(values[k])
                         let innerValues = Object.values(values[k]);
-                        // console.log("inner keys");
-                        // console.log(innerKeys);
+                        console.log("inner keys");
+                        console.log(innerKeys);
                         for (let key = 0; key < innerKeys.length; key++) {
-                            // * object.value toglie gli undefined, ma non gli array lunghi 0, quindi role va gestito a parte
+                            // * object.values toglie gli undefined, ma non gli array lunghi 0, quindi role va gestito a parte
                             if (innerKeys[key] != "_role") {
                                 // console.log("trees")
                                 // console.log(dataTreeGlobal);
@@ -2883,15 +2898,13 @@ function populateElementParametersForm(elementParameters) {
                                 if (select.includes("$$")) {
                                     select = $.escapeSelector(select);
                                 }
-                                // console.log($('#'+select))
+                        
                                 $('#' + select).val(pickerValue);
                                 $('#' + select).change();
                                 let divToPassID = childNodes[childNodes.length - 1].childNodes[2].id;
                                 if (divToPassID.includes("$$")) {
                                     divToPassID = $.escapeSelector(divToPassID);
                                 }
-                                // console.log("divvvvv")
-                                // console.log(divToPassID)
                                 if (keys[k] == "_propertyParameters" && pickerValue == "Property") {
                                     setPropertyField($('#' + divToPassID)[0], innerValues[key]);
                                 } else {
@@ -2907,7 +2920,6 @@ function populateElementParametersForm(elementParameters) {
 
                         }
 
-
                         // console.log(Object.values(values[k]));
                         // setParameterField(, values[k])
                     }
@@ -2917,13 +2929,6 @@ function populateElementParametersForm(elementParameters) {
         }
 
     }
-
-
-
-
-
-
-
 }
 
 function setPropertyField(inputElement, obj) {
@@ -2937,50 +2942,32 @@ function setPropertyField(inputElement, obj) {
     }
 }
 
-function setParameterField(inputElement, obj, offset = 0) {
+function setParameterField(inputElement, obj) {
     // console.log("div in ingresso");
     // console.log(inputElement);
     let childNodes = inputElement.childNodes;
     if (obj != undefined) {
         // console.log("oggetto")
         // console.log(obj);
-        if (obj.value.length > 0) {
+        // if (obj.value.length > 0) {
             for (let i in obj.value) {
                 // console.log("inizio click");
-                inputElement.childNodes[2 - offset].click();
-                // console.log("fine click");
-
-                let picker = inputElement.childNodes[3 - offset].childNodes[0];
-                let divCurrent = inputElement.childNodes[3 - offset];
-                if (offset == 0) {
-                    picker = picker.childNodes[0]
-                    divCurrent = divCurrent.childNodes[0].childNodes[2];
-                } else {
-                    // divCurrent = divCurrent.childNodes[2]
-                }
-                // console.log(picker);
-                // console.log(divCurrent);
-                // picker.value = obj.value[i].getType();
-                // console.log("########");
-                // console.log(obj.value[i].getType());
-                // console.log(picker.value);
-                // console.log("########");
+                inputElement.childNodes[2].click();
+                console.log("input elemente");
+                console.log(inputElement.childNodes);
+                let picker = inputElement.childNodes[3].childNodes[i].childNodes[0];
+                let divCurrent = inputElement.childNodes[3].childNodes[i].childNodes[2];
+                
+                console.log("div corrente")
+                console.log(divCurrent);
 
                 let pickerID = picker.id;
                 if (pickerID.includes("$$")) {
                     pickerID = $.escapeSelector(pickerID);
                 }
 
-                
-                console.log("oggetto in ingresso");
-                console.log(obj);
-                // console.log(obj.value[i].getType())
-                
-                
-                console.log("prima")
-                // a volte serve fare [0]
                 $('#' + pickerID).val(obj.value[i].getType());
-                console.log("dopo")
+
 
                 $('#' + pickerID).change();
 
@@ -2989,17 +2976,34 @@ function setParameterField(inputElement, obj, offset = 0) {
                     divCurrentID = $.escapeSelector(divCurrentID);
                 }
                 let divElements = $('#' + divCurrentID)[0].childNodes;
-                // console.log(divElements);
-                for (let i = 1; i < divElements.length; i = i + 2) { //skip labels
-                    let attributeName = divElements[i].id.split('-')[2];
-                    let value = obj.value[0][attributeName];
-                    // console.log(attributeName+" -> "+value);
-
-                    if (value != undefined) {
-                        divElements[i].value = value;
+                
+                let divElementsWithoutLabels = [];
+                for(let j in divElements){
+                    if(j%2 == 1){
+                        divElementsWithoutLabels.push(divElements[j]);
                     }
                 }
-            }
+                for (let j = 0; j < divElementsWithoutLabels.length; j++) { //skip labels
+                    let attributeName = divElementsWithoutLabels[j].id.split('-')[2];
+                    // console.log("obj");
+                    // console.log(obj);
+
+                    // console.log("value");
+                    // console.log(obj.value);
+
+                    // console.log("i");
+                    // console.log(i);
+
+                    
+                    let value = obj.value[i][attributeName];
+                    
+                    console.log(attributeName+" -> "+value);
+
+                    if (value != undefined) {
+                        divElementsWithoutLabels[j].value = value;
+                    }
+                }
+            // }
         }
 
         if (obj.resultRequest.length > 0) {
@@ -3644,25 +3648,10 @@ function xml2tree(bpsimDataXML) {
 function createObj(node) {
     let nodeObject;
     if (node.localName === "ResultRequest") { //prendere testo nel tag per result request
-        // console.log("qui");
-        // console.log("node")
-        // console.log(node);
-        // console.log("node.localname")
-        // console.log(node.localname);
-        // console.log("node.textContent")
-        // console.log(node.textContent);
 
         nodeObject = factory[node.localName][node.textContent];
-        // console.log("fine qui")
     } else {
-        // console.log("a")
-        // console.log("node.localname")
-        // console.log(node);
         nodeObject = new factory[node.localName]();
-
-        // console.log("b")
-        // console.log(node.localName);
-        // console.log(isParameter(node.localName)+"   "+node.localName); //TODO remove
 
         for (let j = 0; j < node.attributes.length; j++) {
 
@@ -3676,7 +3665,6 @@ function createObj(node) {
                 nodeObject[node.attributes[j].localName] = node.attributes[j].value;
             }
         }
-
 
         // if per salvare il contenuto di testo del tag xml calendar
         if (node.localName === "Calendar") {
@@ -3712,43 +3700,14 @@ function buildDataTree(nodo, nodoObject) {
         }
     }
     childNodes = temp;
-    // if(nodo.nodeName == "bpsim:Quantity"){
-    //     console.log(nodo.nodeName);
-    //     console.log(Array.prototype.slice.call(childNodes));
-    // }
 
-
-
-    let used = false;
-    let tempArr = [];
-    let nameAttr;
+    let haveMoreValue = false;
+    let moreValuesTempArray = [];
     while (numFigli > 0) {
 
         let childToPass = childNodes.shift(); // * shift = pop ma fatta in testa
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
-
-        // if (nodo.localName == "Quantity") {
-        //     console.log("ora");
-        //     console.log("io " + nodo.localName);
-        //     console.log("figlio " + nodoFiglio[0].localName)
-            //     console.log("io sono quantity");
-            //     console.log(nodo);
-            //     console.log("mio figlio")
-            //     console.log(nodoFiglio);
-        // }
-
-
-        nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
-        // creare un Parameter con value avvalorato correttamente
-        // if(nameAttr.includes("Distribution")||
-        //     isConstantParameter(nameAttr)||
-        //     nameAttr.includes("Expression")||
-        //     nameAttr.includes("Enum")){
-        //         nameAttr = "value";
-        // }
-        // console.log("sto qua");
-        // console.log(nodo.localName);
-
+        let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
 
         if (isParameter(nodoFiglio[0].localName)) {
             let parameterFieldsToDelete = [];
@@ -3759,32 +3718,23 @@ function buildDataTree(nodo, nodoObject) {
                     parameterFieldsToDelete.push(temp);
                 }
             }
-            // fare controllo decentemente
-            if(nodoFiglio[0].localName=="Quantity"){
-            //     console.log("il padre è ")
-            //     console.log(nodo);
-            //     console.log("il figlio è quantity");
-            //     console.log(nodoFiglio);
-            //     console.log("quelli temporanei sono")
-            //     console.log(parameterFieldsToDelete);
-                let newParameterFieldsToDelete = []
-                for(let i in parameterFieldsToDelete){
-                    for(let j in parameterFieldsToDelete[i]){
-                        newParameterFieldsToDelete.push(parameterFieldsToDelete[i][j]);
-                    }
-                }
-                parameterFieldsToDelete = newParameterFieldsToDelete;
-            }
 
-            
+            if(parameterFieldsToDelete.length > 0){
+                if(parameterFieldsToDelete.length > 1 || parameterFieldsToDelete[0].length > 1){
+                    let newParameterFieldsToDelete = []
+                    for(let i in parameterFieldsToDelete){
+                        for(let j in parameterFieldsToDelete[i]){
+                            newParameterFieldsToDelete.push(parameterFieldsToDelete[i][j]);
+                        }
+                    }
+                    parameterFieldsToDelete = newParameterFieldsToDelete;
+                }
+            }
 
             let tempResultRequest = nodoFiglio[1].resultRequest;
             nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
             nodoFiglio[1].resultRequest = tempResultRequest;
             nodoFiglio[1].value = parameterFieldsToDelete;
-            // if(nodoFiglio[0].localName=="Quantity"){
-            //     console.log(nodoFiglio[1]);
-            // }
             if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
@@ -3799,70 +3749,42 @@ function buildDataTree(nodo, nodoObject) {
                 tempArray.push(nodoFiglio[1]);
                 nodoObject[nameAttr] = tempArray;
             } else {
-                // console.log(nameAttr);
-                // if(nameAttr != "timeUnit" && nameAttr != "propertyType" && nameAttr != "resultType"){
 
                 if (nameAttr.includes("Distribution") ||
                     isConstantParameter(nameAttr) ||
                     nameAttr.includes("Expression") ||
                     nameAttr.includes("Enum")) {
-                    // console.log("qui");
-                    //     console.log(nodoObject.getType());
-                    //     console.log(nameAttr);
-                    //     console.log(nodoFiglio[1]);
 
-                    //     let tempArray = [];
-                    //     tempArray.push(nodoFiglio[1]);
-                    //     // nodoObject["giovanni"] = tempArray;
-                    //     // nodoObject["value"] = tempArray;
-                    //     nodoObject[nameAttr] = tempArray;
-                    //     console.log(nodoObject);
-                    used = true;
-                    tempArr.push([nameAttr, nodoFiglio[1]]);
+                    haveMoreValue = true;
+                    moreValuesTempArray.push([nameAttr, nodoFiglio[1]]);
                 } else {
 
                     nodoObject[nameAttr] = nodoFiglio[1];
                 }
-
-                // }else{
-                // nodoObject[nameAttr] = nodoFiglio[1];
-                // }
             }
         }
         numFigli--;
     }
-    if (used) {
-        // console.log("aoooooooooooo");
-        // console.log(tempArr);
-        // if(nodo.localName == "Start" || nodoObject.localName == "Start"){
-        //     console.log("mizzalovalova")
-        // }
-        if (tempArr.length != 1) {
-
-
-            nodoObject[tempArr[0][0]] = []
-            nodoObject[tempArr[0][0]].push(tempArr[0][1])
-            for (let i in tempArr) {
+    if (haveMoreValue) {   
+        if (moreValuesTempArray.length != 1) {
+            nodoObject[moreValuesTempArray[0][0]] = []
+            nodoObject[moreValuesTempArray[0][0]].push(moreValuesTempArray[0][1])
+            for (let i in moreValuesTempArray) {
                 if (i != 0) {
-                    if (tempArr[i][0] == tempArr[i - 1][0]) {
-                        nodoObject[tempArr[i][0]].push(tempArr[i][1])
+                    if (moreValuesTempArray[i][0] == moreValuesTempArray[i - 1][0]) {
+                        nodoObject[moreValuesTempArray[i][0]].push(moreValuesTempArray[i][1])
                     } else {
-                        nodoObject[tempArr[i][0]] = []
-                        nodoObject[tempArr[i][0]].push(tempArr[i][1])
+                        nodoObject[moreValuesTempArray[i][0]] = []
+                        nodoObject[moreValuesTempArray[i][0]].push(moreValuesTempArray[i][1])
                     }
                 }
             }
         } else {
-            nodoObject[tempArr[0][0]] = tempArr[0][1]
-            // nodoObject[nameAttr] = tempArr
+            nodoObject[moreValuesTempArray[0][0]] = moreValuesTempArray[0][1]
         }
 
     }
 
-    if (nodo.localName == "Quantity") {
-        console.log("nodo finiti i figli")
-        console.log(nodoObject)
-    }
     let nodo_nodoObj = [];
     nodo_nodoObj.push(nodo);
     nodo_nodoObj.push(nodoObject);
