@@ -681,6 +681,22 @@
           </bpsim:ScenarioParameters>
           
           <!-- inizio modifica -->
+          <bpsim:ElementParameters elementRef="resource_Front_Office">
+            <bpsim:ResourceParameters>
+              <bpsim:Role>
+                <bpsim:FloatingParameter value="40"/>
+                <bpsim:FloatingParameter value="10"/>
+                <bpsim:NumericParameter value="0"/>
+                <bpsim:NumericParameter validFor="C8" value="1"/>
+              </bpsim:Role>
+              <bpsim:Role>
+                <bpsim:FloatingParameter value="4"/>
+                <bpsim:StringParameter value="ciao"/>
+                <bpsim:NumericParameter validFor="C2" value="3"/>
+              </bpsim:Role>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+
           <bpsim:ElementParameters elementRef="_10-189">
             <bpsim:ControlParameters>
               <bpsim:Probability>

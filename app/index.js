@@ -151,8 +151,8 @@ function openDiagram() {
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
 
-            // console.log("obj finale post parsing");
-            // console.log(dataTreeObjGlobal);
+            console.log("obj finale post parsing");
+            console.log(dataTreeObjGlobal);
 
             // * popoliamo la lista di id globali perché ogni id deve essere univoco
             populateIdList();
@@ -2751,16 +2751,7 @@ function populateElementParametersForm(elementParameters) {
                 let keys = Object.keys(elementParameters[j]);
                 let values = Object.values(elementParameters[j]);
 
-                // console.log("elemento");
-                // console.log(elementParameters[j]);
-                // console.log("keys");
-                // console.log(keys);
-                // console.log(values);
-
-
-
                 let div = $("div[id*='$$" + elRefTot + "$$']");
-                // console.log(div);
                 let childNodes = div[0].childNodes;
                 let indexOfButton = childNodes.length - 1;
 
@@ -2779,93 +2770,53 @@ function populateElementParametersForm(elementParameters) {
                             innerValues = Object.values(values[k]);
                         }
 
-                        // console.log("inner keys for "+keys[k]+" "+k);
-                        // console.log(innerKeys);
-                        // console.log(innerValues);
-
                         for (let key = 0; key < innerKeys.length; key++) {
                             // * object.value toglie gli undefined, ma non gli array lunghi 0, quindi role va gestito a parte
-                            if (innerKeys[key] != "_role") {
-                                // if(innerKeys[key] != "_property" || innerValues[key].length != 0){
-                                childNodes[indexOfButton].click();
-                                let pickerValue = innerKeys[key].split('_')[1];
-                                // console.log("ciao");
-                                // console.log(elRefTot);
-                                // console.log(values);
-                                // console.log(childNodes);
-                                // console.log(pickerValue);
-                                pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
-                                // console.log("ciao");
 
-                                let select = childNodes[childNodes.length - 1].childNodes[0].id;
-                                if (select.includes("$$")) {
-                                    select = $.escapeSelector(select);
-                                }
-                                $('#' + select).val(pickerValue);
-                                $('#' + select).change();
-                                let divToPassID = childNodes[childNodes.length - 1].childNodes[2].id;
-                                if (divToPassID.includes("$$")) {
-                                    divToPassID = $.escapeSelector(divToPassID);
-                                }
-                                // console.log(divToPassID)
-                                if (keys[k] == "_propertyParameters" && pickerValue == "Property") {
-                                    setPropertyField($('#' + divToPassID)[0], innerValues[key]);
-                                } else {
-                                    setParameterField($('#' + divToPassID)[0], innerValues[key]);
-                                }
-                                // }
+                            childNodes[indexOfButton].click();
+                            let pickerValue = innerKeys[key].split('_')[1];
+                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
+
+                            let select = childNodes[childNodes.length - 1].childNodes[0].id;
+                            if (select.includes("$$")) {
+                                select = $.escapeSelector(select);
+                            }
+                            $('#' + select).val(pickerValue);
+                            $('#' + select).change();
+                            let divToPassID = childNodes[childNodes.length - 1].childNodes[2].id;
+                            if (divToPassID.includes("$$")) {
+                                divToPassID = $.escapeSelector(divToPassID);
+                            }
+                            if (keys[k] == "_propertyParameters" && pickerValue == "Property") {
+                                setPropertyField($('#' + divToPassID)[0], innerValues[key]);
                             } else {
-                                // è role, va gestito solo quando non è vuoto
-                                if (innerValues[key].length != 0) {
-                                    // TODO gestire role che è un array
-                                }
+                                setParameterField($('#' + divToPassID)[0], innerValues[key]);
                             }
                         }
-
-
-                        // console.log(Object.values(values[k]));
-                        // setParameterField(, values[k])
                     }
                 }
             }
-            //TODO viene fatto solo per l'id, continuare
         }
 
         if (!contained) {
             setField($(fields[i]), undefined);
-            // TODO fare scancellamento quando non esiste
         }
     }
 
     // * inizio fase controllo per sezione 'Resources'
     let divResources = $('#div-resources');
-    // console.log("resources");
-    // console.log(divResources);
     let singleResourcesDivs = [];
     for (let i in divResources[0].childNodes) {
         if (i % 2 == 1) {
             singleResourcesDivs.push(divResources[0].childNodes[i]);
         }
     }
-    // console.log("singoli div");
-    // console.log(singleResourcesDivs);
 
     for (let i in singleResourcesDivs) {
-        // console.log(singleResourcesDivs[i])
-        // let contained=false;
         let elRefTot = singleResourcesDivs[i].id.split('$$')[1];
         for (let j in elementParameters) {
-            // console.log(elementParameters[j].elementRef)
             if (elRefTot == elementParameters[j].elementRef) {
-
-                // console.log("sta sta");
-                // console.log(elementParameters[j])
-
                 let div = $("div[id*='$$" + elRefTot + "$$']");
-
-                // console.log("div che cerco")
-                // console.log(div);
-                
                 let childNodes = div[0].childNodes;
                 let indexOfButton = childNodes.length - 1;
 
@@ -2876,60 +2827,37 @@ function populateElementParametersForm(elementParameters) {
                     if (keys[k] == "_costParameters" || keys[k] == "_resourceParameters") {
                         let innerKeys = Object.keys(values[k])
                         let innerValues = Object.values(values[k]);
-                        console.log("inner keys");
-                        console.log(innerKeys);
                         for (let key = 0; key < innerKeys.length; key++) {
                             // * object.values toglie gli undefined, ma non gli array lunghi 0, quindi role va gestito a parte
-                            if (innerKeys[key] != "_role") {
-                                // console.log("trees")
-                                // console.log(dataTreeGlobal);
-                                // console.log(dataTreeObjGlobal)
-                                childNodes[indexOfButton].click();
-                                let pickerValue = innerKeys[key].split('_')[1];
-                                // console.log("ciao");
-                                // console.log(elRefTot);
-                                // console.log(values);
-                                // console.log(childNodes);
-                                // console.log(pickerValue);
-                                pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
-                                // console.log("ciao");
+                            childNodes[indexOfButton].click();
+                            let pickerValue = innerKeys[key].split('_')[1];
+                            pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
 
-                                let select = childNodes[childNodes.length - 1].childNodes[0].id;
-                                if (select.includes("$$")) {
-                                    select = $.escapeSelector(select);
-                                }
-                        
-                                $('#' + select).val(pickerValue);
-                                $('#' + select).change();
-                                let divToPassID = childNodes[childNodes.length - 1].childNodes[2].id;
-                                if (divToPassID.includes("$$")) {
-                                    divToPassID = $.escapeSelector(divToPassID);
-                                }
-                                if (keys[k] == "_propertyParameters" && pickerValue == "Property") {
-                                    setPropertyField($('#' + divToPassID)[0], innerValues[key]);
-                                } else {
-                                    setParameterField($('#' + divToPassID)[0], innerValues[key]);
-                                }
-                            } else {
-                                // è role, va gestito solo quando non è vuoto
-                                if (innerValues[key].length != 0) {
-                                    // TODO gestire role che è un array
-                                }
+                            let select = childNodes[childNodes.length - 1].childNodes[0].id;
+                            if (select.includes("$$")) {
+                                select = $.escapeSelector(select);
                             }
 
-
+                            $('#' + select).val(pickerValue);
+                            $('#' + select).change();
+                            let divToPassID = childNodes[childNodes.length - 1].childNodes[2].id;
+                            if (divToPassID.includes("$$")) {
+                                divToPassID = $.escapeSelector(divToPassID);
+                            }
+                            if ((keys[k] == "_propertyParameters" && pickerValue == "Property") ||
+                                (innerKeys[key] == "_role" && innerValues[key].length != 0)) {
+                                setPropertyField($('#' + divToPassID)[0], innerValues[key]);
+                            } else {
+                                setParameterField($('#' + divToPassID)[0], innerValues[key]);
+                            }
                         }
-
-                        // console.log(Object.values(values[k]));
-                        // setParameterField(, values[k])
                     }
                 }
-
             }
         }
-
     }
 }
+
 
 function setPropertyField(inputElement, obj) {
     let childNodes = inputElement.childNodes;
@@ -2943,72 +2871,47 @@ function setPropertyField(inputElement, obj) {
 }
 
 function setParameterField(inputElement, obj) {
-    // console.log("div in ingresso");
-    // console.log(inputElement);
     let childNodes = inputElement.childNodes;
     if (obj != undefined) {
-        // console.log("oggetto")
-        // console.log(obj);
-        // if (obj.value.length > 0) {
-            for (let i in obj.value) {
-                // console.log("inizio click");
-                inputElement.childNodes[2].click();
-                console.log("input elemente");
-                console.log(inputElement.childNodes);
-                let picker = inputElement.childNodes[3].childNodes[i].childNodes[0];
-                let divCurrent = inputElement.childNodes[3].childNodes[i].childNodes[2];
-                
-                console.log("div corrente")
-                console.log(divCurrent);
+        for (let i in obj.value) {
+            inputElement.childNodes[2].click();
+            let picker = inputElement.childNodes[3].childNodes[i].childNodes[0];
+            let divCurrent = inputElement.childNodes[3].childNodes[i].childNodes[2];
 
-                let pickerID = picker.id;
-                if (pickerID.includes("$$")) {
-                    pickerID = $.escapeSelector(pickerID);
+            let pickerID = picker.id;
+            if (pickerID.includes("$$")) {
+                pickerID = $.escapeSelector(pickerID);
+            }
+
+            $('#' + pickerID).val(obj.value[i].getType());
+
+
+            $('#' + pickerID).change();
+
+            let divCurrentID = divCurrent.id;
+            if (divCurrentID.includes('$$')) {
+                divCurrentID = $.escapeSelector(divCurrentID);
+            }
+            let divElements = $('#' + divCurrentID)[0].childNodes;
+
+            let divElementsWithoutLabels = [];
+            for (let j in divElements) {
+                if (j % 2 == 1) {
+                    divElementsWithoutLabels.push(divElements[j]);
                 }
+            }
+            for (let j = 0; j < divElementsWithoutLabels.length; j++) { //skip labels
+                let attributeName = divElementsWithoutLabels[j].id.split('-')[2];
 
-                $('#' + pickerID).val(obj.value[i].getType());
+                let value = obj.value[i][attributeName];
 
-
-                $('#' + pickerID).change();
-
-                let divCurrentID = divCurrent.id;
-                if (divCurrentID.includes('$$')) {
-                    divCurrentID = $.escapeSelector(divCurrentID);
+                if (value != undefined) {
+                    divElementsWithoutLabels[j].value = value;
                 }
-                let divElements = $('#' + divCurrentID)[0].childNodes;
-                
-                let divElementsWithoutLabels = [];
-                for(let j in divElements){
-                    if(j%2 == 1){
-                        divElementsWithoutLabels.push(divElements[j]);
-                    }
-                }
-                for (let j = 0; j < divElementsWithoutLabels.length; j++) { //skip labels
-                    let attributeName = divElementsWithoutLabels[j].id.split('-')[2];
-                    // console.log("obj");
-                    // console.log(obj);
-
-                    // console.log("value");
-                    // console.log(obj.value);
-
-                    // console.log("i");
-                    // console.log(i);
-
-                    
-                    let value = obj.value[i][attributeName];
-                    
-                    console.log(attributeName+" -> "+value);
-
-                    if (value != undefined) {
-                        divElementsWithoutLabels[j].value = value;
-                    }
-                }
-            // }
+            }
         }
 
         if (obj.resultRequest.length > 0) {
-            // console.log("altro problema");
-            // console.log(childNodes)
             childNodes[(childNodes.length) - 1].value = obj.resultRequest[0];
         }
     } else {
@@ -3719,11 +3622,11 @@ function buildDataTree(nodo, nodoObject) {
                 }
             }
 
-            if(parameterFieldsToDelete.length > 0){
-                if(parameterFieldsToDelete.length > 1 || parameterFieldsToDelete[0].length > 1){
+            if (parameterFieldsToDelete.length > 0) {
+                if (parameterFieldsToDelete.length > 1 || parameterFieldsToDelete[0].length > 1) {
                     let newParameterFieldsToDelete = []
-                    for(let i in parameterFieldsToDelete){
-                        for(let j in parameterFieldsToDelete[i]){
+                    for (let i in parameterFieldsToDelete) {
+                        for (let j in parameterFieldsToDelete[i]) {
                             newParameterFieldsToDelete.push(parameterFieldsToDelete[i][j]);
                         }
                     }
@@ -3765,7 +3668,7 @@ function buildDataTree(nodo, nodoObject) {
         }
         numFigli--;
     }
-    if (haveMoreValue) {   
+    if (haveMoreValue) {
         if (moreValuesTempArray.length != 1) {
             nodoObject[moreValuesTempArray[0][0]] = []
             nodoObject[moreValuesTempArray[0][0]].push(moreValuesTempArray[0][1])
