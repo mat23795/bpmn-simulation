@@ -188,21 +188,25 @@ function openDiagram() {
                 // // ! DELETE THIS STOP
 
 
-                let scenarioSelected = $('#scenario-picker').val();
+                saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal-1]);
 
-                console.log("riattivare salvataggio")//TODO 
+                // TODO inizio commento da togliere
+                // let scenarioSelected = $('#scenario-picker').val();
 
-                //salvo i calendari 
-                dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
-                calendarsCreatedGlobal = [];
-                calendarsCreatedIDCounterGlobal = 0;
+                // console.log("fare anche qui la questione del salvataggio dei complex")//TODO 
 
-                //saveDataTreeStructure(scenarioSelected);
+                // //salvo i calendari 
+                // dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
+                // calendarsCreatedGlobal = [];
+                // calendarsCreatedIDCounterGlobal = 0;
 
-                extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
-                console.log("XML fase modifica");//TODO remove
-                console.log(xmlDoc);//TODO remove
-                console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
+                // //saveDataTreeStructure(scenarioSelected);
+
+                // extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+                // console.log("XML fase modifica");//TODO remove
+                // console.log(xmlDoc);//TODO remove
+                // console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
+                // TODO fine commento da togliere
 
             });
 
@@ -1123,21 +1127,92 @@ function createFormFields(firstTime = true) {
             let scenarioSelected = $('#scenario-picker').val();
 
 
-            console.log("riattivare salvataggio")//TODO 
-
-            // saveDataTreeStructure(currentScenarioGlobal);
+            
 
             saveLocalCalendars();
 
-            currentScenarioGlobal = scenarioSelected;
 
-            let scenariosTemp = dataTreeObjGlobal.scenario;
-            // createFormFields()
+            console.log("sistemare salvataggio complex ed eliminare")//TODO 
+            // saveDataTreeStructure(currentScenarioGlobal);
+            saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal-1]);
+            
+
+            //cambio dom
+            currentScenarioGlobal = scenarioSelected;
             resetParameterDivs();
-            refreshFormFields(scenariosTemp, scenarioSelected);
+
+            refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
 
         });
     }
+}
+
+function saveCurrentScenarioComplexElement(scenarioToSave){
+    console.log("INIZIO FASE SALVATAGGIO COMPLEX")
+    // let scenarioParameters = scenarioToSave.scenarioParameters;
+    // let elementParameters = scenarioToSave.elementParameters;
+    
+
+    saveScenarioParameterComplexElement(scenarioToSave, "start", $('#scenarioParameters-start-div')[0].childNodes);
+    saveScenarioParameterComplexElement(scenarioToSave, "duration", $('#scenarioParameters-duration-div')[0].childNodes);
+    saveScenarioParameterComplexElement(scenarioToSave, "warmup", $('#scenarioParameters-warmup-div')[0].childNodes);
+
+    
+    // TODO parte Property
+
+    // TODO parte ciclo su elemRef
+
+    
+
+    // TODO REMOVE
+    console.log("nuova struttura");
+    console.log(dataTreeObjGlobal)
+}
+
+function saveScenarioParameterComplexElement(scenarioToSave, parameterName, childNodes){
+    // console.log("child di "+parameterName)
+    // console.log(childNodes);
+
+    // div che contiene i div values
+    let valuesDiv = childNodes[3];
+    let resultRequestDiv = childNodes[5];
+
+    let values = [];
+    
+    // cicliamo per ogni divValue
+    for(let i=0; i < valuesDiv.childNodes.length; i++){
+        
+        let innerDivChildNodes = valuesDiv.childNodes[i].childNodes;
+        
+        // valore nel picker
+        let valueName = innerDivChildNodes[0].value;
+
+        // non gestiamo per il momento EnumParameter
+        if(valueName != "EnumParameter"){
+            // creaiamo l'oggetto value da pushare nell'array di values
+            let singleValue = new factory[valueName]();
+            
+            // accediamo al div del singolo valore
+            let parameterContent = innerDivChildNodes[2].childNodes
+            
+            console.log("singolo div value")
+            console.log(parameterContent);
+            for(let j=1; j < parameterContent.length; j=j+2){
+                let fieldName = parameterContent[j].id.split("-")[2];
+                singleValue[fieldName] = parameterContent[j].value;
+            }
+
+            values.push(singleValue)
+        }else{
+            //TODO fare enum parameter
+        }
+    }
+
+    let obj = new Parameter();
+    obj.value = values;
+    obj.resultRequest = [resultRequestDiv.value];
+
+    scenarioToSave.scenarioParameters[parameterName] = obj;
 }
 
 function setElementParameter(parameter, section, elRef, elementName) {
