@@ -234,6 +234,7 @@ function openDiagram() {
                     idListGlobal = [];
                     $('#scenario-displayed').hide();
                     $('#scenario-picker').empty();
+                    $('#delete-scenario').attr("disabled", true)
                 }
 
                 resetParameterDivs();
@@ -242,6 +243,8 @@ function openDiagram() {
 
             // * aggiunta evento al bottone che crea un nuovo scenario
             $('#create-scenario').on("click", function () {
+                $('#delete-scenario').attr("disabled", false)
+
                 closeCollapsibleButton();
                 $('#scenario-displayed').show();
                 let newScenario = new Scenario();
@@ -1295,7 +1298,11 @@ function setElementParameter(parameter, section, elRef, elementName) {
         let localParametersCounter = elementParameterCounterGlobal;
 
         btnTrash.on('click', function () {
-            document.getElementById('div-parameter' + localParametersCounter + '-$$' + elRef + '$$').remove();
+            let divToDeleteName = $.escapeSelector('div-parameter' + localParametersCounter + '-$$' + elRef + '$$');
+            let divToDelete = $('#'+divToDeleteName);
+            // console.log("div element");
+            // console.log(divToDelete);
+            divToDelete.remove();
         });
 
 
@@ -1681,6 +1688,7 @@ function setParameter(parameter) {
                 });
                 contentDiv.append(valueValidForLabel);
                 contentDiv.append(valueValidForInput);
+                
 
                 let valueInstanceLabel = jQuery('<label/>', {
                     for: parameterName + '-value-instance-input-' + idElementsLocal,
@@ -1834,6 +1842,7 @@ function setParameter(parameter) {
 
                         btnTrash.on('click', function () {
                             $('div[id*=' + parameterName + '-value-div-' + idElementsEnumLocal + '-' + idLocal + ']').remove();
+
                         });
 
                         enumDiv.append(btnTrash);
@@ -2558,8 +2567,13 @@ function setParameter(parameter) {
 
         let idLocal = parameterValueDivCounterGlobal;
 
+        // console.log(parameterName);
         btnTrash.on('click', function () {
-            $('div[id*=' + parameterName + '-value-div-' + idLocal + ']').remove();
+            let divToDelete = $('div[id*=' + parameterName + '-value-div-' + idLocal + ']')
+            // console.log("div");
+            // console.log(divToDelete)
+
+            divToDelete.remove();
         });
 
         valueDiv.append(parameterValuePicker);
@@ -2575,9 +2589,8 @@ function setParameter(parameter) {
     let valuesSection = jQuery('<div/>', {
         id: parameterName + '-values-section'
     });
-
+    
     parameter.append(valuesSection);
-
 
     if (!parameterName.match(/property/g) || parameter[0].id.split('-')[0] == "scenarioParameters") {
         let resultRequestLabel = jQuery('<label/>', {
@@ -2658,8 +2671,8 @@ function setField(inputElement, valueToSet) {
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFields(scenarios, scenarioSelected) {
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
+    
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
-
 }
 
 
@@ -2727,7 +2740,6 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
 
         populateCalendarForm(scenarios[scenarioSelected].calendar);
-
         // populateResource
 
     } else {
@@ -2822,7 +2834,6 @@ function populateElementParametersForm(elementParameters) {
 
                 let keys = Object.keys(elementParameters[j]);
                 let values = Object.values(elementParameters[j]);
-
                 for (let k in keys) {
                     if (keys[k] == "_costParameters" || keys[k] == "_resourceParameters") {
                         let innerKeys = Object.keys(values[k])
@@ -2844,12 +2855,20 @@ function populateElementParametersForm(elementParameters) {
                             if (divToPassID.includes("$$")) {
                                 divToPassID = $.escapeSelector(divToPassID);
                             }
+                            
                             if ((keys[k] == "_propertyParameters" && pickerValue == "Property") ||
                                 (innerKeys[key] == "_role" && innerValues[key].length != 0)) {
+                                    
                                 setPropertyField($('#' + divToPassID)[0], innerValues[key]);
                             } else {
-                                setParameterField($('#' + divToPassID)[0], innerValues[key]);
+                                if(!(innerKeys[key] == "_role" && innerValues[key].length == 0)){
+                                    console.log(innerValues[key]);
+                                    setParameterField($('#' + divToPassID)[0], innerValues[key]);
+                                }
+                                
+
                             }
+
                         }
                     }
                 }
@@ -2872,6 +2891,7 @@ function setPropertyField(inputElement, obj) {
 
 function setParameterField(inputElement, obj) {
     let childNodes = inputElement.childNodes;
+    
     if (obj != undefined) {
         for (let i in obj.value) {
             inputElement.childNodes[2].click();
