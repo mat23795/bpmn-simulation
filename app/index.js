@@ -12,6 +12,8 @@ import { BPSimData } from "./types/scenario/BPSimData";
 import { Scenario } from "./types/scenario/Scenario";
 import { factory } from "./types/factory";
 import { ResultType } from "./types/parameter_type/ResultType";
+import { PropertyParameters } from "./types/parameters/PropertyParameters";
+import { Property } from "./types/parameters/Property";
 import { Parameter } from "./types/parameter_type/Parameter";
 import { PropertyType } from "./types/parameters/PropertyType";
 import { Calendar } from './types/calendar/Calendar';
@@ -289,11 +291,24 @@ function openDiagram() {
 
 function resetParameterDivs() {
     let properties = $("div[id*=scenarioParameters-property]");
+    // console.log("cose da togliere")
+    // console.log(properties)
     for (let i = 0; i < properties.length; i++) {
         if (/\d/g.test(properties[i].id)) {
             properties[i].remove();
         }
     }
+
+    // let queueDivs = $("div[id*=scenarioParameters-queueLength]");
+    // console.log("cose da togliere")
+    // console.log(queueDivs)
+    // for (let i = 0; i < queueDivs.length; i++) {
+    //     if (/\d/g.test(queueDivs[i].id)) {
+    //         queueDivs[i].remove();
+    //     }
+    // }
+    // $("#queueLength-values-section").remove();
+
     let parameters = $("div[id^=div-parameter]");
     for (let i = 0; i < parameters.length; i++) {
         parameters[i].remove();
@@ -302,7 +317,7 @@ function resetParameterDivs() {
     $("div[id^=start-value-div").remove();
     $("div[id^=duration-value-div").remove();
     $("div[id^=warmup-value-div").remove();
-
+    $("div[id^=queueLength-value-div").remove();
 
 }
 
@@ -1153,12 +1168,15 @@ function saveCurrentScenarioComplexElement(scenarioToSave){
     // let elementParameters = scenarioToSave.elementParameters;
     
 
-    saveScenarioParameterComplexElement(scenarioToSave, "start", $('#scenarioParameters-start-div')[0].childNodes);
-    saveScenarioParameterComplexElement(scenarioToSave, "duration", $('#scenarioParameters-duration-div')[0].childNodes);
-    saveScenarioParameterComplexElement(scenarioToSave, "warmup", $('#scenarioParameters-warmup-div')[0].childNodes);
+    saveScenarioParameterComplexParameter(scenarioToSave, "start", $('#scenarioParameters-start-div')[0].childNodes);
+    saveScenarioParameterComplexParameter(scenarioToSave, "duration", $('#scenarioParameters-duration-div')[0].childNodes);
+    saveScenarioParameterComplexParameter(scenarioToSave, "warmup", $('#scenarioParameters-warmup-div')[0].childNodes);
 
     
     // TODO parte Property
+    saveScenarioParameterComplexProperty(scenarioToSave, $("#scenarioParameters-propertyParameters-div")[0].childNodes);
+
+
 
     // TODO parte ciclo su elemRef
 
@@ -1169,7 +1187,132 @@ function saveCurrentScenarioComplexElement(scenarioToSave){
     console.log(dataTreeObjGlobal)
 }
 
-function saveScenarioParameterComplexElement(scenarioToSave, parameterName, childNodes){
+function saveScenarioParameterComplexProperty(scenarioToSave, childNodes){
+    // console.log("child");
+    // console.log(childNodes);
+
+    // console.log("scenario");
+    // console.log(scenarioToSave);
+
+    let propertyDiv = childNodes[3];
+    let queueLengthDiv = childNodes[5];
+
+    let propertyArrayTemp = []
+
+    // * parte property
+    for(let i = 5; i<propertyDiv.childNodes.length; i++){
+        let singlePropertyChildNodes = propertyDiv.childNodes[i].childNodes;
+
+        let singlePropertyValueDiv = singlePropertyChildNodes[3];
+        let singlePropertyResultRequestSelect = singlePropertyChildNodes[5];
+        let singlePropertyNameInput = singlePropertyChildNodes[7];
+        let singlePropertyPropertyTypeSelect = singlePropertyChildNodes[9];
+
+        let singlePropertyValues = []
+
+        for(let j=0; j<singlePropertyValueDiv.childNodes.length; j++){
+            let singlePropertyValuesChildNodes = singlePropertyValueDiv.childNodes[j].childNodes;
+
+            let valueName = singlePropertyValuesChildNodes[0].value;
+
+            // non gestiamo per il momento EnumParameter
+            if(valueName != "EnumParameter" && valueName != ""){
+                // creaiamo l'oggetto value da pushare nell'array di values
+                let singleValue = new factory[valueName]();
+                
+                // accediamo al div del singolo valore
+                let parameterContent = singlePropertyValuesChildNodes[2].childNodes
+                
+                // console.log("singolo div value")
+                // console.log(parameterContent);
+                for(let k=1; k < parameterContent.length; k=k+2){
+                    let fieldName = parameterContent[k].id.split("-")[2];
+                    singleValue[fieldName] = parameterContent[k].value;
+                }
+
+                singlePropertyValues.push(singleValue)
+            }else{
+                //TODO fare enum parameter
+            }
+        }
+        let propertyTemp = new Property();
+
+
+        propertyTemp.value = singlePropertyValues;
+        
+        propertyTemp.resultRequest = [singlePropertyResultRequestSelect.value]
+
+        propertyTemp.name = singlePropertyNameInput.value
+
+        propertyTemp.type = singlePropertyPropertyTypeSelect.value
+
+        propertyArrayTemp.push(propertyTemp);
+    }
+
+
+    // * parte queueLength
+    let queueLengthValuesDiv = queueLengthDiv.childNodes[3];
+    let queueLengthResultRequestSelect = queueLengthDiv.childNodes[5];
+
+    let queueLengthValues = [];
+    
+    // cicliamo per ogni divValue di QueueLength
+    for(let i=0; i < queueLengthValuesDiv.childNodes.length; i++){
+        
+        let innerDivChildNodes = queueLengthValuesDiv.childNodes[i].childNodes;
+        
+        // valore nel picker
+        let valueName = innerDivChildNodes[0].value;
+
+        // non gestiamo per il momento EnumParameter
+        if(valueName != "EnumParameter" && valueName != ""){
+            // creaiamo l'oggetto value da pushare nell'array di values
+            let singleValue = new factory[valueName]();
+            
+            // accediamo al div del singolo valore
+            let parameterContent = innerDivChildNodes[2].childNodes
+            
+            // console.log("singolo div value")
+            // console.log(parameterContent);
+            for(let j=1; j < parameterContent.length; j=j+2){
+                let fieldName = parameterContent[j].id.split("-")[2];
+                singleValue[fieldName] = parameterContent[j].value;
+            }
+
+            queueLengthValues.push(singleValue)
+        }else{
+            //TODO fare enum parameter
+        }
+    }
+
+
+
+
+
+    let propertyParameterObj = new PropertyParameters();
+    let propertyObj = new Property();
+    let queueLengthObj = new Parameter();
+
+    
+    propertyObj = propertyArrayTemp;
+
+    queueLengthObj.value = queueLengthValues;
+    queueLengthObj.resultRequest = [queueLengthResultRequestSelect.value];
+
+    propertyParameterObj.property = propertyObj;
+    propertyParameterObj.queueLength = queueLengthObj;
+
+
+
+    // console.log("oggetti")
+    // console.log(obj);
+    // console.log(scenarioToSave.scenarioParameters.propertyParameters[0].queueLength);
+    // scenarioToSave.scenarioParameters.propertyParameters = undefined
+    scenarioToSave.scenarioParameters.propertyParameters = [propertyParameterObj];
+    
+}
+
+function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, childNodes){
     // console.log("child di "+parameterName)
     // console.log(childNodes);
 
@@ -1188,15 +1331,15 @@ function saveScenarioParameterComplexElement(scenarioToSave, parameterName, chil
         let valueName = innerDivChildNodes[0].value;
 
         // non gestiamo per il momento EnumParameter
-        if(valueName != "EnumParameter"){
+        if(valueName != "EnumParameter" && valueName != ""){
             // creaiamo l'oggetto value da pushare nell'array di values
             let singleValue = new factory[valueName]();
             
             // accediamo al div del singolo valore
             let parameterContent = innerDivChildNodes[2].childNodes
             
-            console.log("singolo div value")
-            console.log(parameterContent);
+            // console.log("singolo div value")
+            // console.log(parameterContent);
             for(let j=1; j < parameterContent.length; j=j+2){
                 let fieldName = parameterContent[j].id.split("-")[2];
                 singleValue[fieldName] = parameterContent[j].value;
@@ -2959,12 +3102,28 @@ function setPropertyField(inputElement, obj) {
         let indexOfButton = childNodes.length - 1;
         for (let i in obj) {
             childNodes[indexOfButton].click();
-            setParameterField(childNodes[childNodes.length - 1], obj[i]);
+
+            let graphicalElement = childNodes[childNodes.length - 1]
+            setParameterField(graphicalElement, obj[i]);
+
+            console.log("aoooo")
+            let graphicalElementChild = graphicalElement.childNodes
+            if(obj[i].name != undefined){
+                console.log()
+                graphicalElementChild[graphicalElementChild.length -1-2].value = obj[i].name;
+            }
+            if(obj[i].type != undefined){
+                graphicalElementChild[graphicalElementChild.length -1].value = obj[i].type;
+            }
         }
     }
 }
 
 function setParameterField(inputElement, obj) {
+
+    // console.log("elemento");
+    // console.log(inputElement)
+
     let childNodes = inputElement.childNodes;
     
     if (obj != undefined) {
@@ -3007,7 +3166,13 @@ function setParameterField(inputElement, obj) {
         }
 
         if (obj.resultRequest.length > 0) {
-            childNodes[(childNodes.length) - 1].value = obj.resultRequest[0];
+            let offset = 0;
+            if(inputElement.id.includes("scenarioParameters-property")){
+                offset = 4;
+            }
+            // console.log("result")
+            // console.log(childNodes[childNodes.length-1-offset])
+            childNodes[(childNodes.length) - 1 - offset].value = obj.resultRequest[0];
         }
     } else {
         childNodes[(childNodes.length) - 1].value = "min"
@@ -3707,11 +3872,22 @@ function buildDataTree(nodo, nodoObject) {
         nodoFiglio = buildDataTree(childToPass, createObj(childToPass));
         let nameAttr = nodoFiglio[0].localName.charAt(0).toLowerCase() + nodoFiglio[0].localName.slice(1);
 
+        
+        
+
         if (isParameter(nodoFiglio[0].localName)) {
+
+            // if(nodoFiglio[0].localName == "Property"){
+            //     console.log("propertyyyyyyyyyy")
+            //     console.log(nodoFiglio[0])
+            //     console.log(nodoFiglio[1])
+            //     // console.log(parameterFieldsToDelete)
+            // }
+
             let parameterFieldsToDelete = [];
             for (let i = 0; i < Object.keys(nodoFiglio[1]).length; i++) {
                 // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
-                if (Object.keys(nodoFiglio[1])[i].charAt(0) != "_") {
+                if (Object.keys(nodoFiglio[1])[i].charAt(0) != "_" /*&& Object.keys(nodoFiglio[1])[i] != "name"*/ ) {
                     let temp = nodoFiglio[1][Object.keys(nodoFiglio[1])[i]];
                     parameterFieldsToDelete.push(temp);
                 }
@@ -3729,10 +3905,34 @@ function buildDataTree(nodo, nodoObject) {
                 }
             }
 
+            
+
             let tempResultRequest = nodoFiglio[1].resultRequest;
+            
+            let tempName;
+            let tempType;
+
+            if(nodoFiglio[0].localName == "Property"){
+                tempName = nodoFiglio[1].name;
+                tempType = nodoFiglio[1].type;
+            }
+
             nodoFiglio[1] = new factory[nodoFiglio[0].localName]();
             nodoFiglio[1].resultRequest = tempResultRequest;
             nodoFiglio[1].value = parameterFieldsToDelete;
+            if(nodoFiglio[0].localName == "Property"){
+                nodoFiglio[1].name = tempName;
+                nodoFiglio[1].type = tempType;
+            }
+            // console.log()
+
+            // if(nodoFiglio[0].localName == "Property"){
+                
+            //     console.log("propertyyyyyyyyyy")
+            //     console.log(nodoFiglio[0])
+            //     console.log(nodoFiglio[1])
+            //     console.log(parameterFieldsToDelete)
+            // }
             if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);

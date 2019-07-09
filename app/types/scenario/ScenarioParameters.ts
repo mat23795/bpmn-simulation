@@ -112,9 +112,11 @@ export class ScenarioParameters {
     }
 
     set propertyParameters(value: PropertyParameters[]) {
+        let newPropertyParameter = [];
         for (let i = 0; i < value.length; i++) {
-            this._propertyParameters.push(value[i]);
+            newPropertyParameter.push(value[i]);
         }
+        this._propertyParameters = newPropertyParameter;
     }
 
     getType(): string{

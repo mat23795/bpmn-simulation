@@ -665,7 +665,9 @@
               
               <bpsim:Property name="noOfIssues">
                 <bpsim:TruncatedNormalDistribution max="1000" mean="2" min="1" standardDeviation="1"/>
-                <bpsim:GammaDistribution shape="1" scale="4"/>  
+                <bpsim:GammaDistribution shape="1" scale="4"/>
+                
+                <bpsim:ResultRequest>count</bpsim:ResultRequest>  
               </bpsim:Property>
               <bpsim:Property name="noOfIssues2">
                 <bpsim:ExpressionParameter value="getProperty('noOfIssues') -1"/>
