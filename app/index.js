@@ -1180,6 +1180,58 @@ function saveCurrentScenarioComplexElement(scenarioToSave){
 
     // TODO parte ciclo su elemRef
 
+    let divActivities = $("#div-activity");
+    let divGateways = $("#div-gateways");
+    let divEvents = $("#div-events");
+    let divConnectingObjects = $("#div-connectingObjects");
+    let divResources = $("#div-resources");
+    
+    let divActivitiesChildNodes = divActivities[0].childNodes;
+    for (let i = 0; i < divActivitiesChildNodes.length; i=i+4) {
+        let elementRef = divActivitiesChildNodes[i].textContent.split(":")[1].slice(1);
+        // console.log(elementRef);
+        let idValueInput = divActivitiesChildNodes[i+2].value;
+        // console.log(idValueInput);
+
+        // TODO salvare solo se esiste almeno un value
+        let devoSalvarlo = true;
+        if(devoSalvarlo){
+            
+            
+            let esiste = false;
+            let posizione;
+
+            for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
+                
+                if(elementRef == scenarioToSave.elementParameters[j].elementRef){
+                    esiste = true;
+                    posizione = j;
+                }
+                if(esiste){
+                    // * esiste e lo devo aggiornare
+
+                    // questo lo faceva già in realtà
+                    scenarioToSave.elementParameters[posizione].id = idValueInput;
+                    
+                }else{
+                    // * ne creo uno nuovo
+                }
+            }
+        }
+    }
+    
+    // let divResources = $('#div-resources');
+    // let singleResourcesDivs = [];
+    // for (let i in divResources[0].childNodes) {
+    //     if (i % 2 == 1) {
+    //         singleResourcesDivs.push(divResources[0].childNodes[i]);
+    //     }
+    // }
+
+    // for (let i in singleResourcesDivs) {
+
+    // }
+
     
 
     // TODO REMOVE
@@ -3080,7 +3132,7 @@ function populateElementParametersForm(elementParameters) {
                                 setPropertyField($('#' + divToPassID)[0], innerValues[key]);
                             } else {
                                 if(!(innerKeys[key] == "_role" && innerValues[key].length == 0)){
-                                    console.log(innerValues[key]);
+                                    // console.log(innerValues[key]);
                                     setParameterField($('#' + divToPassID)[0], innerValues[key]);
                                 }
                                 
@@ -3106,7 +3158,6 @@ function setPropertyField(inputElement, obj) {
             let graphicalElement = childNodes[childNodes.length - 1]
             setParameterField(graphicalElement, obj[i]);
 
-            console.log("aoooo")
             let graphicalElementChild = graphicalElement.childNodes
             if(obj[i].name != undefined){
                 console.log()
