@@ -674,7 +674,7 @@
               </bpsim:Property>
 
               <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
+                <bpsim:ResultRequest>max</bpsim:ResultRequest>
               </bpsim:QueueLength>
 
             </bpsim:PropertyParameters>
@@ -688,7 +688,7 @@
               <bpsim:Role>
                 <bpsim:FloatingParameter value="40"/>
                 <bpsim:FloatingParameter value="10"/>
-                <bpsim:NumericParameter value="0"/>
+                <bpsim:NumericParameter value="0"/>mean
                 <bpsim:NumericParameter validFor="C8" value="1"/>
               </bpsim:Role>
               <bpsim:Role>
