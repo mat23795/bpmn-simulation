@@ -44,11 +44,11 @@
       <semantic:outgoing>_10-454</semantic:outgoing>
       <semantic:messageEventDefinition messageRef="Message_1399929387655"/>
     </semantic:intermediateCatchEvent>
-    <semantic:eventBasedGateway gatewayDirection="Unspecified" name="" id="_10-114">
+    <semantic:exclusiveGateway gatewayDirection="Unspecified" name="" id="_10-114">
       <semantic:incoming>_10-136</semantic:incoming>
       <semantic:outgoing>_10-189</semantic:outgoing>
       <semantic:outgoing>_10-286</semantic:outgoing>
-    </semantic:eventBasedGateway>
+    </semantic:exclusiveGateway>
     <semantic:exclusiveGateway gatewayDirection="Unspecified" name="" id="_10-195">
       <semantic:incoming>_10-217</semantic:incoming>
       <semantic:outgoing>_10-233</semantic:outgoing>
@@ -684,19 +684,33 @@
           
           <!-- inizio modifica -->
           <bpsim:ElementParameters elementRef="resource_Front_Office">
+            <!-- <bpsim:ResourceParameters> -->
+              <!-- <bpsim:Role> -->
+                <!-- <bpsim:FloatingParameter value="40"/> -->
+                <!-- <bpsim:FloatingParameter value="10"/> -->
+                <!-- <bpsim:NumericParameter value="0"/> -->
+                <!-- <bpsim:NumericParameter validFor="C8" value="1"/> -->
+              <!-- </bpsim:Role> -->
+              <!-- <bpsim:Role> -->
+                <!-- <bpsim:FloatingParameter value="4"/> -->
+                <!-- <bpsim:StringParameter value="ciao"/> -->
+                <!-- <bpsim:NumericParameter validFor="C2" value="3"/> -->
+              <!-- </bpsim:Role> -->
+            <!-- </bpsim:ResourceParameters> -->
+
             <bpsim:ResourceParameters>
-              <bpsim:Role>
-                <bpsim:FloatingParameter value="40"/>
-                <bpsim:FloatingParameter value="10"/>
-                <bpsim:NumericParameter value="0"/>mean
-                <bpsim:NumericParameter validFor="C8" value="1"/>
-              </bpsim:Role>
-              <bpsim:Role>
-                <bpsim:FloatingParameter value="4"/>
-                <bpsim:StringParameter value="ciao"/>
-                <bpsim:NumericParameter validFor="C2" value="3"/>
-              </bpsim:Role>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="0"/>
+                <bpsim:NumericParameter validFor="C1" value="200"/>
+                <bpsim:NumericParameter validFor="C2" value="90"/>
+                <bpsim:NumericParameter validFor="C3" value="130"/>
+                <bpsim:NumericParameter validFor="C4" value="60"/>
+                <bpsim:NumericParameter validFor="C5" value="150"/>
+                <bpsim:NumericParameter validFor="C6" value="100"/>
+                <bpsim:NumericParameter validFor="C7" value="40"/>
+              </bpsim:Quantity>
             </bpsim:ResourceParameters>
+
           </bpsim:ElementParameters>
 
           <bpsim:ElementParameters elementRef="_10-189">
