@@ -375,40 +375,47 @@ function createFormFields(firstTime = true) {
                 nodesProcess[j].localName.toLowerCase().includes("callactivity") ||
                 nodesProcess[j].localName.toLowerCase().includes("eventsubprocess")) {
                 nodesActivities.push(nodesProcess[j]);
+            }else if (nodesProcess[j].localName.toLowerCase().includes("gateway")) {
+                nodesGateways.push(nodesProcess[j]);
+            }else if (nodesProcess[j].localName.toLowerCase().includes("event")
+                    && !nodesProcess[j].localName.toLowerCase().includes("definition")) {
+                nodesEvents.push(nodesProcess[j]);
+            }else if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")) {
+                nodesConnectingObjects.push(nodesProcess[j]);
             }
             // console.log(nodes[j].localName);
         }
 
 
         // * avvaloramento variabile che contiene solo i gateway
-        for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("gateway")) {
+        // for (let j = 0; j < nodesProcess.length; j++) {
+        //     if (nodesProcess[j].localName.toLowerCase().includes("gateway")) {
 
-                nodesGateways.push(nodesProcess[j]);
-            }
-            // console.log(nodes[j].localName);
-        }
+        //         nodesGateways.push(nodesProcess[j]);
+        //     }
+        //     // console.log(nodes[j].localName);
+        // }
 
 
         // * avvaloramento variabile che contiene solo gli eventi
-        for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("event")
-                && !nodesProcess[j].localName.toLowerCase().includes("definition")) {
+        // for (let j = 0; j < nodesProcess.length; j++) {
+        //     if (nodesProcess[j].localName.toLowerCase().includes("event")
+        //         && !nodesProcess[j].localName.toLowerCase().includes("definition")) {
 
-                nodesEvents.push(nodesProcess[j]);
-            }
-            // console.log(nodes[j].localName);
-        }
+        //         nodesEvents.push(nodesProcess[j]);
+        //     }
+        //     // console.log(nodes[j].localName);
+        // }
 
 
         // * avvaloramento variabile che contiene solo le freccie
-        for (let j = 0; j < nodesProcess.length; j++) {
-            if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")) {
+        // for (let j = 0; j < nodesProcess.length; j++) {
+        //     if (nodesProcess[j].localName.toLowerCase().includes("sequenceflow")) {
 
-                nodesConnectingObjects.push(nodesProcess[j]);
-            }
-            // console.log(nodesConnectingObjects[j].localName);
-        }
+        //         nodesConnectingObjects.push(nodesProcess[j]);
+        //     }
+        //     // console.log(nodesConnectingObjects[j].localName);
+        // }
 
 
     }
@@ -1186,59 +1193,30 @@ function saveCurrentScenarioComplexElement(scenarioToSave){
     
     let divActivitiesChildNodes = divActivities[0].childNodes;
     for (let i = 0; i < divActivitiesChildNodes.length; i=i+4) {
-
         let elementRef = divActivitiesChildNodes[i].textContent.split("Element Ref: ")[1];
-
         let esiste = false;
         let posizione;
-
         for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
             if(elementRef == scenarioToSave.elementParameters[j].elementRef){
                 esiste = true;
                 posizione = j;
             }
         }
-
-
-        
         let idValueInput = divActivitiesChildNodes[i+2].value;
-
         let values = [];
-        
         let parameterValuesDivChildNodes = divActivitiesChildNodes[i+3].childNodes;
-
         for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
-            
-            
             let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
-
             let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
-            
             let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
             if(valueToAdd != undefined){
                 values.push(valueToAdd);
             }
-
-            // if(elementRef == "_10-235"){
-            //     console.log("aooooooo")
-            //     console.log(singleParameterDivChildNodes)
-            //     console.log(valueToAdd)                
-            //     console.log(values)
-            // }
-            
         }
-        // console.log("values");
-        // console.log(values);
-
-        
-
-
-        // TODO salvare solo se esiste almeno un value
         if(idValueInput != "" || values.length>0){
             if(esiste){
                 // * esiste e lo devo aggiornare
                 scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
-                
             }else{
                 // * ne creo uno nuovo
                 let newElemParam = createElemParamObj(values, idValueInput, elementRef);
@@ -1251,20 +1229,87 @@ function saveCurrentScenarioComplexElement(scenarioToSave){
             }
         }
     }
-    
-    
 
-    // let divResources = $('#div-resources');
-    // let singleResourcesDivs = [];
-    // for (let i in divResources[0].childNodes) {
-    //     if (i % 2 == 1) {
-    //         singleResourcesDivs.push(divResources[0].childNodes[i]);
+    let divGatewaysChildNodes = divGateways[0].childNodes;
+    console.log("divGateways")
+    console.log(divGatewaysChildNodes)
+
+    // for (let i = 0; i < divGatewaysChildNodes.length; i=i+4) {
+    //     let elementRef = divActivitiesChildNodes[i].textContent.split("Element Ref: ")[1];
+    //     let esiste = false;
+    //     let posizione;
+    //     for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
+    //         if(elementRef == scenarioToSave.elementParameters[j].elementRef){
+    //             esiste = true;
+    //             posizione = j;
+    //         }
+    //     }
+    //     let idValueInput = divActivitiesChildNodes[i+2].value;
+    //     let values = [];
+    //     let parameterValuesDivChildNodes = divActivitiesChildNodes[i+3].childNodes;
+    //     for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
+    //         let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
+    //         let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+    //         let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
+    //         if(valueToAdd != undefined){
+    //             values.push(valueToAdd);
+    //         }
+    //     }
+    //     if(idValueInput != "" || values.length>0){
+    //         if(esiste){
+    //             // * esiste e lo devo aggiornare
+    //             scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
+    //         }else{
+    //             // * ne creo uno nuovo
+    //             let newElemParam = createElemParamObj(values, idValueInput, elementRef);
+    //             console.log(newElemParam);
+    //             scenarioToSave.elementParameters = [newElemParam];
+    //         }
+    //     }else{
+    //         if(esiste){
+    //             scenarioToSave.elementParameters.splice(posizione,1);
+    //         }
     //     }
     // }
-
-    // for (let i in singleResourcesDivs) {
-
-    // }
+    
+    let divEventsChildNodes = divEvents[0].childNodes;
+    for (let i = 0; i < divEventsChildNodes.length; i=i+4) {
+        let elementRef = divEventsChildNodes[i].textContent.split("Element Ref: ")[1];
+        let esiste = false;
+        let posizione;
+        for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
+            if(elementRef == scenarioToSave.elementParameters[j].elementRef){
+                esiste = true;
+                posizione = j;
+            }
+        }
+        let idValueInput = divEventsChildNodes[i+2].value;
+        let values = [];
+        let parameterValuesDivChildNodes = divEventsChildNodes[i+3].childNodes;
+        for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
+            let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
+            let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+            let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
+            if(valueToAdd != undefined){
+                values.push(valueToAdd);
+            }
+        }
+        if(idValueInput != "" || values.length>0){
+            if(esiste){
+                // * esiste e lo devo aggiornare
+                scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
+            }else{
+                // * ne creo uno nuovo
+                let newElemParam = createElemParamObj(values, idValueInput, elementRef);
+                console.log(newElemParam);
+                scenarioToSave.elementParameters = [newElemParam];
+            }
+        }else{
+            if(esiste){
+                scenarioToSave.elementParameters.splice(posizione,1);
+            }
+        }
+    }
 
     
 
