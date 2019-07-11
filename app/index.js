@@ -594,20 +594,20 @@ function createFormFields(firstTime = true) {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Activities',
-        id: 'button-activity'
+        id: 'button-activitys'
     });
     buttonActivities.data('clicked', false);
     let divActivities = jQuery('<div/>', {
         class: 'content',
         label: 'element-parameter-activities-form',
-        id: 'div-activity'
+        id: 'div-activitys'
     });
 
     let buttonGateways = jQuery('<button/>', {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Gateways',
-        id: 'button-gateway'
+        id: 'button-gateways'
     });
     buttonGateways.data('clicked', false);
     let divGateways = jQuery('<div/>', {
@@ -620,7 +620,7 @@ function createFormFields(firstTime = true) {
         class: 'collapsible button-collapsible-style',
         type: 'button',
         text: 'Events',
-        id: 'button-event'
+        id: 'button-events'
     });
     buttonEvents.data('clicked', false);
     let divEvents = jQuery('<div/>', {
@@ -771,6 +771,10 @@ function createFormFields(firstTime = true) {
         });
         divGateways.append(labelConnectingObj);
         // console.log(connectingObj);
+
+        let divLabelsConnecting = jQuery('<div/>', {
+            id: 'div-labels-connecting'
+        });
         for (let i = 0; i < connectingObj.length; i++) {
             if (connectingObj[i].localName != "incoming") {
                 let labelFlowLink = jQuery('<label/>', {
@@ -797,15 +801,15 @@ function createFormFields(firstTime = true) {
                     }
                     focusDelayed($("input[id*='$$" + connectingObj[i].textContent + "$$']"));
                 });
-
-                divGateways.append(labelFlowLink);
-
-
+                divLabelsConnecting.append(labelFlowLink);
             }
         }
+        divGateways.append(divLabelsConnecting);
+
+
         // console.log(nodesGateways[counter].children); //TODO REMOVE
         let divGatewaysParameter = jQuery('<div/>', {
-            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+            
             id: 'gateway-parameter-div-$$' + elRef + '$$'
         });
         divGateways.append(divGatewaysParameter);
@@ -814,9 +818,10 @@ function createFormFields(firstTime = true) {
         let elementName = nodesGateways[counter].localName;
         // console.log(elRef + " " + elementName);
         if (elementName == "eventBasedGateway") {
+            divGatewaysParameter.attr("style", "border-radius: 10px; border: solid 1px black; padding: 2%")
             setElementParameter(divGatewaysParameter, "gateways", elRef, elementName);
         } else {
-            divGatewaysParameter.remove();
+            divGatewaysParameter.empty();
         }
 
 
@@ -1185,7 +1190,7 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
 
     // TODO parte ciclo su elemRef
 
-    let divActivities = $("#div-activity");
+    let divActivities = $("#div-activitys");
     let divGateways = $("#div-gateways");
     let divEvents = $("#div-events");
     let divConnectingObjects = $("#div-connectingObjects");
@@ -1230,47 +1235,56 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
     }
 
     // TODO
-    // let divGatewaysChildNodes = divGateways[0].childNodes;
-    // console.log("divGateways")
-    // console.log(divGatewaysChildNodes)
+    let divGatewaysChildNodes = divGateways[0].childNodes;
+    console.log("divGateways")
+    console.log(divGatewaysChildNodes)
 
-    // for (let i = 0; i < divGatewaysChildNodes.length; i=i+4) {
-    //     let elementRef = divActivitiesChildNodes[i].textContent.split("Element Ref: ")[1];
-    //     let esiste = false;
-    //     let posizione;
-    //     for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
-    //         if(elementRef == scenarioToSave.elementParameters[j].elementRef){
-    //             esiste = true;
-    //             posizione = j;
-    //         }
-    //     }
-    //     let idValueInput = divActivitiesChildNodes[i+2].value;
-    //     let values = [];
-    //     let parameterValuesDivChildNodes = divActivitiesChildNodes[i+3].childNodes;
-    //     for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
-    //         let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
-    //         let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
-    //         let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
-    //         if(valueToAdd != undefined){
-    //             values.push(valueToAdd);
-    //         }
-    //     }
-    //     if(idValueInput != "" || values.length>0){
-    //         if(esiste){
-    //             // * esiste e lo devo aggiornare
-    //             scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
-    //         }else{
-    //             // * ne creo uno nuovo
-    //             let newElemParam = createElemParamObj(values, idValueInput, elementRef);
-    //             console.log(newElemParam);
-    //             scenarioToSave.elementParameters = [newElemParam];
-    //         }
-    //     }else{
-    //         if(esiste){
-    //             scenarioToSave.elementParameters.splice(posizione,1);
-    //         }
-    //     }
-    // }
+    for (let i = 0; i < divGatewaysChildNodes.length; i=i+6) {
+        // console.log("figlio")
+        // if(divGatewaysChildNodes[i].tagName == "DIV" ){
+            // console.log("sonoentrato")
+            let elementRef = divGatewaysChildNodes[i].textContent.split("Element Ref: ")[1];
+            console.log("elRef")
+            console.log(elementRef)
+            let esiste = false;
+            let posizione;
+            for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
+                if(elementRef == scenarioToSave.elementParameters[j].elementRef){
+                    esiste = true;
+                    posizione = j;
+                }
+            }
+            console.log(1)
+            let idValueInput = divGatewaysChildNodes[i+2].value;
+            console.log(2)
+            let values = [];
+            let parameterValuesDivChildNodes = divGatewaysChildNodes[i+5].childNodes;
+            for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
+                let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
+                let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+                let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
+                if(valueToAdd != undefined){
+                    values.push(valueToAdd);
+                }
+            }
+            if(idValueInput != "" || values.length>0){
+                if(esiste){
+                    // * esiste e lo devo aggiornare
+                    scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
+                }else{
+                    // * ne creo uno nuovo
+                    let newElemParam = createElemParamObj(values, idValueInput, elementRef);
+                    // console.log(newElemParam);
+                    scenarioToSave.elementParameters = [newElemParam];
+                }
+            }else{
+                if(esiste){
+                    scenarioToSave.elementParameters.splice(posizione,1);
+                }
+            }
+        // }
+        
+    }
 
     let divEventsChildNodes = divEvents[0].childNodes;
     // console.log("events")
@@ -1373,7 +1387,7 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
             let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
             let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
             console.log("inizio")
-            console.log(singleParameterDivChildNodes)
+            // console.log(singleParameterDivChildNodes)
             let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2,false);
             console.log("fine")
             if (valueToAdd != undefined) {
@@ -1387,7 +1401,7 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
             } else {
                 // * ne creo uno nuovo
                 let newElemParam = createElemParamObj(values, idValueInput, elementRef);
-                console.log(newElemParam);
+                // console.log(newElemParam);
                 scenarioToSave.elementParameters = [newElemParam];
             }
         } else {
@@ -3234,34 +3248,42 @@ function saveLocalCalendars() {
 function closeCollapsibleButton() {
     //TODO inserire tuttoin una funzione
     if ($("#elem-par-btn").data('clicked') == true) {
+        console.log("elem aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#elem-par-btn").click();
     }
-    if ($("#button-activities").data('clicked') == true) {
+    if ($("#button-activitys").data('clicked') == true) {
+        console.log("activiti aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-        $("#button-activities").click();
+        $("#button-activitys").click();
     }
     if ($("#button-gateways").data('clicked') == true) {
+        console.log("gatewy aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-gateways").click();
     }
     if ($("#button-events").data('clicked') == true) {
+        console.log("events aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-events").click();
     }
     if ($("#button-connectingObjects").data('clicked') == true) {
+        console.log("connobj aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-connectingObjects").click();
     }
     if ($("#button-resources").data('clicked') == true) {
+        console.log("resc aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-resources").click();
     }
     if ($("#scen-par-btn").data('clicked') == true) {
+        console.log("scenPAr aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#scen-par-btn").click();
     }
     if ($("#calendar-btn").data('clicked') == true) {
+        console.log("calendar aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#calendar-btn").click();
     }
@@ -4631,9 +4653,9 @@ event.forEach(function (event) {
                     $("#elem-par-btn").click();
                 }
 
-                if ($("#button-activity").data('clicked') == false) {
+                if ($("#button-activitys").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-activity").click();
+                    $("#button-activitys").click();
                 }
             } else if (e.element.type.toLowerCase().includes("gateway")) {
                 // * gestione dell'apertura dei bottoni
@@ -4651,9 +4673,9 @@ event.forEach(function (event) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
                     $("#elem-par-btn").click();
                 }
-                if ($("#button-event").data('clicked') == false) {
+                if ($("#button-events").data('clicked') == false) {
                     //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
-                    $("#button-event").click();
+                    $("#button-events").click();
                 }
             } else if (e.element.type.toLowerCase().includes("flow")) {
                 if ($("#elem-par-btn").data('clicked') == false) {
