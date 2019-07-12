@@ -1236,16 +1236,16 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
 
     // TODO
     let divGatewaysChildNodes = divGateways[0].childNodes;
-    console.log("divGateways")
-    console.log(divGatewaysChildNodes)
+    // console.log("divGateways")
+    // console.log(divGatewaysChildNodes)
 
     for (let i = 0; i < divGatewaysChildNodes.length; i=i+6) {
         // console.log("figlio")
         // if(divGatewaysChildNodes[i].tagName == "DIV" ){
             // console.log("sonoentrato")
             let elementRef = divGatewaysChildNodes[i].textContent.split("Element Ref: ")[1];
-            console.log("elRef")
-            console.log(elementRef)
+            // console.log("elRef")
+            // console.log(elementRef)
             let esiste = false;
             let posizione;
             for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
@@ -1254,9 +1254,9 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
                     posizione = j;
                 }
             }
-            console.log(1)
+            // console.log(1)
             let idValueInput = divGatewaysChildNodes[i+2].value;
-            console.log(2)
+            // console.log(2)
             let values = [];
             let parameterValuesDivChildNodes = divGatewaysChildNodes[i+5].childNodes;
             for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
@@ -1386,10 +1386,10 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
         for (let j = 2; j < parameterValuesDivChildNodes.length; j++) {
             let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
             let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
-            console.log("inizio")
+            // console.log("inizio")
             // console.log(singleParameterDivChildNodes)
             let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2,false);
-            console.log("fine")
+            // console.log("fine")
             if (valueToAdd != undefined) {
                 values.push(valueToAdd);
             }
@@ -1661,11 +1661,47 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
             // console.log("singolo div value")
             // console.log(parameterContent);
             for (let j = 1; j < parameterContent.length; j = j + 2) {
-                let fieldName = parameterContent[j].id.split("-")[2];
-                if (parameterContent[j].value == "") {
-                    singleValue[fieldName] = undefined;
-                } else {
-                    singleValue[fieldName] = parameterContent[j].value;
+                
+                // console.log("\n capire")
+                // console.log(parameterContent[j])
+                // console.log(parameterContent[j].tagName)
+                // console.log(singleValue)
+
+                
+
+                // console.log(fieldName)
+
+                // if(parameterContent[j].tagName == "div"){
+                //     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+                // }
+
+                let parameterContentTemp = parameterContent[j];
+                if(parameterContent[j].tagName == "DIV"){
+                    parameterContentTemp = parameterContent[j].childNodes[0];
+                    // console.log("Prove")
+                    // console.log(parameterContentTemp)
+                }
+
+                // if (field.type == "checkbox") {
+                //     //salvo il cambimento della checkbox
+                //     if (dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] == "true") {
+                //         dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "false";
+                //     } else {
+                //         dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "true";
+                //     }
+                // }
+
+
+                let fieldName = parameterContentTemp.id.split("-")[2];
+                if(parameterContent[j].tagName == "DIV"){
+                    singleValue[fieldName] = String(parameterContentTemp.checked);
+                    // console.log(singleValue)
+                }else{
+                    if (parameterContentTemp.value == "") {
+                        singleValue[fieldName] = undefined;
+                    } else {
+                        singleValue[fieldName] = parameterContentTemp.value;
+                    }
                 }
                 // TODO gestire campi che non sono select o input
             }
