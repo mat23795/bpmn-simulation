@@ -1535,11 +1535,20 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                 // console.log("singolo div value")
                 // console.log(parameterContent);
                 for (let k = 1; k < parameterContent.length; k = k + 2) {
-                    let fieldName = parameterContent[k].id.split("-")[2];
-                    if (parameterContent[j].value == "") {
-                        singleValue[fieldName] = undefined;
-                    } else {
-                        singleValue[fieldName] = parameterContent[j].value;
+                    let parameterContentTemp = parameterContent[j];
+                    if(parameterContent[j].tagName == "DIV"){
+                        parameterContentTemp = parameterContent[j].childNodes[0];
+                    }
+                    let fieldName = parameterContentTemp.id.split("-")[2];
+                    if(parameterContent[j].tagName == "DIV"){
+                        singleValue[fieldName] = String(parameterContentTemp.checked);
+                        // console.log(singleValue)
+                    }else{
+                        if (parameterContentTemp.value == "") {
+                            singleValue[fieldName] = undefined;
+                        } else {
+                            singleValue[fieldName] = parameterContentTemp.value;
+                        }
                     }
                     // TODO gestire campi che non sono select o input
                 }
@@ -1661,37 +1670,10 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
             // console.log("singolo div value")
             // console.log(parameterContent);
             for (let j = 1; j < parameterContent.length; j = j + 2) {
-                
-                // console.log("\n capire")
-                // console.log(parameterContent[j])
-                // console.log(parameterContent[j].tagName)
-                // console.log(singleValue)
-
-                
-
-                // console.log(fieldName)
-
-                // if(parameterContent[j].tagName == "div"){
-                //     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
-                // }
-
                 let parameterContentTemp = parameterContent[j];
                 if(parameterContent[j].tagName == "DIV"){
                     parameterContentTemp = parameterContent[j].childNodes[0];
-                    // console.log("Prove")
-                    // console.log(parameterContentTemp)
                 }
-
-                // if (field.type == "checkbox") {
-                //     //salvo il cambimento della checkbox
-                //     if (dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] == "true") {
-                //         dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "false";
-                //     } else {
-                //         dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters[fieldName] = "true";
-                //     }
-                // }
-
-
                 let fieldName = parameterContentTemp.id.split("-")[2];
                 if(parameterContent[j].tagName == "DIV"){
                     singleValue[fieldName] = String(parameterContentTemp.checked);
@@ -1753,11 +1735,20 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
                 // console.log("singolo div value")
                 // console.log(parameterContent);
                 for (let j = 1; j < parameterContent.length; j = j + 2) {
-                    let fieldName = parameterContent[j].id.split("-")[2];
-                    if (parameterContent[j].value == "") {
-                        singleValue[fieldName] = undefined;
-                    } else {
-                        singleValue[fieldName] = parameterContent[j].value;
+                    let parameterContentTemp = parameterContent[j];
+                    if(parameterContent[j].tagName == "DIV"){
+                        parameterContentTemp = parameterContent[j].childNodes[0];
+                    }
+                    let fieldName = parameterContentTemp.id.split("-")[2];
+                    if(parameterContent[j].tagName == "DIV"){
+                        singleValue[fieldName] = String(parameterContentTemp.checked);
+                        // console.log(singleValue)
+                    }else{
+                        if (parameterContentTemp.value == "") {
+                            singleValue[fieldName] = undefined;
+                        } else {
+                            singleValue[fieldName] = parameterContentTemp.value;
+                        }
                     }
                     // TODO gestire campi che non sono select o input
                 }
@@ -3414,6 +3405,8 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
 }
 
 function populateElementParametersForm(elementParameters) {
+    
+    // contiene anche quelli della sezione resources
     let fields = $("input[id*='$$']");
 
     // console.log("fields")
@@ -3627,13 +3620,28 @@ function setParameterField(inputElement, obj) {
                 }
             }
             for (let j = 0; j < divElementsWithoutLabels.length; j++) { //skip labels
-                let attributeName = divElementsWithoutLabels[j].id.split('-')[2];
+                // TODO continuare da qua
+                let attributeName;
 
-                let value = obj.value[i][attributeName];
+                // bisogna distinguere i punti in cui si ha l' 'on/off' switch
+                if(divElementsWithoutLabels[j].tagName == "DIV"){
+                    attributeName = divElementsWithoutLabels[j].childNodes[0].id.split('-')[2];
+                    if(obj.value[i][attributeName] == "true"){
+                        $('#'+divElementsWithoutLabels[j].childNodes[0].id).prop('checked', true);
+                    }else{
+                        $('#'+divElementsWithoutLabels[j].childNodes[0].id).prop('checked', false);
+                    }
+                }else{
+                    attributeName = divElementsWithoutLabels[j].id.split('-')[2];
+                    let value = obj.value[i][attributeName];
 
-                if (value != undefined) {
-                    divElementsWithoutLabels[j].value = value;
+                    if (value != undefined) {
+                        divElementsWithoutLabels[j].value = value;
+                    }
                 }
+
+
+                
             }
         }
 
