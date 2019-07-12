@@ -1535,12 +1535,15 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                 // console.log("singolo div value")
                 // console.log(parameterContent);
                 for (let k = 1; k < parameterContent.length; k = k + 2) {
-                    let parameterContentTemp = parameterContent[j];
-                    if(parameterContent[j].tagName == "DIV"){
-                        parameterContentTemp = parameterContent[j].childNodes[0];
+                    let parameterContentTemp = parameterContent[k];
+                    // console.log("singolo elemento")
+                    // console.log(parameterContent[k])
+                    if(parameterContent[k].tagName == "DIV"){
+                        // console.log("aooooooooo")
+                        parameterContentTemp = parameterContent[k].childNodes[0];
                     }
                     let fieldName = parameterContentTemp.id.split("-")[2];
-                    if(parameterContent[j].tagName == "DIV"){
+                    if(parameterContent[k].tagName == "DIV"){
                         singleValue[fieldName] = String(parameterContentTemp.checked);
                         // console.log(singleValue)
                     }else{
@@ -1550,6 +1553,13 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                             singleValue[fieldName] = parameterContentTemp.value;
                         }
                     }
+
+                    // let fieldName = parameterContent[k].id.split("-")[2];
+                    // if (parameterContent[k].value == "") {
+                    //     singleValue[fieldName] = undefined;
+                    // } else {
+                    //     singleValue[fieldName] = parameterContent[k].value;
+                    // }
                     // TODO gestire campi che non sono select o input
                 }
 
@@ -1598,12 +1608,22 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
             // console.log("singolo div value")
             // console.log(parameterContent);
             for (let j = 1; j < parameterContent.length; j = j + 2) {
-                let fieldName = parameterContent[j].id.split("-")[2];
-                if (parameterContent[j].value == "") {
-                    singleValue[fieldName] = undefined;
-                } else {
-                    singleValue[fieldName] = parameterContent[j].value;
-                }
+                let parameterContentTemp = parameterContent[j];
+                    if(parameterContent[j].tagName == "DIV"){
+                        console.log("aooooooooo")
+                        parameterContentTemp = parameterContent[j].childNodes[0];
+                    }
+                    let fieldName = parameterContentTemp.id.split("-")[2];
+                    if(parameterContent[j].tagName == "DIV"){
+                        singleValue[fieldName] = String(parameterContentTemp.checked);
+                        // console.log(singleValue)
+                    }else{
+                        if (parameterContentTemp.value == "") {
+                            singleValue[fieldName] = undefined;
+                        } else {
+                            singleValue[fieldName] = parameterContentTemp.value;
+                        }
+                    }
                 // TODO gestire campi che non sono select o input
             }
 
