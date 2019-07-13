@@ -195,6 +195,7 @@ function openDiagram() {
                 saveLocalCalendars();
                 // console.log()
                 //TODO vedere salvataggio nuovi calendar 
+                // lo facciamo in questo punto per farsi che i calendar nuovi diventino vecchi
                 populateCalendarForm(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar);
                 // dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
                 // calendarsCreatedGlobal = [];
@@ -249,7 +250,14 @@ function openDiagram() {
             $('#create-scenario').on("click", function () {
                 $('#delete-scenario').attr("disabled", false)
 
-                closeCollapsibleButton();
+                // closeCollapsibleButton();
+
+                // new
+                // saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
+                // saveLocalCalendars();
+                // fine new
+
+
                 $('#scenario-displayed').show();
                 let newScenario = new Scenario();
 
@@ -267,11 +275,27 @@ function openDiagram() {
                     tempArrayScenario.push(newScenario);
                     dataTreeObjGlobal.scenario = tempArrayScenario;
                     idListGlobal.push(name);
-                    saveLocalCalendars();
+
+                    // console.log("\n\nscenari structure")
+                    // console.log(dataTreeObjGlobal)
+                    // console.log("\n\n")
+                    // saveLocalCalendars();
                     // console.log(dataTreeObjGlobal.scenario);
-                    createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-                    currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
-                    $('#scenario-picker').val(currentScenarioGlobal).trigger('change');
+                    
+                    // createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
+                    
+                    // currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
+
+
+                    $('#scenario-picker').append($('<option>', {
+                        value: dataTreeObjGlobal.scenario.length,
+                        text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length-1].id
+                    }));
+
+                    console.log("prima change")
+                    $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
+                    console.log("dopo change")
+
 
                     resetParameterDivs();
 
@@ -1140,8 +1164,8 @@ function createFormFields(firstTime = true) {
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
 
-    refreshFormFields(scenarios, scenarioSelected);
 
+    refreshFormFields(scenarios, scenarioSelected);
 
     if (firstTime) {
         $('#scenario-picker').on('change', function () {
@@ -1166,8 +1190,9 @@ function createFormFields(firstTime = true) {
             currentScenarioGlobal = scenarioSelected;
             resetParameterDivs();
 
+            console.log("prima refresh")
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
-
+            console.log("dopo refresh")
         });
     }
 }
@@ -3347,9 +3372,14 @@ function setField(inputElement, valueToSet) {
 
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFields(scenarios, scenarioSelected) {
-    populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
 
+    console.log("prima popolare scenario attribute")
+    populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
+    console.log("dopo popolare scenario attribute")
+
+    console.log("prima popolare element")
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
+    console.log("dopo popolare element")
 }
 
 
@@ -3360,10 +3390,13 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
     if (scenarioSelected != "") {
 
         scenarioSelected -= 1;
+        console.log()
 
+        console.log("prima di id")
         let idScenarioInput = $('#scenario-id-input');
         let idScenarioVal = scenarios[scenarioSelected].id;
         setField(idScenarioInput, idScenarioVal);
+        console.log("dopo di id")
 
         let nameScenarioInput = $('#scenario-name-input');
         let nameScenarioVal = scenarios[scenarioSelected].name
@@ -3412,11 +3445,17 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
     console.log("scenario numero " + scenarioSelected);
     if (scenarioSelected != "") {
         scenarioSelected -= 1;
+        console.log("prima popolare scenario parameter");
         populateScenarioParametersForm(scenarios[scenarioSelected].scenarioParameters);
+        console.log("dopo popolare scenario parameter");
 
+        console.log("prima popolare element parameter");
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
+        console.log("dopo popolare element parameter");
 
+        console.log("prima popolare calendar");
         populateCalendarForm(scenarios[scenarioSelected].calendar);
+        console.log("dopo popolare calendar");
         // populateResource
 
     } else {
@@ -3474,9 +3513,11 @@ function populateElementParametersForm(elementParameters) {
                                 childNodes[indexOfButton].click();
                                 let pickerValue = innerKeys[key].split('_')[1];
                                 pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
-                                // console.log("valore")
-                                // console.log(pickerValue)
+                                console.log("valore")
+                                console.log(pickerValue)
                                 let select = childNodes[childNodes.length - 1].childNodes[0].id;
+                                console.log("select")
+                                console.log(childNodes[childNodes.length - 1].childNodes[0])
                                 if (select.includes("$$")) {
                                     select = $.escapeSelector(select);
                                 }
@@ -3488,12 +3529,17 @@ function populateElementParametersForm(elementParameters) {
                                 }
                                 if ((keys[k] == "_propertyParameters" && pickerValue == "Property") ||
                                     (innerKeys[key] == "_role" && innerValues[key].length != 0)) {
-
+                                    console.log("prima di setProperty")
                                     setPropertyField($('#' + divToPassID)[0], innerValues[key]);
+                                    console.log("dopo di setProperty")
                                 } else {
                                     if (!(innerKeys[key] == "_role" && innerValues[key].length == 0)) {
                                         // console.log(innerValues[key]);
+                                        console.log("prima di setParameter")
+                                        console.log($('#' + divToPassID)[0])
+                                        console.log(innerValues[key])
                                         setParameterField($('#' + divToPassID)[0], innerValues[key]);
+                                        console.log("dopo di setParameter")
                                     } else {
                                         // console.log("sono entrato")
                                         // $('#' + select).remove()
@@ -3591,7 +3637,12 @@ function setPropertyField(inputElement, obj) {
             childNodes[indexOfButton].click();
 
             let graphicalElement = childNodes[childNodes.length - 1]
+            console.log(1)
+            // TODO continuare da qua
+            console.log("aooooooo")
+            console.log(obj[i])
             setParameterField(graphicalElement, obj[i]);
+            console.log(2)
 
             let graphicalElementChild = graphicalElement.childNodes
             if (obj[i].name != undefined) {
@@ -3682,7 +3733,6 @@ function setParameterField(inputElement, obj) {
 
 function populateScenarioParametersForm(scenarioParameters) {
     //TODO controllare al cambio del picker
-
     let startScenParDiv = $('#scenarioParameters-start-div');
     let startScenParVal = scenarioParameters.start;
     setParameterField(startScenParDiv[0], startScenParVal);
@@ -3742,19 +3792,19 @@ function populateScenarioParametersForm(scenarioParameters) {
 
 
     // * sezione property parameters
-
     let propertyScenParDiv = $('#scenarioParameters-property-propertyParameters-div');
     let queueLengthScenParDiv = $('#scenarioParameters-queueLength-propertyParameters-div');
     if (scenarioParameters.propertyParameters.length > 0) {
         let propertyScenParVal = scenarioParameters.propertyParameters[0].property;
+        console.log("mino")
+        console.log(propertyScenParVal)
         setPropertyField(propertyScenParDiv[0], propertyScenParVal);
-
+        console.log("mano")
         let queueLengthScenParVal = scenarioParameters.propertyParameters[0].queueLength;
         setParameterField(queueLengthScenParDiv[0], queueLengthScenParVal);
     } else {
         $("select[id^=queueLength-resultRequest-picker]")[0].value = "min";
     }
-
 
 }
 

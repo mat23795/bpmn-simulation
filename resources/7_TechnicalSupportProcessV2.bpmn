@@ -1001,19 +1001,19 @@
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_Front_Office">
-            <bpsim:TimeParameters>
-              <bpsim:WaitTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:WaitTime>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
+            <!-- <bpsim:TimeParameters> -->
+              <!-- <bpsim:WaitTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:WaitTime> -->
+              <!-- <bpsim:ProcessingTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:ProcessingTime> -->
+            <!-- </bpsim:TimeParameters> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
                 <bpsim:NumericParameter value="0"/>
@@ -1028,19 +1028,19 @@
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_1st_Level_Techical_Support_Agent">
-            <bpsim:TimeParameters>
-              <bpsim:WaitTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:WaitTime>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
+            <!-- <bpsim:TimeParameters> -->
+              <!-- <bpsim:WaitTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:WaitTime> -->
+              <!-- <bpsim:ProcessingTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:ProcessingTime> -->
+            <!-- </bpsim:TimeParameters> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
                 <bpsim:NumericParameter value="0"/>
@@ -1054,19 +1054,19 @@
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_2nd_Level_Techical_Support_Agent">
-            <bpsim:TimeParameters>
-              <bpsim:WaitTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:WaitTime>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
+            <!-- <bpsim:TimeParameters> -->
+              <!-- <bpsim:WaitTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:WaitTime> -->
+              <!-- <bpsim:ProcessingTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:ProcessingTime> -->
+            <!-- </bpsim:TimeParameters> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
                 <bpsim:NumericParameter value="0"/>
@@ -1080,19 +1080,19 @@
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_Supplier">
-            <bpsim:TimeParameters>
-              <bpsim:WaitTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:WaitTime>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>sum</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
+            <!-- <bpsim:TimeParameters> -->
+              <!-- <bpsim:WaitTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:WaitTime> -->
+              <!-- <bpsim:ProcessingTime> -->
+                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
+              <!-- </bpsim:ProcessingTime> -->
+            <!-- </bpsim:TimeParameters> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
                 <bpsim:NumericParameter value="0"/>
