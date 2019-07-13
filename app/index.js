@@ -292,9 +292,9 @@ function openDiagram() {
                         text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length-1].id
                     }));
 
-                    console.log("prima change")
+                    // console.log("prima change")
                     $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
-                    console.log("dopo change")
+                    // console.log("dopo change")
 
 
                     resetParameterDivs();
@@ -1190,9 +1190,9 @@ function createFormFields(firstTime = true) {
             currentScenarioGlobal = scenarioSelected;
             resetParameterDivs();
 
-            console.log("prima refresh")
+            // console.log("prima refresh")
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
-            console.log("dopo refresh")
+            // console.log("dopo refresh")
         });
     }
 }
@@ -3373,13 +3373,13 @@ function setField(inputElement, valueToSet) {
 // * Funzione che aggiorna i campi in base allo scenario selezionato
 function refreshFormFields(scenarios, scenarioSelected) {
 
-    console.log("prima popolare scenario attribute")
+    // console.log("prima popolare scenario attribute")
     populateScenarioAttributesForm(scenarios, scenarioSelected); //popoliamo il form con gli attributi bpsim di scenario
-    console.log("dopo popolare scenario attribute")
+    // console.log("dopo popolare scenario attribute")
 
-    console.log("prima popolare element")
+    // console.log("prima popolare element")
     populateScenarioElementsForm(scenarios, scenarioSelected); //popoliamo il form con gli elementi bpsim di scenario
-    console.log("dopo popolare element")
+    // console.log("dopo popolare element")
 }
 
 
@@ -3392,11 +3392,11 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
         scenarioSelected -= 1;
         console.log()
 
-        console.log("prima di id")
+        // console.log("prima di id")
         let idScenarioInput = $('#scenario-id-input');
         let idScenarioVal = scenarios[scenarioSelected].id;
         setField(idScenarioInput, idScenarioVal);
-        console.log("dopo di id")
+        // console.log("dopo di id")
 
         let nameScenarioInput = $('#scenario-name-input');
         let nameScenarioVal = scenarios[scenarioSelected].name
@@ -3445,17 +3445,17 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
     console.log("scenario numero " + scenarioSelected);
     if (scenarioSelected != "") {
         scenarioSelected -= 1;
-        console.log("prima popolare scenario parameter");
+        // console.log("prima popolare scenario parameter");
         populateScenarioParametersForm(scenarios[scenarioSelected].scenarioParameters);
-        console.log("dopo popolare scenario parameter");
+        // console.log("dopo popolare scenario parameter");
 
-        console.log("prima popolare element parameter");
+        // console.log("prima popolare element parameter");
         populateElementParametersForm(scenarios[scenarioSelected].elementParameters);
-        console.log("dopo popolare element parameter");
+        // console.log("dopo popolare element parameter");
 
-        console.log("prima popolare calendar");
+        // console.log("prima popolare calendar");
         populateCalendarForm(scenarios[scenarioSelected].calendar);
-        console.log("dopo popolare calendar");
+        // console.log("dopo popolare calendar");
         // populateResource
 
     } else {
@@ -3513,11 +3513,11 @@ function populateElementParametersForm(elementParameters) {
                                 childNodes[indexOfButton].click();
                                 let pickerValue = innerKeys[key].split('_')[1];
                                 pickerValue = pickerValue.charAt(0).toUpperCase() + pickerValue.slice(1);
-                                console.log("valore")
-                                console.log(pickerValue)
+                                // console.log("valore")
+                                // console.log(pickerValue)
                                 let select = childNodes[childNodes.length - 1].childNodes[0].id;
-                                console.log("select")
-                                console.log(childNodes[childNodes.length - 1].childNodes[0])
+                                // console.log("select")
+                                // console.log(childNodes[childNodes.length - 1].childNodes[0])
                                 if (select.includes("$$")) {
                                     select = $.escapeSelector(select);
                                 }
@@ -3529,17 +3529,17 @@ function populateElementParametersForm(elementParameters) {
                                 }
                                 if ((keys[k] == "_propertyParameters" && pickerValue == "Property") ||
                                     (innerKeys[key] == "_role" && innerValues[key].length != 0)) {
-                                    console.log("prima di setProperty")
+                                    // console.log("prima di setProperty")
                                     setPropertyField($('#' + divToPassID)[0], innerValues[key]);
-                                    console.log("dopo di setProperty")
+                                    // console.log("dopo di setProperty")
                                 } else {
                                     if (!(innerKeys[key] == "_role" && innerValues[key].length == 0)) {
                                         // console.log(innerValues[key]);
-                                        console.log("prima di setParameter")
-                                        console.log($('#' + divToPassID)[0])
-                                        console.log(innerValues[key])
+                                        // console.log("prima di setParameter")
+                                        // console.log($('#' + divToPassID)[0])
+                                        // console.log(innerValues[key])
                                         setParameterField($('#' + divToPassID)[0], innerValues[key]);
-                                        console.log("dopo di setParameter")
+                                        // console.log("dopo di setParameter")
                                     } else {
                                         // console.log("sono entrato")
                                         // $('#' + select).remove()
@@ -3637,12 +3637,12 @@ function setPropertyField(inputElement, obj) {
             childNodes[indexOfButton].click();
 
             let graphicalElement = childNodes[childNodes.length - 1]
-            console.log(1)
+            // console.log(1)
             // TODO continuare da qua
-            console.log("aooooooo")
-            console.log(obj[i])
+            // console.log("aooooooo")
+            // console.log(obj[i])
             setParameterField(graphicalElement, obj[i]);
-            console.log(2)
+            // console.log(2)
 
             let graphicalElementChild = graphicalElement.childNodes
             if (obj[i].name != undefined) {
@@ -3796,10 +3796,10 @@ function populateScenarioParametersForm(scenarioParameters) {
     let queueLengthScenParDiv = $('#scenarioParameters-queueLength-propertyParameters-div');
     if (scenarioParameters.propertyParameters.length > 0) {
         let propertyScenParVal = scenarioParameters.propertyParameters[0].property;
-        console.log("mino")
-        console.log(propertyScenParVal)
+        // console.log("mino")
+        // console.log(propertyScenParVal)
         setPropertyField(propertyScenParDiv[0], propertyScenParVal);
-        console.log("mano")
+        // console.log("mano")
         let queueLengthScenParVal = scenarioParameters.propertyParameters[0].queueLength;
         setParameterField(queueLengthScenParDiv[0], queueLengthScenParVal);
     } else {
@@ -4335,17 +4335,17 @@ function saveCalendarField(field, isNew) {
                 if (calendarsNew[i].id == calendarID) {
                     // console.log(fieldName)
                     // console.log(value)
-                    console.log("prima")
+                    // console.log("prima")
                     if (value != "") {
-                        console.log("true")
+                        // console.log("true")
                         console.log(value)
                         calendarsNew[i][fieldName] = value;
                     } else {
-                        console.log("false")
+                        // console.log("false")
                         console.log(value)
                         calendarsNew[i][fieldName] = undefined;
                     }
-                    console.log("dopo")
+                    // console.log("dopo")
                     console.log(calendarsNew[i]);
 
                 }
