@@ -2269,11 +2269,14 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
 function setParameter(parameter) {
 
-    // console.log(parameter);
+    console.log("parameter in ingresso")
+    console.log(parameter);
 
     let parameterName = parameter[0].id.split("-")[1];
     parameter.empty();
 
+    console.log("parameter name")
+    console.log(parameterName)
 
 
     let divTemp = jQuery('<div/>', {
