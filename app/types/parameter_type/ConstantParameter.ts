@@ -36,7 +36,7 @@ export class StringParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":StringParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":StringParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -69,7 +69,7 @@ export class NumericParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":NumericParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":NumericParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -103,7 +103,7 @@ export class FloatingParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":FloatingParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":FloatingParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -128,7 +128,7 @@ export class BooleanParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":BooleanParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":BooleanParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -152,7 +152,7 @@ export class DurationParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DurationParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DurationParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -176,7 +176,7 @@ export class DateTimeParameter extends ConstantParameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DateTimeParamater");
+        let childParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":DateTimeParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);

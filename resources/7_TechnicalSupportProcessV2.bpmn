@@ -834,6 +834,12 @@
         </bpsim:Scenario>
         <bpsim:Scenario id="S2" inherits="S1" name="2 - Temporal perspective">
           <bpsim:ScenarioParameters>
+            <bpsim:Start>
+              <bpsim:EnumParameter>
+                <bpsim:BooleanParameter value="false"></bpsim:BooleanParameter>
+                <bpsim:NumericParameter timeUnit="hours"></bpsim:NumericParameter>
+              </bpsim:EnumParameter>
+            </bpsim:Start>
             <bpsim:Warmup>
               <bpsim:DurationParameter value="P7D"/>
             </bpsim:Warmup>
