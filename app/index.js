@@ -46,6 +46,8 @@ var pageXGlobal = 0;
 var pageYGlobal = 0;
 var parameterValueDivCounterGlobal = 0;
 var elementParameterCounterGlobal = 0;
+var propertiesCounterGlobal = 0;
+
 
 var bpmnPrefixGlobal;
 var saved = false;
@@ -281,15 +283,15 @@ function openDiagram() {
                     // console.log("\n\n")
                     // saveLocalCalendars();
                     // console.log(dataTreeObjGlobal.scenario);
-                    
+
                     // createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-                    
+
                     // currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
 
 
                     $('#scenario-picker').append($('<option>', {
                         value: dataTreeObjGlobal.scenario.length,
-                        text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length-1].id
+                        text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
                     }));
 
                     // console.log("prima change")
@@ -341,6 +343,9 @@ function resetParameterDivs() {
     $("div[id^=warmup-value-div").remove();
     $("div[id^=queueLength-value-div").remove();
 
+    parameterValueDivCounterGlobal = 0;
+    elementParameterCounterGlobal = 0;
+    propertiesCounterGlobal = 0;
 }
 
 function populateIdList() {
@@ -500,13 +505,12 @@ function createFormFields(firstTime = true) {
     });
 
     btnAddProperty.append(iElForPlus);
-    let propertiesCounter = 0;
     btnAddProperty.on('click', function () {
-        propertiesCounter += 1;
+        propertiesCounterGlobal += 1;
         parameterValueDivCounterGlobal += 1;
         //aggiunta div property
         let propertyDiv = jQuery('<div/>', {
-            id: 'scenarioParameters-property' + propertiesCounter + '-div-' + parameterValueDivCounterGlobal,
+            id: 'scenarioParameters-property' + propertiesCounterGlobal + '-div-' + parameterValueDivCounterGlobal,
             style: "border-radius: 10px; border: solid 1px black; padding: 2%"
         });
 
@@ -516,30 +520,30 @@ function createFormFields(firstTime = true) {
         let btnTrash = jQuery('<button/>', {
             class: 'btn btn-primary btn-lg button-calculate btn-icon',
             type: 'button',
-            id: 'btn-deleteProperty' + propertiesCounter + '-' + parameterValueDivCounterGlobal
+            id: 'btn-deleteProperty' + propertiesCounterGlobal + '-' + parameterValueDivCounterGlobal
 
         });
 
         let iElforTrash = jQuery('<i/>', {
             class: 'fa fa-trash',
-            id: 'btn-deleteProperty' + propertiesCounter + '-' + parameterValueDivCounterGlobal
+            id: 'btn-deleteProperty' + propertiesCounterGlobal + '-' + parameterValueDivCounterGlobal
         });
 
         btnTrash.append(iElforTrash);
 
         let idLocalRemoveProperty = parameterValueDivCounterGlobal;
-        let localPropertiesCounter = propertiesCounter;
+        let localPropertiesCounterGlobal = propertiesCounterGlobal;
 
 
         btnTrash.on('click', function () {
-            $('div[id*=scenarioParameters-property' + localPropertiesCounter + '-div-' + idLocalRemoveProperty + ']').remove();
+            $('div[id*=scenarioParameters-property' + localPropertiesCounterGlobal + '-div-' + idLocalRemoveProperty + ']').remove();
         });
 
         btnTrash.insertAfter(propertyDiv[0].childNodes[0].childNodes[0]);
 
         // for(let i in propertyDiv[0].childNodes){
         //     console.log(propertyDiv[0].childNodes[i]);
-        //     if(propertyDiv[0].childNodes[i].id == "delete-div-property"+propertiesCounter+"-"+localPropertiesCounter){
+        //     if(propertyDiv[0].childNodes[i].id == "delete-div-property"+propertiesCounterGlobal+"-"+localPropertiesCounterGlobal){
         //         $('#'+propertyDiv[0].childNodes[i].id).append(btnTrash);
         //     }
         // }
@@ -833,7 +837,7 @@ function createFormFields(firstTime = true) {
 
         // console.log(nodesGateways[counter].children); //TODO REMOVE
         let divGatewaysParameter = jQuery('<div/>', {
-            
+
             id: 'gateway-parameter-div-$$' + elRef + '$$'
         });
         divGateways.append(divGatewaysParameter);
@@ -1175,11 +1179,7 @@ function createFormFields(firstTime = true) {
 
             let scenarioSelected = $('#scenario-picker').val();
 
-
-
-
             saveLocalCalendars();
-
 
             console.log("sistemare salvataggio complex ed eliminare")//TODO 
             // saveDataTreeStructure(currentScenarioGlobal);
@@ -1190,9 +1190,11 @@ function createFormFields(firstTime = true) {
             currentScenarioGlobal = scenarioSelected;
             resetParameterDivs();
 
+
             // console.log("prima refresh")
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
             // console.log("dopo refresh")
+
         });
     }
 }
@@ -1223,6 +1225,9 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
 
     let divActivitiesChildNodes = divActivities[0].childNodes;
     for (let i = 0; i < divActivitiesChildNodes.length; i = i + 4) {
+
+        console.log("\n\nNUOVA ACTIVITIE")
+
         let elementRef = divActivitiesChildNodes[i].textContent.split("Element Ref: ")[1];
         let esiste = false;
         let posizione;
@@ -1235,14 +1240,45 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
         let idValueInput = divActivitiesChildNodes[i + 2].value;
         let values = [];
         let parameterValuesDivChildNodes = divActivitiesChildNodes[i + 3].childNodes;
+
+        console.log("parameterValues")
+        console.log(parameterValuesDivChildNodes)
+
+        let isProperty = false;
+        if (parameterValuesDivChildNodes.length > 2) {
+            if(parameterValuesDivChildNodes[2].childNodes.length > 2){
+                if (parameterValuesDivChildNodes[2].childNodes[2].childNodes[1].id.includes("property")) {
+                    console.log("stavolta tenevo ragione io")
+                    parameterValuesDivChildNodes = parameterValuesDivChildNodes[2].childNodes[2].childNodes
+                    isProperty = true;
+                }
+            }
+        }
+
+        // console.log("parameterChild")
+        // console.log(parameterValuesDivChildNodes)
+
         for (let j = 2; j < parameterValuesDivChildNodes.length; j++) {
             let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
-            let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+
+
+
+            let singleParameterDivChildNodes = singleParameterDiv;
+            if(!isProperty){
+                singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+            } 
             let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2);
+            console.log("valore to add")
+            console.log(valueToAdd);
             if (valueToAdd != undefined) {
                 values.push(valueToAdd);
             }
         }
+        
+        console.log("values array")
+        console.log(values)
+
+
         if (idValueInput != "" || values.length > 0) {
             if (esiste) {
                 // * esiste e lo devo aggiornare
@@ -1264,51 +1300,51 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
     // console.log("divGateways")
     // console.log(divGatewaysChildNodes)
 
-    for (let i = 0; i < divGatewaysChildNodes.length; i=i+6) {
+    for (let i = 0; i < divGatewaysChildNodes.length; i = i + 6) {
         // console.log("figlio")
         // if(divGatewaysChildNodes[i].tagName == "DIV" ){
-            // console.log("sonoentrato")
-            let elementRef = divGatewaysChildNodes[i].textContent.split("Element Ref: ")[1];
-            // console.log("elRef")
-            // console.log(elementRef)
-            let esiste = false;
-            let posizione;
-            for(let j = 0; j< scenarioToSave.elementParameters.length; j++){
-                if(elementRef == scenarioToSave.elementParameters[j].elementRef){
-                    esiste = true;
-                    posizione = j;
-                }
+        // console.log("sonoentrato")
+        let elementRef = divGatewaysChildNodes[i].textContent.split("Element Ref: ")[1];
+        // console.log("elRef")
+        // console.log(elementRef)
+        let esiste = false;
+        let posizione;
+        for (let j = 0; j < scenarioToSave.elementParameters.length; j++) {
+            if (elementRef == scenarioToSave.elementParameters[j].elementRef) {
+                esiste = true;
+                posizione = j;
             }
-            // console.log(1)
-            let idValueInput = divGatewaysChildNodes[i+2].value;
-            // console.log(2)
-            let values = [];
-            let parameterValuesDivChildNodes = divGatewaysChildNodes[i+5].childNodes;
-            for(let j = 2; j < parameterValuesDivChildNodes.length; j++){
-                let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
-                let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
-                let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j-2);
-                if(valueToAdd != undefined){
-                    values.push(valueToAdd);
-                }
+        }
+        // console.log(1)
+        let idValueInput = divGatewaysChildNodes[i + 2].value;
+        // console.log(2)
+        let values = [];
+        let parameterValuesDivChildNodes = divGatewaysChildNodes[i + 5].childNodes;
+        for (let j = 2; j < parameterValuesDivChildNodes.length; j++) {
+            let singleParameterDiv = parameterValuesDivChildNodes[j].childNodes;
+            let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
+            let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2);
+            if (valueToAdd != undefined) {
+                values.push(valueToAdd);
             }
-            if(idValueInput != "" || values.length>0){
-                if(esiste){
-                    // * esiste e lo devo aggiornare
-                    scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
-                }else{
-                    // * ne creo uno nuovo
-                    let newElemParam = createElemParamObj(values, idValueInput, elementRef);
-                    // console.log(newElemParam);
-                    scenarioToSave.elementParameters = [newElemParam];
-                }
-            }else{
-                if(esiste){
-                    scenarioToSave.elementParameters.splice(posizione,1);
-                }
+        }
+        if (idValueInput != "" || values.length > 0) {
+            if (esiste) {
+                // * esiste e lo devo aggiornare
+                scenarioToSave.elementParameters[posizione] = createElemParamObj(values, idValueInput, elementRef);
+            } else {
+                // * ne creo uno nuovo
+                let newElemParam = createElemParamObj(values, idValueInput, elementRef);
+                // console.log(newElemParam);
+                scenarioToSave.elementParameters = [newElemParam];
             }
+        } else {
+            if (esiste) {
+                scenarioToSave.elementParameters.splice(posizione, 1);
+            }
+        }
         // }
-        
+
     }
 
     let divEventsChildNodes = divEvents[0].childNodes;
@@ -1413,7 +1449,7 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
             let singleParameterDivChildNodes = singleParameterDiv[2].childNodes;
             // console.log("inizio")
             // console.log(singleParameterDivChildNodes)
-            let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2,false);
+            let valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2, false);
             // console.log("fine")
             if (valueToAdd != undefined) {
                 values.push(valueToAdd);
@@ -1435,9 +1471,6 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
             }
         }
     }
-
-
-
 
 
     // TODO REMOVE
@@ -1487,7 +1520,10 @@ function createElemParamObj(values, idValueInput, elementRef) {
             }
             case "Property Parameters": {
                 flagParameters[4] = true;
-                propertyParameters[values[j][2]] = values[j][0];
+                propertyParameters[values[j][2]] = [values[j][0]];
+                console.log("PROPERTY PARAM CIAO");
+                console.log(propertyParameters);
+
                 break;
             }
             case "Priority Parameters": {
@@ -1512,7 +1548,7 @@ function createElemParamObj(values, idValueInput, elementRef) {
         newElemParam.resourceParameters = resourceParameters;
     }
     if (flagParameters[4]) {
-        newElemParam.propertyParameters = propertyParameters;
+        newElemParam.propertyParameters = [propertyParameters];
     }
     if (flagParameters[5]) {
         newElemParam.priorityParameters = priorityParameters;
@@ -1563,15 +1599,15 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                     let parameterContentTemp = parameterContent[k];
                     // console.log("singolo elemento")
                     // console.log(parameterContent[k])
-                    if(parameterContent[k].tagName == "DIV"){
+                    if (parameterContent[k].tagName == "DIV") {
                         // console.log("aooooooooo")
                         parameterContentTemp = parameterContent[k].childNodes[0];
                     }
                     let fieldName = parameterContentTemp.id.split("-")[2];
-                    if(parameterContent[k].tagName == "DIV"){
+                    if (parameterContent[k].tagName == "DIV") {
                         singleValue[fieldName] = String(parameterContentTemp.checked);
                         // console.log(singleValue)
-                    }else{
+                    } else {
                         if (parameterContentTemp.value == "") {
                             singleValue[fieldName] = undefined;
                         } else {
@@ -1634,21 +1670,21 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
             // console.log(parameterContent);
             for (let j = 1; j < parameterContent.length; j = j + 2) {
                 let parameterContentTemp = parameterContent[j];
-                    if(parameterContent[j].tagName == "DIV"){
-                        console.log("aooooooooo")
-                        parameterContentTemp = parameterContent[j].childNodes[0];
+                if (parameterContent[j].tagName == "DIV") {
+                    console.log("aooooooooo")
+                    parameterContentTemp = parameterContent[j].childNodes[0];
+                }
+                let fieldName = parameterContentTemp.id.split("-")[2];
+                if (parameterContent[j].tagName == "DIV") {
+                    singleValue[fieldName] = String(parameterContentTemp.checked);
+                    // console.log(singleValue)
+                } else {
+                    if (parameterContentTemp.value == "") {
+                        singleValue[fieldName] = undefined;
+                    } else {
+                        singleValue[fieldName] = parameterContentTemp.value;
                     }
-                    let fieldName = parameterContentTemp.id.split("-")[2];
-                    if(parameterContent[j].tagName == "DIV"){
-                        singleValue[fieldName] = String(parameterContentTemp.checked);
-                        // console.log(singleValue)
-                    }else{
-                        if (parameterContentTemp.value == "") {
-                            singleValue[fieldName] = undefined;
-                        } else {
-                            singleValue[fieldName] = parameterContentTemp.value;
-                        }
-                    }
+                }
                 // TODO gestire campi che non sono select o input
             }
 
@@ -1716,14 +1752,14 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
             // console.log(parameterContent);
             for (let j = 1; j < parameterContent.length; j = j + 2) {
                 let parameterContentTemp = parameterContent[j];
-                if(parameterContent[j].tagName == "DIV"){
+                if (parameterContent[j].tagName == "DIV") {
                     parameterContentTemp = parameterContent[j].childNodes[0];
                 }
                 let fieldName = parameterContentTemp.id.split("-")[2];
-                if(parameterContent[j].tagName == "DIV"){
+                if (parameterContent[j].tagName == "DIV") {
                     singleValue[fieldName] = String(parameterContentTemp.checked);
                     // console.log(singleValue)
-                }else{
+                } else {
                     if (parameterContentTemp.value == "") {
                         singleValue[fieldName] = undefined;
                     } else {
@@ -1747,19 +1783,32 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
 }
 
 function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultRequest = true) {
-    // console.log("child di "+parameterName)
+    // console.log("child di ")
     // console.log(childNodes);
+    let isProperty = false;
+    let propertyNameDiv;
+    let propertyTypeDiv;
 
-    // div che contiene i div values
     let valuesDiv = childNodes[3];
     let resultRequestDiv;
     if (haveResultRequest) {
         resultRequestDiv = childNodes[5];
     }
 
+
+    if (childNodes[0].id.includes("property")) {
+        isProperty = true;
+        haveResultRequest = false;
+        propertyNameDiv = childNodes[5];
+        propertyTypeDiv = childNodes[7];
+        pickerIndex = 0;
+    }
+
+    // div che contiene i div values
+
+
+
     let values = [];
-    // console.log("valuesDiv")
-    // console.log(valuesDiv)
     // cicliamo per ogni divValue
     if (valuesDiv != undefined) {
         for (let i = 0; i < valuesDiv.childNodes.length; i++) {
@@ -1781,14 +1830,14 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
                 // console.log(parameterContent);
                 for (let j = 1; j < parameterContent.length; j = j + 2) {
                     let parameterContentTemp = parameterContent[j];
-                    if(parameterContent[j].tagName == "DIV"){
+                    if (parameterContent[j].tagName == "DIV") {
                         parameterContentTemp = parameterContent[j].childNodes[0];
                     }
                     let fieldName = parameterContentTemp.id.split("-")[2];
-                    if(parameterContent[j].tagName == "DIV"){
+                    if (parameterContent[j].tagName == "DIV") {
                         singleValue[fieldName] = String(parameterContentTemp.checked);
                         // console.log(singleValue)
-                    }else{
+                    } else {
                         if (parameterContentTemp.value == "") {
                             singleValue[fieldName] = undefined;
                         } else {
@@ -1804,11 +1853,23 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
             }
         }
 
-        let obj = new Parameter();
-        obj.value = values;
-        if (haveResultRequest) {
-            obj.resultRequest = [resultRequestDiv.value];
+        let obj;
+        if (isProperty) {
+            obj = new Property();
+            obj.value = values;
+            if(propertyNameDiv.value != "" && propertyNameDiv.value != undefined){
+                obj.name = propertyNameDiv.value;
+            }
+            obj.type = propertyTypeDiv.value;
+
+        } else {
+            obj = new Parameter();
+            obj.value = values;
+            if (haveResultRequest) {
+                obj.resultRequest = [resultRequestDiv.value];
+            }
         }
+
         // scenarioToSave.scenarioParameters[parameterName] = obj;
 
 
@@ -1817,6 +1878,7 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
         let outputQuery = $(query);
 
         let selected_value = outputQuery[pickerIndex].value;
+
         let optgroup = outputQuery[pickerIndex].options[outputQuery[pickerIndex].options.selectedIndex].parentElement.label
 
         // console.log(   $(query)[0].options[ $(query)[0].options.selectedIndex ].parentElement.label   )
@@ -2153,13 +2215,13 @@ function setElementParameter(parameter, section, elRef, elementName) {
                             });
 
                             btnAddProperty.append(iElForPlus);
-                            let propertiesCounter = 0;
+                            // let propertiesCounterGlobal = 0;
                             btnAddProperty.on('click', function () {
-                                propertiesCounter += 1;
+                                propertiesCounterGlobal += 1;
                                 parameterValueDivCounterGlobal += 1;
                                 //aggiunta div property
                                 let propertyDiv = jQuery('<div/>', {
-                                    id: 'elementParameters-property' + propertiesCounter + '-div-' + parameterValueDivCounterGlobal,
+                                    id: 'elementParameters-property' + propertiesCounterGlobal + '-div-' + parameterValueDivCounterGlobal,
                                     style: "border-radius: 10px; border: solid 1px black; padding: 2%"
                                 });
 
@@ -2206,23 +2268,23 @@ function setElementParameter(parameter, section, elRef, elementName) {
                                 let btnTrash = jQuery('<button/>', {
                                     class: 'btn btn-primary btn-lg button-calculate btn-icon',
                                     type: 'button',
-                                    id: 'btn-deleteProperty' + propertiesCounter + '-' + parameterValueDivCounterGlobal
+                                    id: 'btn-deleteProperty' + propertiesCounterGlobal + '-' + parameterValueDivCounterGlobal
 
                                 });
 
                                 let iElforTrash = jQuery('<i/>', {
                                     class: 'fa fa-trash',
-                                    id: 'btn-deleteProperty' + propertiesCounter + '-' + parameterValueDivCounterGlobal
+                                    id: 'btn-deleteProperty' + propertiesCounterGlobal + '-' + parameterValueDivCounterGlobal
                                 });
 
                                 btnTrash.append(iElforTrash);
 
                                 let idLocalRemoveProperty = parameterValueDivCounterGlobal;
-                                let localPropertiesCounter = propertiesCounter;
+                                let localPropertiesCounterGlobal = propertiesCounterGlobal;
 
 
                                 btnTrash.on('click', function () {
-                                    $('div[id*=elementParameters-property' + localPropertiesCounter + '-div-' + idLocalRemoveProperty + ']').remove();
+                                    $('div[id*=elementParameters-property' + localPropertiesCounterGlobal + '-div-' + idLocalRemoveProperty + ']').remove();
                                 });
 
                                 btnTrash.insertAfter(propertyDiv[0].childNodes[0].childNodes[0]);
@@ -2269,14 +2331,14 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
 function setParameter(parameter) {
 
-    console.log("parameter in ingresso")
-    console.log(parameter);
+    // console.log("parameter in ingresso")
+    // console.log(parameter);
 
     let parameterName = parameter[0].id.split("-")[1];
     parameter.empty();
 
-    console.log("parameter name")
-    console.log(parameterName)
+    // console.log("parameter name")
+    // console.log(parameterName)
 
 
     let divTemp = jQuery('<div/>', {
@@ -3467,7 +3529,7 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
 }
 
 function populateElementParametersForm(elementParameters) {
-    
+
     // contiene anche quelli della sezione resources
     let fields = $("input[id*='$$']");
 
@@ -3511,7 +3573,7 @@ function populateElementParametersForm(elementParameters) {
                         for (let key = 0; key < innerKeys.length; key++) {
                             // * object.value toglie gli undefined, ma non gli array lunghi 0, quindi role va gestito a parte
 
-                            
+
                             if (!(innerKeys[key] == "_role" && innerValues[key].length == 0)) {
                                 childNodes[indexOfButton].click();
                                 let pickerValue = innerKeys[key].split('_')[1];
@@ -3698,14 +3760,14 @@ function setParameterField(inputElement, obj) {
                 let attributeName;
 
                 // bisogna distinguere i punti in cui si ha l' 'on/off' switch
-                if(divElementsWithoutLabels[j].tagName == "DIV"){
+                if (divElementsWithoutLabels[j].tagName == "DIV") {
                     attributeName = divElementsWithoutLabels[j].childNodes[0].id.split('-')[2];
-                    if(obj.value[i][attributeName] == "true"){
-                        $('#'+divElementsWithoutLabels[j].childNodes[0].id).prop('checked', true);
-                    }else{
-                        $('#'+divElementsWithoutLabels[j].childNodes[0].id).prop('checked', false);
+                    if (obj.value[i][attributeName] == "true") {
+                        $('#' + divElementsWithoutLabels[j].childNodes[0].id).prop('checked', true);
+                    } else {
+                        $('#' + divElementsWithoutLabels[j].childNodes[0].id).prop('checked', false);
                     }
-                }else{
+                } else {
                     attributeName = divElementsWithoutLabels[j].id.split('-')[2];
                     let value = obj.value[i][attributeName];
 
@@ -3715,7 +3777,7 @@ function setParameterField(inputElement, obj) {
                 }
 
 
-                
+
             }
         }
 

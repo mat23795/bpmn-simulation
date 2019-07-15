@@ -713,14 +713,6 @@
             </bpsim:ResourceParameters>
             
           </bpsim:ElementParameters>
-
-          <bpsim:ElementParameters elementRef="_10-189">
-            <bpsim:ControlParameters>
-              <bpsim:Probability>
-                <bpsim:FloatingParameter value="40"/>
-              </bpsim:Probability>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
           <!-- fine modifica -->
 
           <bpsim:ElementParameters elementRef="_10-42">
