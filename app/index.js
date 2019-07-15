@@ -3684,7 +3684,6 @@ function setParameterField(inputElement, obj) {
             for (let j = 0; j < divElementsWithoutLabels.length; j++) { //skip labels
                 // TODO continuare da qua
                 let attributeName;
-
                 // bisogna distinguere i punti in cui si ha l' 'on/off' switch
                 if (divElementsWithoutLabels[j].tagName == "DIV") {
                     attributeName = divElementsWithoutLabels[j].childNodes[0].id.split('-')[2];
@@ -3701,9 +3700,20 @@ function setParameterField(inputElement, obj) {
                         divElementsWithoutLabels[j].value = value;
                     }
                 }
-
-
-
+            }
+            if(divElements[divElements.length-1].id.includes("enum")){
+                let enumValues = obj.value[i]["value"];
+                // let enumContent = divElements[divElements.length-1].childNodes;
+                for(let j = 0; j < enumValues.length; j++){
+                    divElements[divElements.length-2].click();
+                    let singleEnumDiv = divElements[divElements.length-1].childNodes[0];
+                    console.log("singleEnumDiv");
+                    console.log(divElements[divElements.length-1].childNodes);
+                    console.log(singleEnumDiv);
+                    singleEnumDiv.childNodes[0].value = enumValues[j].getType();
+                    $('#'+singleEnumDiv.childNodes[0].id).trigger('change');
+                    //TODO continuare da qui (vanno avvalorati i singoli field)
+                }
             }
         }
 
@@ -3726,6 +3736,8 @@ function populateScenarioParametersForm(scenarioParameters) {
     //TODO controllare al cambio del picker
     let startScenParDiv = $('#scenarioParameters-start-div');
     let startScenParVal = scenarioParameters.start;
+    console.log("startDiv");
+    console.log(startScenParDiv);
     setParameterField(startScenParDiv[0], startScenParVal);
 
     let durationScenParDiv = $('#scenarioParameters-duration-div');
