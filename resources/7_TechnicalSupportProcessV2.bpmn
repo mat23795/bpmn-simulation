@@ -836,8 +836,8 @@
           <bpsim:ScenarioParameters>
             <bpsim:Start>
               <bpsim:EnumParameter>
-                <bpsim:BooleanParameter value="false"></bpsim:BooleanParameter>
-                <bpsim:NumericParameter timeUnit="hours"></bpsim:NumericParameter>
+                <bpsim:BooleanParameter value="true"></bpsim:BooleanParameter>
+                <bpsim:NumericParameter value="1" timeUnit="hours"></bpsim:NumericParameter>
               </bpsim:EnumParameter>
             </bpsim:Start>
             <bpsim:Warmup>
