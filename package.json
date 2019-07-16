@@ -27,5 +27,8 @@
     "webpack-cli": "^3.3.0",
     "xml-loader": "^1.2.1",
     "npx": "^10.2.0"
+  },
+  "dependencies": {
+    "vkbeautify": "^0.99.3"
   }
 }
