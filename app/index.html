@@ -29,10 +29,10 @@
                 <div class="canvas div-vertical-border" id="js-canvas"></div>
                 <div style="display: inline-flex; width: -webkit-fill-available">
                     <div style="width:60%; text-align: center">
-                        <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="generate-bpsim">Generate BPSim XML</button>
+                        <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="generate-bpsim" disabled="true">Generate BPSim XML</button>
                     </div>
                     <div style="width:40%; text-align: right">
-                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="scroll-top-button"><i class="fa fa-arrow-up" id="scroll-top-button"></i></button>
+                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="scroll-top-button" disabled="true"><i class="fa fa-arrow-up" id="scroll-top-button"></i></button>
                     </div>
                 </div>
                 
@@ -62,15 +62,15 @@
                         </select>
                     
                         <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="create-scenario">Create new scenario</button> -->
-                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="create-scenario"><i class="fa fa-plus" id="create-scenario"></i></button>
+                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="create-scenario" disabled="true"><i class="fa fa-plus" id="create-scenario"></i></button>
                         <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="delete-scenario" style="background: firebrick">Delete current scenario</button> -->
-                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="delete-scenario"><i class="fa fa-trash" id="delete-scenario"></i></button>
+                        <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="delete-scenario" disabled="true"><i class="fa fa-trash" id="delete-scenario"></i></button>
                         
                     </div>
                 </div>
 
                 <form>
-                    <div class="form-group" id = 'scenario-displayed' label="scenario-form">
+                    <div class="form-group" id = 'scenario-displayed' label="scenario-form" style="display: none">
                         <h2 class="form-title">Scenario</h2>
                         <label for="scenario-id-input">ID</label>
                         <input type="text" class="form-control form-control-input" id="scenario-id-input" placeholder="Scenario ID">

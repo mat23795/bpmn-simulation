@@ -79,6 +79,17 @@ function openDiagram() {
         //         .addClass('with-diagram');
         // }
 
+
+
+        $('#generate-bpsim').attr("disabled", false);
+        $('#scroll-top-button').attr("disabled", false);
+        $('#create-scenario').attr("disabled", false);
+
+
+
+
+
+
         viewer.get('canvas').zoom('fit-viewport'); //TODO Vedere se mantenere zoom
         // TODO vedere scrollbar
         $('.djs-container').css('transform-origin', '0% 0% 0px');
@@ -118,6 +129,148 @@ function openDiagram() {
         // $('.djs-container').css('height', '700px');
 
         // xmlGlobal=xml;
+
+
+
+
+        $('#scroll-top-button').on('click', function () {
+            $('#js-simulation').scrollTop(0);
+        });
+
+        // * aggiunta evento al bottone che calcola il bpsim per far generare l'xml 'aggiornato'
+        $('#generate-bpsim').on("click", function () {
+
+            saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
+
+            // TODO inizio commento da togliere
+            let scenarioSelected = $('#scenario-picker').val();
+
+            console.log("fare anche qui la questione del salvataggio dei complex")//TODO 
+
+            //salvo i calendari 
+            saveLocalCalendars();
+            // console.log()
+            //TODO vedere salvataggio nuovi calendar 
+            // lo facciamo in questo punto per farsi che i calendar nuovi diventino vecchi
+            populateCalendarForm(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar);
+            // dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
+            // calendarsCreatedGlobal = [];
+            // calendarsCreatedIDCounterGlobal = 0;
+
+            //saveDataTreeStructure(scenarioSelected);
+
+            while (extensionElementXML[0].firstChild) {
+                extensionElementXML[0].removeChild(extensionElementXML[0].firstChild);
+            }
+            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+
+            console.log("XML fase modifica");//TODO remove
+            console.log(xmlDoc);//TODO remove
+            console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
+
+            //TODO commentare o scommentare se si vuole salvare o no il file
+            download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
+        });
+
+        // * aggiunta evento al bottone che elimina lo scenario corrente
+        $('#delete-scenario').on("click", function () {
+            closeCollapsibleButton();
+
+            let scenarioDeleted = dataTreeObjGlobal.scenario.splice(currentScenarioGlobal - 1, 1);
+
+            //rimozione degli id da idglobal perché lo scenario viene eliminato
+            idListGlobal.splice(idListGlobal.indexOf(scenarioDeleted[0].id), 1);
+
+            scenarioDeleted[0].calendar.forEach(function (cal) {
+                idListGlobal.splice(idListGlobal.indexOf(cal.id), 1);
+            });
+
+            scenarioDeleted[0].elementParameters.forEach(function (el) {
+                if (el.id != undefined) {
+                    idListGlobal.splice(idListGlobal.indexOf(el.id), 1);
+                }
+            });
+
+            console.log("lista");
+            console.log(idListGlobal); //TODO REMOVE
+            console.log(dataTreeObjGlobal.scenario);
+
+            resetParameterDivs();
+
+
+            if (dataTreeObjGlobal.scenario.length > 0) {
+                createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
+            } else {
+                idListGlobal = [];
+                $('#scenario-displayed').hide();
+                $('#scenario-picker').empty();
+                $('#delete-scenario').attr("disabled", true);
+            }
+
+
+            // $('#js-simulation').scrollTop(0);
+        });
+
+        // * aggiunta evento al bottone che crea un nuovo scenario
+        $('#create-scenario').on("click", function () {
+            $('#delete-scenario').attr("disabled", false)
+
+            // closeCollapsibleButton();
+
+            // new
+            // saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
+            // saveLocalCalendars();
+            // fine new
+
+
+            $('#scenario-displayed').show();
+            let newScenario = new Scenario();
+
+            let name = "";
+            while (name == "" || idListGlobal.includes(name)) {
+                if (name == "") {
+                    name = prompt("Insert Scenario ID (It can not be empty):");
+                } else if (idListGlobal.includes(name)) {
+                    name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
+                }
+            }
+            if (name != null) {
+                newScenario.id = name;
+                let tempArrayScenario = [];
+                tempArrayScenario.push(newScenario);
+                dataTreeObjGlobal.scenario = tempArrayScenario;
+                idListGlobal.push(name);
+
+                // console.log("\n\nscenari structure")
+                // console.log(dataTreeObjGlobal)
+                // console.log("\n\n")
+                // saveLocalCalendars();
+                // console.log(dataTreeObjGlobal.scenario);
+
+                // createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
+
+                // currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
+
+
+                $('#scenario-picker').append($('<option>', {
+                    value: dataTreeObjGlobal.scenario.length,
+                    text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
+                }));
+
+                // console.log("prima change")
+                $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
+                // console.log("dopo change")
+
+
+                resetParameterDivs();
+
+            }
+        });
+
+
+
+
+
         // * rimozione commenti dal xml perché creano problemi con il parsing
         const regExpRemoveComments = /(\<!--.*?\-->)/g;
 
@@ -149,13 +302,56 @@ function openDiagram() {
             //TODO 1) field2emptytree 2) tree2xml
             //TODO forse poter usare bottone crea nuovo scenario?
             let bpsimData = new BPSimData();
-            let scenario = new Scenario();
-            scenario.id = "new Scenario";
-            bpsimData.addScenario(scenario);
+            // let scenario = new Scenario();
+            // scenario.id = "new Scenario";
+            // bpsimData.addScenario(scenario);
             dataTreeObjGlobal = bpsimData;
-            createFormFields();
+
+            console.log("inizio prove")
+
+            let bpsimDataXMLelement = dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal)
+
+            extensionElementXML = xmlDoc.createElement(bpmnPrefixGlobal + ":extensionElements");
+            extensionElementXML.appendChild(bpsimDataXMLelement)
+
+            let relationshipXMLelement = xmlDoc.createElement(bpmnPrefixGlobal + ":relationship");
+            relationshipXMLelement.setAttribute("type", "BPSimData");
+            relationshipXMLelement.appendChild(extensionElementXML)
+
+            definitionsTagXML[0].appendChild(relationshipXMLelement)
+
+
+
+            // TODO continuare da qua, capire come fare ad avere l'htmlCollection
+
+            let extensionElementXMLtemp = Object.create(HTMLCollection.prototype);
+            extensionElementXMLtemp[0] = [extensionElementXML];
+            console.log("extEl");
+            // extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
+            console.log(extensionElementXMLtemp);
+
+
+
+            // dataTreeGlobal = xml2tree();
+            // dataTreeObjGlobal = dataTreeGlobal[1];
+
+
+            console.log(xmlDoc)
+
+            console.log("fine prove")
+
+            // $('#scenario-displayed').hide();
+            // $('#scenario-picker').empty();
+            // $('#delete-scenario').attr("disabled", true);
+
+            // createFormFields();
 
         } else {
+
+            console.log("extEl")
+            console.log(extensionElementXML)
+
+            $('#scenario-displayed').show();
             // * Fase 1 xml2tree
             bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
 
@@ -191,149 +387,9 @@ function openDiagram() {
             // console.log(extensionElementXML[0].childNodes[0]);
 
             // console.log(extensionElementXML);
-
-
-            $('#scroll-top-button').on('click', function () {
-                $('#js-simulation').scrollTop(0);
-            });
-
-            // * aggiunta evento al bottone che calcola il bpsim per far generare l'xml 'aggiornato'
-            $('#generate-bpsim').on("click", function () {
-
-                saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
-
-                // TODO inizio commento da togliere
-                let scenarioSelected = $('#scenario-picker').val();
-
-                console.log("fare anche qui la questione del salvataggio dei complex")//TODO 
-
-                //salvo i calendari 
-                saveLocalCalendars();
-                // console.log()
-                //TODO vedere salvataggio nuovi calendar 
-                // lo facciamo in questo punto per farsi che i calendar nuovi diventino vecchi
-                populateCalendarForm(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar);
-                // dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar = calendarsCreatedGlobal;
-                // calendarsCreatedGlobal = [];
-                // calendarsCreatedIDCounterGlobal = 0;
-
-                //saveDataTreeStructure(scenarioSelected);
-
-                while (extensionElementXML[0].firstChild) {
-                    extensionElementXML[0].removeChild(extensionElementXML[0].firstChild);
-                }
-                extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
-
-                console.log("XML fase modifica");//TODO remove
-                console.log(xmlDoc);//TODO remove
-                console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
-                
-                //TODO commentare o scommentare se si vuole salvare o no il file
-                download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc))) ;
-
-
-
-            });
-
-            // * aggiunta evento al bottone che elimina lo scenario corrente
-            $('#delete-scenario').on("click", function () {
-                closeCollapsibleButton();
-
-                let scenarioDeleted = dataTreeObjGlobal.scenario.splice(currentScenarioGlobal - 1, 1);
-
-                //rimozione degli id da idglobal perché lo scenario viene eliminato
-                idListGlobal.splice(idListGlobal.indexOf(scenarioDeleted[0].id), 1);
-
-                scenarioDeleted[0].calendar.forEach(function (cal) {
-                    idListGlobal.splice(idListGlobal.indexOf(cal.id), 1);
-                });
-
-                scenarioDeleted[0].elementParameters.forEach(function (el) {
-                    if (el.id != undefined) {
-                        idListGlobal.splice(idListGlobal.indexOf(el.id), 1);
-                    }
-                });
-
-                console.log("lista");
-                console.log(idListGlobal); //TODO REMOVE
-                console.log(dataTreeObjGlobal.scenario);
-
-                resetParameterDivs();
-
-
-                if (dataTreeObjGlobal.scenario.length > 0) {
-                    createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-                } else {
-                    idListGlobal = [];
-                    $('#scenario-displayed').hide();
-                    $('#scenario-picker').empty();
-                    $('#delete-scenario').attr("disabled", true)
-                }
-
-
-                $('#js-simulation').scrollTop(0);
-            });
-
-            // * aggiunta evento al bottone che crea un nuovo scenario
-            $('#create-scenario').on("click", function () {
-                $('#delete-scenario').attr("disabled", false)
-
-                // closeCollapsibleButton();
-
-                // new
-                // saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
-                // saveLocalCalendars();
-                // fine new
-
-
-                $('#scenario-displayed').show();
-                let newScenario = new Scenario();
-
-                let name = "";
-                while (name == "" || idListGlobal.includes(name)) {
-                    if (name == "") {
-                        name = prompt("Insert Scenario ID (It can not be empty):");
-                    } else if (idListGlobal.includes(name)) {
-                        name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
-                    }
-                }
-                if (name != null) {
-                    newScenario.id = name;
-                    let tempArrayScenario = [];
-                    tempArrayScenario.push(newScenario);
-                    dataTreeObjGlobal.scenario = tempArrayScenario;
-                    idListGlobal.push(name);
-
-                    // console.log("\n\nscenari structure")
-                    // console.log(dataTreeObjGlobal)
-                    // console.log("\n\n")
-                    // saveLocalCalendars();
-                    // console.log(dataTreeObjGlobal.scenario);
-
-                    // createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-
-                    // currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
-
-
-                    $('#scenario-picker').append($('<option>', {
-                        value: dataTreeObjGlobal.scenario.length,
-                        text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
-                    }));
-
-                    // console.log("prima change")
-                    $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
-                    // console.log("dopo change")
-
-
-                    resetParameterDivs();
-
-                }
-            });
-
-
         }
 
-        $('#js-simulation').scrollTop(0);
+        // $('#js-simulation').scrollTop(0);
 
         // * funzione per parsare l'XML
         // xmlParsing();
@@ -616,7 +672,12 @@ function createFormFields(firstTime = true) {
 
         $('#scenarioParameters-property-propertyParameters-div').append(propertyDiv);
 
-        propertyDiv.focus();
+
+        if ($('#scen-par-btn').data('clicked') == true) {
+            console.log("sto focussando " + propertyDiv[0].id)
+            propertyDiv.focus();
+        }
+
 
 
     });
@@ -2220,7 +2281,12 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
                                     divType.append(roleDiv);
 
-                                    roleDiv.focus();
+
+                                    if ($('#elem-par-btn').data('clicked') == true) {
+                                        console.log("sto focussando " + roleDiv[0].id)
+                                        roleDiv.focus();
+                                    }
+
                                 });
                                 divType.append(btnAddRole);
                             }
@@ -2340,7 +2406,11 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
                                 divType.append(propertyDiv);
 
-                                propertyDiv.focus();
+                                if ($('#elem-par-btn').data('clicked') == true) {
+                                    console.log("sto focussando " + propertyDiv[0].id)
+                                    propertyDiv.focus();
+                                }
+
 
                             });
                             divType.append(btnAddProperty);
@@ -2372,7 +2442,10 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
         parameter.append(div);
 
-        div.focus();
+        if ($('#elem-par-btn').data('clicked') == true) {
+            console.log("sto focussando " + div[0].id)
+            div.focus();
+        }
 
     });
 
@@ -2865,7 +2938,10 @@ function setParameter(parameter, buttonID) {
                                 }
                             }
                         });
-                        enumDiv.focus();
+                        if ($('#' + buttonID).data('clicked') == true) {
+                            console.log("sto focussando " + enumDiv[0].id)
+                            enumDiv[0].focus();
+                        }
                     });
 
                     let divContentEnumValues = jQuery('<div/>', {
@@ -3427,7 +3503,7 @@ function setParameter(parameter, buttonID) {
         // console.log("aooo")
         // console.log( $('#' + buttonID).data('clicked') )
         if ($('#' + buttonID).data('clicked') == true) {
-            // console.log("sto focussando " + valueDiv[0].id)
+            console.log("sto focussando " + valueDiv[0].id)
             valueDiv[0].focus();
         }
     });
@@ -4766,7 +4842,7 @@ function registerFileDrop(container, callback) {
 
     function handleFileSelect(e) {
         e.stopPropagation();
-        e.preventsDefault();
+        e.preventDefault();
 
         var files = e.dataTransfer.files;
 
@@ -4794,7 +4870,7 @@ function registerFileDrop(container, callback) {
 
     function handleDragOver(e) {
         e.stopPropagation();
-        e.preventsDefault();
+        e.preventDefault();
 
         e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     }
@@ -4822,21 +4898,21 @@ if (!window.FileList || !window.FileReader) {
 } else {
 
 
-    //TODO remove these line 
-    $('#js-drop-zone').css('display', 'none');
-    $('#js-canvas').css('display', 'block');
+    // //TODO remove these line 
+    // $('#js-drop-zone').css('display', 'none');
+    // $('#js-canvas').css('display', 'block');
 
 
-    // xmlGlobal=firstdiagramXML;
-    // xmlGlobal=bpmn_example1;
-    // xmlGlobal=bpmn_example2;
-    // xmlGlobal=bpmn_example3;
-    // xmlGlobal=bpmn_example4;
-    // xmlGlobal=bpmn_example5;
-    // xmlGlobal=bpmn_example6;
-    xmlGlobal = bpmn_example7;
-    openDiagram();
-    // * END Remove
+    // // xmlGlobal=firstdiagramXML;
+    // // xmlGlobal=bpmn_example1;
+    // // xmlGlobal=bpmn_example2;
+    // // xmlGlobal=bpmn_example3;
+    // // xmlGlobal=bpmn_example4;
+    // // xmlGlobal=bpmn_example5;
+    // // xmlGlobal=bpmn_example6;
+    // xmlGlobal = bpmn_example7;
+    // openDiagram();
+    // // * END Remove
 
 
     registerFileDrop(container, openDiagram);
