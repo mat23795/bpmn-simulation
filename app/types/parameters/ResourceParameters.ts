@@ -50,7 +50,7 @@ export class ResourceParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let resourceParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":ResourceParameters");
+        let resourceParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResourceParameters");
 
         if(this._availability != undefined){
             resourceParametersXMLelement.appendChild(this._availability.toXMLelement(bpsimPrefix, xml, "Availability"));

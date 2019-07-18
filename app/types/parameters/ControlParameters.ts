@@ -49,10 +49,10 @@ export class ControlParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let controlParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":ControlParameters");
+        let controlParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "ControlParameters");
 
         if(this._interTriggerTimer != undefined){
-            controlParametersXMLelement.appendChild(this._interTriggerTimer.toXMLelement(bpsimPrefix, xml, "InterTriggerTime"));
+            controlParametersXMLelement.appendChild(this._interTriggerTimer.toXMLelement(bpsimPrefix, xml, "InterTriggerTimer"));
         }
 
         if(this._triggerCount != undefined){

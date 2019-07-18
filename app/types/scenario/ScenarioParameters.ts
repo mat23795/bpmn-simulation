@@ -133,7 +133,7 @@ export class ScenarioParameters {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let scenarioParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ScenarioParameters");
+        let scenarioParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ScenarioParameters");
 
         if(this._start != undefined){
             scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix, xml, "Start"));

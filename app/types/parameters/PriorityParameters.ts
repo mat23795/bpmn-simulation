@@ -31,7 +31,7 @@ export class PriorityParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let priorityParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":PriorityParameters");
+        let priorityParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"PriorityParameters");
 
         if(this._interruptible != undefined){
             priorityParametersXMLelement.appendChild(this._interruptible.toXMLelement(bpsimPrefix, xml, "Interruptible"));

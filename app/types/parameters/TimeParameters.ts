@@ -102,7 +102,7 @@ export class TimeParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let timeParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":TimeParameters");
+        let timeParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TimeParameters");
 
         if(this._duration != undefined){
             timeParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));

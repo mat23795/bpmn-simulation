@@ -36,7 +36,7 @@ export class Property extends Parameter {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let propertyXMLelement = xmlDoc.createElement(bpsimPrefix +":Property");
+        let propertyXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Property");
 
         this.eventuallyAddAttribute(propertyXMLelement, "name", this._name);
         this.eventuallyAddAttribute(propertyXMLelement, "type", this._type);
@@ -47,7 +47,7 @@ export class Property extends Parameter {
 
         //TODO verificare check su undefined per un enum
         for(let i=0; i< this._resultRequest.length; i++) {
-            let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
+            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest[i];
             propertyXMLelement.appendChild(resultRequestXMLelement);
         }

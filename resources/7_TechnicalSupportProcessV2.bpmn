@@ -640,7 +640,7 @@
         <di:waypoint x="1149.0" y="744.0"/>
         <bpmndi:BPMNLabel labelStyle="LS1399929387616"/>
       </bpmndi:BPMNEdge>
-    </bpmndi:BPMNPlane>n 
+    </bpmndi:BPMNPlane> 
     <bpmndi:BPMNLabelStyle id="LS1399929387616">
       <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="8.0"/>
     </bpmndi:BPMNLabelStyle>

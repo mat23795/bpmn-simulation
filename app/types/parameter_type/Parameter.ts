@@ -43,7 +43,7 @@ export class Parameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let parameterXMLelement = xmlDoc.createElement(bpsimPrefix +":"+ nameTag);
+        let parameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,nameTag);
 
         for(let i=0; i< this._value.length; i++) {
             parameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
@@ -51,7 +51,7 @@ export class Parameter{
 
         //TODO verificare check su undefined per un enum
         for(let i=0; i< this._resultRequest.length; i++) {
-            let resultRequestXMLelement = xmlDoc.createElement(bpsimPrefix +":ResultRequest");
+            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest[i];
 
             parameterXMLelement.appendChild(resultRequestXMLelement);

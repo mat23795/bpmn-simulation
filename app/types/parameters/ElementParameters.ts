@@ -108,7 +108,7 @@ export class ElementParameters {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let elementParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":ElementParameters");
+        let elementParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "ElementParameters");
 
         this.eventuallyAddAttribute(elementParametersXMLelement, "id", this._id);
         this.eventuallyAddAttribute(elementParametersXMLelement, "elementRef", this._elementRef);

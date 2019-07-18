@@ -44,7 +44,7 @@ export class Calendar{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let calendarXMLelement = xmlDoc.createElement(bpsimPrefix + ":Calendar");
+        let calendarXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Calendar");
 
         // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);

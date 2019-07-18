@@ -36,7 +36,7 @@ export class VendorExtension {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let vendorExtensionXMLelement = xmlDoc.createElement(bpsimPrefix + ":VendorExtension");
+        let vendorExtensionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"VendorExtension");
 
         this.eventuallyAddAttribute(vendorExtensionXMLelement, "name", this._name);
         //TODO gestire il valore value opportunamente perché da specifiche è incomprensibile

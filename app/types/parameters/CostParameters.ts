@@ -31,7 +31,7 @@ export class CostParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let costParametersXMLelement = xmlDoc.createElement(bpsimPrefix +":CostParameters");
+        let costParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "CostParameters");
 
         if(this._fixedCost != undefined){
             costParametersXMLelement.appendChild(this._fixedCost.toXMLelement(bpsimPrefix, xml, "FixedCost"));

@@ -156,7 +156,7 @@ export class Scenario {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let scenarioXMLelement = xmlDoc.createElement(bpsimPrefix + ":Scenario");
+        let scenarioXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Scenario");
 
         this.eventuallyAddAttribute(scenarioXMLelement, "id", this._id);
         this.eventuallyAddAttribute(scenarioXMLelement, "name", this._name);

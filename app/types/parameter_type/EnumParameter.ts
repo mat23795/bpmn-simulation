@@ -26,7 +26,7 @@ export class EnumParameter extends ParameterValue{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let enumParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":EnumParameter");
+        let enumParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"EnumParameter");
 
         this.addSuperClassAttributesToXMLElement(enumParameterXMLelement);
         for(let i = 0; i < this._value.length; i++){

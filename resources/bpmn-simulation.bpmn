@@ -648,537 +648,534 @@
                 <di:waypoint x="1149.0" y="744.0"/>
                 <bpmndi:BPMNLabel labelStyle="LS1399929387616"/>
             </bpmndi:BPMNEdge>
-        </bpmndi:BPMNPlane>n 
-    
+        </bpmndi:BPMNPlane>
         <bpmndi:BPMNLabelStyle id="LS1399929387616">
             <dc:Font isBold="false" isItalic="false" isStrikeThrough="false" isUnderline="false" name="Arial" size="8.0"/>
         </bpmndi:BPMNLabelStyle>
     </bpmndi:BPMNDiagram>
     <semantic:relationship type="BPSimData">
         <semantic:extensionElements>
-            <bpsim:BPSimData>
-                <bpsim:Scenario id="S1" name="1 - Control perspective" vendor="Caputo &amp; Lazazzera">
-                    <bpsim:ScenarioParameters replication="3" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES">
-                        <bpsim:Start>
-                            <bpsim:DateTimeParameter result="min" value="2016-01-01T06:00:00"/>
-                            <bpsim:DateTimeParameter result="min" value="2015-05-05T06:00:00"/>
-                            <bpsim:GammaDistribution result="min" timeUnit="milliseconds" shape="1" scale="4"/>
-                            <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                        </bpsim:Start>
-                        <bpsim:Duration>
-                            <bpsim:DurationParameter result="min" value="P1M"/>
-                            <bpsim:ResultRequest>min</bpsim:ResultRequest>
-                        </bpsim:Duration>
-                        <bpsim:Warmup>
-                            <bpsim:ResultRequest>min</bpsim:ResultRequest>
-                        </bpsim:Warmup>
-                        <bpsim:PropertyParameters>
-                            <bpsim:Property name="noOfIssues" type="string">
-                                <bpsim:TruncatedNormalDistribution result="min" timeUnit="milliseconds" mean="2" standardDeviation="1" min="1" max="1000"/>
-                                <bpsim:GammaDistribution result="min" timeUnit="milliseconds" shape="1" scale="4"/>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:Property>
-                            <bpsim:Property name="noOfIssues2" type="string">
-                                <bpsim:ExpressionParameter result="min" value="getProperty('noOfIssues') -1"/>
-                                <bpsim:ResultRequest>min</bpsim:ResultRequest>
-                            </bpsim:Property>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>max</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ScenarioParameters>
-                    <bpsim:ElementParameters elementRef="resource_Front_Office">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter result="min" value="0" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C1" result="min" value="200" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C2" result="min" value="90" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C3" result="min" value="130" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C4" result="min" value="60" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C5" result="min" value="150" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C6" result="min" value="100" timeUnit="milliseconds"/>
-                                <bpsim:NumericParameter validFor="C7" result="min" value="40" timeUnit="milliseconds"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-42">
-                        <bpsim:ControlParameters>
-                            <bpsim:InterTriggerTime>
-                                <bpsim:TriangularDistribution result="min" timeUnit="milliseconds" min="0.35" max="2.5" mode="2"/>
-                                <bpsim:ResultRequest>min</bpsim:ResultRequest>
-                            </bpsim:InterTriggerTime>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-189">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="60" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-286">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="40" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-233">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="15" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-456">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="85" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-431">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="70" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-509">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="30" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-668">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="80" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-721">
-                        <bpsim:ControlParameters>
-                            <bpsim:Probability>
-                                <bpsim:FloatingParameter result="min" value="20" timeUnit="milliseconds"/>
-                            </bpsim:Probability>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-781">
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-511">
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-288">
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                </bpsim:Scenario>
-                <bpsim:Scenario id="S2" name="2 - Temporal perspective" vendor="Caputo &amp; Lazazzera" inherits="S1">
-                    <bpsim:ScenarioParameters replication="1" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES">
-                        <bpsim:Start>
-                            <bpsim:EnumParameter>
-                                <bpsim:BooleanParameter value="true"/>
-                                <bpsim:NumericParameter value="1" timeUnit="hours"/>
-                            </bpsim:EnumParameter>
-                        </bpsim:Start>
-                        <bpsim:Warmup>
-                            <bpsim:DurationParameter value="P7D"/>
-                        </bpsim:Warmup>
-                    </bpsim:ScenarioParameters>
-                    <bpsim:ElementParameters elementRef="WFP-40005-1">
-                        <bpsim:TimeParameters>
-                            <bpsim:ElapsedTime>
-                                <bpsim:ResultRequest>min</bpsim:ResultRequest>
-                                <bpsim:ResultRequest>max</bpsim:ResultRequest>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:ElapsedTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-57">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="4" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-920">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-235">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:DurationParameter value="PT30S"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-138">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="10" standardDeviation="2.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-303">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="4" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-458">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:DurationParameter value="PT30S"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-380">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-526">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="7" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-670">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="3" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-617">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-794">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="300" standardDeviation="30" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-847">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TruncatedNormalDistribution mean="2" standardDeviation="0.5" min="0" max="1000"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="resource_Front_Office">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter value="0"/>
-                                <bpsim:NumericParameter validFor="C1" value="200"/>
-                                <bpsim:NumericParameter validFor="C2" value="90"/>
-                                <bpsim:NumericParameter validFor="C3" value="130"/>
-                                <bpsim:NumericParameter validFor="C4" value="60"/>
-                                <bpsim:NumericParameter validFor="C5" value="150"/>
-                                <bpsim:NumericParameter validFor="C6" value="100"/>
-                                <bpsim:NumericParameter validFor="C7" value="40"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                </bpsim:Scenario>
-                <bpsim:Scenario id="S3" name="3 - Resource perspective" vendor="Caputo &amp; Lazazzera" inherits="S2">
-                    <bpsim:ScenarioParameters replication="1" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequency="P1D" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES"/>
-                    <bpsim:ElementParameters elementRef="_10-42">
-                        <bpsim:ControlParameters>
-                            <bpsim:InterTriggerTime>
-                                <bpsim:FloatingParameter value="1.0"/>
-                                <bpsim:FloatingParameter validFor="C1" value="0.35"/>
-                                <bpsim:FloatingParameter validFor="C2" value="0.86"/>
-                                <bpsim:FloatingParameter validFor="C3" value="0.55"/>
-                                <bpsim:FloatingParameter validFor="C4" value="1.0"/>
-                                <bpsim:FloatingParameter validFor="C5" value="0.43"/>
-                                <bpsim:FloatingParameter validFor="C6" value="0.67"/>
-                                <bpsim:FloatingParameter validFor="C7" value="2.0"/>
-                            </bpsim:InterTriggerTime>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="resource_Front_Office">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter value="0"/>
-                                <bpsim:NumericParameter validFor="C1" value="200"/>
-                                <bpsim:NumericParameter validFor="C2" value="90"/>
-                                <bpsim:NumericParameter validFor="C3" value="130"/>
-                                <bpsim:NumericParameter validFor="C4" value="60"/>
-                                <bpsim:NumericParameter validFor="C5" value="150"/>
-                                <bpsim:NumericParameter validFor="C6" value="100"/>
-                                <bpsim:NumericParameter validFor="C7" value="40"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="resource_1st_Level_Techical_Support_Agent">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter value="0"/>
-                                <bpsim:NumericParameter validFor="C1" value="3"/>
-                                <bpsim:NumericParameter validFor="C2" value="3"/>
-                                <bpsim:NumericParameter validFor="C3" value="3"/>
-                                <bpsim:NumericParameter validFor="C4" value="3"/>
-                                <bpsim:NumericParameter validFor="C5" value="3"/>
-                                <bpsim:NumericParameter validFor="C6" value="3"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="resource_2nd_Level_Techical_Support_Agent">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter value="0"/>
-                                <bpsim:NumericParameter validFor="C1" value="2"/>
-                                <bpsim:NumericParameter validFor="C2" value="2"/>
-                                <bpsim:NumericParameter validFor="C3" value="2"/>
-                                <bpsim:NumericParameter validFor="C4" value="2"/>
-                                <bpsim:NumericParameter validFor="C5" value="2"/>
-                                <bpsim:NumericParameter validFor="C6" value="2"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="resource_Supplier">
-                        <bpsim:ResourceParameters>
-                            <bpsim:Quantity>
-                                <bpsim:NumericParameter value="0"/>
-                                <bpsim:NumericParameter validFor="C8" value="1"/>
-                            </bpsim:Quantity>
-                        </bpsim:ResourceParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-57">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-920">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-235">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-138">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-303">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-458">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-380">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-526">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-670">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-617">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-794">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_10-847">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                        <bpsim:PropertyParameters>
-                            <bpsim:QueueLength>
-                                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-                            </bpsim:QueueLength>
-                        </bpsim:PropertyParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:Calendar id="C1" name="shift-6-9am">
+            <BPSimData
+                xmlns="bpsim">
+                <Scenario id="S1" name="1 - Control perspective" vendor="Caputo &amp; Lazazzera">
+                    <ScenarioParameters replication="3" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES">
+                        <Start>
+                            <ResultRequest>count</ResultRequest>
+                        </Start>
+                        <Duration>
+                            <DurationParameter result="min" value="P1M"/>
+                            <ResultRequest>min</ResultRequest>
+                        </Duration>
+                        <Warmup>
+                            <ResultRequest>min</ResultRequest>
+                        </Warmup>
+                        <PropertyParameters>
+                            <Property name="noOfIssues" type="string">
+                                <TruncatedNormalDistribution result="min" timeUnit="milliseconds" mean="2" standardDeviation="1" min="1" max="1000"/>
+                                <GammaDistribution result="min" timeUnit="milliseconds" shape="1" scale="4"/>
+                                <ResultRequest>count</ResultRequest>
+                            </Property>
+                            <Property name="noOfIssues2" type="string">
+                                <ExpressionParameter result="min" value="getProperty('noOfIssues') -1"/>
+                                <ResultRequest>min</ResultRequest>
+                            </Property>
+                            <QueueLength>
+                                <ResultRequest>max</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ScenarioParameters>
+                    <ElementParameters elementRef="resource_Front_Office">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter result="min" value="0" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C1" result="min" value="200" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C2" result="min" value="90" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C3" result="min" value="130" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C4" result="min" value="60" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C5" result="min" value="150" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C6" result="min" value="100" timeUnit="milliseconds"/>
+                                <NumericParameter validFor="C7" result="min" value="40" timeUnit="milliseconds"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-42">
+                        <ControlParameters>
+                            <InterTriggerTimer>
+                                <TriangularDistribution result="min" timeUnit="milliseconds" min="0.35" max="2.5" mode="2"/>
+                                <ResultRequest>min</ResultRequest>
+                            </InterTriggerTimer>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-189">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="60" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-286">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="40" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-233">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="15" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-456">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="85" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-431">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="70" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-509">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="30" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-668">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="80" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-721">
+                        <ControlParameters>
+                            <Probability>
+                                <FloatingParameter result="min" value="20" timeUnit="milliseconds"/>
+                            </Probability>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-781">
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-511">
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-288">
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                    </ElementParameters>
+                </Scenario>
+                <Scenario id="S2" name="2 - Temporal perspective" vendor="Caputo &amp; Lazazzera" inherits="S1">
+                    <ScenarioParameters replication="1" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES">
+                        <Start>
+                            <EnumParameter>
+                                <BooleanParameter value="true"/>
+                                <NumericParameter value="1" timeUnit="hours"/>
+                            </EnumParameter>
+                        </Start>
+                        <Warmup>
+                            <DurationParameter value="P7D"/>
+                        </Warmup>
+                    </ScenarioParameters>
+                    <ElementParameters elementRef="WFP-40005-1">
+                        <TimeParameters>
+                            <ElapsedTime>
+                                <ResultRequest>min</ResultRequest>
+                                <ResultRequest>max</ResultRequest>
+                                <ResultRequest>mean</ResultRequest>
+                            </ElapsedTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-57">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="4" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-920">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-235">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <DurationParameter value="PT30S"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-138">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="10" standardDeviation="2.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-303">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="4" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-458">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <DurationParameter value="PT30S"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-380">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-526">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="7" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-670">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="3" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-617">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="1" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-794">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="300" standardDeviation="30" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-847">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <TruncatedNormalDistribution mean="2" standardDeviation="0.5" min="0" max="1000"/>
+                            </ProcessingTime>
+                        </TimeParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="resource_Front_Office">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter value="0"/>
+                                <NumericParameter validFor="C1" value="200"/>
+                                <NumericParameter validFor="C2" value="90"/>
+                                <NumericParameter validFor="C3" value="130"/>
+                                <NumericParameter validFor="C4" value="60"/>
+                                <NumericParameter validFor="C5" value="150"/>
+                                <NumericParameter validFor="C6" value="100"/>
+                                <NumericParameter validFor="C7" value="40"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                </Scenario>
+                <Scenario id="S3" name="3 - Resource perspective" vendor="Caputo &amp; Lazazzera" inherits="S2">
+                    <ScenarioParameters replication="1" baseTimeUnit="min" baseCurrencyUnit="USD" baseResultFrequency="P1D" baseResultFrequencyCumul="false" traceOutput="false" traceFormat="XES"/>
+                    <ElementParameters elementRef="_10-42">
+                        <ControlParameters>
+                            <InterTriggerTimer>
+                                <FloatingParameter value="1.0"/>
+                                <FloatingParameter validFor="C1" value="0.35"/>
+                                <FloatingParameter validFor="C2" value="0.86"/>
+                                <FloatingParameter validFor="C3" value="0.55"/>
+                                <FloatingParameter validFor="C4" value="1.0"/>
+                                <FloatingParameter validFor="C5" value="0.43"/>
+                                <FloatingParameter validFor="C6" value="0.67"/>
+                                <FloatingParameter validFor="C7" value="2.0"/>
+                            </InterTriggerTimer>
+                        </ControlParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="resource_Front_Office">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter value="0"/>
+                                <NumericParameter validFor="C1" value="200"/>
+                                <NumericParameter validFor="C2" value="90"/>
+                                <NumericParameter validFor="C3" value="130"/>
+                                <NumericParameter validFor="C4" value="60"/>
+                                <NumericParameter validFor="C5" value="150"/>
+                                <NumericParameter validFor="C6" value="100"/>
+                                <NumericParameter validFor="C7" value="40"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="resource_1st_Level_Techical_Support_Agent">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter value="0"/>
+                                <NumericParameter validFor="C1" value="3"/>
+                                <NumericParameter validFor="C2" value="3"/>
+                                <NumericParameter validFor="C3" value="3"/>
+                                <NumericParameter validFor="C4" value="3"/>
+                                <NumericParameter validFor="C5" value="3"/>
+                                <NumericParameter validFor="C6" value="3"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="resource_2nd_Level_Techical_Support_Agent">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter value="0"/>
+                                <NumericParameter validFor="C1" value="2"/>
+                                <NumericParameter validFor="C2" value="2"/>
+                                <NumericParameter validFor="C3" value="2"/>
+                                <NumericParameter validFor="C4" value="2"/>
+                                <NumericParameter validFor="C5" value="2"/>
+                                <NumericParameter validFor="C6" value="2"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="resource_Supplier">
+                        <ResourceParameters>
+                            <Quantity>
+                                <NumericParameter value="0"/>
+                                <NumericParameter validFor="C8" value="1"/>
+                            </Quantity>
+                        </ResourceParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-57">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-920">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-235">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-138">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-303">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-458">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-380">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-526">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-670">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-617">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-794">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <ElementParameters elementRef="_10-847">
+                        <TimeParameters>
+                            <ProcessingTime>
+                                <ResultRequest>count</ResultRequest>
+                            </ProcessingTime>
+                        </TimeParameters>
+                        <ControlParameters>
+                            <TriggerCount>
+                                <ResultRequest>count</ResultRequest>
+                            </TriggerCount>
+                        </ControlParameters>
+                        <PropertyParameters>
+                            <QueueLength>
+                                <ResultRequest>mean</ResultRequest>
+                            </QueueLength>
+                        </PropertyParameters>
+                    </ElementParameters>
+                    <Calendar id="C1" name="shift-6-9am">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             UID:1356035064823@localhost
@@ -1189,8 +1186,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C2" name="shift-9-noon">
+          </Calendar>
+                    <Calendar id="C2" name="shift-9-noon">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1202,8 +1199,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C3" name="shift-noon-3pm">
+          </Calendar>
+                    <Calendar id="C3" name="shift-noon-3pm">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1215,8 +1212,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C4" name="shift-3-6pm">
+          </Calendar>
+                    <Calendar id="C4" name="shift-3-6pm">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1228,8 +1225,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C5" name="shift-6-10pm">
+          </Calendar>
+                    <Calendar id="C5" name="shift-6-10pm">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1241,8 +1238,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C6" name="shift-10-1am">
+          </Calendar>
+                    <Calendar id="C6" name="shift-10-1am">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1254,8 +1251,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C7" name="shift-1-6am">
+          </Calendar>
+                    <Calendar id="C7" name="shift-1-6am">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1267,8 +1264,8 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                    <bpsim:Calendar id="C8" name="shift-9am-10pm-weekdays">
+          </Calendar>
+                    <Calendar id="C8" name="shift-9am-10pm-weekdays">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
             DTSTAMP:20160101T000000
@@ -1280,9 +1277,9 @@
             PRODID:PAF Editor
             VERSION:2.0
             END:VCALENDAR
-          </bpsim:Calendar>
-                </bpsim:Scenario>
-            </bpsim:BPSimData>
+          </Calendar>
+                </Scenario>
+            </BPSimData>
         </semantic:extensionElements>
         <semantic:source>_1399929387037</semantic:source>
         <semantic:target>_1399929387037</semantic:target>

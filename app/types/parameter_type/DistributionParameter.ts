@@ -82,7 +82,7 @@ export class BetaDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let betaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BetaDistribution");
+        let betaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BetaDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(betaDistributionXMLelement);
         this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
@@ -125,7 +125,7 @@ export class BinomialDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let binomialDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BinomialDistribution");
+        let binomialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BinomialDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(binomialDistributionXMLelement);
         this.eventuallyAddAttribute(binomialDistributionXMLelement, "probability", this._probability);
@@ -168,7 +168,7 @@ export class WeibullDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let weibullDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":WeibullDistribution");
+        let weibullDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"WeibullDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(weibullDistributionXMLelement);
         this.eventuallyAddAttribute(weibullDistributionXMLelement, "shape", this._shape);
@@ -211,7 +211,7 @@ export class NormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let normalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":NormalDistribution");
+        let normalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"NormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(normalDistributionXMLelement);
         this.eventuallyAddAttribute(normalDistributionXMLelement, "mean", this._mean);
@@ -255,7 +255,7 @@ export class LogNormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let logNormalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":LogNormalDistribution");
+        let logNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"LogNormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(logNormalDistributionXMLelement);
         this.eventuallyAddAttribute(logNormalDistributionXMLelement, "mean", this._mean);
@@ -298,7 +298,7 @@ export class UniformDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let uniformDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":UniformDistribution");
+        let uniformDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UniformDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(uniformDistributionXMLelement);
         this.eventuallyAddAttribute(uniformDistributionXMLelement, "min", this._min);
@@ -350,7 +350,7 @@ export class TriangularDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let triangularDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":TriangularDistribution");
+        let triangularDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TriangularDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(triangularDistributionXMLelement);
         this.eventuallyAddAttribute(triangularDistributionXMLelement, "min", this._min);
@@ -413,7 +413,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let truncatedNormalDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":TruncatedNormalDistribution");
+        let truncatedNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TruncatedNormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(truncatedNormalDistributionXMLelement);
         this.eventuallyAddAttribute(truncatedNormalDistributionXMLelement, "mean", this._mean);
@@ -449,7 +449,7 @@ export class PoissonDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let poissonDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":PoissonDistribution");
+        let poissonDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"PoissonDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(poissonDistributionXMLelement);
         this.eventuallyAddAttribute(poissonDistributionXMLelement, "mean", this._mean);
@@ -482,7 +482,7 @@ export class NegativeExponentialDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let negativeExponentialDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":NegativeExponentialDistribution");
+        let negativeExponentialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"NegativeExponentialDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(negativeExponentialDistributionXMLelement);
         this.eventuallyAddAttribute(negativeExponentialDistributionXMLelement, "mean", this._mean);
@@ -524,7 +524,7 @@ export class ErlangDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let erlangDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":ErlangDistribution");
+        let erlangDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ErlangDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(erlangDistributionXMLelement);
         this.eventuallyAddAttribute(erlangDistributionXMLelement, "mean", this._mean);
@@ -568,7 +568,7 @@ export class GammaDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let gammaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":GammaDistribution");
+        let gammaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"GammaDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(gammaDistributionXMLelement);
         this.eventuallyAddAttribute(gammaDistributionXMLelement, "shape", this._shape);
@@ -611,7 +611,7 @@ export class UserDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let userDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistribution");
+        let userDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UserDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(userDistributionXMLelement);
         for(let i = 0; i < this._points.length; i++){
@@ -660,7 +660,7 @@ export class UserDistributionDataPoint{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let userDistributionDataPointXMLelement = xmlDoc.createElement(bpsimPrefix +":UserDistributionDataPoint");
+        let userDistributionDataPointXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UserDistributionDataPoint");
 
         this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "probability", this._probability);
         userDistributionDataPointXMLelement.appendChild(this._value.toXMLelement(bpsimPrefix,xml));

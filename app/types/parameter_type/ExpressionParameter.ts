@@ -26,7 +26,7 @@ export class ExpressionParameter extends ParameterValue{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let expressionParameterXMLelement = xmlDoc.createElement(bpsimPrefix +":ExpressionParameter");
+        let expressionParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ExpressionParameter");
 
         this.addSuperClassAttributesToXMLElement(expressionParameterXMLelement);
         this.eventuallyAddAttribute(expressionParameterXMLelement, "value", this._value);

@@ -225,6 +225,8 @@ function openDiagram() {
 
             $('#scenario-displayed').show();
             let newScenario = new Scenario();
+            console.log("newScenario")
+            console.log(newScenario)
 
             let name = "";
             while (name == "" || idListGlobal.includes(name)) {
@@ -235,11 +237,28 @@ function openDiagram() {
                 }
             }
             if (name != null) {
+                console.log("name")
+                console.log(name)
+
                 newScenario.id = name;
+                console.log("newScenario.id")
+                console.log(newScenario.id)
+
                 let tempArrayScenario = [];
                 tempArrayScenario.push(newScenario);
+                console.log("tempArrayScenario")
+                console.log(tempArrayScenario)
+
                 dataTreeObjGlobal.scenario = tempArrayScenario;
+                console.log("dataTreeObjGlobal.scenario")
+                console.log(dataTreeObjGlobal.scenario)
+
+                console.log("dataTreeObjGlobal")
+                console.log(dataTreeObjGlobal)
+
                 idListGlobal.push(name);
+                console.log("idListGlobal")
+                console.log(idListGlobal)
 
                 // console.log("\n\nscenari structure")
                 // console.log(dataTreeObjGlobal)
@@ -257,7 +276,10 @@ function openDiagram() {
                     text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
                 }));
 
+
+
                 // console.log("prima change")
+                // currentScenarioGlobal = dataTreeObjGlobal.scenario.length
                 $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
                 // console.log("dopo change")
 
@@ -294,7 +316,7 @@ function openDiagram() {
         bpsimPrefixGlobal = "bpsim"; // * default
 
         if (extensionElementXML.length == 0) {
-
+            console.log("non avente")
 
             // TODO gestire questione bpsim non esistente
 
@@ -302,56 +324,83 @@ function openDiagram() {
             //TODO 1) field2emptytree 2) tree2xml
             //TODO forse poter usare bottone crea nuovo scenario?
             let bpsimData = new BPSimData();
-            // let scenario = new Scenario();
-            // scenario.id = "new Scenario";
-            // bpsimData.addScenario(scenario);
+            let scenario = new Scenario();
+            scenario.id = "new Scenario";
+            bpsimData.addScenario(scenario);
             dataTreeObjGlobal = bpsimData;
-
-            console.log("inizio prove")
 
             let bpsimDataXMLelement = dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal)
 
-            extensionElementXML = xmlDoc.createElement(bpmnPrefixGlobal + ":extensionElements");
-            extensionElementXML.appendChild(bpsimDataXMLelement)
+            let extensionElementXMLtemp = xmlDoc.createElementNS(bpmnPrefixGlobal,"extensionElements");
+            extensionElementXMLtemp.appendChild(bpsimDataXMLelement)
 
-            let relationshipXMLelement = xmlDoc.createElement(bpmnPrefixGlobal + ":relationship");
+            let sourceXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"source");
+            sourceXMLelement.textContent=definitionsTagXML[0].id;
+
+            let targetXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"target");
+            targetXMLelement.textContent=definitionsTagXML[0].id;
+
+
+            let relationshipXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"relationship");
             relationshipXMLelement.setAttribute("type", "BPSimData");
-            relationshipXMLelement.appendChild(extensionElementXML)
-
+            relationshipXMLelement.appendChild(extensionElementXMLtemp);
+            relationshipXMLelement.appendChild(sourceXMLelement);
+            relationshipXMLelement.appendChild(targetXMLelement);
+            
             definitionsTagXML[0].appendChild(relationshipXMLelement)
-
-
 
             // TODO continuare da qua, capire come fare ad avere l'htmlCollection
 
-            let extensionElementXMLtemp = Object.create(HTMLCollection.prototype);
-            extensionElementXMLtemp[0] = [extensionElementXML];
-            console.log("extEl");
-            // extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
-            console.log(extensionElementXMLtemp);
+            
+            extensionElementXML = definitionsTagXML[0].children[ definitionsTagXML[0].children.length -1 ].children;
 
 
+            dataTreeGlobal = xml2tree(extensionElementXML[0]);
+            dataTreeObjGlobal = dataTreeGlobal[1];
+
+            console.log("obj finale post parsing");
+            console.log(dataTreeObjGlobal);
+
+            
+
+            // let extensionElementXMLCreated = Object.create(HTMLCollection.prototype);
+            // extensionElementXMLCreated.push(extensionElementXMLtemp);
+            // console.log("quello creato ad hoc")
+            // console.log(extensionElementXMLCreated)
 
             // dataTreeGlobal = xml2tree();
             // dataTreeObjGlobal = dataTreeGlobal[1];
 
 
-            console.log(xmlDoc)
+            // console.log(xmlDoc)
 
-            console.log("fine prove")
-
+            // createFormFields();
             // $('#scenario-displayed').hide();
             // $('#scenario-picker').empty();
             // $('#delete-scenario').attr("disabled", true);
 
-            // createFormFields();
+
+
+            console.log("scenario prima");
+            console.log(dataTreeObjGlobal);
+
+            createFormFields();
+            $('#delete-scenario').click();
+            
+            console.log("scenario dopo");
+            console.log(dataTreeObjGlobal);
 
         } else {
+            console.log("avente")
 
             console.log("extEl")
             console.log(extensionElementXML)
+            console.log("definitionsTagXML")
+            console.log(definitionsTagXML)
 
             $('#scenario-displayed').show();
+            $('#delete-scenario').attr("disabled",false);
+
             // * Fase 1 xml2tree
             bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
 
@@ -1268,6 +1317,8 @@ function createFormFields(firstTime = true) {
 
     if (firstTime) {
         $('#scenario-picker').on('change', function () {
+            console.log("cuss ie u valor")
+            console.log(this.value)
 
             // * serie di if che servono a chiudere i menù a tendina quando si cambia scenario
             closeCollapsibleButton();
@@ -1278,6 +1329,8 @@ function createFormFields(firstTime = true) {
 
             console.log("sistemare salvataggio complex ed eliminare")//TODO 
             // saveDataTreeStructure(currentScenarioGlobal);
+
+            console.log()
             saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
 
 
@@ -1327,7 +1380,10 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
     saveElementParametersSection(divGateways, scenarioToSave, 6);
     saveElementParametersSection(divEvents, scenarioToSave, 4);
     saveElementParametersSection(divConnectingObjects, scenarioToSave, 6, false);
-    saveElementParametersSection(divResources, scenarioToSave, 4);
+    if(divResources.length != 0){
+        saveElementParametersSection(divResources, scenarioToSave, 4);
+    }
+
 
 
     // TODO REMOVE
@@ -4610,7 +4666,6 @@ function saveDataTreeStructure(scenarioSelected) {
 function xml2tree(bpsimDataXML) {
     // * array di tutti gli elementi presenti in "extensionElements", ovvero BPSimData
     var nodes = Array.prototype.slice.call(bpsimDataXML.getElementsByTagName("*"), 0);
-
     return buildDataTree(nodes[0], createObj(nodes[0]));
 }
 
@@ -4671,7 +4726,6 @@ function buildDataTree(nodo, nodoObject) {
         }
     }
     childNodes = temp;
-
     let haveMoreValue = false;
     let moreValuesTempArray = [];
     while (numFigli > 0) {

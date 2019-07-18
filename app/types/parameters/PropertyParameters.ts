@@ -35,7 +35,7 @@ export class PropertyParameters{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let propertyParametersXMLelement = xmlDoc.createElement(bpsimPrefix + ":PropertyParameters");
+        let propertyParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "PropertyParameters");
 
         //TODO passare a Property
         for(let i=0; i< this._property.length; i++) {
