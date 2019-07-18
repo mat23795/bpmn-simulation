@@ -20,18 +20,18 @@
         <h1 class = "centered-title">BPMN Simulation Tool</h1>
 
 
-        <div class="orizzontal-wrapper">
+        <div class="horizontal-wrapper">
             <div class="vertical-wrapper">
                 <div class="div-vertical-border" id="js-drop-zone">
                     Drop you BPMN diagram here.
                 </div>
 
                 <div class="canvas div-vertical-border" id="js-canvas"></div>
-                <div style="display: inline-flex; width: -webkit-fill-available">
+                <div style="display: none; width: -webkit-fill-available" id="sim-buttons-section">
                     <div style="width:60%; text-align: center">
                         <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="generate-bpsim" disabled="true">Generate BPSim XML</button>
                     </div>
-                    <div style="width:40%; text-align: right">
+                    <div style="width:40%; text-align: right; padding-right: 3%">
                         <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="scroll-top-button" disabled="true"><i class="fa fa-arrow-up" id="scroll-top-button"></i></button>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
 
 
             <!-- simulation-->
-            <div class="sim-parameter-section div-vertical-border" id="js-simulation">
+            <div class="sim-parameter-section div-vertical-border" id="js-simulation" style="display: none">
                 <h1 class="centered-title-sim-section">BPSim Parameters</h1>
 
                 <div id="scenario-option-section" style="text-align: center">

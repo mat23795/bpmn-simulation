@@ -213,7 +213,6 @@ function openDiagram() {
 
         // * aggiunta evento al bottone che crea un nuovo scenario
         $('#create-scenario').on("click", function () {
-            $('#delete-scenario').attr("disabled", false)
 
             // closeCollapsibleButton();
 
@@ -222,8 +221,7 @@ function openDiagram() {
             // saveLocalCalendars();
             // fine new
 
-
-            $('#scenario-displayed').show();
+            
             let newScenario = new Scenario();
             console.log("newScenario")
             console.log(newScenario)
@@ -237,6 +235,9 @@ function openDiagram() {
                 }
             }
             if (name != null) {
+                $('#delete-scenario').attr("disabled", false)
+                $('#scenario-displayed').show();
+
                 console.log("name")
                 console.log(name)
 
@@ -3743,7 +3744,6 @@ function populateScenarioElementsForm(scenarios, scenarioSelected) {
         // console.log("prima popolare calendar");
         populateCalendarForm(scenarios[scenarioSelected].calendar);
         // console.log("dopo popolare calendar");
-        // populateResource
 
     } else {
         //TODO gestire caso in cui si debba creare bspim da zero
@@ -4913,6 +4913,9 @@ function registerFileDrop(container, callback) {
             // * mette visibile il div del diagramma e toglie quello della drop-zone
             $('#js-drop-zone').css('display', 'none');
             $('#js-canvas').css('display', 'block');
+            $('#js-simulation').css('display', 'unset');
+            $('#sim-buttons-section').css('display', 'inline-flex');
+            $('.horizontal-wrapper').css('display', 'flex');
 
             // * richiama la funzione openDiagram
             xmlGlobal = xml;

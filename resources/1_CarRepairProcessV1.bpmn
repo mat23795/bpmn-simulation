@@ -642,13 +642,13 @@
               </bpsim:Probability>
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_87E52808-857B-45B0-93E8-F6D7AC0B4B3E">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
+          <!-- <bpsim:ElementParameters elementRef="_87E52808-857B-45B0-93E8-F6D7AC0B4B3E"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
           <bpsim:ElementParameters elementRef="_FA77D7D8-9C02-4006-942A-B003AEDA5E3C">
             <bpsim:ControlParameters>
               <bpsim:TriggerCount>
@@ -656,20 +656,20 @@
               </bpsim:TriggerCount>
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_B67579E4-E038-4D9D-AA46-A3F9628CADA1">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_4CFC937C-2E42-4671-859E-42E710931963">
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-          </bpsim:ElementParameters>
+          <!-- <bpsim:ElementParameters elementRef="_B67579E4-E038-4D9D-AA46-A3F9628CADA1"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_4CFC937C-2E42-4671-859E-42E710931963"> -->
+            <!-- <bpsim:ControlParameters> -->
+              <!-- <bpsim:TriggerCount> -->
+                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+              <!-- </bpsim:TriggerCount> -->
+            <!-- </bpsim:ControlParameters> -->
+          <!-- </bpsim:ElementParameters> -->
         </bpsim:Scenario>
         <bpsim:Scenario id="S2" inherits="S1" name="Scenario 2: Main and Secondary paths">
           <bpsim:ElementParameters elementRef="_2BBAB508-4026-40F7-8FC3-23E68E77EE46">
