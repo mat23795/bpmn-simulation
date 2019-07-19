@@ -169,7 +169,7 @@ function openDiagram() {
             console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
 
             //TODO commentare o scommentare se si vuole salvare o no il file
-            download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
+            // download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
         });
 
         // * aggiunta evento al bottone che elimina lo scenario corrente
@@ -221,7 +221,7 @@ function openDiagram() {
             // saveLocalCalendars();
             // fine new
 
-            
+
             let newScenario = new Scenario();
             console.log("newScenario")
             console.log(newScenario)
@@ -332,28 +332,28 @@ function openDiagram() {
 
             let bpsimDataXMLelement = dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal)
 
-            let extensionElementXMLtemp = xmlDoc.createElementNS(bpmnPrefixGlobal,"extensionElements");
+            let extensionElementXMLtemp = xmlDoc.createElementNS(bpmnPrefixGlobal, "extensionElements");
             extensionElementXMLtemp.appendChild(bpsimDataXMLelement)
 
-            let sourceXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"source");
-            sourceXMLelement.textContent=definitionsTagXML[0].id;
+            let sourceXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "source");
+            sourceXMLelement.textContent = definitionsTagXML[0].id;
 
-            let targetXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"target");
-            targetXMLelement.textContent=definitionsTagXML[0].id;
+            let targetXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "target");
+            targetXMLelement.textContent = definitionsTagXML[0].id;
 
 
-            let relationshipXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal,"relationship");
+            let relationshipXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "relationship");
             relationshipXMLelement.setAttribute("type", "BPSimData");
             relationshipXMLelement.appendChild(extensionElementXMLtemp);
             relationshipXMLelement.appendChild(sourceXMLelement);
             relationshipXMLelement.appendChild(targetXMLelement);
-            
+
             definitionsTagXML[0].appendChild(relationshipXMLelement)
 
             // TODO continuare da qua, capire come fare ad avere l'htmlCollection
 
-            
-            extensionElementXML = definitionsTagXML[0].children[ definitionsTagXML[0].children.length -1 ].children;
+
+            extensionElementXML = definitionsTagXML[0].children[definitionsTagXML[0].children.length - 1].children;
 
 
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
@@ -362,7 +362,7 @@ function openDiagram() {
             console.log("obj finale post parsing");
             console.log(dataTreeObjGlobal);
 
-            
+
 
             // let extensionElementXMLCreated = Object.create(HTMLCollection.prototype);
             // extensionElementXMLCreated.push(extensionElementXMLtemp);
@@ -387,7 +387,7 @@ function openDiagram() {
 
             createFormFields();
             $('#delete-scenario').click();
-            
+
             console.log("scenario dopo");
             console.log(dataTreeObjGlobal);
 
@@ -400,7 +400,7 @@ function openDiagram() {
             console.log(definitionsTagXML)
 
             $('#scenario-displayed').show();
-            $('#delete-scenario').attr("disabled",false);
+            $('#delete-scenario').attr("disabled", false);
 
             // * Fase 1 xml2tree
             bpsimPrefixGlobal = extensionElementXML[0].childNodes[1].prefix;
@@ -1273,11 +1273,16 @@ function createFormFields(firstTime = true) {
         }));
     }
 
+
+
+
     if (firstTime) {
         //salvataggio delle modifiche per ogni attributo di scenario
         $("input[id*='scenario-']").on('change', function () {
             saveScenarioAtrribute(this);
         });
+
+
 
         //salvataggio delle modifiche per ogni attributo semplice (no baseTimeUnit) di scenarioParameters
         $("input[id*='scenarioParametersAttribute-']").on('change', function () {
@@ -1313,10 +1318,34 @@ function createFormFields(firstTime = true) {
     let scenarioSelected = $('#scenario-picker').val();
     currentScenarioGlobal = scenarioSelected;
 
+    $('#scenario-inherits-picker').empty();
+    $('#scenario-inherits-picker').append($('<option>', {
+        value: "",
+        text: ""
+    }));
+
+    for (let i = 0; i < numScenarios; i++) {
+        if (i != currentScenarioGlobal - 1) {
+            $('#scenario-inherits-picker').append($('<option>', {
+                value: scenarios[i].id,
+                text: scenarios[i].id
+            }));
+        }
+    }
+
 
     refreshFormFields(scenarios, scenarioSelected);
 
     if (firstTime) {
+        $('#scenario-inherits-picker').on('change', function () {
+            if (this.value != "") {
+                dataTreeObjGlobal.scenario[currentScenarioGlobal-1].inherits = this.value;
+            } else {
+                dataTreeGlobal.scenario[currentScenarioGlobal-1].inherits = undefined;
+            }
+
+        });
+
         $('#scenario-picker').on('change', function () {
             console.log("cuss ie u valor")
             console.log(this.value)
@@ -1341,7 +1370,26 @@ function createFormFields(firstTime = true) {
 
 
             // console.log("prima refresh")
+
+
+
+            $('#scenario-inherits-picker').empty();
+            $('#scenario-inherits-picker').append($('<option>', {
+                value: "",
+                text: ""
+            }));
+
+            for (let i = 0; i < numScenarios; i++) {
+                if (i != currentScenarioGlobal - 1) {
+                    $('#scenario-inherits-picker').append($('<option>', {
+                        value: scenarios[i].id,
+                        text: scenarios[i].id
+                    }));
+                }
+            }
+
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
+
             // console.log("dopo refresh")
 
             $('#js-simulation').scrollTop(0);
@@ -1381,7 +1429,7 @@ function saveCurrentScenarioComplexElement(scenarioToSave) {
     saveElementParametersSection(divGateways, scenarioToSave, 6);
     saveElementParametersSection(divEvents, scenarioToSave, 4);
     saveElementParametersSection(divConnectingObjects, scenarioToSave, 6, false);
-    if(divResources.length != 0){
+    if (divResources.length != 0) {
         saveElementParametersSection(divResources, scenarioToSave, 4);
     }
 
@@ -1667,11 +1715,15 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 
         propertyTemp.value = singlePropertyValues;
 
-        propertyTemp.resultRequest = [singlePropertyResultRequestSelect.value]
-
-        propertyTemp.name = singlePropertyNameInput.value
+        if (singlePropertyNameInput.value != "") {
+            propertyTemp.name = singlePropertyNameInput.value
+        }
 
         propertyTemp.type = singlePropertyPropertyTypeSelect.value
+
+        if (propertyTemp.value.length > 0) {
+            propertyTemp.resultRequest = [singlePropertyResultRequestSelect.value];
+        }
 
         propertyArrayTemp.push(propertyTemp);
     }
@@ -1781,18 +1833,21 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
     propertyObj = propertyArrayTemp;
 
     queueLengthObj.value = queueLengthValues;
-    queueLengthObj.resultRequest = [queueLengthResultRequestSelect.value];
-
+    if (queueLengthValues.length > 0) {
+        queueLengthObj.resultRequest = [queueLengthResultRequestSelect.value];
+    } else {
+        queueLengthObj = undefined;
+    }
     propertyParameterObj.property = propertyObj;
     propertyParameterObj.queueLength = queueLengthObj;
 
-
-
-    // console.log("oggetti")
-    // console.log(obj);
     // console.log(scenarioToSave.scenarioParameters.propertyParameters[0].queueLength);
     // scenarioToSave.scenarioParameters.propertyParameters = undefined
-    scenarioToSave.scenarioParameters.propertyParameters = [propertyParameterObj];
+    if (propertyObj.length > 0 || queueLengthObj != undefined) {
+        scenarioToSave.scenarioParameters.propertyParameters = [propertyParameterObj];
+    } else {
+        scenarioToSave.scenarioParameters.propertyParameters = [];
+    }
 
 }
 
@@ -1893,7 +1948,11 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
 
     let obj = new Parameter();
     obj.value = values;
-    obj.resultRequest = [resultRequestDiv.value];
+    if (values.length > 0) {
+        obj.resultRequest = [resultRequestDiv.value];
+    } else {
+        obj = undefined
+    }
 
     scenarioToSave.scenarioParameters[parameterName] = obj;
 }
@@ -1916,9 +1975,6 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
         haveResultRequest = false;
     }
 
-
-
-
     let isProperty = false;
     let propertyNameDiv;
     let propertyTypeDiv;
@@ -1939,9 +1995,6 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
     }
 
     // div che contiene i div values
-
-
-
     let values = [];
     // cicliamo per ogni divValue
     if (valuesDiv != undefined) {
@@ -2042,7 +2095,11 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
             obj = new Parameter();
             obj.value = values;
             if (haveResultRequest) {
-                obj.resultRequest = [resultRequestDiv.value];
+                if (values.length > 0) {
+                    obj.resultRequest = [resultRequestDiv.value];
+                } else {
+                    return undefined;
+                }
             }
         }
 
@@ -3678,7 +3735,6 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
     if (scenarioSelected != "") {
 
         scenarioSelected -= 1;
-        console.log()
 
         // console.log("prima di id")
         let idScenarioInput = $('#scenario-id-input');
@@ -3718,11 +3774,17 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
         let resultScenarioVal = scenarios[scenarioSelected].result;
         setField(resultScenarioInput, resultScenarioVal);
 
-        let inheritsScenarioInput = $('#scenario-inherits-input');
+        let inheritsScenarioInput = $('#scenario-inherits-picker');
         let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
-        setField(inheritsScenarioInput, inheritsScenarioVal);
-
-
+        console.log("elemn by id");
+        console.log(inheritsScenarioInput)
+        // inheritsScenarioInput.value ="S3";
+        if (inheritsScenarioVal != undefined) {
+            inheritsScenarioInput.val(inheritsScenarioVal);
+        } else {
+            inheritsScenarioInput.val("");
+        }
+        // setField(inheritsScenarioInput, inheritsScenarioVal);
     } else {
         //TODO valutare se settare defaults e considerare aggiunta scenario
     }
@@ -4328,31 +4390,7 @@ function saveScenarioAtrribute(field) {
         console.log(idListGlobal)
     }
 
-    let inheritsOk = false;
-    if (fieldName == "inherits") {
-        validName = false; //per far funzionare l'if di sotto
-        for (let i = 0; i < dataTreeObjGlobal.scenario.length; i++) {
-            // console.log("scenario "+dataTreeObjGlobal.scenario[i].id );
-            // console.log("inherits " + dataTreeObjGlobal.scenario[i].inherits );
-            if (dataTreeObjGlobal.scenario[i].id == value && dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id != value) {
-                inheritsOk = true;
-            }
-        }
-        if (!inheritsOk) {
-            if (dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id == value) {
-                setTimeout(function () {
-                    window.alert("ERROR: You can not inherit from the same scenario " + value);
-                }, 10);
-            } else {
-                setTimeout(function () {
-                    window.alert("ERROR: No scenario with the following ID: " + value);
-                }, 10);
-            }
-            $('#scenario-inherits-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].inherits);
-        }
-    }
-
-    if (validName || inheritsOk) {
+    if (validName) {
         let oldValue = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1][fieldName];
         for (let i = 0; i < idListGlobal.length; i++) {
             if (idListGlobal[i] == oldValue) {

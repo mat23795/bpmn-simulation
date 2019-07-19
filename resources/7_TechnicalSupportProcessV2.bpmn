@@ -832,7 +832,7 @@
             <!-- </bpsim:ControlParameters> -->
           <!-- </bpsim:ElementParameters> -->
         </bpsim:Scenario>
-        <bpsim:Scenario id="S2" inherits="S1" name="2 - Temporal perspective">
+        <bpsim:Scenario id="S2" inherits="S1" result="S2" name="2 - Temporal perspective">
           <bpsim:ScenarioParameters>
             <bpsim:Start>
               <bpsim:EnumParameter>

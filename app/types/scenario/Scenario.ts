@@ -14,8 +14,8 @@ export class Scenario {
     private _author: string;
     private _vendor: string = "Caputo & Lazazzera";
     private _version: string;
-    private _result: Scenario;
-    private _inherits: Scenario;
+    private _result: string;
+    private _inherits: string;
     private _elementParameters: ElementParameters[] = [];
     private _scenarioParameters: ScenarioParameters = new ScenarioParameters();
     private _vendorExtensions: VendorExtension[] = [];
@@ -87,19 +87,19 @@ export class Scenario {
         this._version = value;
     }
 
-    get result(): Scenario {
+    get result(): string {
         return this._result;
     }
 
-    set result(value: Scenario) {
+    set result(value: string) {
         this._result = value;
     }
 
-    get inherits(): Scenario {
+    get inherits(): string {
         return this._inherits;
     }
 
-    set inherits(value: Scenario) {
+    set inherits(value: string) {
         this._inherits = value;
     }
 
