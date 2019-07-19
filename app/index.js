@@ -167,6 +167,7 @@ function openDiagram() {
             console.log("XML fase modifica");//TODO remove
             console.log(xmlDoc);//TODO remove
             console.log(extensionElementXML[0].lastChild); //printa il nuovo bpsimdata
+            console.log(dataTreeObjGlobal)
 
             //TODO commentare o scommentare se si vuole salvare o no il file
             // download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
@@ -223,8 +224,6 @@ function openDiagram() {
 
 
             let newScenario = new Scenario();
-            console.log("newScenario")
-            console.log(newScenario)
 
             let name = "";
             while (name == "" || idListGlobal.includes(name)) {
@@ -238,38 +237,14 @@ function openDiagram() {
                 $('#delete-scenario').attr("disabled", false)
                 $('#scenario-displayed').show();
 
-                console.log("name")
-                console.log(name)
-
                 newScenario.id = name;
-                console.log("newScenario.id")
-                console.log(newScenario.id)
-
                 let tempArrayScenario = [];
                 tempArrayScenario.push(newScenario);
-                console.log("tempArrayScenario")
-                console.log(tempArrayScenario)
-
                 dataTreeObjGlobal.scenario = tempArrayScenario;
-                console.log("dataTreeObjGlobal.scenario")
-                console.log(dataTreeObjGlobal.scenario)
-
-                console.log("dataTreeObjGlobal")
-                console.log(dataTreeObjGlobal)
-
                 idListGlobal.push(name);
+
                 console.log("idListGlobal")
                 console.log(idListGlobal)
-
-                // console.log("\n\nscenari structure")
-                // console.log(dataTreeObjGlobal)
-                // console.log("\n\n")
-                // saveLocalCalendars();
-                // console.log(dataTreeObjGlobal.scenario);
-
-                // createFormFields(false); //false = evitare doppio toggle active per bottoni creati in precedenza
-
-                // currentScenarioGlobal = dataTreeObjGlobal.scenario.length;
 
 
                 $('#scenario-picker').append($('<option>', {
@@ -289,9 +264,6 @@ function openDiagram() {
 
             }
         });
-
-
-
 
 
         // * rimozione commenti dal xml perché creano problemi con il parsing
@@ -317,7 +289,6 @@ function openDiagram() {
         bpsimPrefixGlobal = "bpsim"; // * default
 
         if (extensionElementXML.length == 0) {
-            console.log("non avente")
 
             // TODO gestire questione bpsim non esistente
 
@@ -379,25 +350,10 @@ function openDiagram() {
             // $('#scenario-displayed').hide();
             // $('#scenario-picker').empty();
             // $('#delete-scenario').attr("disabled", true);
-
-
-
-            console.log("scenario prima");
-            console.log(dataTreeObjGlobal);
-
             createFormFields();
             $('#delete-scenario').click();
 
-            console.log("scenario dopo");
-            console.log(dataTreeObjGlobal);
-
         } else {
-            console.log("avente")
-
-            console.log("extEl")
-            console.log(extensionElementXML)
-            console.log("definitionsTagXML")
-            console.log(definitionsTagXML)
 
             $('#scenario-displayed').show();
             $('#delete-scenario').attr("disabled", false);
@@ -724,7 +680,7 @@ function createFormFields(firstTime = true) {
 
 
         if ($('#scen-par-btn').data('clicked') == true) {
-            console.log("sto focussando " + propertyDiv[0].id)
+            // console.log("sto focussando " + propertyDiv[0].id)
             propertyDiv.focus();
         }
 
@@ -1324,31 +1280,31 @@ function createFormFields(firstTime = true) {
         text: ""
     }));
 
-    for (let i = 0; i < numScenarios; i++) {
+    for (let i = 0; i < dataTreeObjGlobal.scenario.length; i++) {
         if (i != currentScenarioGlobal - 1) {
             $('#scenario-inherits-picker').append($('<option>', {
-                value: scenarios[i].id,
-                text: scenarios[i].id
+                value: dataTreeObjGlobal.scenario[i].id,
+                text: dataTreeObjGlobal.scenario[i].id
             }));
         }
     }
-
-
+    console.log("createFormFiels inizio")
+    updateValidFor();
     refreshFormFields(scenarios, scenarioSelected);
 
     if (firstTime) {
         $('#scenario-inherits-picker').on('change', function () {
             if (this.value != "") {
-                dataTreeObjGlobal.scenario[currentScenarioGlobal-1].inherits = this.value;
+                dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].inherits = this.value;
             } else {
-                dataTreeGlobal.scenario[currentScenarioGlobal-1].inherits = undefined;
+                dataTreeGlobal.scenario[currentScenarioGlobal - 1].inherits = undefined;
             }
 
         });
 
         $('#scenario-picker').on('change', function () {
-            console.log("cuss ie u valor")
-            console.log(this.value)
+            // console.log("cuss ie u valor")
+            // console.log(this.value)
 
             // * serie di if che servono a chiudere i menù a tendina quando si cambia scenario
             closeCollapsibleButton();
@@ -1379,15 +1335,16 @@ function createFormFields(firstTime = true) {
                 text: ""
             }));
 
-            for (let i = 0; i < numScenarios; i++) {
+            for (let i = 0; i < dataTreeObjGlobal.scenario.length; i++) {
                 if (i != currentScenarioGlobal - 1) {
                     $('#scenario-inherits-picker').append($('<option>', {
-                        value: scenarios[i].id,
-                        text: scenarios[i].id
+                        value: dataTreeObjGlobal.scenario[i].id,
+                        text: dataTreeObjGlobal.scenario[i].id
                     }));
                 }
             }
-
+            console.log("createFormFielsPickerChange")
+            updateValidFor();
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
 
             // console.log("dopo refresh")
@@ -1395,6 +1352,46 @@ function createFormFields(firstTime = true) {
             $('#js-simulation').scrollTop(0);
 
         });
+    }
+
+
+
+}
+
+function updateValidFor() {
+    let validForPickers = $('select[id*=-validFor-');
+    // console.log("validFors + length: "+   validForPickers.length);
+    // console.log(validForPickers);
+    for (let i = 0; i < validForPickers.length; i++) {
+        let picker = $('#' + $.escapeSelector(validForPickers[i].id));
+        let oldValue = picker.val()
+        // console.log("cuss ier u valor")
+        // console.log(oldValue)
+        // console.log(picker)
+        picker.empty();
+
+        picker.append($('<option>', {
+            value: "",
+            text: ""
+        }));
+
+
+        let calendarExistingTemp = dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar
+        for (let j in calendarExistingTemp) {
+            picker.append($('<option>', {
+                value: calendarExistingTemp[j].id,
+                text: calendarExistingTemp[j].id
+            }));
+        }
+
+        // let calendarExistingTemp = dataTreeObjGlobal.scenario[currentScenarioGlobal-1].calendar
+        for (let j in calendarsCreatedGlobal) {
+            picker.append($('<option>', {
+                value: calendarsCreatedGlobal[j].id,
+                text: calendarsCreatedGlobal[j].id
+            }));
+        }
+        picker.val(oldValue);
     }
 }
 
@@ -1477,8 +1474,6 @@ function saveElementParametersSection(div, scenarioToSave, firstCicleIndex, have
                         for (let k = 2; k < singleParameterDiv[2].childNodes.length; k++) {
                             singleParameterDivChildNodes = singleParameterDiv[2].childNodes[k].childNodes;
                             valueToAdd = getElementParameterObj(singleParameterDivChildNodes, elementRef, j - 2, haveResultRequest);
-                            console.log("valueToAdd")
-                            console.log(valueToAdd)
                             if (valueToAdd != undefined) {
                                 values.push(valueToAdd);
                             }
@@ -1642,18 +1637,20 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                     // console.log("singolo elemento")
                     // console.log(parameterContent[k])
                     if (parameterContent[k].tagName == "DIV") {
-                        // console.log("aooooooooo")
                         parameterContentTemp = parameterContent[k].childNodes[0];
                     }
                     let fieldName = parameterContentTemp.id.split("-")[2];
                     if (parameterContent[k].tagName == "DIV") {
                         singleValue[fieldName] = String(parameterContentTemp.checked);
-                        // console.log(singleValue)
                     } else {
                         if (parameterContentTemp.value == "") {
                             singleValue[fieldName] = undefined;
                         } else {
-                            singleValue[fieldName] = parameterContentTemp.value;
+                            if (fieldName == "validFor") {
+                                singleValue[fieldName] = [parameterContentTemp.value];
+                            } else {
+                                singleValue[fieldName] = parameterContentTemp.value;
+                            }
                         }
                     }
 
@@ -1890,10 +1887,15 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
                     singleValue[fieldName] = String(parameterContentTemp.checked);
                     // console.log(singleValue)
                 } else {
+
                     if (parameterContentTemp.value == "") {
                         singleValue[fieldName] = undefined;
                     } else {
-                        singleValue[fieldName] = parameterContentTemp.value;
+                        if (fieldName == "validFor") {
+                            singleValue[fieldName] = [parameterContentTemp.value];
+                        } else {
+                            singleValue[fieldName] = parameterContentTemp.value;
+                        }
                     }
                 }
             }
@@ -2028,7 +2030,11 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
                         if (parameterContentTemp.value == "") {
                             singleValue[fieldName] = undefined;
                         } else {
-                            singleValue[fieldName] = parameterContentTemp.value;
+                            if (fieldName == "validFor") {
+                                singleValue[fieldName] = [parameterContentTemp.value];
+                            } else {
+                                singleValue[fieldName] = parameterContentTemp.value;
+                            }
                         }
                     }
                     // TODO gestire campi che non sono select o input
@@ -2397,7 +2403,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
 
                                     if ($('#elem-par-btn').data('clicked') == true) {
-                                        console.log("sto focussando " + roleDiv[0].id)
+                                        // console.log("sto focussando " + roleDiv[0].id)
                                         roleDiv.focus();
                                     }
 
@@ -2521,7 +2527,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
                                 divType.append(propertyDiv);
 
                                 if ($('#elem-par-btn').data('clicked') == true) {
-                                    console.log("sto focussando " + propertyDiv[0].id)
+                                    // console.log("sto focussando " + propertyDiv[0].id)
                                     propertyDiv.focus();
                                 }
 
@@ -2557,7 +2563,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
         parameter.append(div);
 
         if ($('#elem-par-btn').data('clicked') == true) {
-            console.log("sto focussando " + div[0].id)
+            // console.log("sto focussando " + div[0].id)
             div.focus();
         }
 
@@ -2665,7 +2671,37 @@ function setParameter(parameter, buttonID) {
         }
 
         parameterValuePicker.on('change', function () {
-            // console.log(this.id);
+            console.log("ooooooooooooooooooooooooooooooooooooooooooooooo")
+            let externalDiv = this.parentElement.parentElement;
+            let nameArrayUsed = []
+            for (let i = 0; i < externalDiv.childNodes.length; i++) {
+                let sibling = externalDiv.childNodes[i];
+                if (sibling.childNodes[0].id != this.id) {
+                    //     console.log(sibling.childNodes[0].value);
+                    nameArrayUsed.push(sibling.childNodes[0].value);
+                }//else{
+                //     if(! nameArrayUsed.includes(sibling.childNodes[0].value)){
+                //         console.log(sibling.childNodes[0].value);
+                //         nameArrayUsed.push(sibling.childNodes[0].value);
+                //     }else{
+                //         window.alert("You can not select the following paralemter:\n" +nameArrayUsed+"\nbecause they are alredy used!")
+                //         console.log("ALEEEEEEEEEERTTTTTTTTTTTT");
+                //         this.value = "";
+                //     }
+                // }
+                // console.log(externalDiv.childNodes);
+            }
+
+            if (nameArrayUsed.length > 0) {
+                if (nameArrayUsed.includes(this.value)) {
+                    window.alert("ERROR: Value " + this.value +" is already used in this parameter");
+                    this.value = "";
+                }
+            }
+
+            console.log("array")
+            console.log(nameArrayUsed)
+
             let idElementsLocal = this.id.split("-")[3];
             let contentDiv = $('#' + parameterName + '-value-content-div-' + idElementsLocal);
 
@@ -2673,49 +2709,27 @@ function setParameter(parameter, buttonID) {
 
             if (this.value != "") {
                 let valueValidForLabel = jQuery('<label/>', {
-                    for: parameterName + '-value-validFor-input-' + idElementsLocal,
-                    text: 'Valid For'
+                    for: parameterName + '-value-validFor-picker-' + idElementsLocal,
+                    text: 'Valid For',
+                    style: "width: 100%"
                 });
 
-                let valueValidForInput = jQuery('<input/>', {
-                    type: 'text',
-                    class: 'form-control form-control-input',
-                    id: parameterName + '-value-validFor-input-' + idElementsLocal,
-                    placeholder: 'Valid for'
+                let valueValidForSelect = jQuery('<select/>', {
+                    class: 'scenario-picker',
+                    id: parameterName + '-value-validFor-picker-' + idElementsLocal
                 });
+
+
                 contentDiv.append(valueValidForLabel);
-                contentDiv.append(valueValidForInput);
-
-                valueValidForInput.on('change', function () {
-                    let value = valueValidForInput.val();
-
-                    if (value == "") {
-                        valueValidForInput.val(undefined);
-                    } else {
-                        let calendarsID = [];
-                        for (let j = 0; j < calendarsCreatedGlobal.length; j++) {
-                            calendarsID.push(calendarsCreatedGlobal[j].id);
-                        }
-                        for (let j = 0; j < dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.length; j++) {
-                            calendarsID.push(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar[j].id);
-                        }
-                        if (!calendarsID.includes(value)) {
-                            setTimeout(function () {
-                                window.alert("ERROR: There is not a calendar with the following ID: " + value);
-                                valueValidForInput.val(undefined);
-                            }, 10);
-                        }
-                        // console.log("calendarsID");
-                        // console.log(calendarsID);
-                    }
-
-
-                });
+                contentDiv.append(valueValidForSelect);
+                // console.log("setParameterChangePicker")
+                updateValidFor();
 
 
                 let valueInstanceLabel = jQuery('<label/>', {
                     for: parameterName + '-value-instance-input-' + idElementsLocal,
-                    text: 'Instance'
+                    text: 'Instance',
+                    style: 'width: 100%'
                 });
 
                 let valueInstanceInput = jQuery('<input/>', {
@@ -3972,9 +3986,17 @@ function setParameterField(inputElement, obj) {
                 } else {
                     attributeName = divElementsWithoutLabels[j].id.split('-')[2];
                     let value = obj.value[i][attributeName];
-
                     if (value != undefined) {
-                        divElementsWithoutLabels[j].value = value;
+                        if (attributeName == "validFor") {
+                            console.log("dentro " + i);
+                            console.log(divElementsWithoutLabels[j]);
+                            console.log(value[0])
+                            // $('#'+$.escapeSelector(divElementsWithoutLabels[j].id)).val(value[0]);
+                            divElementsWithoutLabels[j].value = value[0];
+
+                        } else {
+                            divElementsWithoutLabels[j].value = value;
+                        }
                     }
                 }
             }
@@ -4149,6 +4171,8 @@ function populateCalendarForm(calendars) {
 
         inputCalID.on('change', function () {
             saveCalendarField(this, false);
+            // console.log("changeIdCalendarVecchi")
+            updateValidFor();
         });
 
 
@@ -4176,6 +4200,8 @@ function populateCalendarForm(calendars) {
             dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].calendar.splice(positionToEliminate, 1);
             $(document.getElementById(calId)).remove();
             idListGlobal.splice(idListGlobal.indexOf(calId), 1);
+            // console.log("deleteCalendarVecchi")
+            updateValidFor()
         });
 
         let div = jQuery('<div/>', {
@@ -4266,6 +4292,8 @@ function populateCalendarForm(calendars) {
             });
             inputCalID.on('change', function () {
                 saveCalendarField(this, true);
+                console.log("changeIdCalendar")
+                updateValidFor();
             });
 
             let btnTrash = jQuery('<button/>', {
@@ -4300,6 +4328,9 @@ function populateCalendarForm(calendars) {
                 $(document.getElementById(newCalId)).remove();
                 calendarsCreatedIDCounterGlobal -= 1;
                 idListGlobal.splice(idListGlobal.indexOf(newCalId), 1);
+                console.log("deleteCalendar")
+                updateValidFor();
+
             });
 
             divCalendarSection.append(div);
@@ -4357,6 +4388,8 @@ function populateCalendarForm(calendars) {
 
             calendarsCreatedGlobal.push(calendarTemp);
             calendarsCreatedIDCounterGlobal += 1;
+            console.log("createCalendar")
+            updateValidFor();
         }
     });
 
@@ -4374,7 +4407,7 @@ function saveScenarioAtrribute(field) {
         for (let i = 0; i < idListGlobal.length; i++) {
             if (idListGlobal[i] == value) {
                 setTimeout(function () {
-                    window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
+                    window.alert("ERROR: ID: " + value + " is already used")
                 }, 10);
                 validName = false;
                 $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id); //reset scenario id
@@ -4460,7 +4493,7 @@ function saveOrCreateSingleFieldInElementParameters(field) {
     for (let i = 0; i < idListGlobal.length; i++) {
         if (idListGlobal[i] == value) {
             setTimeout(function () {
-                window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
+                window.alert("ERROR: ID: " + value + " is already used")
             }, 10);
             validName = false;
             // $(document.getElementById(field.id)).val(undefined); //TODO reset value in input (o undefined o vecchio valore)
@@ -4548,7 +4581,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsExisting[j].id == calendarID) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
+                            window.alert("ERROR: ID: " + value + " is already used")
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsExisting[j][fieldName]); //reset value in iput
@@ -4576,7 +4609,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsNew[j].id == calendarID) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: There exists a scenario/calendar/element with the following ID: " + value)
+                            window.alert("ERROR: ID: " + value + " is already used")
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsNew[j][fieldName]); //reset value in iput

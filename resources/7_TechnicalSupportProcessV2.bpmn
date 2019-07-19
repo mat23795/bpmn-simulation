@@ -655,7 +655,7 @@
             </bpsim:Duration>
             <bpsim:Start>
               <bpsim:DateTimeParameter value="2016-01-01T06:00:00" />
-              <bpsim:DateTimeParameter value="2015-05-05T06:00:00" />
+              <bpsim:BooleanParameter value="true" />
               <bpsim:GammaDistribution shape="1" scale="4"/>  
               <bpsim:ResultRequest>count</bpsim:ResultRequest>
             </bpsim:Start>
@@ -701,14 +701,14 @@
 
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
-                <bpsim:NumericParameter validFor="C1" value="200"/>
-                <bpsim:NumericParameter validFor="C2" value="90"/>
-                <bpsim:NumericParameter validFor="C3" value="130"/>
-                <bpsim:NumericParameter validFor="C4" value="60"/>
-                <bpsim:NumericParameter validFor="C5" value="150"/>
-                <bpsim:NumericParameter validFor="C6" value="100"/>
-                <bpsim:NumericParameter validFor="C7" value="40"/>
+                <bpsim:NumericParameter value="20"/>
+                <!-- <bpsim:NumericParameter validFor="C1" value="200"/> -->
+                <!-- <bpsim:NumericParameter validFor="C2" value="90"/> -->
+                <!-- <bpsim:NumericParameter validFor="C3" value="130"/> -->
+                <!-- <bpsim:NumericParameter validFor="C4" value="60"/> -->
+                <!-- <bpsim:NumericParameter validFor="C5" value="150"/> -->
+                <!-- <bpsim:NumericParameter validFor="C6" value="100"/> -->
+                <!-- <bpsim:NumericParameter validFor="C7" value="40"/> -->
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
             
@@ -831,6 +831,19 @@
               <!-- </bpsim:TriggerCount> -->
             <!-- </bpsim:ControlParameters> -->
           <!-- </bpsim:ElementParameters> -->
+          <bpsim:Calendar id="C8" name="shift-9am-10pm-weekdays">
+            BEGIN:VCALENDAR
+            BEGIN:VEVENT
+            DTSTAMP:20160101T000000
+            UID:1356035303891@localhost
+            DTSTART:20160101T090000
+            DTEND:20160101T220000
+            RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+            END:VEVENT
+            PRODID:PAF Editor
+            VERSION:2.0
+            END:VCALENDAR
+          </bpsim:Calendar>
         </bpsim:Scenario>
         <bpsim:Scenario id="S2" inherits="S1" result="S2" name="2 - Temporal perspective">
           <bpsim:ScenarioParameters>
@@ -999,33 +1012,15 @@
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_Front_Office">
-            <!-- <bpsim:TimeParameters> -->
-              <!-- <bpsim:WaitTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:WaitTime> -->
-              <!-- <bpsim:ProcessingTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:ProcessingTime> -->
-            <!-- </bpsim:TimeParameters> -->
-            <!-- <bpsim:ControlParameters> -->
-              <!-- <bpsim:TriggerCount> -->
-                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
-              <!-- </bpsim:TriggerCount> -->
-            <!-- </bpsim:ControlParameters> -->
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
                 <bpsim:NumericParameter value="0"/>
                 <bpsim:NumericParameter validFor="C1" value="200"/>
                 <bpsim:NumericParameter validFor="C2" value="90"/>
-                <bpsim:NumericParameter validFor="C3" value="130"/>
-                <bpsim:NumericParameter validFor="C4" value="60"/>
-                <bpsim:NumericParameter validFor="C5" value="150"/>
-                <bpsim:NumericParameter validFor="C6" value="100"/>
-                <bpsim:NumericParameter validFor="C7" value="40"/>
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="resource_1st_Level_Techical_Support_Agent">
+ 
             <!-- <bpsim:TimeParameters> -->
               <!-- <bpsim:WaitTime> -->
                 <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
@@ -1039,330 +1034,92 @@
                 <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
               <!-- </bpsim:TriggerCount> -->
             <!-- </bpsim:ControlParameters> -->
-            <bpsim:ResourceParameters>
-              <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
-                <bpsim:NumericParameter validFor="C1" value="3"/>
-                <bpsim:NumericParameter validFor="C2" value="3"/>
-                <bpsim:NumericParameter validFor="C3" value="3"/>
-                <bpsim:NumericParameter validFor="C4" value="3"/>
-                <bpsim:NumericParameter validFor="C5" value="3"/>
-                <bpsim:NumericParameter validFor="C6" value="3"/>
-              </bpsim:Quantity>
-            </bpsim:ResourceParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="resource_2nd_Level_Techical_Support_Agent">
-            <!-- <bpsim:TimeParameters> -->
-              <!-- <bpsim:WaitTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:WaitTime> -->
-              <!-- <bpsim:ProcessingTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:ProcessingTime> -->
-            <!-- </bpsim:TimeParameters> -->
-            <!-- <bpsim:ControlParameters> -->
-              <!-- <bpsim:TriggerCount> -->
-                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
-              <!-- </bpsim:TriggerCount> -->
-            <!-- </bpsim:ControlParameters> -->
-            <bpsim:ResourceParameters>
-              <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
-                <bpsim:NumericParameter validFor="C1" value="2"/>
-                <bpsim:NumericParameter validFor="C2" value="2"/>
-                <bpsim:NumericParameter validFor="C3" value="2"/>
-                <bpsim:NumericParameter validFor="C4" value="2"/>
-                <bpsim:NumericParameter validFor="C5" value="2"/>
-                <bpsim:NumericParameter validFor="C6" value="2"/>
-              </bpsim:Quantity>
-            </bpsim:ResourceParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="resource_Supplier">
-            <!-- <bpsim:TimeParameters> -->
-              <!-- <bpsim:WaitTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:WaitTime> -->
-              <!-- <bpsim:ProcessingTime> -->
-                <!-- <bpsim:ResultRequest>sum</bpsim:ResultRequest> -->
-              <!-- </bpsim:ProcessingTime> -->
-            <!-- </bpsim:TimeParameters> -->
-            <!-- <bpsim:ControlParameters> -->
-              <!-- <bpsim:TriggerCount> -->
-                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
-              <!-- </bpsim:TriggerCount> -->
-            <!-- </bpsim:ControlParameters> -->
-            <bpsim:ResourceParameters>
-              <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
-                <bpsim:NumericParameter validFor="C8" value="1"/>
-              </bpsim:Quantity>
-            </bpsim:ResourceParameters>
-          </bpsim:ElementParameters>
+            
           <!-- Tasks resource assigment-->
-          <bpsim:ElementParameters elementRef="_10-57">
+          <!-- <bpsim:ElementParameters elementRef="_10-57"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-920">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-920"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-235">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-235"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-138">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-138"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Front_Office', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-303">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-303"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-458">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-458"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-380">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-380"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_1st_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-526">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-526"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-670">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-670"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-617">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-617"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_2nd_Level_Techical_Support_Agent', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-794">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-794"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
-          <bpsim:ElementParameters elementRef="_10-847">
+          <!-- </bpsim:ElementParameters> -->
+          <!-- <bpsim:ElementParameters elementRef="_10-847"> -->
             <!-- <bpsim:ResourceParameters> -->
               <!-- <bpsim:Selection> -->
                 <!-- <bpsim:ExpressionParameter value="getResource('resource_Supplier', 1)" /> -->
               <!-- </bpsim:Selection> -->
             <!-- </bpsim:ResourceParameters> -->
-            <bpsim:PropertyParameters>
-              <bpsim:QueueLength>
-                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
-              </bpsim:QueueLength>
-            </bpsim:PropertyParameters>
-            <bpsim:ControlParameters>
-              <bpsim:TriggerCount>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:TriggerCount>
-            </bpsim:ControlParameters>
-            <bpsim:TimeParameters>
-              <bpsim:ProcessingTime>
-                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-              </bpsim:ProcessingTime>
-            </bpsim:TimeParameters>
-          </bpsim:ElementParameters>
+          <!-- </bpsim:ElementParameters> -->
           <bpsim:Calendar id="C1" name="shift-6-9am">
             BEGIN:VCALENDAR
             BEGIN:VEVENT
