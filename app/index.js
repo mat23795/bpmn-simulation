@@ -107,7 +107,15 @@ function openDiagram() {
             let e = window.event;
             let num = e.wheelDelta / 1000;
             scaleGlobal += num;
+            
+            if(scaleGlobal>5.5){
+                scaleGlobal=5.5;
+            }else if(scaleGlobal<0.5){
+                scaleGlobal=0.5
+            }
+
             $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
+            console.log(scaleGlobal)
 
         });
 
@@ -117,15 +125,26 @@ function openDiagram() {
         $('#js-canvas').mousedown(function (event) {
             pageX = event.pageX;
             pageY = event.pageY;
-            // console.log("px = "+ pageX + " --- py = "+ pageY);
+            console.log("px = "+ pageX + " --- py = "+ pageY);
+            console.log($('.djs-container').position())
+            $('#js-canvas').on('mousemove', function (event) {
+                pageXGlobal += event.pageX - pageX
+                pageYGlobal += event.pageY - pageY
+            //     // console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
+                $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
+                pageX = event.pageX;
+                pageY = event.pageY;
+
+            }); 
         });
 
         $('#js-canvas').mouseup(function (event) {
-            pageXGlobal += event.pageX - pageX
-            pageYGlobal += event.pageY - pageY
-            // console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
-            $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
+            $('#js-canvas').off('mousemove'); 
         });
+        
+        
+        
+        
         // $('.djs-container').css('height', '700px');
 
         // xmlGlobal=xml;
