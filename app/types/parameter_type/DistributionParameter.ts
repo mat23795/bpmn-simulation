@@ -1,7 +1,7 @@
-import {ParameterValue} from "./ParameterValue";
-import {TimeUnit} from "../scenario/TimeUnit";
+import { ParameterValue } from "./ParameterValue";
+import { TimeUnit } from "../scenario/TimeUnit";
 
-export class DistributionParameter extends ParameterValue{
+export class DistributionParameter extends ParameterValue {
     protected _timeUnit: TimeUnit;
 
     constructor() {
@@ -16,11 +16,11 @@ export class DistributionParameter extends ParameterValue{
         this._timeUnit = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "DistributionParameter"
     }
 
-    protected addTimeUnitToSuperClassAttributesToXMLElement(elementXML: any){
+    protected addTimeUnitToSuperClassAttributesToXMLElement(elementXML: any) {
         this.addSuperClassAttributesToXMLElement(elementXML);
         this.eventuallyAddAttribute(elementXML, "timeUnit", this._timeUnit);
     }
@@ -50,7 +50,7 @@ export class DistributionParameter extends ParameterValue{
 
 }
 
-export class BetaDistribution extends DistributionParameter{
+export class BetaDistribution extends DistributionParameter {
     private _shape: number;
     private _scale: number;
 
@@ -74,7 +74,7 @@ export class BetaDistribution extends DistributionParameter{
         this._scale = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "BetaDistribution"
     }
 
@@ -82,7 +82,7 @@ export class BetaDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let betaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BetaDistribution");
+        let betaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "BetaDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(betaDistributionXMLelement);
         this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
@@ -93,7 +93,7 @@ export class BetaDistribution extends DistributionParameter{
     }
 }
 
-export class BinomialDistribution extends DistributionParameter{
+export class BinomialDistribution extends DistributionParameter {
     private _probability: number;
     private _trials: number;
 
@@ -117,7 +117,7 @@ export class BinomialDistribution extends DistributionParameter{
         this._trials = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "BinomialDistribution"
     }
 
@@ -125,7 +125,7 @@ export class BinomialDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let binomialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BinomialDistribution");
+        let binomialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "BinomialDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(binomialDistributionXMLelement);
         this.eventuallyAddAttribute(binomialDistributionXMLelement, "probability", this._probability);
@@ -136,7 +136,7 @@ export class BinomialDistribution extends DistributionParameter{
     }
 }
 
-export class WeibullDistribution extends DistributionParameter{
+export class WeibullDistribution extends DistributionParameter {
     private _shape: number;
     private _scale: number;
 
@@ -160,7 +160,7 @@ export class WeibullDistribution extends DistributionParameter{
         this._scale = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "WeibullDistribution"
     }
 
@@ -168,7 +168,7 @@ export class WeibullDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let weibullDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"WeibullDistribution");
+        let weibullDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "WeibullDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(weibullDistributionXMLelement);
         this.eventuallyAddAttribute(weibullDistributionXMLelement, "shape", this._shape);
@@ -179,7 +179,7 @@ export class WeibullDistribution extends DistributionParameter{
     }
 }
 
-export class NormalDistribution extends DistributionParameter{
+export class NormalDistribution extends DistributionParameter {
     private _mean: number;
     private _standardDeviation: number;
 
@@ -203,7 +203,7 @@ export class NormalDistribution extends DistributionParameter{
         this._standardDeviation = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "NormalDistribution"
     }
 
@@ -211,7 +211,7 @@ export class NormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let normalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"NormalDistribution");
+        let normalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "NormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(normalDistributionXMLelement);
         this.eventuallyAddAttribute(normalDistributionXMLelement, "mean", this._mean);
@@ -223,7 +223,7 @@ export class NormalDistribution extends DistributionParameter{
 
 }
 
-export class LogNormalDistribution extends DistributionParameter{
+export class LogNormalDistribution extends DistributionParameter {
     private _mean: number;
     private _standardDeviation: number;
 
@@ -247,7 +247,7 @@ export class LogNormalDistribution extends DistributionParameter{
         this._standardDeviation = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "LogNormalDistribution"
     }
 
@@ -255,7 +255,7 @@ export class LogNormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let logNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"LogNormalDistribution");
+        let logNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "LogNormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(logNormalDistributionXMLelement);
         this.eventuallyAddAttribute(logNormalDistributionXMLelement, "mean", this._mean);
@@ -266,7 +266,7 @@ export class LogNormalDistribution extends DistributionParameter{
     }
 }
 
-export class UniformDistribution extends DistributionParameter{
+export class UniformDistribution extends DistributionParameter {
     private _min: number;
     private _max: number;
 
@@ -290,7 +290,7 @@ export class UniformDistribution extends DistributionParameter{
         this._max = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "UniformDistribution"
     }
 
@@ -298,7 +298,7 @@ export class UniformDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let uniformDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UniformDistribution");
+        let uniformDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "UniformDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(uniformDistributionXMLelement);
         this.eventuallyAddAttribute(uniformDistributionXMLelement, "min", this._min);
@@ -309,7 +309,7 @@ export class UniformDistribution extends DistributionParameter{
     }
 }
 
-export class TriangularDistribution extends DistributionParameter{
+export class TriangularDistribution extends DistributionParameter {
     private _min: number;
     private _max: number;
     private _mode: number;
@@ -342,7 +342,7 @@ export class TriangularDistribution extends DistributionParameter{
         this._mode = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "TriangularDistribution"
     }
 
@@ -350,7 +350,7 @@ export class TriangularDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let triangularDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TriangularDistribution");
+        let triangularDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "TriangularDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(triangularDistributionXMLelement);
         this.eventuallyAddAttribute(triangularDistributionXMLelement, "min", this._min);
@@ -363,7 +363,7 @@ export class TriangularDistribution extends DistributionParameter{
 
 }
 
-export class TruncatedNormalDistribution extends DistributionParameter{
+export class TruncatedNormalDistribution extends DistributionParameter {
     private _mean: number;
     private _standardDeviation: number;
     private _min: number;
@@ -405,7 +405,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
         this._max = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "TruncatedNormalDistribution"
     }
 
@@ -413,7 +413,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let truncatedNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TruncatedNormalDistribution");
+        let truncatedNormalDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "TruncatedNormalDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(truncatedNormalDistributionXMLelement);
         this.eventuallyAddAttribute(truncatedNormalDistributionXMLelement, "mean", this._mean);
@@ -426,7 +426,7 @@ export class TruncatedNormalDistribution extends DistributionParameter{
     }
 }
 
-export class PoissonDistribution extends DistributionParameter{
+export class PoissonDistribution extends DistributionParameter {
     private _mean: number;
 
     constructor() {
@@ -441,7 +441,7 @@ export class PoissonDistribution extends DistributionParameter{
         this._mean = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "PoissonDistribution"
     }
 
@@ -449,7 +449,7 @@ export class PoissonDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let poissonDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"PoissonDistribution");
+        let poissonDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "PoissonDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(poissonDistributionXMLelement);
         this.eventuallyAddAttribute(poissonDistributionXMLelement, "mean", this._mean);
@@ -459,7 +459,7 @@ export class PoissonDistribution extends DistributionParameter{
     }
 }
 
-export class NegativeExponentialDistribution extends DistributionParameter{
+export class NegativeExponentialDistribution extends DistributionParameter {
     private _mean: number;
 
     constructor() {
@@ -474,7 +474,7 @@ export class NegativeExponentialDistribution extends DistributionParameter{
         this._mean = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "NegativeExponentialDistribution"
     }
 
@@ -482,7 +482,7 @@ export class NegativeExponentialDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let negativeExponentialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"NegativeExponentialDistribution");
+        let negativeExponentialDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "NegativeExponentialDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(negativeExponentialDistributionXMLelement);
         this.eventuallyAddAttribute(negativeExponentialDistributionXMLelement, "mean", this._mean);
@@ -492,7 +492,7 @@ export class NegativeExponentialDistribution extends DistributionParameter{
     }
 }
 
-export class ErlangDistribution extends DistributionParameter{
+export class ErlangDistribution extends DistributionParameter {
     private _mean: number;
     private _k: number;
 
@@ -516,7 +516,7 @@ export class ErlangDistribution extends DistributionParameter{
         this._k = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "ErlangDistribution"
     }
 
@@ -524,7 +524,7 @@ export class ErlangDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let erlangDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ErlangDistribution");
+        let erlangDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "ErlangDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(erlangDistributionXMLelement);
         this.eventuallyAddAttribute(erlangDistributionXMLelement, "mean", this._mean);
@@ -536,7 +536,7 @@ export class ErlangDistribution extends DistributionParameter{
     }
 }
 
-export class GammaDistribution extends DistributionParameter{
+export class GammaDistribution extends DistributionParameter {
     private _shape: number;
     private _scale: number;
 
@@ -560,7 +560,7 @@ export class GammaDistribution extends DistributionParameter{
         this._scale = value;
     }
 
-    getType(): string{
+    getType(): string {
         return "GammaDistribution"
     }
 
@@ -568,7 +568,7 @@ export class GammaDistribution extends DistributionParameter{
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let gammaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"GammaDistribution");
+        let gammaDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "GammaDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(gammaDistributionXMLelement);
         this.eventuallyAddAttribute(gammaDistributionXMLelement, "shape", this._shape);
@@ -581,7 +581,7 @@ export class GammaDistribution extends DistributionParameter{
 
 }
 
-export class UserDistribution extends DistributionParameter{
+export class UserDistribution extends DistributionParameter {
     private _points: UserDistributionDataPoint[] = [];
     private _discrete: boolean;
 
@@ -608,28 +608,29 @@ export class UserDistribution extends DistributionParameter{
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
+        console.log("user distribution")
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let userDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UserDistribution");
+        let userDistributionXMLelement = xmlDoc.createElementNS(bpsimPrefix, "UserDistribution");
 
         this.addTimeUnitToSuperClassAttributesToXMLElement(userDistributionXMLelement);
-        for(let i = 0; i < this._points.length; i++){
-            userDistributionXMLelement.appendChild(this._points[i].toXMLelement(bpsimPrefix,xml));
+        for (let i = 0; i < this._points.length; i++) {
+            userDistributionXMLelement.appendChild(this._points[i].toXMLelement(bpsimPrefix, xml));
         }
         this.eventuallyAddAttribute(userDistributionXMLelement, "discrete", this._discrete);
 
         return userDistributionXMLelement;
 
     }
-    getType(): string{
+    getType(): string {
         return "UserDistribution"
     }
 }
 
-export class UserDistributionDataPoint{
+export class UserDistributionDataPoint {
     private _probability: number;
-    private _value: ParameterValue;
+    private _value: ParameterValue[] = [];
 
     constructor() {
     }
@@ -642,28 +643,36 @@ export class UserDistributionDataPoint{
         this._probability = value;
     }
 
-    get value(): ParameterValue {
+    get value(): ParameterValue[] {
         return this._value;
     }
 
-    set value(value: ParameterValue) {
-        this._value = value;
+    set value(value: ParameterValue[]) {
+        for (let i = 0; i < value.length; i++) {
+            this._value.push(value[i]);
+        }
     }
 
-    eventuallyAddAttribute(elementXML: any, name: string, value:any){
-        if(value != undefined){
+    eventuallyAddAttribute(elementXML: any, name: string, value: any) {
+        if (value != undefined) {
             elementXML.setAttribute(name, value);
         }
     }
 
     toXMLelement(bpsimPrefix: string, xml: any): any {
+        console.log("user distribution data point")
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        let userDistributionDataPointXMLelement = xmlDoc.createElementNS(bpsimPrefix,"UserDistributionDataPoint");
+        let userDistributionDataPointXMLelement = xmlDoc.createElementNS(bpsimPrefix, "UserDistributionDataPoint");
 
+
+        // this.addSuperClassAttributesToXMLElement(userDistributionDataPointXMLelement);
         this.eventuallyAddAttribute(userDistributionDataPointXMLelement, "probability", this._probability);
-        userDistributionDataPointXMLelement.appendChild(this._value.toXMLelement(bpsimPrefix,xml));
+        
+        for(let i = 0; i < this._value.length; i++){
+            userDistributionDataPointXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix, xml));
+        }
 
         return userDistributionDataPointXMLelement;
 

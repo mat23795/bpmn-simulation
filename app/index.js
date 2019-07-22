@@ -26,6 +26,7 @@ import { PropertyParameters } from "./types/parameters/PropertyParameters";
 import { PriorityParameters } from "./types/parameters/PriorityParameters";
 
 import * as vkbeautify from 'vkbeautify';
+import { UserDistributionDataPoint } from './types/parameter_type/DistributionParameter';
 
 
 
@@ -47,6 +48,7 @@ var pageYGlobal = 0;
 var parameterValueDivCounterGlobal = 0;
 var elementParameterCounterGlobal = 0;
 var propertiesCounterGlobal = 0;
+var numberOfPointsGlobal = 0;
 
 
 var bpmnPrefixGlobal;
@@ -107,11 +109,11 @@ function openDiagram() {
             let e = window.event;
             let num = e.wheelDelta / 1000;
             scaleGlobal += num;
-            
-            if(scaleGlobal>5.5){
-                scaleGlobal=5.5;
-            }else if(scaleGlobal<0.5){
-                scaleGlobal=0.5
+
+            if (scaleGlobal > 5.5) {
+                scaleGlobal = 5.5;
+            } else if (scaleGlobal < 0.5) {
+                scaleGlobal = 0.5
             }
 
             $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
@@ -125,26 +127,26 @@ function openDiagram() {
         $('#js-canvas').mousedown(function (event) {
             pageX = event.pageX;
             pageY = event.pageY;
-            console.log("px = "+ pageX + " --- py = "+ pageY);
+            console.log("px = " + pageX + " --- py = " + pageY);
             console.log($('.djs-container').position())
             $('#js-canvas').on('mousemove', function (event) {
                 pageXGlobal += event.pageX - pageX
                 pageYGlobal += event.pageY - pageY
-            //     // console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
+                //     // console.log("diffx = "+(pageXGlobal) + " -------- diffy = " + pageYGlobal);
                 $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
                 pageX = event.pageX;
                 pageY = event.pageY;
 
-            }); 
+            });
         });
 
         $('#js-canvas').mouseup(function (event) {
-            $('#js-canvas').off('mousemove'); 
+            $('#js-canvas').off('mousemove');
         });
-        
-        
-        
-        
+
+
+
+
         // $('.djs-container').css('height', '700px');
 
         // xmlGlobal=xml;
@@ -189,7 +191,7 @@ function openDiagram() {
             console.log(dataTreeObjGlobal)
 
             //TODO commentare o scommentare se si vuole salvare o no il file
-            // download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
+            download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
         });
 
         // * aggiunta evento al bottone che elimina lo scenario corrente
@@ -456,6 +458,7 @@ function resetParameterDivs() {
     parameterValueDivCounterGlobal = 0;
     elementParameterCounterGlobal = 0;
     propertiesCounterGlobal = 0;
+    numberOfPointsGlobal = 0;
 }
 
 function populateIdList() {
@@ -1719,6 +1722,79 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 
                     singleValue.value = enumValues;
 
+                } else if (valueName == "UserDistribution") {
+                    let pointsDiv = parameterContent[parameterContent.length - 1];
+    
+                    let pointsNodes = pointsDiv.childNodes;
+    
+                    let pointsElements = [];
+    
+                    for (let j = 0; j < pointsNodes.length; j++) {
+                        // console.log("ciclo per ogni point, questo è il "+j)
+                        let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
+                        let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
+    
+                        let singlePointValuesTemp = [];
+    
+                        // console.log("prima cosa")
+                        // console.log(singlePointAllValuesDiv)
+    
+                        for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
+                            // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
+                            let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
+                         
+                            let pickerValue = singlePointValueDiv.childNodes[0].value;
+                            if (pickerValue != "") {
+                                let singleParamValue = new factory[pickerValue];
+                                let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
+    
+                                // console.log("singleValueDiv")
+                                // console.log(singleValueContent)
+                                for (let h = 1; h < singleValueContent.length; h = h + 2) {
+                                    let singleValueContentTemp = singleValueContent[h];
+                                    if (singleValueContent[h].tagName == "DIV") {
+                                        singleValueContentTemp = singleValueContent[h].childNodes[0];
+                                    }
+                                    let fieldName = singleValueContentTemp.id.split("-")[2];
+                                    if (singleValueContent[h].tagName == "DIV") {
+                                        singleParamValue[fieldName] = String(singleValueContentTemp.checked);
+                                        // console.log(singleValue)
+                                    } else {
+                                        if (singleValueContentTemp.value == "") {
+                                            singleParamValue[fieldName] = undefined;
+                                        } else {
+                                            singleParamValue[fieldName] = singleValueContentTemp.value;
+                                        }
+                                    }
+                                }
+                                // if (singleParamValue.value != undefined) {
+                                    // console.log("sto pischando")
+                                    singlePointValuesTemp.push(singleParamValue);
+                                // }
+                            }
+                        }
+                        // console.log("singlePointValuesTemp");
+                        // console.log(singlePointValuesTemp)
+    
+                        let singlePoint = new UserDistributionDataPoint();
+    
+                        // console.log("singlepintvlue")
+    
+                        // console.log(singlePointValuesTemp);
+                        
+                        singlePoint.value = singlePointValuesTemp;
+    
+                        if (singlePointProbabilityInput.value != "") {
+                            singlePoint.probability = singlePointProbabilityInput.value;
+                        }
+    
+                        if (singlePointValuesTemp.length > 0) {
+                            pointsElements.push(singlePoint);
+                        }
+    
+                    }
+    
+                    singleValue.points = pointsElements;
                 }
 
                 singlePropertyValues.push(singleValue)
@@ -1832,6 +1908,79 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 
                 singleValue.value = enumValues;
 
+            } else if (valueName == "UserDistribution") {
+                let pointsDiv = parameterContent[parameterContent.length - 1];
+
+                let pointsNodes = pointsDiv.childNodes;
+
+                let pointsElements = [];
+
+                for (let j = 0; j < pointsNodes.length; j++) {
+                    // console.log("ciclo per ogni point, questo è il "+j)
+                    let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
+                    let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
+
+                    let singlePointValuesTemp = [];
+
+                    // console.log("prima cosa")
+                    // console.log(singlePointAllValuesDiv)
+
+                    for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
+                        // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
+                        let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
+                     
+                        let pickerValue = singlePointValueDiv.childNodes[0].value;
+                        if (pickerValue != "") {
+                            let singleParamValue = new factory[pickerValue];
+                            let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
+
+                            // console.log("singleValueDiv")
+                            // console.log(singleValueContent)
+                            for (let h = 1; h < singleValueContent.length; h = h + 2) {
+                                let singleValueContentTemp = singleValueContent[h];
+                                if (singleValueContent[h].tagName == "DIV") {
+                                    singleValueContentTemp = singleValueContent[h].childNodes[0];
+                                }
+                                let fieldName = singleValueContentTemp.id.split("-")[2];
+                                if (singleValueContent[h].tagName == "DIV") {
+                                    singleParamValue[fieldName] = String(singleValueContentTemp.checked);
+                                    // console.log(singleValue)
+                                } else {
+                                    if (singleValueContentTemp.value == "") {
+                                        singleParamValue[fieldName] = undefined;
+                                    } else {
+                                        singleParamValue[fieldName] = singleValueContentTemp.value;
+                                    }
+                                }
+                            }
+                            // if (singleParamValue.value != undefined) {
+                                // console.log("sto pischando")
+                                singlePointValuesTemp.push(singleParamValue);
+                            // }
+                        }
+                    }
+                    // console.log("singlePointValuesTemp");
+                    // console.log(singlePointValuesTemp)
+
+                    let singlePoint = new UserDistributionDataPoint();
+
+                    // console.log("singlepintvlue")
+
+                    // console.log(singlePointValuesTemp);
+                    
+                    singlePoint.value = singlePointValuesTemp;
+
+                    if (singlePointProbabilityInput.value != "") {
+                        singlePoint.probability = singlePointProbabilityInput.value;
+                    }
+
+                    if (singlePointValuesTemp.length > 0) {
+                        pointsElements.push(singlePoint);
+                    }
+
+                }
+
+                singleValue.points = pointsElements;
             }
             queueLengthValues.push(singleValue)
         }
@@ -1868,8 +2017,8 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 }
 
 function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, childNodes) {
-    // console.log("child di "+parameterName)
-    // console.log(childNodes);
+    console.log("child di " + parameterName)
+    console.log(childNodes);
 
     // div che contiene i div values
     let valuesDiv = childNodes[3];
@@ -1882,6 +2031,8 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
     for (let i = 0; i < valuesDiv.childNodes.length; i++) {
 
         let innerDivChildNodes = valuesDiv.childNodes[i].childNodes;
+        console.log("child di " + parameterName + " " + valuesDiv.childNodes[i].id)
+        console.log(innerDivChildNodes);
 
         // valore nel picker
         let valueName = innerDivChildNodes[0].value;
@@ -1961,6 +2112,79 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
 
                 singleValue.value = enumValues;
 
+            } else if (valueName == "UserDistribution") {
+                let pointsDiv = parameterContent[parameterContent.length - 1];
+
+                let pointsNodes = pointsDiv.childNodes;
+
+                let pointsElements = [];
+
+                for (let j = 0; j < pointsNodes.length; j++) {
+                    // console.log("ciclo per ogni point, questo è il "+j)
+                    let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
+                    let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
+
+                    let singlePointValuesTemp = [];
+
+                    // console.log("prima cosa")
+                    // console.log(singlePointAllValuesDiv)
+
+                    for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
+                        // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
+                        let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
+                     
+                        let pickerValue = singlePointValueDiv.childNodes[0].value;
+                        if (pickerValue != "") {
+                            let singleParamValue = new factory[pickerValue];
+                            let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
+
+                            // console.log("singleValueDiv")
+                            // console.log(singleValueContent)
+                            for (let h = 1; h < singleValueContent.length; h = h + 2) {
+                                let singleValueContentTemp = singleValueContent[h];
+                                if (singleValueContent[h].tagName == "DIV") {
+                                    singleValueContentTemp = singleValueContent[h].childNodes[0];
+                                }
+                                let fieldName = singleValueContentTemp.id.split("-")[2];
+                                if (singleValueContent[h].tagName == "DIV") {
+                                    singleParamValue[fieldName] = String(singleValueContentTemp.checked);
+                                    // console.log(singleValue)
+                                } else {
+                                    if (singleValueContentTemp.value == "") {
+                                        singleParamValue[fieldName] = undefined;
+                                    } else {
+                                        singleParamValue[fieldName] = singleValueContentTemp.value;
+                                    }
+                                }
+                            }
+                            // if (singleParamValue.value != undefined) {
+                                // console.log("sto pischando")
+                                singlePointValuesTemp.push(singleParamValue);
+                            // }
+                        }
+                    }
+                    // console.log("singlePointValuesTemp");
+                    // console.log(singlePointValuesTemp)
+
+                    let singlePoint = new UserDistributionDataPoint();
+
+                    // console.log("singlepintvlue")
+
+                    // console.log(singlePointValuesTemp);
+                    
+                    singlePoint.value = singlePointValuesTemp;
+
+                    if (singlePointProbabilityInput.value != "") {
+                        singlePoint.probability = singlePointProbabilityInput.value;
+                    }
+
+                    if (singlePointValuesTemp.length > 0) {
+                        pointsElements.push(singlePoint);
+                    }
+
+                }
+
+                singleValue.points = pointsElements;
             }
 
             values.push(singleValue)
@@ -2102,6 +2326,79 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
 
                     singleValue.value = enumValues;
 
+                } else if (valueName == "UserDistribution") {
+                    let pointsDiv = parameterContent[parameterContent.length - 1];
+    
+                    let pointsNodes = pointsDiv.childNodes;
+    
+                    let pointsElements = [];
+    
+                    for (let j = 0; j < pointsNodes.length; j++) {
+                        // console.log("ciclo per ogni point, questo è il "+j)
+                        let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
+                        let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
+    
+                        let singlePointValuesTemp = [];
+    
+                        // console.log("prima cosa")
+                        // console.log(singlePointAllValuesDiv)
+    
+                        for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
+                            // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
+                            let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
+                         
+                            let pickerValue = singlePointValueDiv.childNodes[0].value;
+                            if (pickerValue != "") {
+                                let singleParamValue = new factory[pickerValue];
+                                let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
+    
+                                // console.log("singleValueDiv")
+                                // console.log(singleValueContent)
+                                for (let h = 1; h < singleValueContent.length; h = h + 2) {
+                                    let singleValueContentTemp = singleValueContent[h];
+                                    if (singleValueContent[h].tagName == "DIV") {
+                                        singleValueContentTemp = singleValueContent[h].childNodes[0];
+                                    }
+                                    let fieldName = singleValueContentTemp.id.split("-")[2];
+                                    if (singleValueContent[h].tagName == "DIV") {
+                                        singleParamValue[fieldName] = String(singleValueContentTemp.checked);
+                                        // console.log(singleValue)
+                                    } else {
+                                        if (singleValueContentTemp.value == "") {
+                                            singleParamValue[fieldName] = undefined;
+                                        } else {
+                                            singleParamValue[fieldName] = singleValueContentTemp.value;
+                                        }
+                                    }
+                                }
+                                // if (singleParamValue.value != undefined) {
+                                    // console.log("sto pischando")
+                                    singlePointValuesTemp.push(singleParamValue);
+                                // }
+                            }
+                        }
+                        // console.log("singlePointValuesTemp");
+                        // console.log(singlePointValuesTemp)
+    
+                        let singlePoint = new UserDistributionDataPoint();
+    
+                        // console.log("singlepintvlue")
+    
+                        // console.log(singlePointValuesTemp);
+                        
+                        singlePoint.value = singlePointValuesTemp;
+    
+                        if (singlePointProbabilityInput.value != "") {
+                            singlePoint.probability = singlePointProbabilityInput.value;
+                        }
+    
+                        if (singlePointValuesTemp.length > 0) {
+                            pointsElements.push(singlePoint);
+                        }
+    
+                    }
+    
+                    singleValue.points = pointsElements;
                 }
                 values.push(singleValue)
             }
@@ -2638,6 +2935,8 @@ function setParameter(parameter, buttonID) {
     btnAdd.append(iElForPlus);
 
     btnAdd.on("click", function () {
+        console.log("nomeeeeee")
+        console.log(parameterName)
         let superclassOptions = ["Constant Parameters", "Distribution Parameters", "Enum Parameters", "Expression Parameters"];
         let singleOptionMatrix = [
             ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter",
@@ -2649,6 +2948,9 @@ function setParameter(parameter, buttonID) {
             ["Enum Parameter"],
             ["Expression Parameter"]];
 
+        if (parameterName.includes("point")) {
+            singleOptionMatrix[1].splice(singleOptionMatrix[1].length - 2, 1)
+        }
         parameterValueDivCounterGlobal += 1;
 
         let valuesSection = $('#' + parameterName + '-values-section');
@@ -2712,8 +3014,8 @@ function setParameter(parameter, buttonID) {
             }
 
             if (nameArrayUsed.length > 0) {
-                if (nameArrayUsed.includes(this.value)) {
-                    window.alert("ERROR: Value " + this.value +" is already used in this parameter");
+                if (nameArrayUsed.includes(this.value) && this.value != "") {
+                    window.alert("ERROR: Value " + this.value + " is already used in this parameter");
                     this.value = "";
                 }
             }
@@ -3426,7 +3728,360 @@ function setParameter(parameter, buttonID) {
                     contentDiv.append(discreteBooleanLabel);
                     contentDiv.append(divBoolean);
 
-                    //TODO Fare points che è un'array di constant parameters
+                    let pointsLabel = jQuery('<label/>', {
+                        for: parameterName + '-points-userDistribution-' + idElementsLocal,
+                        text: 'Points'
+                    });
+
+                    let btnAddPoints = jQuery('<button/>', {
+                        class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                        type: 'button',
+                        id: 'btn-create-' + parameterName + '-points-userDistribution-' + idElementsLocal
+
+                    });
+
+                    let iElForPlusPoints = jQuery('<i/>', {
+                        class: 'fa fa-plus',
+                        id: 'btn-create-' + parameterName + '-points-userDistribution-' + idElementsLocal
+                    });
+
+                    btnAddPoints.append(iElForPlusPoints);
+                    btnAddPoints.on("click", function () {
+
+                        numberOfPointsGlobal++;
+                        parameterValueDivCounterGlobal += 1;
+
+
+                        let idElementsUserLocal = this.id.split("-")[5];
+                        // console.log(idElementsUserLocal)
+                        let contentPointValues = $('#' + parameterName + "-points-userDistribution-content-div-" + idElementsUserLocal);
+
+                        let probabilityLabel = jQuery('<label/>', {
+                            for: parameterName + '-userDistribution-probability' + numberOfPointsGlobal + '-input-' + parameterValueDivCounterGlobal,
+                            text: 'Probability'
+                        });
+
+                        let probabilityInput = jQuery('<input/>', {
+                            type: 'text',
+                            class: 'form-control form-control-input',
+                            id: parameterName + '-userDistribution-probability' + numberOfPointsGlobal + '-input-' + parameterValueDivCounterGlobal,
+                            placeholder: 'Probability value'
+                        });
+                        // contentPointValues.append(probabilityLabel);
+                        // contentPointValues.append(probabilityInput);
+
+                        // setParameter(contentPointValues);
+
+                        // let superclassOptions = ["Constant Parameters", "Distribution Parameters", "Enum Parameters", "Expression Parameters"];
+                        // let singleOptionMatrix = [
+                        //     ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter",
+                        //         "String Parameter"],
+                        //     ["Beta Distribution", "Binomial Distribution", "Erlang Distribution", "Gamma Distribution",
+                        //         "Log Normal Distribution", "Negative Exponential Distribution", "Normal Distribution",
+                        //         "Poisson Distribution", "Triangular Distribution", "Truncated Normal Distribution", "Uniform Distribution",
+                        //         "Weibull Distribution"],
+                        //     ["Enum Parameter"],
+                        //     ["Expression Parameter"]];
+
+
+                        // let userValuePicker = jQuery('<select/>', {
+                        //     class: "scenario-picker",
+                        //     id: parameterName + "-value-user-values-picker-" + parameterValueDivCounterGlobal
+                        // });
+
+                        // userValuePicker.append($('<option>', {
+                        //     value: "",
+                        //     text: ""
+                        // }));
+
+                        // //creazione picker con tutti i possibili valori di ParameterValue
+                        // for (let i = 0; i < superclassOptions.length; i++) {
+                        //     let subGroup = $('<optgroup>', {
+                        //         label: superclassOptions[i]
+                        //     });
+                        //     for (let j = 0; j < singleOptionMatrix[i].length; j++) {
+                        //         let singleNames = singleOptionMatrix[i][j].split(" ");
+                        //         let nameSplittedWithoutSpace = "";
+                        //         for (let k = 0; k < singleNames.length; k++) {
+                        //             nameSplittedWithoutSpace += singleNames[k];
+                        //         }
+                        //         subGroup.append($('<option>', {
+                        //             value: nameSplittedWithoutSpace,
+                        //             text: singleOptionMatrix[i][j]
+                        //         }));
+                        //     }
+                        //     userValuePicker.append(subGroup);
+                        // }
+
+
+                        let pointDiv = jQuery('<div/>', {
+                            style: "border-radius: 10px; border: solid 1px black; padding: 2%",
+                            id: 'userDistribution-point' + numberOfPointsGlobal + '-' + parameterName + '-div-' + idElementsUserLocal + '-' + parameterValueDivCounterGlobal,
+                            tabindex: '1'
+                        });
+
+
+                        pointDiv.append(probabilityLabel);
+                        pointDiv.append(probabilityInput);
+
+                        setParameter(pointDiv);
+
+
+
+                        let btnTrash = jQuery('<button/>', {
+                            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                            type: 'button',
+                            id: 'btn-deletePoint' + numberOfPointsGlobal + '-' + parameterValueDivCounterGlobal
+                        });
+
+                        let iElforTrash = jQuery('<i/>', {
+                            class: 'fa fa-trash',
+                            id: 'btn-deletePoint' + numberOfPointsGlobal + '-' + parameterValueDivCounterGlobal
+                        });
+
+                        btnTrash.append(iElforTrash);
+
+                        let idLocalRemovePoint = parameterValueDivCounterGlobal;
+                        let localPointsCounterGlobal = numberOfPointsGlobal;
+
+
+                        btnTrash.on('click', function () {
+                            // $('div[id*=scenarioParameters-property' + localPropertiesCounterGlobal + '-div-' + idLocalRemoveProperty + ']').remove();
+                            console.log("pointDiv");
+                            console.log(pointDiv);
+                            pointDiv.remove();
+                        });
+
+                        btnTrash.insertAfter(pointDiv[0].childNodes[0].childNodes[0]);
+
+                        //rimozione resultRequest per point
+                        pointDiv.children().last().remove();
+                        pointDiv.children().last().remove();
+
+                        pointDiv.append(probabilityLabel);
+                        pointDiv.append(probabilityInput);
+
+                        contentPointValues.append(pointDiv);
+
+                        // let btnTrash = jQuery('<button/>', {
+                        //     class: 'btn btn-primary btn-lg button-calculate btn-icon',
+                        //     type: 'button',
+                        //     id: 'btn-deleteValue-' + parameterName + '-value-' + idElementsEnumLocal + '-' + parameterValueDivCounterGlobal
+
+                        // });
+
+                        // let iElforTrash = jQuery('<i/>', {
+                        //     class: 'fa fa-trash',
+                        //     id: 'btn-deleteValue-' + parameterName + '-value-' + idElementsEnumLocal + '-' + parameterValueDivCounterGlobal
+                        // });
+
+                        // btnTrash.append(iElforTrash);
+
+                        // let idLocal = parameterValueDivCounterGlobal;
+
+                        // btnTrash.on('click', function () {
+                        //     $('div[id*=' + parameterName + '-value-div-' + idElementsEnumLocal + '-' + idLocal + ']').remove();
+
+                        // });
+
+                        // enumDiv.append(btnTrash);
+
+                        // let enumContentDiv = jQuery('<div/>', {
+                        //     id: 'enumParameter-' + parameterName + '-content-div-' + idElementsEnumLocal + '-' + parameterValueDivCounterGlobal
+                        // });
+
+                        // enumDiv.append(enumContentDiv);
+
+                        // //gestione onchange del picker di enum
+                        // enumValuePicker.on('change', function () {
+                        //     enumContentDiv.empty();
+
+                        //     switch (this.value) {
+                        //         case "BooleanParameter": {
+                        //             let valueBooleanLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-booleanParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let divBoolean = jQuery('<div/>', {
+                        //                 class: "onoffswitch"
+                        //             });
+
+                        //             // <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-traceOutput-input" checked></input>
+                        //             let booleanCheckBox = jQuery('<input/>', {
+                        //                 type: "checkbox",
+                        //                 name: "onoffswitch",
+                        //                 class: "onoffswitch-checkbox",
+                        //                 id: 'enumParameter-' + parameterName + '-value-booleanParameterValue-input-' + idElementsEnumLocal + '-' + idLocal
+                        //             });
+                        //             divBoolean.append(booleanCheckBox);
+
+                        //             let spanInner = jQuery('<span/>', {
+                        //                 class: "onoffswitch-inner"
+                        //             });
+
+                        //             let spanSwitch = jQuery('<span/>', {
+                        //                 class: "onoffswitch-switch"
+                        //             });
+
+                        //             let labelOnOffSwitch = jQuery('<label/>', {
+                        //                 class: "onoffswitch-label",
+                        //                 for: 'enumParameter-' + parameterName + '-value-booleanParameterValue-input-' + idElementsEnumLocal + '-' + idLocal
+                        //             });
+
+                        //             labelOnOffSwitch.append(spanInner);
+                        //             labelOnOffSwitch.append(spanSwitch);
+
+                        //             divBoolean.append(labelOnOffSwitch);
+
+                        //             enumContentDiv.append(valueBooleanLabel);
+                        //             enumContentDiv.append(divBoolean);
+
+                        //             break;
+                        //         }
+                        //         case "DateTimeParameter": {
+                        //             let dateTimeLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-value-dateTimeParameter-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let dateTimeInput = jQuery('<input/>', {
+                        //                 type: 'text',
+                        //                 class: 'form-control form-control-input',
+                        //                 id: 'enumParameter-' + parameterName + '-value-value-dateTimeParameter-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 placeholder: 'DateTime value'
+                        //             });
+                        //             enumContentDiv.append(dateTimeLabel);
+                        //             enumContentDiv.append(dateTimeInput);
+                        //             break;
+                        //         }
+                        //         case "DurationParameter": {
+                        //             let durationLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-durationParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let durationInput = jQuery('<input/>', {
+                        //                 type: 'text',
+                        //                 class: 'form-control form-control-input',
+                        //                 id: 'enumParameter-' + parameterName + '-value-durationParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 placeholder: 'Duration value'
+                        //             });
+                        //             enumContentDiv.append(durationLabel);
+                        //             enumContentDiv.append(durationInput);
+                        //             break;
+                        //         }
+                        //         case "FloatingParameter": {
+                        //             let floatingLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-floatingParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let floatingInput = jQuery('<input/>', {
+                        //                 type: 'text',
+                        //                 class: 'form-control form-control-input',
+                        //                 id: 'enumParameter-' + parameterName + '-value-floatingParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 placeholder: 'Floating value'
+                        //             });
+
+                        //             enumContentDiv.append(floatingLabel);
+                        //             enumContentDiv.append(floatingInput);
+
+                        //             let floatingTimeUnitLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-value-timeUnit-floatingParameter-picker-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Time Unit',
+                        //                 style: "width: 100%"
+                        //             });
+
+                        //             let floatingTimeUnitPicker = jQuery('<select/>', {
+                        //                 class: 'scenario-picker',
+                        //                 id: 'enumParameter-value-timeUnit-floatingParameter-picker-' + idElementsEnumLocal + '-' + idLocal
+                        //             });
+
+                        //             for (let timeUnit in TimeUnit) {
+                        //                 floatingTimeUnitPicker.append($('<option>', {
+                        //                     value: timeUnit,
+                        //                     text: timeUnit
+                        //                 }));
+                        //             }
+
+                        //             enumContentDiv.append(floatingTimeUnitLabel);
+                        //             enumContentDiv.append(floatingTimeUnitPicker);
+
+                        //             break;
+                        //         }
+                        //         case "NumericParameter": {
+                        //             let numericLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-numericParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let numericInput = jQuery('<input/>', {
+                        //                 type: 'text',
+                        //                 class: 'form-control form-control-input',
+                        //                 id: 'enumParameter-' + parameterName + '-value-numericParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 placeholder: 'Int value'
+                        //             });
+
+                        //             enumContentDiv.append(numericLabel);
+                        //             enumContentDiv.append(numericInput);
+
+                        //             let numericTimeUnitLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-value-timeUnit-numericParameter-picker-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Time Unit',
+                        //                 style: "width: 100%"
+                        //             });
+
+                        //             let numericTimeUnitPicker = jQuery('<select/>', {
+                        //                 class: 'scenario-picker',
+                        //                 id: 'enumParameter-value-timeUnit-numericParameter-picker-' + idElementsEnumLocal + '-' + idLocal
+                        //             });
+
+                        //             for (let timeUnit in TimeUnit) {
+                        //                 numericTimeUnitPicker.append($('<option>', {
+                        //                     value: timeUnit,
+                        //                     text: timeUnit
+                        //                 }));
+                        //             }
+
+                        //             enumContentDiv.append(numericTimeUnitLabel);
+                        //             enumContentDiv.append(numericTimeUnitPicker);
+
+                        //             break;
+                        //         }
+                        //         case "StringParameter": {
+                        //             let stringLabel = jQuery('<label/>', {
+                        //                 for: 'enumParameter-' + parameterName + '-value-stringParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 text: 'Value'
+                        //             });
+
+                        //             let stringInput = jQuery('<input/>', {
+                        //                 type: 'text',
+                        //                 class: 'form-control form-control-input',
+                        //                 id: 'enumParameter-' + parameterName + '-value-stringParameterValue-input-' + idElementsEnumLocal + '-' + idLocal,
+                        //                 placeholder: 'String value'
+                        //             });
+                        //             enumContentDiv.append(stringLabel);
+                        //             enumContentDiv.append(stringInput);
+                        //             break;
+                        //         }
+                        //     }
+                        // });
+                        // if ($('#' + buttonID).data('clicked') == true) {
+                        //     console.log("sto focussando " + enumDiv[0].id)
+                        //     enumDiv[0].focus();
+                        // }
+                    });
+
+                    let divContentPoints = jQuery('<div/>', {
+                        id: parameterName + "-points-userDistribution-content-div-" + idElementsLocal
+                    });
+
+                    contentDiv.append(pointsLabel);
+                    contentDiv.append(btnAddPoints);
+                    contentDiv.append(divContentPoints);
+
+                    //TODO Fare points che è un'array di parameters senza userdistribution
 
                     break;
                 }
@@ -4049,7 +4704,10 @@ function setParameterField(inputElement, obj) {
                         }
                     }
                 }
+            } else if (divElements[divElements.length - 1].id.includes("userDistribution")) {
+                console.log("cucucurucucucucu palomaaa")
             }
+
         }
 
         if (obj.resultRequest.length > 0) {
@@ -4831,13 +5489,6 @@ function buildDataTree(nodo, nodoObject) {
 
         if (isParameter(nodoFiglio[0].localName)) {
 
-            if (nodoFiglio[0].localName == "EnumParameter") {
-                console.log("queueueueue")
-                console.log(nodoFiglio[0])
-                console.log(nodoFiglio[1])
-                // console.log(parameterFieldsToDelete)
-            }
-
             let parameterFieldsToDelete = [];
             for (let i = 0; i < Object.keys(nodoFiglio[1]).length; i++) {
                 // salvo tutti quei parametri che si sono creati in più ovvero quelli che non iniziano per '_'
@@ -4878,15 +5529,6 @@ function buildDataTree(nodo, nodoObject) {
                 nodoFiglio[1].name = tempName;
                 nodoFiglio[1].type = tempType;
             }
-            // console.log()
-
-            // if(nodoFiglio[0].localName == "Property"){
-
-            //     console.log("propertyyyyyyyyyy")
-            //     console.log(nodoFiglio[0])
-            //     console.log(nodoFiglio[1])
-            //     console.log(parameterFieldsToDelete)
-            // }
             if (isArrayAttribute(nodoFiglio[0].localName)) {
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
@@ -4896,25 +5538,42 @@ function buildDataTree(nodo, nodoObject) {
             }
         } else {
             if (isArrayAttribute(nodoFiglio[0].localName)) {
-
                 let tempArray = [];
                 tempArray.push(nodoFiglio[1]);
-                nodoObject[nameAttr] = tempArray;
-            } else {
 
+                if (nodoFiglio[0].localName == "UserDistributionDataPoint") {
+
+                    
+                    let newTempArray = [];
+
+                    for (let i = 0; i < tempArray.length; i++) {
+                        let singlePoint = tempArray[i];
+                        let nameToEliminate = [];
+                        console.log(Object.keys(singlePoint))
+                        for (let j = 0; j < Object.keys(singlePoint).length; j++) {
+                            if (Object.keys(singlePoint)[j].charAt(0) != "_") {
+                                console.log("voglio pushare")
+
+                                singlePoint["value"].push(singlePoint[Object.keys(singlePoint)[j]][0]);
+                                nameToEliminate.push(Object.keys(singlePoint)[j])
+                            }
+                        }
+                        for(let j in nameToEliminate){
+                            delete singlePoint[nameToEliminate[j]];
+                        }
+                        newTempArray.push(singlePoint);
+                    }
+                    nodoObject["points"] = newTempArray;
+                } else {
+                    nodoObject[nameAttr] = tempArray;
+                }
+            } else {
                 if (nameAttr.includes("Distribution") ||
                     isConstantParameter(nameAttr) ||
                     nameAttr.includes("Expression") ||
                     nameAttr.includes("Enum")) {
 
                     haveMoreValue = true;
-                    //TODO remove following if
-                    if (nameAttr.includes("Enum")) {
-                        console.log("so entrto in enum obj builder")
-                        console.log(nameAttr)
-                        console.log(nodoFiglio[1])
-                        console.log(moreValuesTempArray)
-                    }
                     moreValuesTempArray.push([nameAttr, nodoFiglio[1]]);
                 } else {
 
