@@ -1724,30 +1724,30 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 
                 } else if (valueName == "UserDistribution") {
                     let pointsDiv = parameterContent[parameterContent.length - 1];
-    
+
                     let pointsNodes = pointsDiv.childNodes;
-    
+
                     let pointsElements = [];
-    
+
                     for (let j = 0; j < pointsNodes.length; j++) {
                         // console.log("ciclo per ogni point, questo è il "+j)
                         let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
                         let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
-    
+
                         let singlePointValuesTemp = [];
-    
+
                         // console.log("prima cosa")
                         // console.log(singlePointAllValuesDiv)
-    
+
                         for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
                             // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
                             let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
-                         
+
                             let pickerValue = singlePointValueDiv.childNodes[0].value;
                             if (pickerValue != "") {
                                 let singleParamValue = new factory[pickerValue];
                                 let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
-    
+
                                 // console.log("singleValueDiv")
                                 // console.log(singleValueContent)
                                 for (let h = 1; h < singleValueContent.length; h = h + 2) {
@@ -1768,32 +1768,77 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                                     }
                                 }
                                 // if (singleParamValue.value != undefined) {
-                                    // console.log("sto pischando")
-                                    singlePointValuesTemp.push(singleParamValue);
+                                // console.log("sto pischando")
+                                singlePointValuesTemp.push(singleParamValue);
                                 // }
                             }
                         }
+                        if (pickerValue == "EnumParameter") {
+
+                            let enumDiv = singleValueContent[singleValueContent.length - 1];
+
+                            let enumValues = [];
+
+                            for (let j = 0; j < enumDiv.childNodes.length; j++) {
+                                let singleEnumValue = enumDiv.childNodes[j];
+                                // console.log("enum");
+
+                                let pickerValue = singleEnumValue.childNodes[0].value;
+                                if (pickerValue != "") {
+                                    let singleConstantParam = new factory[pickerValue];
+                                    let enumContent = singleEnumValue.childNodes[2].childNodes;
+                                    for (let k = 1; k < enumContent.length; k = k + 2) {
+                                        let enumContentTemp = enumContent[k];
+                                        if (enumContent[k].tagName == "DIV") {
+                                            enumContentTemp = enumContent[k].childNodes[0];
+                                        }
+                                        let fieldName = enumContentTemp.id.split("-")[2];
+                                        if (enumContent[k].tagName == "DIV") {
+                                            singleConstantParam[fieldName] = String(enumContentTemp.checked);
+                                            // console.log(singleValue)
+                                        } else {
+                                            if (enumContentTemp.value == "") {
+                                                singleConstantParam[fieldName] = undefined;
+                                            } else {
+                                                singleConstantParam[fieldName] = enumContentTemp.value;
+                                            }
+                                        }
+                                    }
+                                    if (pickerValue == "StringParameter" || pickerValue == "DateTimeParameter" || pickerValue == "DurationParameter") {
+                                        if (singleConstantParam.value != undefined) {
+                                            enumValues.push(singleConstantParam);
+                                        }
+                                    } else {
+                                        enumValues.push(singleConstantParam);
+                                    }
+                                }
+                            }
+
+                            singleParamValue.value = enumValues;
+
+                        }
+
                         // console.log("singlePointValuesTemp");
                         // console.log(singlePointValuesTemp)
-    
+
                         let singlePoint = new UserDistributionDataPoint();
-    
+
                         // console.log("singlepintvlue")
-    
+
                         // console.log(singlePointValuesTemp);
-                        
+
                         singlePoint.value = singlePointValuesTemp;
-    
+
                         if (singlePointProbabilityInput.value != "") {
                             singlePoint.probability = singlePointProbabilityInput.value;
                         }
-    
-                        if (singlePointValuesTemp.length > 0) {
+
+                        if (singlePoint.value.length > 0 || singlePoint.probability != undefined) {
                             pointsElements.push(singlePoint);
                         }
-    
+
                     }
-    
+
                     singleValue.points = pointsElements;
                 }
 
@@ -1928,7 +1973,7 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                     for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
                         // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
                         let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
-                     
+
                         let pickerValue = singlePointValueDiv.childNodes[0].value;
                         if (pickerValue != "") {
                             let singleParamValue = new factory[pickerValue];
@@ -1953,9 +1998,55 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                                     }
                                 }
                             }
+
+                            if (pickerValue == "EnumParameter") {
+
+                                let enumDiv = singleValueContent[singleValueContent.length - 1];
+
+                                let enumValues = [];
+
+                                for (let j = 0; j < enumDiv.childNodes.length; j++) {
+                                    let singleEnumValue = enumDiv.childNodes[j];
+                                    // console.log("enum");
+
+                                    let pickerValue = singleEnumValue.childNodes[0].value;
+                                    if (pickerValue != "") {
+                                        let singleConstantParam = new factory[pickerValue];
+                                        let enumContent = singleEnumValue.childNodes[2].childNodes;
+                                        for (let k = 1; k < enumContent.length; k = k + 2) {
+                                            let enumContentTemp = enumContent[k];
+                                            if (enumContent[k].tagName == "DIV") {
+                                                enumContentTemp = enumContent[k].childNodes[0];
+                                            }
+                                            let fieldName = enumContentTemp.id.split("-")[2];
+                                            if (enumContent[k].tagName == "DIV") {
+                                                singleConstantParam[fieldName] = String(enumContentTemp.checked);
+                                                // console.log(singleValue)
+                                            } else {
+                                                if (enumContentTemp.value == "") {
+                                                    singleConstantParam[fieldName] = undefined;
+                                                } else {
+                                                    singleConstantParam[fieldName] = enumContentTemp.value;
+                                                }
+                                            }
+                                        }
+                                        if (pickerValue == "StringParameter" || pickerValue == "DateTimeParameter" || pickerValue == "DurationParameter") {
+                                            if (singleConstantParam.value != undefined) {
+                                                enumValues.push(singleConstantParam);
+                                            }
+                                        } else {
+                                            enumValues.push(singleConstantParam);
+                                        }
+                                    }
+                                }
+
+                                singleParamValue.value = enumValues;
+
+                            }
+
                             // if (singleParamValue.value != undefined) {
-                                // console.log("sto pischando")
-                                singlePointValuesTemp.push(singleParamValue);
+                            // console.log("sto pischando")
+                            singlePointValuesTemp.push(singleParamValue);
                             // }
                         }
                     }
@@ -1967,14 +2058,14 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
                     // console.log("singlepintvlue")
 
                     // console.log(singlePointValuesTemp);
-                    
+
                     singlePoint.value = singlePointValuesTemp;
 
                     if (singlePointProbabilityInput.value != "") {
                         singlePoint.probability = singlePointProbabilityInput.value;
                     }
 
-                    if (singlePointValuesTemp.length > 0) {
+                    if (singlePoint.value.length > 0 || singlePoint.probability != undefined) {
                         pointsElements.push(singlePoint);
                     }
 
@@ -2132,7 +2223,7 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
                     for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
                         // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
                         let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
-                     
+
                         let pickerValue = singlePointValueDiv.childNodes[0].value;
                         if (pickerValue != "") {
                             let singleParamValue = new factory[pickerValue];
@@ -2157,9 +2248,55 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
                                     }
                                 }
                             }
+                            if (pickerValue == "EnumParameter") {
+
+                                let enumDiv = singleValueContent[singleValueContent.length - 1];
+
+                                let enumValues = [];
+
+                                for (let j = 0; j < enumDiv.childNodes.length; j++) {
+                                    let singleEnumValue = enumDiv.childNodes[j];
+                                    // console.log("enum");
+
+                                    let pickerValue = singleEnumValue.childNodes[0].value;
+                                    if (pickerValue != "") {
+                                        let singleConstantParam = new factory[pickerValue];
+                                        let enumContent = singleEnumValue.childNodes[2].childNodes;
+                                        for (let k = 1; k < enumContent.length; k = k + 2) {
+                                            let enumContentTemp = enumContent[k];
+                                            if (enumContent[k].tagName == "DIV") {
+                                                enumContentTemp = enumContent[k].childNodes[0];
+                                            }
+                                            let fieldName = enumContentTemp.id.split("-")[2];
+                                            if (enumContent[k].tagName == "DIV") {
+                                                singleConstantParam[fieldName] = String(enumContentTemp.checked);
+                                                // console.log(singleValue)
+                                            } else {
+                                                if (enumContentTemp.value == "") {
+                                                    singleConstantParam[fieldName] = undefined;
+                                                } else {
+                                                    singleConstantParam[fieldName] = enumContentTemp.value;
+                                                }
+                                            }
+                                        }
+                                        if (pickerValue == "StringParameter" || pickerValue == "DateTimeParameter" || pickerValue == "DurationParameter") {
+                                            if (singleConstantParam.value != undefined) {
+                                                enumValues.push(singleConstantParam);
+                                            }
+                                        } else {
+                                            enumValues.push(singleConstantParam);
+                                        }
+                                    }
+                                }
+
+                                singleParamValue.value = enumValues;
+
+                            }
+
+
                             // if (singleParamValue.value != undefined) {
-                                // console.log("sto pischando")
-                                singlePointValuesTemp.push(singleParamValue);
+                            // console.log("sto pischando")
+                            singlePointValuesTemp.push(singleParamValue);
                             // }
                         }
                     }
@@ -2171,18 +2308,19 @@ function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, ch
                     // console.log("singlepintvlue")
 
                     // console.log(singlePointValuesTemp);
-                    
+
                     singlePoint.value = singlePointValuesTemp;
 
                     if (singlePointProbabilityInput.value != "") {
                         singlePoint.probability = singlePointProbabilityInput.value;
                     }
 
-                    if (singlePointValuesTemp.length > 0) {
+                    if (singlePoint.value.length > 0 || singlePoint.probability != undefined) {
                         pointsElements.push(singlePoint);
                     }
 
                 }
+
 
                 singleValue.points = pointsElements;
             }
@@ -2328,30 +2466,30 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
 
                 } else if (valueName == "UserDistribution") {
                     let pointsDiv = parameterContent[parameterContent.length - 1];
-    
+
                     let pointsNodes = pointsDiv.childNodes;
-    
+
                     let pointsElements = [];
-    
+
                     for (let j = 0; j < pointsNodes.length; j++) {
                         // console.log("ciclo per ogni point, questo è il "+j)
                         let singlePointAllValuesDiv = pointsNodes[j].childNodes[3];
                         let singlePointProbabilityInput = pointsNodes[j].childNodes[5];
-    
+
                         let singlePointValuesTemp = [];
-    
+
                         // console.log("prima cosa")
                         // console.log(singlePointAllValuesDiv)
-    
+
                         for (let k = 0; k < singlePointAllValuesDiv.childNodes.length; k++) {
                             // console.log("ciclo per ogni value nel value del point n"+j+", orasono nella sua value n"+k)
                             let singlePointValueDiv = singlePointAllValuesDiv.childNodes[k];
-                         
+
                             let pickerValue = singlePointValueDiv.childNodes[0].value;
                             if (pickerValue != "") {
                                 let singleParamValue = new factory[pickerValue];
                                 let singleValueContent = singlePointValueDiv.childNodes[2].childNodes;
-    
+
                                 // console.log("singleValueDiv")
                                 // console.log(singleValueContent)
                                 for (let h = 1; h < singleValueContent.length; h = h + 2) {
@@ -2371,33 +2509,80 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
                                         }
                                     }
                                 }
+
+
+                                if (pickerValue == "EnumParameter") {
+
+                                    let enumDiv = singleValueContent[singleValueContent.length - 1];
+
+                                    let enumValues = [];
+
+                                    for (let j = 0; j < enumDiv.childNodes.length; j++) {
+                                        let singleEnumValue = enumDiv.childNodes[j];
+                                        // console.log("enum");
+
+                                        let pickerValue = singleEnumValue.childNodes[0].value;
+                                        if (pickerValue != "") {
+                                            let singleConstantParam = new factory[pickerValue];
+                                            let enumContent = singleEnumValue.childNodes[2].childNodes;
+                                            for (let k = 1; k < enumContent.length; k = k + 2) {
+                                                let enumContentTemp = enumContent[k];
+                                                if (enumContent[k].tagName == "DIV") {
+                                                    enumContentTemp = enumContent[k].childNodes[0];
+                                                }
+                                                let fieldName = enumContentTemp.id.split("-")[2];
+                                                if (enumContent[k].tagName == "DIV") {
+                                                    singleConstantParam[fieldName] = String(enumContentTemp.checked);
+                                                    // console.log(singleValue)
+                                                } else {
+                                                    if (enumContentTemp.value == "") {
+                                                        singleConstantParam[fieldName] = undefined;
+                                                    } else {
+                                                        singleConstantParam[fieldName] = enumContentTemp.value;
+                                                    }
+                                                }
+                                            }
+                                            if (pickerValue == "StringParameter" || pickerValue == "DateTimeParameter" || pickerValue == "DurationParameter") {
+                                                if (singleConstantParam.value != undefined) {
+                                                    enumValues.push(singleConstantParam);
+                                                }
+                                            } else {
+                                                enumValues.push(singleConstantParam);
+                                            }
+                                        }
+                                    }
+
+                                    singleParamValue.value = enumValues;
+
+                                }
+
                                 // if (singleParamValue.value != undefined) {
-                                    // console.log("sto pischando")
-                                    singlePointValuesTemp.push(singleParamValue);
+                                // console.log("sto pischando")
+                                singlePointValuesTemp.push(singleParamValue);
                                 // }
                             }
                         }
                         // console.log("singlePointValuesTemp");
                         // console.log(singlePointValuesTemp)
-    
+
                         let singlePoint = new UserDistributionDataPoint();
-    
+
                         // console.log("singlepintvlue")
-    
+
                         // console.log(singlePointValuesTemp);
-                        
+
                         singlePoint.value = singlePointValuesTemp;
-    
+
                         if (singlePointProbabilityInput.value != "") {
                             singlePoint.probability = singlePointProbabilityInput.value;
                         }
-    
-                        if (singlePointValuesTemp.length > 0) {
+
+                        if (singlePoint.value.length > 0 || singlePoint.probability != undefined) {
                             pointsElements.push(singlePoint);
                         }
-    
+
                     }
-    
+
                     singleValue.points = pointsElements;
                 }
                 values.push(singleValue)
@@ -2935,8 +3120,8 @@ function setParameter(parameter, buttonID) {
     btnAdd.append(iElForPlus);
 
     btnAdd.on("click", function () {
-        console.log("nomeeeeee")
-        console.log(parameterName)
+        // console.log("nomeeeeee")
+        // console.log(parameterName)
         let superclassOptions = ["Constant Parameters", "Distribution Parameters", "Enum Parameters", "Expression Parameters"];
         let singleOptionMatrix = [
             ["Boolean Parameter", "DateTime Parameter", "Duration Parameter", "Floating Parameter", "Numeric Parameter",
@@ -2992,7 +3177,7 @@ function setParameter(parameter, buttonID) {
         }
 
         parameterValuePicker.on('change', function () {
-            console.log("ooooooooooooooooooooooooooooooooooooooooooooooo")
+            // console.log("ooooooooooooooooooooooooooooooooooooooooooooooo")
             let externalDiv = this.parentElement.parentElement;
             let nameArrayUsed = []
             for (let i = 0; i < externalDiv.childNodes.length; i++) {
@@ -3020,8 +3205,8 @@ function setParameter(parameter, buttonID) {
                 }
             }
 
-            console.log("array")
-            console.log(nameArrayUsed)
+            // console.log("array")
+            // console.log(nameArrayUsed)
 
             let idElementsLocal = this.id.split("-")[3];
             let contentDiv = $('#' + parameterName + '-value-content-div-' + idElementsLocal);
@@ -4614,8 +4799,10 @@ function setPropertyField(inputElement, obj) {
 
 function setParameterField(inputElement, obj) {
 
-    // console.log("elemento");
-    // console.log(inputElement)
+    console.log("elemento");
+    console.log(inputElement)
+    console.log("oggetto")
+    console.log(obj)
 
     let childNodes = inputElement.childNodes;
 
@@ -4705,7 +4892,104 @@ function setParameterField(inputElement, obj) {
                     }
                 }
             } else if (divElements[divElements.length - 1].id.includes("userDistribution")) {
-                console.log("cucucurucucucucu palomaaa")
+                console.log("palomaaaaaaaaaaa")
+                console.log(obj.value[i]);
+                let points = obj.value[i].points;
+                for (let j in points) {
+                    divElements[divElements.length - 2].click();
+
+                    let singlePointDiv = divElements[divElements.length - 1].childNodes[j]
+
+                    // fase popolamento ricorsivo di values
+                    let valuesObj = points[j]["value"];
+                    for (let k in valuesObj) {
+                        singlePointDiv.childNodes[2].click();
+                        // console.log("singlePointDiv")
+                        // console.log(singlePointDiv)
+
+                        let singleValueDiv = singlePointDiv.childNodes[singlePointDiv.childNodes.length - 3].childNodes[k]
+                        singleValueDiv.childNodes[0].value = valuesObj[k].getType();
+                        $('#' + $.escapeSelector(singleValueDiv.childNodes[0].id)).change();
+
+                        let valueFields = singleValueDiv.childNodes[2].childNodes;
+
+                        for (let h = 1; h < valueFields.length; h = h + 2) {
+                            // for (let k = 1; k < valuesSingleEnumContent.length; k = k + 2) {
+                            let attributeName;
+                            // bisogna distinguere i punti in cui si ha l' 'on/off' switch
+                            if (valueFields[h].tagName == "DIV") {
+                                attributeName = valueFields[h].childNodes[0].id.split('-')[2];
+
+                                if (valuesObj[k][attributeName] == "true") {
+                                    $('#' + $.escapeSelector(valueFields[h].childNodes[0].id)).prop('checked', true);
+                                } else {
+                                    $('#' + $.escapeSelector(valueFields[h].childNodes[0].id)).prop('checked', false);
+                                }
+                            } else {
+                                attributeName = valueFields[h].id.split('-')[2];
+                                let value = valuesObj[k][attributeName];
+
+                                if (value != undefined) {
+                                    if (attributeName == "validFor") {
+                                        valueFields[h].value = value[0];
+
+                                    } else {
+                                        valueFields[h].value = value;
+                                    }
+                                }
+                            }
+                            console.log("attributename");
+                            console.log(attributeName);
+                        }
+
+                        if (valueFields[valueFields.length - 1].id.includes("enum")) {
+                            console.log("EUREKAAAA")
+                            let enumValues = valuesObj[k]["value"];
+                            // let enumContent = divElements[divElements.length-1].childNodes;
+                            for (let j = 0; j < enumValues.length; j++) {
+                                valueFields[valueFields.length - 2].click();
+                                let singleEnumDiv = valueFields[valueFields.length - 1].childNodes[j];
+
+                                singleEnumDiv.childNodes[0].value = enumValues[j].getType();
+                                $('#' + $.escapeSelector(singleEnumDiv.childNodes[0].id)).trigger('change');
+                                let valuesSingleEnumContent = singleEnumDiv.childNodes[2].childNodes;
+                                for (let k = 1; k < valuesSingleEnumContent.length; k = k + 2) {
+                                    let attributeName;
+                                    // bisogna distinguere i punti in cui si ha l' 'on/off' switch
+                                    if (valuesSingleEnumContent[k].tagName == "DIV") {
+                                        attributeName = valuesSingleEnumContent[k].childNodes[0].id.split('-')[2];
+                                        if (enumValues[j][attributeName] == "true") {
+                                            $('#' + $.escapeSelector(valuesSingleEnumContent[k].childNodes[0].id)).prop('checked', true);
+                                        } else {
+                                            $('#' + $.escapeSelector(valuesSingleEnumContent[k].childNodes[0].id)).prop('checked', false);
+                                        }
+                                    } else {
+                                        attributeName = valuesSingleEnumContent[k].id.split('-')[2];
+                                        let value = enumValues[j][attributeName];
+
+                                        if (value != undefined) {
+                                            valuesSingleEnumContent[k].value = value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        console.log("valuesObj")
+                        console.log(valuesObj[k])
+
+
+                    }
+
+                    // popolamento field probability
+                    singlePointDiv.childNodes[singlePointDiv.childNodes.length - 1].value = points[j]["probability"];
+
+                    console.log("singlepointdiv")
+                    console.log(singlePointDiv);
+                    // points[j]["probability"] 
+                    // let singlePointDiv = divElements[divElements.length - 1].childNodes[j];
+                    // console.log(singlePointDiv);
+                }
             }
 
         }
@@ -5543,7 +5827,7 @@ function buildDataTree(nodo, nodoObject) {
 
                 if (nodoFiglio[0].localName == "UserDistributionDataPoint") {
 
-                    
+
                     let newTempArray = [];
 
                     for (let i = 0; i < tempArray.length; i++) {
@@ -5553,12 +5837,18 @@ function buildDataTree(nodo, nodoObject) {
                         for (let j = 0; j < Object.keys(singlePoint).length; j++) {
                             if (Object.keys(singlePoint)[j].charAt(0) != "_") {
                                 console.log("voglio pushare")
+                                console.log(Object.keys(singlePoint).length)
+                                console.log(singlePoint[Object.keys(singlePoint)[j]])
 
-                                singlePoint["value"].push(singlePoint[Object.keys(singlePoint)[j]][0]);
+                                if (singlePoint[Object.keys(singlePoint)[j]][0] == undefined) {
+                                    singlePoint["value"].push(singlePoint[Object.keys(singlePoint)[j]]);
+                                } else {
+                                    singlePoint["value"].push(singlePoint[Object.keys(singlePoint)[j]][0]);
+                                }
                                 nameToEliminate.push(Object.keys(singlePoint)[j])
                             }
                         }
-                        for(let j in nameToEliminate){
+                        for (let j in nameToEliminate) {
                             delete singlePoint[nameToEliminate[j]];
                         }
                         newTempArray.push(singlePoint);
