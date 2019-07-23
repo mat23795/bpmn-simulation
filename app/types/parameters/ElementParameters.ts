@@ -104,45 +104,45 @@ export class ElementParameters {
         return "ElementParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let elementParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "ElementParameters");
+        let elementParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ElementParameters");
 
         this.eventuallyAddAttribute(elementParametersXMLelement, "id", this._id);
         this.eventuallyAddAttribute(elementParametersXMLelement, "elementRef", this._elementRef);
 
         for(let i=0; i< this._vendorExtensions.length; i++) {
-            elementParametersXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         if(this._timeParameters != undefined){
-            elementParametersXMLelement.appendChild(this._timeParameters.toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._timeParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         if(this._controlParameters != undefined){
-            elementParametersXMLelement.appendChild(this._controlParameters.toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._controlParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         if(this._costParameters != undefined){
-            elementParametersXMLelement.appendChild(this._costParameters.toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._costParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         if(this._resourceParameters != undefined){
-            elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         // console.log("prima");
         for(let i=0; i< this._propertyParameters.length; i++) {
         // if(this._propertyParameters != undefined){
             // console.log(this);
-            elementParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
         // console.log("dopo");
 
         if(this._priorityParameters != undefined){
-            elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, xml));
+            elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         return elementParametersXMLelement;

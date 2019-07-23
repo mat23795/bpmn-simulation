@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
-<semantic:definitions id="_1364754596385" name="Car Repair Process v0.20" targetNamespace="http://www.trisotech.com/definitions/_1364754596385" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:semantic="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<semantic:definitions id="_1364754596385" name="Car Repair Process v0.20" 
+targetNamespace="http://www.trisotech.com/definitions/_1364754596385" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+xmlns:semantic="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <semantic:process isExecutable="false" id="_6">
     <semantic:dataObject isCollection="false" id="DF1364754596565"/>
     <semantic:dataObject isCollection="false" id="DF1364754596566"/>
@@ -62,7 +66,7 @@
         <semantic:incoming>_9C46FDB0-2EBD-4B2F-A72A-0189A4D76A73</semantic:incoming>
         <semantic:outgoing>_E2740126-A38E-40E2-9FA9-554778B51381</semantic:outgoing>
       </semantic:exclusiveGateway>
-      <semantic:subProcess triggeredByEvent="true" completionQuantity="1" isForCompensation="false" startQuantity="1" name="" id="_AF4F8D5E-E399-4ED8-992F-9AA653C17D6E">
+      <semantic:eventSubProcess triggeredByEvent="true" completionQuantity="1" isForCompensation="false" startQuantity="1" name="" id="_AF4F8D5E-E399-4ED8-992F-9AA653C17D6E">
         <semantic:startEvent isInterrupting="false" name="Customer Requests Additional  Repairs" id="_25E36E2C-9196-4170-8BA3-52DDF55D177E">
           <semantic:outgoing>_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F</semantic:outgoing>
           <semantic:signalEventDefinition/>
@@ -90,7 +94,7 @@
         </semantic:dataObjectReference>
         <semantic:sequenceFlow sourceRef="_25E36E2C-9196-4170-8BA3-52DDF55D177E" targetRef="_D226B9E0-0194-481E-AAEC-32473D45FEEF" name="" id="_62BD6E5E-B5C0-4719-86CE-D5E30A1D128F"/>
         <semantic:sequenceFlow sourceRef="_D226B9E0-0194-481E-AAEC-32473D45FEEF" targetRef="_4C551546-C127-4CD9-9106-78A3FC8978A6" name="" id="_24A3FEEC-8DE6-42DC-9B85-D076EB8909A4"/>
-      </semantic:subProcess>
+      </semantic:eventSubProcess>
       <semantic:task completionQuantity="1" isForCompensation="false" startQuantity="1" name="Take Apart for Issue" id="_91C1F9A1-0EB9-4FD4-A2A7-99C2E8C34854">
         <semantic:incoming>_E2740126-A38E-40E2-9FA9-554778B51381</semantic:incoming>
         <semantic:outgoing>_F165F4A8-69B1-4B19-A1A4-470BDE12FA77</semantic:outgoing>

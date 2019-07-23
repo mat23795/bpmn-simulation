@@ -22,15 +22,15 @@ export class EnumParameter extends ParameterValue{
         return "EnumParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let enumParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"EnumParameter");
+        let enumParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":EnumParameter");
 
         this.addSuperClassAttributesToXMLElement(enumParameterXMLelement);
         for(let i = 0; i < this._value.length; i++){
-            enumParameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
+            enumParameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         return enumParameterXMLelement;

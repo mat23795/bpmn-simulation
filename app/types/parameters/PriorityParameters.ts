@@ -27,18 +27,18 @@ export class PriorityParameters{
         return "PriorityParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let priorityParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"PriorityParameters");
+        let priorityParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":PriorityParameters");
 
         if(this._interruptible != undefined){
-            priorityParametersXMLelement.appendChild(this._interruptible.toXMLelement(bpsimPrefix, xml, "Interruptible"));
+            priorityParametersXMLelement.appendChild(this._interruptible.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Interruptible"));
         }
 
         if(this._priority != undefined){
-            priorityParametersXMLelement.appendChild(this._priority.toXMLelement(bpsimPrefix, xml, "Priority"));
+            priorityParametersXMLelement.appendChild(this._priority.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Priority"));
         }
 
         return priorityParametersXMLelement;

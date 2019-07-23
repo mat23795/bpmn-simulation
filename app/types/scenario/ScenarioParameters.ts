@@ -129,22 +129,22 @@ export class ScenarioParameters {
         }
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let scenarioParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ScenarioParameters");
+        let scenarioParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ScenarioParameters");
 
         if(this._start != undefined){
-            scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix, xml, "Start"));
+            scenarioParametersXMLelement.appendChild(this._start.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Start"));
         }
 
         if(this._duration != undefined){
             // console.log(this);
-            scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));
+            scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Duration"));
         }
         if(this._warmup != undefined){
-            scenarioParametersXMLelement.appendChild(this._warmup.toXMLelement(bpsimPrefix,xml, "Warmup"));
+            scenarioParametersXMLelement.appendChild(this._warmup.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Warmup"));
         }
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "replication", this._replication);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "seed", this._seed);
@@ -157,7 +157,7 @@ export class ScenarioParameters {
 
         // TODO Passare a PropertyParameters
         for(let i=0; i< this._propertyParameters.length; i++) {
-            scenarioParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix,xml));
+            scenarioParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
 

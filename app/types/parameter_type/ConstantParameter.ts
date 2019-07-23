@@ -32,11 +32,11 @@ export class StringParameter extends ConstantParameter {
         return "StringParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"StringParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":StringParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -65,11 +65,11 @@ export class NumericParameter extends ConstantParameter {
         return "NumericParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"NumericParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":NumericParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -99,11 +99,11 @@ export class FloatingParameter extends ConstantParameter {
         return "FloatingParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"FloatingParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":FloatingParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -124,11 +124,11 @@ export class BooleanParameter extends ConstantParameter {
         return "BooleanParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BooleanParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":BooleanParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -148,11 +148,11 @@ export class DurationParameter extends ConstantParameter {
         return "DurationParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"DurationParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":DurationParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);
@@ -172,11 +172,11 @@ export class DateTimeParameter extends ConstantParameter {
         return "DateTimeParameter"
     }
     
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
     
-        let childParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"DateTimeParameter");
+        let childParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":DateTimeParameter");
     
         this.addSuperClassAttributesToXMLElement(childParameterXMLelement);
         this.eventuallyAddAttribute(childParameterXMLelement, "value", this._value);

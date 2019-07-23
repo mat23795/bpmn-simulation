@@ -98,50 +98,50 @@ export class TimeParameters{
         return "TimeParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let timeParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"TimeParameters");
+        let timeParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":TimeParameters");
 
         if(this._duration != undefined){
-            timeParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, xml, "Duration"));
+            timeParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Duration"));
         }
 
         if(this._elapsedTime != undefined){
-            timeParametersXMLelement.appendChild(this._elapsedTime.toXMLelement(bpsimPrefix, xml, "ElapsedTime"));
+            timeParametersXMLelement.appendChild(this._elapsedTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "ElapsedTime"));
         }
 
         if(this._lagTime != undefined){
-            timeParametersXMLelement.appendChild(this._lagTime.toXMLelement(bpsimPrefix, xml, "LagTime"));
+            timeParametersXMLelement.appendChild(this._lagTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "LagTime"));
         }
 
         if(this._processingTime != undefined){
-            timeParametersXMLelement.appendChild(this._processingTime.toXMLelement(bpsimPrefix, xml, "ProcessingTime"));
+            timeParametersXMLelement.appendChild(this._processingTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "ProcessingTime"));
         }
 
         if(this._queueTime != undefined){
-            timeParametersXMLelement.appendChild(this._queueTime.toXMLelement(bpsimPrefix, xml, "QueueTime"));
+            timeParametersXMLelement.appendChild(this._queueTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "QueueTime"));
         }
 
         if(this._reworkTime != undefined){
-            timeParametersXMLelement.appendChild(this._reworkTime.toXMLelement(bpsimPrefix, xml, "ReworkTime"));
+            timeParametersXMLelement.appendChild(this._reworkTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "ReworkTime"));
         }
 
         if(this._setupTime != undefined){
-            timeParametersXMLelement.appendChild(this._setupTime.toXMLelement(bpsimPrefix, xml, "SetupTime"));
+            timeParametersXMLelement.appendChild(this._setupTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "SetupTime"));
         }
 
         if(this._transferTime != undefined){
-            timeParametersXMLelement.appendChild(this._transferTime.toXMLelement(bpsimPrefix, xml, "TransferTime"));
+            timeParametersXMLelement.appendChild(this._transferTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "TransferTime"));
         }
 
         if(this._validationTime != undefined){
-            timeParametersXMLelement.appendChild(this._validationTime.toXMLelement(bpsimPrefix, xml, "ValidationTime"));
+            timeParametersXMLelement.appendChild(this._validationTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "ValidationTime"));
         }
 
         if(this._waitTime != undefined){
-            timeParametersXMLelement.appendChild(this._waitTime.toXMLelement(bpsimPrefix, xml, "WaitTime"));
+            timeParametersXMLelement.appendChild(this._waitTime.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "WaitTime"));
         }
 
         return timeParametersXMLelement;

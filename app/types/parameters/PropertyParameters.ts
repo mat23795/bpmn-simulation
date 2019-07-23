@@ -31,18 +31,18 @@ export class PropertyParameters{
         return "PropertyParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let propertyParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "PropertyParameters");
+        let propertyParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":PropertyParameters");
 
         //TODO passare a Property
         for(let i=0; i< this._property.length; i++) {
             // qui in realtà è Property, che è figlio di Parameter, ma non essemdoci
             // la funz in Property, si prende quella del padre
             // TODO fare la funzione per Property e soprattutto capire se vuole anche gli attributi del padre
-            propertyParametersXMLelement.appendChild(this._property[i].toXMLelement(bpsimPrefix,xml));
+            propertyParametersXMLelement.appendChild(this._property[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
 
         }
 
@@ -50,7 +50,7 @@ export class PropertyParameters{
 
         //TODO passare a Parameter
         if(this._queueLength != undefined){
-            propertyParametersXMLelement.appendChild(this._queueLength.toXMLelement(bpsimPrefix,xml, "QueueLength"));
+            propertyParametersXMLelement.appendChild(this._queueLength.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "QueueLength"));
         }
 
         return propertyParametersXMLelement;

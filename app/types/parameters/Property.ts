@@ -32,22 +32,22 @@ export class Property extends Parameter {
         return "Property"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let propertyXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Property");
+        let propertyXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":Property");
 
         this.eventuallyAddAttribute(propertyXMLelement, "name", this._name);
         this.eventuallyAddAttribute(propertyXMLelement, "type", this._type);
 
         for(let i=0; i< this._value.length; i++) {
-            propertyXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
+            propertyXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         //TODO verificare check su undefined per un enum
         for(let i=0; i< this._resultRequest.length; i++) {
-            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResultRequest");
+            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest[i];
             propertyXMLelement.appendChild(resultRequestXMLelement);
         }

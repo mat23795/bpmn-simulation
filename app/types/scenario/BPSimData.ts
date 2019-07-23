@@ -25,15 +25,15 @@ export class BPSimData{
         this._scenario.push(scenario);
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any){
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
 
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
         
-        let bpsimDataXMLelement = xmlDoc.createElementNS(bpsimPrefix,"BPSimData");
+        let bpsimDataXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":BPSimData");
         
         for(let i=0; i< this._scenario.length; i++) {
-            bpsimDataXMLelement.appendChild(this._scenario[i].toXMLelement(bpsimPrefix,xml));
+            bpsimDataXMLelement.appendChild(this._scenario[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         return bpsimDataXMLelement;

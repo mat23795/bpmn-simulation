@@ -953,14 +953,14 @@
           <bpsim:ElementParameters elementRef="resource_Front_Office">
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
-                <bpsim:NumericParameter validFor="C1" value="200"/>
-                <bpsim:NumericParameter validFor="C2" value="90"/>
+                <!-- <bpsim:NumericParameter value="0"/> -->
+                <!-- <bpsim:NumericParameter validFor="C1" value="200"/> -->
+                <!-- <bpsim:NumericParameter validFor="C2" value="90"/> -->
                 <bpsim:NumericParameter validFor="C3" value="130"/>
-                <bpsim:NumericParameter validFor="C4" value="60"/>
-                <bpsim:NumericParameter validFor="C5" value="150"/>
-                <bpsim:NumericParameter validFor="C6" value="100"/>
-                <bpsim:NumericParameter validFor="C7" value="40"/>
+                <!-- <bpsim:NumericParameter validFor="C4" value="60"/> -->
+                <!-- <bpsim:NumericParameter validFor="C5" value="150"/> -->
+                <!-- <bpsim:NumericParameter validFor="C6" value="100"/> -->
+                <!-- <bpsim:NumericParameter validFor="C7" value="40"/> -->
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>
@@ -993,30 +993,30 @@
             <bpsim:ControlParameters>
               <bpsim:InterTriggerTimer>
                 <!--Default />-->
-                <bpsim:FloatingParameter value="1.0"/>
+                <!-- <bpsim:FloatingParameter value="1.0"/> -->
                 <!-- 170 tokens / hour -->
-                <bpsim:FloatingParameter value="0.35" validFor="C1"/>
+                <!-- <bpsim:FloatingParameter value="0.35" validFor="C1"/> -->
                 <!-- 70 tokens / hour -->
-                <bpsim:FloatingParameter value="0.86" validFor="C2"/>
+                <!-- <bpsim:FloatingParameter value="0.86" validFor="C2"/> -->
                 <!-- 110 tokens / hour -->
-                <bpsim:FloatingParameter value="0.55" validFor="C3"/>
+                <!-- <bpsim:FloatingParameter value="0.55" validFor="C3"/> -->
                 <!-- 60 tokens / hour -->
-                <bpsim:FloatingParameter value="1.0" validFor="C4"/>
+                <!-- <bpsim:FloatingParameter value="1.0" validFor="C4"/> -->
                 <!-- 140 tokens / hour -->
                 <bpsim:FloatingParameter value="0.43" validFor="C5"/>
                 <!-- 90 tokens / hour -->
-                <bpsim:FloatingParameter value="0.67" validFor="C6"/>
+                <!-- <bpsim:FloatingParameter value="0.67" validFor="C6"/> -->
                 <!-- 30 tokens / hour -->
-                <bpsim:FloatingParameter value="2.0" validFor="C7"/>
+                <!-- <bpsim:FloatingParameter value="2.0" validFor="C7"/> -->
               </bpsim:InterTriggerTimer>
             </bpsim:ControlParameters>
           </bpsim:ElementParameters>
           <bpsim:ElementParameters elementRef="resource_Front_Office">
             <bpsim:ResourceParameters>
               <bpsim:Quantity>
-                <bpsim:NumericParameter value="0"/>
+                <!-- <bpsim:NumericParameter value="0"/> -->
                 <bpsim:NumericParameter validFor="C1" value="200"/>
-                <bpsim:NumericParameter validFor="C2" value="90"/>
+                <!-- <bpsim:NumericParameter validFor="C2" value="90"/> -->
               </bpsim:Quantity>
             </bpsim:ResourceParameters>
           </bpsim:ElementParameters>

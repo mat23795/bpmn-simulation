@@ -46,26 +46,26 @@ export class ResourceParameters{
         return "ResourceParameters";
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let resourceParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResourceParameters");
+        let resourceParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ResourceParameters");
 
         if(this._availability != undefined){
-            resourceParametersXMLelement.appendChild(this._availability.toXMLelement(bpsimPrefix, xml, "Availability"));
+            resourceParametersXMLelement.appendChild(this._availability.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Availability"));
         }
 
         if(this._quantity != undefined){
-            resourceParametersXMLelement.appendChild(this._quantity.toXMLelement(bpsimPrefix, xml, "Quantity"));
+            resourceParametersXMLelement.appendChild(this._quantity.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Quantity"));
         }
 
         if(this._selection != undefined){
-            resourceParametersXMLelement.appendChild(this._selection.toXMLelement(bpsimPrefix, xml, "Selection"));
+            resourceParametersXMLelement.appendChild(this._selection.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Selection"));
         }
 
         for(let i = 0; i < this._role.length; i++){
-            resourceParametersXMLelement.appendChild(this._role[i].toXMLelement(bpsimPrefix, xml, "Role"));
+            resourceParametersXMLelement.appendChild(this._role[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Role"));
         }
 
         return resourceParametersXMLelement;

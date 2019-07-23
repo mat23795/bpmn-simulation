@@ -40,11 +40,11 @@ export class Calendar{
         return "Calendar";
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let calendarXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Calendar");
+        let calendarXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":Calendar");
 
         // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);

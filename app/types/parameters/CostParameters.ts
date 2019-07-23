@@ -27,18 +27,18 @@ export class CostParameters{
         return "CostParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let costParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "CostParameters");
+        let costParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":CostParameters");
 
         if(this._fixedCost != undefined){
-            costParametersXMLelement.appendChild(this._fixedCost.toXMLelement(bpsimPrefix, xml, "FixedCost"));
+            costParametersXMLelement.appendChild(this._fixedCost.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "FixedCost"));
         }
 
         if(this._unitCost != undefined){
-            costParametersXMLelement.appendChild(this._unitCost.toXMLelement(bpsimPrefix, xml, "UnitCost"));
+            costParametersXMLelement.appendChild(this._unitCost.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "UnitCost"));
         }
 
         return costParametersXMLelement;

@@ -45,26 +45,26 @@ export class ControlParameters{
         return "ControlParameters"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let controlParametersXMLelement = xmlDoc.createElementNS(bpsimPrefix, "ControlParameters");
+        let controlParametersXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ControlParameters");
 
         if(this._interTriggerTimer != undefined){
-            controlParametersXMLelement.appendChild(this._interTriggerTimer.toXMLelement(bpsimPrefix, xml, "InterTriggerTimer"));
+            controlParametersXMLelement.appendChild(this._interTriggerTimer.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "InterTriggerTimer"));
         }
 
         if(this._triggerCount != undefined){
-            controlParametersXMLelement.appendChild(this._triggerCount.toXMLelement(bpsimPrefix, xml, "TriggerCount"));
+            controlParametersXMLelement.appendChild(this._triggerCount.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "TriggerCount"));
         }
 
         if(this._probability != undefined){
-            controlParametersXMLelement.appendChild(this._probability.toXMLelement(bpsimPrefix, xml, "Probability"));
+            controlParametersXMLelement.appendChild(this._probability.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Probability"));
         }
 
         if(this._condition != undefined){
-            controlParametersXMLelement.appendChild(this._condition.toXMLelement(bpsimPrefix, xml, "Condition"));
+            controlParametersXMLelement.appendChild(this._condition.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Condition"));
         }
 
         return controlParametersXMLelement;

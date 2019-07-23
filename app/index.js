@@ -50,6 +50,11 @@ var elementParameterCounterGlobal = 0;
 var propertiesCounterGlobal = 0;
 var numberOfPointsGlobal = 0;
 
+let nodesActivities = [];
+let nodesGateways = [];
+let nodesEvents = [];
+let nodesConnectingObjects = [];
+let nodesResources = [];
 
 var bpmnPrefixGlobal;
 var saved = false;
@@ -117,7 +122,7 @@ function openDiagram() {
             }
 
             $('.djs-container').css('transform', 'scale(' + scaleGlobal + ') translate(' + (pageXGlobal) + 'px,' + (pageYGlobal) + 'px)');
-            console.log(scaleGlobal)
+            // console.log(scaleGlobal)
 
         });
 
@@ -127,8 +132,8 @@ function openDiagram() {
         $('#js-canvas').mousedown(function (event) {
             pageX = event.pageX;
             pageY = event.pageY;
-            console.log("px = " + pageX + " --- py = " + pageY);
-            console.log($('.djs-container').position())
+            // console.log("px = " + pageX + " --- py = " + pageY);
+            // console.log($('.djs-container').position())
             $('#js-canvas').on('mousemove', function (event) {
                 pageXGlobal += event.pageX - pageX
                 pageYGlobal += event.pageY - pageY
@@ -183,7 +188,7 @@ function openDiagram() {
             while (extensionElementXML[0].firstChild) {
                 extensionElementXML[0].removeChild(extensionElementXML[0].firstChild);
             }
-            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
 
             console.log("XML fase modifica");//TODO remove
             console.log(xmlDoc);//TODO remove
@@ -307,34 +312,48 @@ function openDiagram() {
         // * prefisso bpmn (es. semantic, bpmn)
         bpmnPrefixGlobal = definitionsTagXML[0].prefix;
 
+        console.log("bpmnPrefix")
+        console.log(bpmnPrefixGlobal)
+
         bpsimPrefixGlobal = "bpsim"; // * default
+        
+        console.log("definitions")
+        console.log(definitionsTagXML)
 
         if (extensionElementXML.length == 0) {
+            console.log("non esiste simulazione")
 
             // TODO gestire questione bpsim non esistente
 
             //TODO scrivere xml in base a dati della struttura presi da form fields
             //TODO 1) field2emptytree 2) tree2xml
             //TODO forse poter usare bottone crea nuovo scenario?
+
+            console.log("prove")
+            definitionsTagXML[0].setAttribute("xmlns:bpsim","http://www.bpsim.org/schemas/1.0");
+
+
             let bpsimData = new BPSimData();
             let scenario = new Scenario();
             scenario.id = "new Scenario";
             bpsimData.addScenario(scenario);
             dataTreeObjGlobal = bpsimData;
 
-            let bpsimDataXMLelement = dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal)
+            let bpsimDataXMLelement = dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI)
 
-            let extensionElementXMLtemp = xmlDoc.createElementNS(bpmnPrefixGlobal, "extensionElements");
+            let extensionElementXMLtemp = xmlDoc.createElementNS(bpmnNamespaceURI, bpmnPrefixGlobal+":extensionElements");
             extensionElementXMLtemp.appendChild(bpsimDataXMLelement)
 
-            let sourceXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "source");
+            let sourceXMLelement = xmlDoc.createElementNS(bpmnNamespaceURI, bpmnPrefixGlobal+":source");
             sourceXMLelement.textContent = definitionsTagXML[0].id;
 
-            let targetXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "target");
+            let targetXMLelement = xmlDoc.createElementNS(bpmnNamespaceURI, bpmnPrefixGlobal+":target");
             targetXMLelement.textContent = definitionsTagXML[0].id;
 
 
-            let relationshipXMLelement = xmlDoc.createElementNS(bpmnPrefixGlobal, "relationship");
+            let relationshipXMLelement = xmlDoc.createElementNS(bpmnNamespaceURI, bpmnPrefixGlobal+":relationship");
+            console.log("relationship");
+            console.log(relationshipXMLelement);
             relationshipXMLelement.setAttribute("type", "BPSimData");
             relationshipXMLelement.appendChild(extensionElementXMLtemp);
             relationshipXMLelement.appendChild(sourceXMLelement);
@@ -352,6 +371,7 @@ function openDiagram() {
             dataTreeObjGlobal = dataTreeGlobal[1];
 
             console.log("obj finale post parsing");
+            console.log(xmlDoc)
             console.log(dataTreeObjGlobal);
 
 
@@ -375,6 +395,8 @@ function openDiagram() {
             $('#delete-scenario').click();
 
         } else {
+            console.log("esiste simulazione")
+        
 
             $('#scenario-displayed').show();
             $('#delete-scenario').attr("disabled", false);
@@ -407,7 +429,9 @@ function openDiagram() {
                 extensionElementXML[0].removeChild(extensionElementXML[0].firstChild);
             }
             // aggiunta elemento
-            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal));
+            console.log("bpsimPrefixGlobal")
+            console.log(bpsimPrefixGlobal)
+            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
 
             console.log(xmlDoc);//TODO remove
 
@@ -495,11 +519,7 @@ function createFormFields(firstTime = true) {
     // console.log(bpmnElementXML[0]); //TODO REMOVE
 
 
-    let nodesActivities = [];
-    let nodesGateways = [];
-    let nodesEvents = [];
-    let nodesConnectingObjects = [];
-    let nodesResources = [];
+
 
     for (let i = 0; i < bpmnElementProcessXML.length; i++) {
 
@@ -514,8 +534,7 @@ function createFormFields(firstTime = true) {
             if (nodesProcess[j].localName.toLowerCase().includes("task") ||
                 nodesProcess[j].localName.toLowerCase().includes("subprocess") ||
                 nodesProcess[j].localName.toLowerCase().includes("transaction") ||
-                nodesProcess[j].localName.toLowerCase().includes("callactivity") ||
-                nodesProcess[j].localName.toLowerCase().includes("eventsubprocess")) {
+                nodesProcess[j].localName.toLowerCase().includes("callactivity")) {
                 nodesActivities.push(nodesProcess[j]);
             } else if (nodesProcess[j].localName.toLowerCase().includes("gateway")) {
                 nodesGateways.push(nodesProcess[j]);
@@ -1231,7 +1250,7 @@ function createFormFields(firstTime = true) {
 
     // * parte completamento form con dati esistenti
     // let parser = new DOMParser();
-    // let xmlDoc = parser.parseFromString(xml, "text/xml");
+    // let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
     // * elemento XML "extensionElements" che contiene tutti gli elementi della simulazione
     // let extensionElementXML = xmlDoc.getElementsByTagNameNS(bpmnNamespaceURI, "extensionElements");
@@ -1310,7 +1329,7 @@ function createFormFields(firstTime = true) {
             }));
         }
     }
-    console.log("createFormFiels inizio")
+    // console.log("createFormFiels inizio")
     updateValidFor();
     refreshFormFields(scenarios, scenarioSelected);
 
@@ -1335,10 +1354,6 @@ function createFormFields(firstTime = true) {
 
             saveLocalCalendars();
 
-            console.log("sistemare salvataggio complex ed eliminare")//TODO 
-            // saveDataTreeStructure(currentScenarioGlobal);
-
-            console.log()
             saveCurrentScenarioComplexElement(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1]);
 
 
@@ -2108,8 +2123,8 @@ function saveScenarioParameterComplexProperty(scenarioToSave, childNodes) {
 }
 
 function saveScenarioParameterComplexParameter(scenarioToSave, parameterName, childNodes) {
-    console.log("child di " + parameterName)
-    console.log(childNodes);
+    // console.log("child di " + parameterName)
+    // console.log(childNodes);
 
     // div che contiene i div values
     let valuesDiv = childNodes[3];
@@ -2682,6 +2697,56 @@ function setElementParameter(parameter, section, elRef, elementName) {
                 ["Interruptible", "Priority"]
             ];
 
+            console.log("eliminazione voci picker")
+
+        
+            if (elRef != undefined) {
+                // console.log(elemRefTemp)
+                // console.log(nodesActivities)
+                for (let i in nodesActivities) {
+                    // console.log("fuori")
+                    // console.lelementsInSubActivity[i].localName == "incoming"og(nodesActivities[i].id)
+                    // console.log(elemRefTemp)
+                    // console.log(nodesActivities[i].localName)
+                    if(nodesActivities[i].id == elRef && nodesActivities[i].localName != "task"){
+    
+                        console.log("dentro");
+                        console.log(nodesActivities[i].children);
+                        let elementsInSubActivity = nodesActivities[i].children;
+                        if(elementsInSubActivity.length > 0){
+                            let haveDecomposition = false;
+                            let haveIncoming = false;
+                            for(let j=0; j < elementsInSubActivity.length; j++){
+                                if(elementsInSubActivity[i].localName != "incoming" && elementsInSubActivity[i].localName != "outgoing"){
+                                    haveDecomposition = true;
+                                    if(elementsInSubActivity[i].localName == "incoming"){
+                                        haveIncoming = true;
+                                    }
+                                    break;
+                                }
+                            }
+                            if(haveDecomposition){
+                                superclassOptions = ["Cost Parameters", "Property Parameters"];
+                                singleOptionMatrix = [
+                                    ["Fixed Cost", "Unit Cost"],
+                                    ["Property"]
+                                ];
+                            }else{
+                                if(haveIncoming){
+                                    superclassOptions = ["Cost Parameters", "Property Parameters"];
+                                    singleOptionMatrix = [
+                                        ["Fixed Cost", "Unit Cost"],
+                                        ["Property"]
+                                    ];
+                                }
+                            }
+                        }
+    
+                    }
+                }
+            }
+    
+
         } else if (section == "events") {
             if (elementName == "startEvent") {
                 superclassOptions = ["Control Parameters", "Property Parameters"];
@@ -2801,6 +2866,29 @@ function setElementParameter(parameter, section, elRef, elementName) {
         //  TODO fare set parameter sull'on change del picker
 
         elementParameterTypePicker.on('change', function () {
+
+            // console.log("ooooooooooooooooooooooooooooooooooooooooooooooo")
+            let externalDiv = this.parentElement.parentElement;
+            // console.log(externalDiv)
+            // externalDiv = externalDiv.childNodes[2];
+            let nameArrayUsed = [];
+            for (let i = 2; i < externalDiv.childNodes.length; i++) {
+                let sibling = externalDiv.childNodes[i];
+                if (sibling.childNodes[0].id != this.id) {
+                    // console.log(sibling.childNodes[0].value);
+                    nameArrayUsed.push(sibling.childNodes[0].value);
+                }
+            }
+
+            if (nameArrayUsed.length > 0) {
+                if (nameArrayUsed.includes(this.value) && this.value != "") {
+                    window.alert("ERROR: Value " + this.value + " is already used in this parameter");
+                    this.value = "";
+                }
+            }
+
+
+
             divType.empty();
             let selected_option = $(this).find(":selected"); // get selected option for the changed select only
             let selected_value = selected_option.val();
@@ -3078,7 +3166,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
 function setParameter(parameter, buttonID) {
 
     // console.log("parameter in ingresso")
-    // console.log(parameter);
+    // console.log(parameter[0].id);
 
     let parameterName = parameter[0].id.split("-")[1];
     parameter.empty();
@@ -3136,6 +3224,11 @@ function setParameter(parameter, buttonID) {
         if (parameterName.includes("point")) {
             singleOptionMatrix[1].splice(singleOptionMatrix[1].length - 2, 1)
         }
+
+       
+
+
+
         parameterValueDivCounterGlobal += 1;
 
         let valuesSection = $('#' + parameterName + '-values-section');
@@ -3185,17 +3278,7 @@ function setParameter(parameter, buttonID) {
                 if (sibling.childNodes[0].id != this.id) {
                     //     console.log(sibling.childNodes[0].value);
                     nameArrayUsed.push(sibling.childNodes[0].value);
-                }//else{
-                //     if(! nameArrayUsed.includes(sibling.childNodes[0].value)){
-                //         console.log(sibling.childNodes[0].value);
-                //         nameArrayUsed.push(sibling.childNodes[0].value);
-                //     }else{
-                //         window.alert("You can not select the following paralemter:\n" +nameArrayUsed+"\nbecause they are alredy used!")
-                //         console.log("ALEEEEEEEEEERTTTTTTTTTTTT");
-                //         this.value = "";
-                //     }
-                // }
-                // console.log(externalDiv.childNodes);
+                }
             }
 
             if (nameArrayUsed.length > 0) {
@@ -4032,8 +4115,6 @@ function setParameter(parameter, buttonID) {
 
                         btnTrash.on('click', function () {
                             // $('div[id*=scenarioParameters-property' + localPropertiesCounterGlobal + '-div-' + idLocalRemoveProperty + ']').remove();
-                            console.log("pointDiv");
-                            console.log(pointDiv);
                             pointDiv.remove();
                         });
 
@@ -4490,7 +4571,7 @@ function setParameter(parameter, buttonID) {
         // console.log("aooo")
         // console.log( $('#' + buttonID).data('clicked') )
         if ($('#' + buttonID).data('clicked') == true) {
-            console.log("sto focussando " + valueDiv[0].id)
+            // console.log("sto focussando " + valueDiv[0].id)
             valueDiv[0].focus();
         }
     });
@@ -4538,42 +4619,42 @@ function saveLocalCalendars() {
 function closeCollapsibleButton() {
     //TODO inserire tuttoin una funzione
     if ($("#elem-par-btn").data('clicked') == true) {
-        console.log("elem aperto")
+        // console.log("elem aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#elem-par-btn").click();
     }
     if ($("#button-activities").data('clicked') == true) {
-        console.log("activiti aperto")
+        // console.log("activiti aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-activities").click();
     }
     if ($("#button-gateways").data('clicked') == true) {
-        console.log("gatewy aperto")
+        // console.log("gatewy aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-gateways").click();
     }
     if ($("#button-events").data('clicked') == true) {
-        console.log("events aperto")
+        // console.log("events aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-events").click();
     }
     if ($("#button-connectingObjects").data('clicked') == true) {
-        console.log("connobj aperto")
+        // console.log("connobj aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-connectingObjects").click();
     }
     if ($("#button-resources").data('clicked') == true) {
-        console.log("resc aperto")
+        // console.log("resc aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#button-resources").click();
     }
     if ($("#scen-par-btn").data('clicked') == true) {
-        console.log("scenPAr aperto")
+        // console.log("scenPAr aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#scen-par-btn").click();
     }
     if ($("#calendar-btn").data('clicked') == true) {
-        console.log("calendar aperto")
+        // console.log("calendar aperto")
         //al click di un elemento del bpmn apro la sezione bpsim dedicata (elem param e task/gateway/etc.)
         $("#calendar-btn").click();
     }
@@ -4649,8 +4730,8 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
 
         let inheritsScenarioInput = $('#scenario-inherits-picker');
         let inheritsScenarioVal = scenarios[scenarioSelected].inherits;
-        console.log("elemn by id");
-        console.log(inheritsScenarioInput)
+        // console.log("elemn by id");
+        // console.log(inheritsScenarioInput)
         // inheritsScenarioInput.value ="S3";
         if (inheritsScenarioVal != undefined) {
             inheritsScenarioInput.val(inheritsScenarioVal);
@@ -4665,7 +4746,7 @@ function populateScenarioAttributesForm(scenarios, scenarioSelected) {
 
 // * Funzione di supporto per popolare gli attributi di Scenario
 function populateScenarioElementsForm(scenarios, scenarioSelected) {
-    console.log("scenario numero " + scenarioSelected);
+    // console.log("scenario numero " + scenarioSelected);
     if (scenarioSelected != "") {
         scenarioSelected -= 1;
         // console.log("prima popolare scenario parameter");
@@ -4799,10 +4880,10 @@ function setPropertyField(inputElement, obj) {
 
 function setParameterField(inputElement, obj) {
 
-    console.log("elemento");
-    console.log(inputElement)
-    console.log("oggetto")
-    console.log(obj)
+    // console.log("elemento");
+    // console.log(inputElement)
+    // console.log("oggetto")
+    // console.log(obj)
 
     let childNodes = inputElement.childNodes;
 
@@ -4849,9 +4930,9 @@ function setParameterField(inputElement, obj) {
                     let value = obj.value[i][attributeName];
                     if (value != undefined) {
                         if (attributeName == "validFor") {
-                            console.log("dentro " + i);
-                            console.log(divElementsWithoutLabels[j]);
-                            console.log(value[0])
+                            // console.log("dentro " + i);
+                            // console.log(divElementsWithoutLabels[j]);
+                            // console.log(value[0])
                             // $('#'+$.escapeSelector(divElementsWithoutLabels[j].id)).val(value[0]);
                             divElementsWithoutLabels[j].value = value[0];
 
@@ -4892,8 +4973,8 @@ function setParameterField(inputElement, obj) {
                     }
                 }
             } else if (divElements[divElements.length - 1].id.includes("userDistribution")) {
-                console.log("palomaaaaaaaaaaa")
-                console.log(obj.value[i]);
+                // console.log("palomaaaaaaaaaaa")
+                // console.log(obj.value[i]);
                 let points = obj.value[i].points;
                 for (let j in points) {
                     divElements[divElements.length - 2].click();
@@ -4938,12 +5019,11 @@ function setParameterField(inputElement, obj) {
                                     }
                                 }
                             }
-                            console.log("attributename");
-                            console.log(attributeName);
+                            // console.log("attributename");
+                            // console.log(attributeName);
                         }
 
                         if (valueFields[valueFields.length - 1].id.includes("enum")) {
-                            console.log("EUREKAAAA")
                             let enumValues = valuesObj[k]["value"];
                             // let enumContent = divElements[divElements.length-1].childNodes;
                             for (let j = 0; j < enumValues.length; j++) {
@@ -4975,8 +5055,8 @@ function setParameterField(inputElement, obj) {
                             }
                         }
 
-                        console.log("valuesObj")
-                        console.log(valuesObj[k])
+                        // console.log("valuesObj")
+                        // console.log(valuesObj[k])
 
 
                     }
@@ -4984,8 +5064,8 @@ function setParameterField(inputElement, obj) {
                     // popolamento field probability
                     singlePointDiv.childNodes[singlePointDiv.childNodes.length - 1].value = points[j]["probability"];
 
-                    console.log("singlepointdiv")
-                    console.log(singlePointDiv);
+                    // console.log("singlepointdiv")
+                    // console.log(singlePointDiv);
                     // points[j]["probability"] 
                     // let singlePointDiv = divElements[divElements.length - 1].childNodes[j];
                     // console.log(singlePointDiv);
@@ -5253,7 +5333,6 @@ function populateCalendarForm(calendars) {
             });
             inputCalID.on('change', function () {
                 saveCalendarField(this, true);
-                console.log("changeIdCalendar")
                 updateValidFor();
             });
 
@@ -5289,7 +5368,6 @@ function populateCalendarForm(calendars) {
                 $(document.getElementById(newCalId)).remove();
                 calendarsCreatedIDCounterGlobal -= 1;
                 idListGlobal.splice(idListGlobal.indexOf(newCalId), 1);
-                console.log("deleteCalendar")
                 updateValidFor();
 
             });
@@ -5349,7 +5427,6 @@ function populateCalendarForm(calendars) {
 
             calendarsCreatedGlobal.push(calendarTemp);
             calendarsCreatedIDCounterGlobal += 1;
-            console.log("createCalendar")
             updateValidFor();
         }
     });
@@ -5477,7 +5554,6 @@ function saveOrCreateSingleFieldInElementParameters(field) {
                     for (let j = 0; j < idListGlobal.length; j++) {
                         if (idListGlobal[j] == oldValue) {
                             if (value == "") {
-                                console.log("lo tolgo")
                                 idListGlobal.splice(j, 1);
                                 elementParameters[i][fieldName] = undefined;
                             } else {
@@ -5501,13 +5577,11 @@ function saveOrCreateSingleFieldInElementParameters(field) {
         }
 
     } else {
-        console.log("nome non valido")
         let found = false;
         for (let i = 0; i < elementParameters.length; i++) {
             if (elementParameters[i].elementRef == elRef) {
                 found = true;
                 let oldValue = elementParameters[i][fieldName];
-                console.log(oldValue);
                 $(document.getElementById(field.id)).val(oldValue); //TODO reset value in input (o undefined o vecchio valore)
             }
         }
@@ -5595,24 +5669,14 @@ function saveCalendarField(field, isNew) {
 
     if (!flagIdUsed) {
         if (isNew) {
-            console.log("isNew")
             for (let i = 0; i < calendarsNew.length; i++) {
                 if (calendarsNew[i].id == calendarID) {
-                    // console.log(fieldName)
-                    // console.log(value)
-                    // console.log("prima")
                     if (value != "") {
-                        // console.log("true")
-                        console.log(value)
                         calendarsNew[i][fieldName] = value;
                     } else {
-                        // console.log("false")
-                        console.log(value)
                         calendarsNew[i][fieldName] = undefined;
                     }
-                    // console.log("dopo")
                     console.log(calendarsNew[i]);
-
                 }
             }
         } else {
@@ -5833,12 +5897,9 @@ function buildDataTree(nodo, nodoObject) {
                     for (let i = 0; i < tempArray.length; i++) {
                         let singlePoint = tempArray[i];
                         let nameToEliminate = [];
-                        console.log(Object.keys(singlePoint))
+                        // console.log(Object.keys(singlePoint))
                         for (let j = 0; j < Object.keys(singlePoint).length; j++) {
                             if (Object.keys(singlePoint)[j].charAt(0) != "_") {
-                                console.log("voglio pushare")
-                                console.log(Object.keys(singlePoint).length)
-                                console.log(singlePoint[Object.keys(singlePoint)[j]])
 
                                 if (singlePoint[Object.keys(singlePoint)[j]][0] == undefined) {
                                     singlePoint["value"].push(singlePoint[Object.keys(singlePoint)[j]]);

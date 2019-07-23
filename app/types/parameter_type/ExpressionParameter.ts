@@ -22,11 +22,11 @@ export class ExpressionParameter extends ParameterValue{
         return "ExpressionParameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let expressionParameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ExpressionParameter");
+        let expressionParameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ExpressionParameter");
 
         this.addSuperClassAttributesToXMLElement(expressionParameterXMLelement);
         this.eventuallyAddAttribute(expressionParameterXMLelement, "value", this._value);

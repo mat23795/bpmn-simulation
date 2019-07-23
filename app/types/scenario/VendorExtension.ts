@@ -32,11 +32,11 @@ export class VendorExtension {
     }    
 
     
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let vendorExtensionXMLelement = xmlDoc.createElementNS(bpsimPrefix,"VendorExtension");
+        let vendorExtensionXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":VendorExtension");
 
         this.eventuallyAddAttribute(vendorExtensionXMLelement, "name", this._name);
         //TODO gestire il valore value opportunamente perché da specifiche è incomprensibile

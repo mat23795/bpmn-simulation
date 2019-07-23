@@ -151,12 +151,12 @@ export class Scenario {
         return "Scenario"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any) : any{
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any{
 
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let scenarioXMLelement = xmlDoc.createElementNS(bpsimPrefix,"Scenario");
+        let scenarioXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":Scenario");
 
         this.eventuallyAddAttribute(scenarioXMLelement, "id", this._id);
         this.eventuallyAddAttribute(scenarioXMLelement, "name", this._name);
@@ -171,22 +171,22 @@ export class Scenario {
 
         // TODO
         if(this._scenarioParameters != undefined){
-            scenarioXMLelement.appendChild(this._scenarioParameters.toXMLelement(bpsimPrefix,xml));
+            scenarioXMLelement.appendChild(this._scenarioParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         // TODO
         // console.log(this._elementParameters.length);
         for(let i=0; i< this._elementParameters.length; i++) {
-            scenarioXMLelement.appendChild(this._elementParameters[i].toXMLelement(bpsimPrefix, xml));
+            scenarioXMLelement.appendChild(this._elementParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         for(let i=0; i< this._vendorExtensions.length; i++) {
-            scenarioXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, xml));
+            scenarioXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         // TODO
         for(let i=0; i< this._calendar.length; i++) {
-            scenarioXMLelement.appendChild(this._calendar[i].toXMLelement(bpsimPrefix, xml));
+            scenarioXMLelement.appendChild(this._calendar[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         return scenarioXMLelement;

@@ -38,20 +38,20 @@ export class Parameter{
         return "Parameter"
     }
 
-    toXMLelement(bpsimPrefix: string, xml: any, nameTag: string): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string, nameTag: string): any {
         
         let parser = new DOMParser();
-        let xmlDoc = parser.parseFromString(xml, "text/xml");
+        let xmlDoc = parser.parseFromString(undefined, "text/xml");
 
-        let parameterXMLelement = xmlDoc.createElementNS(bpsimPrefix,nameTag);
+        let parameterXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri,bpsimPrefix+":"+nameTag);
 
         for(let i=0; i< this._value.length; i++) {
-            parameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix,xml));
+            parameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
         //TODO verificare check su undefined per un enum
         for(let i=0; i< this._resultRequest.length; i++) {
-            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimPrefix,"ResultRequest");
+            let resultRequestXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest[i];
 
             parameterXMLelement.appendChild(resultRequestXMLelement);

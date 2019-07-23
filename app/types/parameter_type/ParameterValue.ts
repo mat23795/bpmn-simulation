@@ -63,7 +63,7 @@ export class ParameterValue{
     }
 
     // toXMLelement(element: any): any {
-    toXMLelement(bpsimPrefix: string, xml: any): any {
+    toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
         // TODO
         console.log("sono in ParameterValue"); //TODO REMOVE
 
