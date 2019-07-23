@@ -218,9 +218,9 @@ function openDiagram() {
                 }
             });
 
-            console.log("lista");
-            console.log(idListGlobal); //TODO REMOVE
-            console.log(dataTreeObjGlobal.scenario);
+            // console.log("lista");
+            // console.log(idListGlobal); //TODO REMOVE
+            // console.log(dataTreeObjGlobal.scenario);
 
             resetParameterDivs();
 
@@ -232,6 +232,7 @@ function openDiagram() {
                 $('#scenario-displayed').hide();
                 $('#scenario-picker').empty();
                 $('#delete-scenario').attr("disabled", true);
+                $('#generate-bpsim').attr("disabled", true);
             }
 
 
@@ -260,7 +261,8 @@ function openDiagram() {
                 }
             }
             if (name != null) {
-                $('#delete-scenario').attr("disabled", false)
+                $('#delete-scenario').attr("disabled", false);
+                $('#generate-bpsim').attr("disabled", false);
                 $('#scenario-displayed').show();
 
                 newScenario.id = name;
@@ -284,7 +286,6 @@ function openDiagram() {
                 // currentScenarioGlobal = dataTreeObjGlobal.scenario.length
                 $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
                 // console.log("dopo change")
-
 
                 resetParameterDivs();
 
@@ -457,6 +458,11 @@ function resetParameterDivs() {
     elementParameterCounterGlobal = 0;
     propertiesCounterGlobal = 0;
     numberOfPointsGlobal = 0;
+    nodesActivities = [];
+    nodesGateways = [];
+    nodesEvents = [];
+    nodesConnectingObjects = [];
+    nodesResources = [];
 }
 
 function populateIdList() {
@@ -2674,7 +2680,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
         
             if (elRef != undefined) {
                 for (let i in nodesActivities) {
-                    if(nodesActivities[i].id == elRef && nodesActivities[i].localName != "task"){
+                    if(nodesActivities[i].id == elRef && (! nodesActivities[i].localName.toLowerCase().includes("task"))){
                         let elementsInSubActivity = nodesActivities[i].children;
                         if(elementsInSubActivity.length > 0){
                             let haveDecomposition = false;

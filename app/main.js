@@ -8,10 +8,17 @@ let win;
 function createWindow(){
 
     //create browser windo
-    win = new BrowserWindow({width:800, heigth:600});
+    win = new BrowserWindow({
+        width:800, 
+        heigth:600
+,
+        icon: __dirname+'/../img/icon.png'    
+    });
+
+    win.maximize();
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, '/dist/index.html'),
+        pathname: path.join(__dirname, '/../dist/index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -23,7 +30,6 @@ function createWindow(){
         win = null;
     });
 }
-
 
 //run create window function
 app.on('ready', createWindow);

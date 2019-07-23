@@ -2,7 +2,7 @@
   "name": "bpmn-simulation",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "app/main.js",
   "scripts": {
     "start": "npx webpack --config webpack.config.js && electron .",
     "all": "npx webpack --config webpack.config.js && google-chrome dist/index.html",
@@ -21,17 +21,16 @@
   "homepage": "https://github.com/mat23795/bpmn-simulation#readme",
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.2",
+    "npx": "^10.2.0",
     "text-loader": "0.0.1",
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "xml-loader": "^1.2.1",
-    "npx": "^10.2.0"
+    "electron": "^5.0.7"
   },
   "dependencies": {
-    "electron": "^5.0.7",
-    "nyc": "^14.1.1",
     "vkbeautify": "^0.99.3"
   }
 }
