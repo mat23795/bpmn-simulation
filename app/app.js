@@ -312,16 +312,9 @@ function openDiagram() {
         // * prefisso bpmn (es. semantic, bpmn)
         bpmnPrefixGlobal = definitionsTagXML[0].prefix;
 
-        console.log("bpmnPrefix")
-        console.log(bpmnPrefixGlobal)
-
         bpsimPrefixGlobal = "bpsim"; // * default
-        
-        console.log("definitions")
-        console.log(definitionsTagXML)
 
         if (extensionElementXML.length == 0) {
-            console.log("non esiste simulazione")
 
             // TODO gestire questione bpsim non esistente
 
@@ -329,9 +322,7 @@ function openDiagram() {
             //TODO 1) field2emptytree 2) tree2xml
             //TODO forse poter usare bottone crea nuovo scenario?
 
-            console.log("prove")
             definitionsTagXML[0].setAttribute("xmlns:bpsim","http://www.bpsim.org/schemas/1.0");
-
 
             let bpsimData = new BPSimData();
             let scenario = new Scenario();
@@ -352,16 +343,12 @@ function openDiagram() {
 
 
             let relationshipXMLelement = xmlDoc.createElementNS(bpmnNamespaceURI, bpmnPrefixGlobal+":relationship");
-            console.log("relationship");
-            console.log(relationshipXMLelement);
             relationshipXMLelement.setAttribute("type", "BPSimData");
             relationshipXMLelement.appendChild(extensionElementXMLtemp);
             relationshipXMLelement.appendChild(sourceXMLelement);
             relationshipXMLelement.appendChild(targetXMLelement);
 
             definitionsTagXML[0].appendChild(relationshipXMLelement)
-
-            // TODO continuare da qua, capire come fare ad avere l'htmlCollection
 
 
             extensionElementXML = definitionsTagXML[0].children[definitionsTagXML[0].children.length - 1].children;
@@ -395,9 +382,6 @@ function openDiagram() {
             $('#delete-scenario').click();
 
         } else {
-            console.log("esiste simulazione")
-        
-
             $('#scenario-displayed').show();
             $('#delete-scenario').attr("disabled", false);
 
@@ -434,17 +418,7 @@ function openDiagram() {
             extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
 
             console.log(xmlDoc);//TODO remove
-
-            // console.log(extensionElementXML[0].childNodes[0]);
-
-            // console.log(extensionElementXML);
         }
-
-        // $('#js-simulation').scrollTop(0);
-
-        // * funzione per parsare l'XML
-        // xmlParsing();
-
     });
 }
 
@@ -1380,7 +1354,6 @@ function createFormFields(firstTime = true) {
                     }));
                 }
             }
-            console.log("createFormFielsPickerChange")
             updateValidFor();
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
 
@@ -2697,32 +2670,21 @@ function setElementParameter(parameter, section, elRef, elementName) {
                 ["Interruptible", "Priority"]
             ];
 
-            console.log("eliminazione voci picker")
 
         
             if (elRef != undefined) {
-                // console.log(elemRefTemp)
-                // console.log(nodesActivities)
                 for (let i in nodesActivities) {
-                    // console.log("fuori")
-                    // console.lelementsInSubActivity[i].localName == "incoming"og(nodesActivities[i].id)
-                    // console.log(elemRefTemp)
-                    // console.log(nodesActivities[i].localName)
                     if(nodesActivities[i].id == elRef && nodesActivities[i].localName != "task"){
-    
-                        console.log("dentro");
-                        console.log(nodesActivities[i].children);
                         let elementsInSubActivity = nodesActivities[i].children;
                         if(elementsInSubActivity.length > 0){
                             let haveDecomposition = false;
                             let haveIncoming = false;
-                            for(let j=0; j < elementsInSubActivity.length; j++){
-                                if(elementsInSubActivity[i].localName != "incoming" && elementsInSubActivity[i].localName != "outgoing"){
-                                    haveDecomposition = true;
-                                    if(elementsInSubActivity[i].localName == "incoming"){
-                                        haveIncoming = true;
-                                    }
-                                    break;
+                            for(let j=0; j < elementsInSubActivity.length; j++){  
+                                if(elementsInSubActivity[j].localName != "incoming" && elementsInSubActivity[j].localName != "outgoing"){
+                                    haveDecomposition = true; 
+                                }
+                                if(elementsInSubActivity[j].localName == "incoming"){
+                                    haveIncoming = true;
                                 }
                             }
                             if(haveDecomposition){
