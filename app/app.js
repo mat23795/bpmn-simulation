@@ -30,7 +30,14 @@ import * as vkbeautify from 'vkbeautify';
 
 
 
-// const prompt = require('electron-prompt');
+// const electronPrompt = require('electron-prompt');
+
+// const { dialog } = require('electron').remote;
+// import smalltalk from 'smalltalk/legacy';
+// const remote = require("electron").remote;
+// let win = remote.getCurrentWindow();
+
+
 // const prompt = require ("electron");
 // const remote = require ("electron").remote;
 
@@ -218,17 +225,47 @@ function openDiagram() {
             let name = "";
             while (name == "" || idListGlobal.includes(name)) {
                 if (name == "") {
-                    // console.log( remote.getCurrentWindow () );
-                    // prompt.showOpenDialog(
-                    //     remote.getCurrentWindow (),
-                    //     {
-                    //         title: "prova"
+                    // win.webContents.openDevTools();
+
+                    // electronPrompt({
+                    //     title: 'Prompt example',
+                    //     label: 'URL:',
+                    //     value: 'http://example.org',
+                    //     inputAttrs: {
+                    //         type: 'url'
                     //     }
-                    // );  
-                    
+                    // }, win)
+                    //     .then((r) => {
+                    //         if (r === null) {
+                    //             console.log('user cancelled');
+                    //         } else {
+                    //             console.log('result', r);
+                    //         }
+                    //     })
+                    //     .catch(console.error);
+
+
+                    // const dialogOptions = 
+
+                    // dialogs.prompt('username', ok => {
+                    //     console.log('prompt', ok)
+                    // });
+
                     name = prompt("Insert Scenario ID (It can not be empty):");
 
+                    // smalltalk
+                    //     .prompt('Question', 'How old are you?', '10')
+                    //     .then((value) => {
+                    //         console.log(value);
+                    //     })
+                    //     .catch(() => {
+                    //         console.log('cancel');
+                    //     });
+
+                        
+                    // name = "pippo"
                 } else if (idListGlobal.includes(name)) {
+                    // name = "pluto"
                     name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
                 }
             }

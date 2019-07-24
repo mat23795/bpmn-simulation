@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -7,17 +7,17 @@ const prompt = require('electron-prompt');
 //init win
 let win;
 
-function createWindow(){
+function createWindow() {
 
     //create browser windo
     win = new BrowserWindow({
-        width:800, 
-        heigth:600,
-        icon: __dirname+'/../img/icon.png'
+        width: 800,
+        heigth: 600,
+        icon: __dirname + '/../img/icon.png'
         ,
         webPreferences: {
             nodeIntegration: true
-        }    
+        }
     });
 
     win.maximize();
@@ -29,9 +29,25 @@ function createWindow(){
     }));
 
     //open up devtools
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
-    
+
+    // prompt({
+    //     title: 'Prompt example',
+    //     label: 'URL:',
+    //     value: 'http://example.org',
+    //     inputAttrs: {
+    //         type: 'url'
+    //     }
+    // })
+    //     .then((r) => {
+    //         if (r === null) {
+    //             console.log('user cancelled');
+    //         } else {
+    //             console.log('result', r);
+    //         }
+    //     })
+    //     .catch(console.error);
 
 
     win.on('closed', () => {
@@ -43,8 +59,8 @@ function createWindow(){
 app.on('ready', createWindow);
 
 // quit when all eindows are closed
-app.on('window-all-closed', ()=>{
-    if(process.platfoem !== 'darwin'){
+app.on('window-all-closed', () => {
+    if (process.platfoem !== 'darwin') {
         app.quit();
     }
 });

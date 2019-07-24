@@ -20,10 +20,8 @@ module.exports = {
             { test: /\.bpmn$/, use: 'text-loader' },
 
             { test: /\.ts$/, use: 'ts-loader' },
-            {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
-              }
+
+            { test: /\.css$/, use: 'css-loader' }
 
         ]
     }
