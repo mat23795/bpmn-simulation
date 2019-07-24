@@ -2189,7 +2189,8 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
 
 //* Funziona che setta il div relativo all'element parameter passato
 function setElementParameter(parameter, section, elRef, elementName) {
-
+    let nodesActivitiesLocal = nodesActivities;
+    
     let labelInitial = jQuery('<label/>', {
         text: 'Add Parameter'
     });
@@ -2244,9 +2245,9 @@ function setElementParameter(parameter, section, elRef, elementName) {
             ];
 
             if (elRef != undefined) {
-                for (let i in nodesActivities) {
-                    if (nodesActivities[i].id == elRef && (!nodesActivities[i].localName.toLowerCase().includes("task"))) {
-                        let elementsInSubActivity = nodesActivities[i].children;
+                for (let i in nodesActivitiesLocal) {
+                    if (nodesActivitiesLocal[i].id == elRef && (!nodesActivitiesLocal[i].localName.toLowerCase().includes("task"))) {
+                        let elementsInSubActivity = nodesActivitiesLocal[i].children;
                         if (elementsInSubActivity.length > 0) {
                             let haveDecomposition = false;
                             let haveIncoming = false;
