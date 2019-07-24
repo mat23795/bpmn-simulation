@@ -49,7 +49,6 @@ export class Parameter{
             parameterXMLelement.appendChild(this._value[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
-        //TODO verificare check su undefined per un enum
         for(let i=0; i< this._resultRequest.length; i++) {
             let resultRequestXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":ResultRequest");
             resultRequestXMLelement.textContent = this._resultRequest[i];

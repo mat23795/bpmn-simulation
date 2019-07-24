@@ -169,13 +169,10 @@ export class Scenario {
         this.eventuallyAddAttribute(scenarioXMLelement, "result", this._result);
         this.eventuallyAddAttribute(scenarioXMLelement, "inherits", this._inherits);
 
-        // TODO
         if(this._scenarioParameters != undefined){
             scenarioXMLelement.appendChild(this._scenarioParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
-        // TODO
-        // console.log(this._elementParameters.length);
         for(let i=0; i< this._elementParameters.length; i++) {
             scenarioXMLelement.appendChild(this._elementParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
@@ -184,7 +181,6 @@ export class Scenario {
             scenarioXMLelement.appendChild(this._vendorExtensions[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
-        // TODO
         for(let i=0; i< this._calendar.length; i++) {
             scenarioXMLelement.appendChild(this._calendar[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }

@@ -39,7 +39,6 @@ export class VendorExtension {
         let vendorExtensionXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":VendorExtension");
 
         this.eventuallyAddAttribute(vendorExtensionXMLelement, "name", this._name);
-        //TODO gestire il valore value opportunamente perché da specifiche è incomprensibile
         this.eventuallyAddAttribute(vendorExtensionXMLelement, "value", this._value);
         
         return vendorExtensionXMLelement;

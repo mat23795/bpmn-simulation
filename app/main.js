@@ -2,6 +2,8 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 
+const prompt = require('electron-prompt');
+
 //init win
 let win;
 
@@ -10,9 +12,12 @@ function createWindow(){
     //create browser windo
     win = new BrowserWindow({
         width:800, 
-        heigth:600
-,
-        icon: __dirname+'/../img/icon.png'    
+        heigth:600,
+        icon: __dirname+'/../img/icon.png'
+        ,
+        webPreferences: {
+            nodeIntegration: true
+        }    
     });
 
     win.maximize();
@@ -25,6 +30,16 @@ function createWindow(){
 
     //open up devtools
     win.webContents.openDevTools();
+
+    prompt({
+            title: 'Prompt example',
+            label: 'Aooooo'
+        },win)
+        .then(() => {
+            console.log("then");
+        })
+        .catch(console.log("catch"));
+
 
     win.on('closed', () => {
         win = null;

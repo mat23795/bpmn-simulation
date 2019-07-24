@@ -140,7 +140,6 @@ export class ScenarioParameters {
         }
 
         if(this._duration != undefined){
-            // console.log(this);
             scenarioParametersXMLelement.appendChild(this._duration.toXMLelement(bpsimPrefix, bpsimNamespaceUri, "Duration"));
         }
         if(this._warmup != undefined){
@@ -155,7 +154,6 @@ export class ScenarioParameters {
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceOutput", this._traceOutput);
         this.eventuallyAddAttribute(scenarioParametersXMLelement, "traceFormat", this._traceFormat)
 
-        // TODO Passare a PropertyParameters
         for(let i=0; i< this._propertyParameters.length; i++) {
             scenarioParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }

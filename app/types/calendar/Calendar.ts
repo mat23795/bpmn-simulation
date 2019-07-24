@@ -46,7 +46,6 @@ export class Calendar{
 
         let calendarXMLelement = xmlDoc.createElementNS(bpsimNamespaceUri, bpsimPrefix+":Calendar");
 
-        // TODO FINIRLA
         this.eventuallyAddAttribute(calendarXMLelement, "id", this._id);
         this.eventuallyAddAttribute(calendarXMLelement, "name", this._name);
         calendarXMLelement.textContent = this._calendar;

@@ -24,30 +24,6 @@ export class DistributionParameter extends ParameterValue {
         this.addSuperClassAttributesToXMLElement(elementXML);
         this.eventuallyAddAttribute(elementXML, "timeUnit", this._timeUnit);
     }
-
-
-    // protected eventuallyAddAttribute(elementXML: any, name: string, value:any){
-    //     if(value != undefined){
-    //         elementXML.setAttribute(name, value);
-    //     }
-    // }
-
-    // toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
-    //     let parser = new DOMParser();
-    //     let xmlDoc = parser.parseFromString(undefined, "text/xml");
-    //
-    //     let betaDistributionXMLelement = xmlDoc.createElement(bpsimPrefix +":BetaDistribution");
-    //
-    //     // TODO vedere se vanno aggiunti i parametri del padre
-    //     // super.toXMLelement(expressionParameterXMLelement);
-    //
-    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "shape", this._shape);
-    //     this.eventuallyAddAttribute(betaDistributionXMLelement, "scale", this._scale);
-    //
-    //     return betaDistributionXMLelement;
-    //
-    // }
-
 }
 
 export class BetaDistribution extends DistributionParameter {

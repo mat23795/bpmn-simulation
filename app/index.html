@@ -8,17 +8,12 @@
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../css/diagram-js.css">
 
-
         <title>BPMN Simulation</title>
-
-        
-
 
     </head>
     <body>
 
         <h1 class = "centered-title">BPMN Simulation Tool</h1>
-
 
         <div class="horizontal-wrapper">
             <div class="vertical-wrapper">
@@ -38,12 +33,24 @@
                 
             </div>
 
+
+
+            <!-- Insert this line above script imports  -->
+            <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+            <!-- normal script imports etc  -->
             <!-- viewer -->
             <script src="https://unpkg.com/bpmn-js@3.2.2/dist/bpmn-viewer.development.js"></script>
 
             <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
 
             <script src="app.js" type="text/javascript"></script>
+
+            <!-- Insert this line after script imports -->
+            <script>if (window.module) module = window.module;</script>
+
+
+            
 
 
 
@@ -61,9 +68,7 @@
                             <!-- <option></option> -->
                         </select>
                     
-                        <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="create-scenario">Create new scenario</button> -->
                         <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="create-scenario" disabled="true"><i class="fa fa-plus" id="create-scenario"></i></button>
-                        <!-- <button class="btn btn-primary btn-lg button-calculate" role="button" aria-pressed="true" id="delete-scenario" style="background: firebrick">Delete current scenario</button> -->
                         <button class="btn btn-primary btn-lg button-calculate btn-icon" role="button" aria-pressed="true" id="delete-scenario" disabled="true"><i class="fa fa-trash" id="delete-scenario"></i></button>
                         
                     </div>
@@ -87,8 +92,6 @@
                         <label for="scenario-modified-input">Modified</label>
                         <input type="datetime-local" class="form-control form-control-input" id="scenario-modified-input">
 
-                        <!-- <input type="file"> -->
-
                         <label for="scenario-author-input">Author</label>
                         <input type="text" class="form-control form-control-input" id="scenario-author-input" placeholder="Your Company">
 
@@ -104,12 +107,9 @@
 
 
                         <label for="scenario-inherits-picker" style = "width: 100%">Inherits</label>
-                        <!-- <input type="text" class="form-control form-control-input" id="scenario-inherits-input" placeholder="Scenario ID"> -->
                         <select class = "scenario-picker" id="scenario-inherits-picker" style="margin-right: 10%">
                             <!-- <option></option> -->
                         </select>
-
-                        <!-- <p>Collapsible Set:</p> -->
 
                         <button class="collapsible button-collapsible-style" type="button", id="scen-par-btn">Scenario Parameters</button>
                         <div class="content">
@@ -125,13 +125,6 @@
                             <div id="scenarioParameters-warmup-div" style = "border-radius: 10px; border: solid 1px black; padding: 2%">
                                 <label style="font-size: large; width:100%">Warmup</label>
                             </div>
-
-
-                            <!-- <label for="scenarioParameters-duration-input">Duration</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParameters-duration-input" placeholder="Duration of the scenario">
-                       
-                            <label for="scenarioParameters-warmup-input">Warmup</label>
-                            <input type="text" class="form-control form-control-input" id="scenarioParameters-warmup-input" placeholder="Warmup"> -->
 
                             <label for="scenarioParametersAttribute-replication-input">Replications</label>
                             <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-replication-input" value = "1" placeholder="Number of replications">
@@ -149,7 +142,6 @@
                             <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseResultFrequency-input" placeholder="Base Result Frequency">
                         
                             <label for="scenarioParametersAttribute-baseResultFrequencyCumul-input"> Base Result Frequency Cumul</label>
-                            <!-- <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" value="false"> -->
                             <div class="onoffswitch">
                                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-baseResultFrequencyCumul-input" checked>
                                 <label class="onoffswitch-label" for="scenarioParametersAttribute-baseResultFrequencyCumul-input">
@@ -159,7 +151,6 @@
                             </div>
 
                             <label for="scenarioParametersAttribute-traceOutput-input">Trace Output</label>
-                            <!-- <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceOutput-input" value = "false"> -->
                             <div class="onoffswitch">
                                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="scenarioParametersAttribute-traceOutput-input" checked>
                                 <label class="onoffswitch-label" for="scenarioParametersAttribute-traceOutput-input">
@@ -171,7 +162,6 @@
                             <label for="scenarioParametersAttribute-traceFormat-input">Trace Format</label>
                             <input type="text" class="form-control form-control-input" id="scenarioParametersAttribute-traceFormat-input" value ="XES" placeholder="XES">
 
-                            <!-- <label for="scenarioParameters-propertyParameters">Property Parameters</label> -->
                             <div id="scenarioParameters-propertyParameters-div" style = "border-radius: 10px; border: solid 1px black; padding: 2%">
                                 <label style="font-size: large; width:100%">Property Parameters</label>
                                 <div id="scenarioParameters-property-propertyParameters-div" style = "border-radius: 10px; border: solid 1px black; padding: 2%">
@@ -183,76 +173,14 @@
                             </div>
                         </div>
 
-
-
                         <button class="collapsible button-collapsible-style" type="button", id="elem-par-btn">Element Parameters</button>
                         <div class="content" id="element-parameter-section"></div>
-
                         
                         <button class="collapsible button-collapsible-style" type="button", id="calendar-btn">Calendar</button>
                         <div class="content" id="calendar-section"></div>
-
-
                     </div>
-
-                    <!-- TODO spostare questo script in index.js -->
-                    <script>
-                    
-                        // // costruzione buttons in scenario
-                        // var coll = document.getElementsByClassName("collapsible");
-                        // for (let i = 0; i < coll.length; i++) {
-                        //     coll[i].addEventListener("click", function() {
-                        //         this.classList.toggle("active");
-                        //         var content = this.nextElementSibling;
-                        //         if (content.style.maxHeight){
-                        //             content.style.maxHeight = null;
-                        //         } else {
-                        //             content.style.maxHeight = content.scrollHeight + "px";
-                        //         } 
-                        //     });
-                        // }
-
-                    </script>
-
-
-                    <!-- TODO eliminare -->
-                    <!-- <div class="form-group" label="task-form" id="task-form">
-
-                    </div>
-                    <div class="form-group" label="gateway-form" id="gateway-form">
-
-                    </div>
-                    <div class="form-group" label="altro-form" id="altro-form">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Example select</label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect2">Example multiple select</label>
-                        <select multiple class="form-control" id="exampleFormControlSelect2">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Example textarea</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div> -->
-                    <!-- TODO fine eliminare -->
                 </form>
             </div>
         </div>
-
     </body>
 </html>

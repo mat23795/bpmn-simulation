@@ -59,16 +59,10 @@ export class ParameterValue{
         this.eventuallyAddAttribute(elementXML, "instance", this._instance);
         this.eventuallyAddAttribute(elementXML, "result", this._result);
         this.eventuallyAddAttribute(elementXML, "resultTimeStamp", this._resultTimeStamp);
-        // console.log("sono nella funzione figlia di tutti i parameteValue"); //TODO remove
     }
 
-    // toXMLelement(element: any): any {
     toXMLelement(bpsimPrefix: string, bpsimNamespaceUri: string): any {
-        // TODO
-        console.log("sono in ParameterValue"); //TODO REMOVE
-
-        //TODO chiamare addSuper... anche qui, dopo aver scritto toxml di tutti i suoi figli
-
+        // console.log("sono in ParameterValue");
     }
 
 }

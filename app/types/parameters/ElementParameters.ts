@@ -133,13 +133,9 @@ export class ElementParameters {
             elementParametersXMLelement.appendChild(this._resourceParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
 
-        // console.log("prima");
         for(let i=0; i< this._propertyParameters.length; i++) {
-        // if(this._propertyParameters != undefined){
-            // console.log(this);
             elementParametersXMLelement.appendChild(this._propertyParameters[i].toXMLelement(bpsimPrefix, bpsimNamespaceUri));
         }
-        // console.log("dopo");
 
         if(this._priorityParameters != undefined){
             elementParametersXMLelement.appendChild(this._priorityParameters.toXMLelement(bpsimPrefix, bpsimNamespaceUri));
