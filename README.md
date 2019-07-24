@@ -34,4 +34,4 @@ Per eseguire il progetto con _Electron_ utilizzare il seguente comando
 npm start
 ```
 
-Nella cartella [/resources](/../../tree/master/resoruces) sono presenti una serie di file con notazione BPSIM inclusa, usabili per capire il funzionamento della web app.
+Nella cartella [/resources](/../../tree/master/resources) sono presenti una serie di file con notazione BPSIM inclusa, usabili per capire il funzionamento della web app.
