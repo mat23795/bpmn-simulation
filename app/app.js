@@ -28,7 +28,12 @@ import { UserDistributionDataPoint } from './types/parameter_type/DistributionPa
 
 import * as vkbeautify from 'vkbeautify';
 
-const prompt = require('electron-prompt');
+
+
+// const prompt = require('electron-prompt');
+// const prompt = require ("electron");
+// const remote = require ("electron").remote;
+
 
 
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
@@ -213,19 +218,18 @@ function openDiagram() {
             let name = "";
             while (name == "" || idListGlobal.includes(name)) {
                 if (name == "") {
-                    console.log(event.sender.getOwnerBrowserWindow());
-                    // prompt({
-                    //     title: 'Prompt example',
-                    //     label: 'Aooooo'
-                    // })
-                    // .then(() => {
-                    //     console.log("then");
-                    // })
-                    // .catch(console.log("catch"));
+                    // console.log( remote.getCurrentWindow () );
+                    // prompt.showOpenDialog(
+                    //     remote.getCurrentWindow (),
+                    //     {
+                    //         title: "prova"
+                    //     }
+                    // );  
+                    
+                    name = prompt("Insert Scenario ID (It can not be empty):");
 
-                    name = "pippo"
                 } else if (idListGlobal.includes(name)) {
-                    // name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
+                    name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
                 }
             }
             if (name != null) {

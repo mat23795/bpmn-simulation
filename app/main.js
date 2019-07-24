@@ -31,14 +31,7 @@ function createWindow(){
     //open up devtools
     win.webContents.openDevTools();
 
-    prompt({
-            title: 'Prompt example',
-            label: 'Aooooo'
-        },win)
-        .then(() => {
-            console.log("then");
-        })
-        .catch(console.log("catch"));
+    
 
 
     win.on('closed', () => {
