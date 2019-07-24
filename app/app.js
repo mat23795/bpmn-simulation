@@ -28,6 +28,14 @@ import { UserDistributionDataPoint } from './types/parameter_type/DistributionPa
 
 import * as vkbeautify from 'vkbeautify';
 
+const vex = require('vex-js')
+vex.registerPlugin(require('vex-dialog'))
+vex.defaultOptions.className = 'vex-theme-os'
+
+// const icon = __dirname + '../img//icon.png';
+
+
+
 
 
 // const electronPrompt = require('electron-prompt');
@@ -78,6 +86,17 @@ var viewer = new BpmnJS({
     height: "700px",
 });
 
+function isElectron() {
+    if (typeof require !== 'function') return false;
+    if (typeof window !== 'object') return false;
+    try {
+        const electron = require('electron');
+        if (typeof electron !== 'object') return false;
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
 function openDiagram() {
 
@@ -251,7 +270,7 @@ function openDiagram() {
                     //     console.log('prompt', ok)
                     // });
 
-                    name = prompt("Insert Scenario ID (It can not be empty):");
+
 
                     // smalltalk
                     //     .prompt('Question', 'How old are you?', '10')
@@ -262,11 +281,31 @@ function openDiagram() {
                     //         console.log('cancel');
                     //     });
 
-                        
-                    // name = "pippo"
+                    // TODO finire gestione dell'input
+                    vex.dialog.open({
+                        message: 'Enter your username and password:',
+                        input: [
+                            '<input name="username" type="text" placeholder="Username" required />',
+                            '<input name="password" type="password" placeholder="Password" required />'
+                        ].join(''),
+                        buttons: [
+                            $.extend({}, vex.dialog.buttons.YES, { text: 'Login' }),
+                            $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
+                        ],
+                        callback: function (data) {
+                            if (!data) {
+                                console.log('Cancelled')
+                            } else {
+                                console.log('Username', data.username, 'Password', data.password)
+                            }
+                        }
+                    })
+
+                    // name = prompt("Insert Scenario ID (It can not be empty):");
+                    name = "pippo"
                 } else if (idListGlobal.includes(name)) {
-                    // name = "pluto"
-                    name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
+                    name = "pluto"
+                    // name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
                 }
             }
             if (name != null) {
@@ -2190,7 +2229,7 @@ function getElementParameterObj(childNodes, elRef, pickerIndex, haveResultReques
 //* Funziona che setta il div relativo all'element parameter passato
 function setElementParameter(parameter, section, elRef, elementName) {
     let nodesActivitiesLocal = nodesActivities;
-    
+
     let labelInitial = jQuery('<label/>', {
         text: 'Add Parameter'
     });

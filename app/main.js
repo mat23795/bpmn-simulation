@@ -4,6 +4,10 @@ const url = require('url');
 
 const prompt = require('electron-prompt');
 
+// const vex = require('vex-js')
+// vex.registerPlugin(require('vex-dialog'))
+// vex.defaultOptions.className = 'vex-theme-os'
+
 //init win
 let win;
 
@@ -24,7 +28,7 @@ function createWindow() {
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, '/../dist/index.html'),
-        protocol: 'file:',
+        protocol: 'file',
         slashes: true
     }));
 
@@ -49,6 +53,17 @@ function createWindow() {
     //     })
     //     .catch(console.error);
 
+
+    // vex.dialog.confirm({
+    //     message: 'Are you absolutely sure you want to destroy the alien planet?',
+    //     callback: function (value) {
+    //         if (value) {
+    //             console.log('Successfully destroyed the planet.')
+    //         } else {
+    //             console.log('Chicken.')
+    //         }
+    //     }
+    // })
 
     win.on('closed', () => {
         win = null;
