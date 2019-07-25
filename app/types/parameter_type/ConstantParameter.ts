@@ -28,6 +28,10 @@ export class StringParameter extends ConstantParameter {
         super();
     }
 
+    set value(value: string) {
+        this._value = value;
+    }
+
     getType(): string{
         return "StringParameter"
     }
@@ -51,6 +55,10 @@ export class NumericParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    set value(value: number) {
+        this._value = value;
     }
 
     get timeUnit(): TimeUnit {
@@ -87,6 +95,10 @@ export class FloatingParameter extends ConstantParameter {
         super();
     }
 
+    set value(value: number) {
+        this._value = value;
+    }
+
     get timeUnit(): TimeUnit {
         return this._timeUnit;
     }
@@ -120,6 +132,10 @@ export class BooleanParameter extends ConstantParameter {
         super();
     }
 
+    set value(value: boolean) {
+        this._value = value;
+    }
+
     getType(): string{
         return "BooleanParameter"
     }
@@ -142,6 +158,10 @@ export class DurationParameter extends ConstantParameter {
 
     constructor() {
         super();
+    }
+
+    set value(value: string) {
+        this._value = value;
     }
 
     getType(): string{

@@ -2,7 +2,7 @@ import { BPSimData } from "../app/types/scenario/BPSimData";
 import { Scenario } from "../app/types/scenario/Scenario";
 import { expect } from 'chai';
 import 'mocha';
-import { DateTime, BooleanParameter } from "../app/types/parameter_type/ConstantParameter";
+import { DateTime, BooleanParameter, FloatingParameter, NumericParameter } from "../app/types/parameter_type/ConstantParameter";
 import { VendorExtension } from "../app/types/scenario/VendorExtension";
 import { Calendar } from "../app/types/calendar/Calendar";
 import { ScenarioParameters } from "../app/types/scenario/ScenarioParameters";
@@ -11,7 +11,10 @@ import { Parameter } from "../app/types/parameter_type/Parameter";
 import { ResultType } from "../app/types/parameter_type/ResultType";
 import { ExpressionParameter } from "../app/types/parameter_type/ExpressionParameter";
 import { EnumParameter } from "../app/types/parameter_type/EnumParameter";
-import { ErlangDistribution } from "../app/types/parameter_type/DistributionParameter";
+import { ErlangDistribution, UserDistribution, UserDistributionDataPoint, TriangularDistribution } from "../app/types/parameter_type/DistributionParameter";
+import { Property } from "../app/types/parameters/Property";
+import { PropertyType } from "../app/types/parameters/PropertyType";
+import { PropertyParameters } from "../app/types/parameters/PropertyParameters";
 
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
@@ -96,7 +99,7 @@ describe('Scenario testing complex attributes', () => {
 
     scenPar.replication = 10;
     scenPar.baseTimeUnit = TimeUnit.hours;
-    scenPar.baseCurrencyUnit = "EUR"; 
+    scenPar.baseCurrencyUnit = "EUR";
     bpsimdata.scenario[1].scenarioParameters = scenPar;
 
     describe('Scenario testing \"ScenarioParameters\" simple attributes', () => {
@@ -120,7 +123,7 @@ describe('Scenario testing complex attributes', () => {
 
         let start = new Parameter();
         start.resultRequest = [ResultType.count];
-        
+
         let boolpar = new BooleanParameter();
         boolpar.validFor = bpsimdata.scenario[1].calendar[0];
         boolpar.value = true;
@@ -143,8 +146,51 @@ describe('Scenario testing complex attributes', () => {
       });
 
     });
-    describe('Scenario testing \"ScenarioParameters\" properties', () => {
-    
+    describe('Scenario testing \"ScenarioParameters\" property parameters', () => {
+
+      it('should return the \"Property Parameters\" value', () => {
+        let property1 = new Property();
+        property1.type = PropertyType.long;
+
+        let floatpar = new FloatingParameter();
+        floatpar.result = ResultType.max;
+        floatpar.timeUnit = TimeUnit.year;
+        floatpar.value = 2.1;
+
+        let triangdistr = new TriangularDistribution();
+        triangdistr.min = 2;
+        triangdistr.instance = "Triangolo";
+
+        let userdistr = new UserDistribution();
+        userdistr.discrete = true;
+        let point1 = new UserDistributionDataPoint();
+        point1.probability = 0.8;
+        point1.value = [floatpar, triangdistr];
+        userdistr.points = [point1];
+
+        property1.value = [floatpar, userdistr, triangdistr];
+
+
+        let property2 = new Property();
+        let boolpar = new BooleanParameter();
+        boolpar.value = false;
+        boolpar.instance = "Ciao";
+
+        let numpar = new NumericParameter();
+        numpar.result = ResultType.max;
+        numpar.timeUnit = TimeUnit.year;
+        numpar.value = 9;
+
+        property2.value = [boolpar, numpar];
+
+        let propertyparam = new PropertyParameters();
+        propertyparam.property = [property1, property2];
+
+        bpsimdata.scenario[1].scenarioParameters.propertyParameters = [propertyparam];
+
+
+        expect(JSON.stringify(bpsimdata.scenario[1].scenarioParameters.propertyParameters)).to.equal('[{"_property":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.1},{"_points":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.1},{"_min":2,"_instance":"Triangolo"}],"_probability":0.8}],"_discrete":true},{"_min":2,"_instance":"Triangolo"}],"_resultRequest":[],"_type":"long"},{"_value":[{"_value":false,"_instance":"Ciao"},{"_result":"max","_timeUnit":"year","_value":9}],"_resultRequest":[]}]}]');
+      });
 
     });
 
