@@ -195,4 +195,8 @@ export class DateTime{
     get date() : string{
         return this._date;
     }
+
+    set date(date: string){
+        this._date = date;
+    }
 }
