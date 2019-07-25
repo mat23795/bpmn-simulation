@@ -2,7 +2,7 @@ import { BPSimData } from "../app/types/scenario/BPSimData";
 import { Scenario } from "../app/types/scenario/Scenario";
 import { expect } from 'chai';
 import 'mocha';
-import { DateTime, BooleanParameter, FloatingParameter, NumericParameter } from "../app/types/parameter_type/ConstantParameter";
+import { DateTime, BooleanParameter, FloatingParameter, NumericParameter, StringParameter } from "../app/types/parameter_type/ConstantParameter";
 import { VendorExtension } from "../app/types/scenario/VendorExtension";
 import { Calendar } from "../app/types/calendar/Calendar";
 import { ScenarioParameters } from "../app/types/scenario/ScenarioParameters";
@@ -11,10 +11,16 @@ import { Parameter } from "../app/types/parameter_type/Parameter";
 import { ResultType } from "../app/types/parameter_type/ResultType";
 import { ExpressionParameter } from "../app/types/parameter_type/ExpressionParameter";
 import { EnumParameter } from "../app/types/parameter_type/EnumParameter";
-import { ErlangDistribution, UserDistribution, UserDistributionDataPoint, TriangularDistribution } from "../app/types/parameter_type/DistributionParameter";
+import { ErlangDistribution, UserDistribution, UserDistributionDataPoint, TriangularDistribution, GammaDistribution, LogNormalDistribution } from "../app/types/parameter_type/DistributionParameter";
 import { Property } from "../app/types/parameters/Property";
 import { PropertyType } from "../app/types/parameters/PropertyType";
 import { PropertyParameters } from "../app/types/parameters/PropertyParameters";
+import { ElementParameters } from "../app/types/parameters/ElementParameters";
+import { CostParameters } from "../app/types/parameters/CostParameters";
+import { ControlParameters } from "../app/types/parameters/ControlParameters";
+import { TimeParameters } from "../app/types/parameters/TimeParameters";
+import { ResourceParameters } from "../app/types/parameters/ResourceParameters";
+import { PriorityParameters } from "../app/types/parameters/PriorityParameters";
 
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
@@ -192,6 +198,80 @@ describe('Scenario testing complex attributes', () => {
         expect(JSON.stringify(bpsimdata.scenario[1].scenarioParameters.propertyParameters)).to.equal('[{"_property":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.1},{"_points":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.1},{"_min":2,"_instance":"Triangolo"}],"_probability":0.8}],"_discrete":true},{"_min":2,"_instance":"Triangolo"}],"_resultRequest":[],"_type":"long"},{"_value":[{"_value":false,"_instance":"Ciao"},{"_result":"max","_timeUnit":"year","_value":9}],"_resultRequest":[]}]}]');
       });
 
+    });
+  });
+
+  describe('Scenario testing \"ElementParameters\" parameters', () => {
+
+    it('should return the JSON.strigify \"Element Parameters\" object', () => {
+      let property1 = new Property();
+      property1.type = PropertyType.long;
+
+      let floatpar = new FloatingParameter();
+      floatpar.result = ResultType.max;
+      floatpar.timeUnit = TimeUnit.year;
+      floatpar.value = 2.9;
+
+      let triangdistr = new TriangularDistribution();
+      triangdistr.max = 1;
+      triangdistr.instance = "Cerchio";
+
+      let userdistr = new UserDistribution();
+      userdistr.discrete = true;
+      let point1 = new UserDistributionDataPoint();
+      point1.probability = 0.1;
+      point1.value = [floatpar, triangdistr];
+      userdistr.points = [point1];
+
+      property1.value = [floatpar, userdistr, triangdistr];
+
+      let stringpar = new StringParameter();
+      stringpar.result = ResultType.max;
+      stringpar.value = "Parola";
+
+      let propertyparam = new PropertyParameters();
+      propertyparam.property = [property1];
+
+      let param1 = new Parameter();
+      let gammadistr = new GammaDistribution();
+      gammadistr.scale = 2;
+      let lognormaldistr = new LogNormalDistribution();
+      lognormaldistr.mean = 0.7;
+      param1.value = [gammadistr, lognormaldistr];
+      let costparam = new CostParameters();
+      costparam.fixedCost = param1;
+
+      let elem1 = new ElementParameters();
+      elem1.elementRef = "ref_XXX";
+      elem1.id = "el1";
+      elem1.propertyParameters = [propertyparam];
+      elem1.costParameters = costparam;
+
+      let param2 = new Parameter();
+      let booleanparam = new BooleanParameter();
+      booleanparam.value = true;
+      param2.value = [booleanparam];
+      let controlparam = new ControlParameters();
+      controlparam.triggerCount = param2;
+      let timeparam = new TimeParameters();
+      timeparam.lagTime = param1;
+      let resourceparam = new ResourceParameters();
+      resourceparam.role = [param1, param2];
+      let priorityparam = new PriorityParameters();
+      priorityparam.interruptible = param1;
+
+      let elem2 = new ElementParameters();
+      elem2.elementRef = "ref_YYY";
+      elem2.id = "el2";
+      elem2.controlParameters = controlparam;
+      elem2.timeParameters = timeparam;
+      elem2.resourceParameters = resourceparam;
+      elem2.priorityParameters = priorityparam;
+
+      bpsimdata.scenario[1].elementParameters = [elem1, elem2];
+
+
+      expect(JSON.stringify(bpsimdata.scenario[1].elementParameters)).to.equal('[{"_vendorExtensions":[],"_propertyParameters":[{"_property":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.9},{"_points":[{"_value":[{"_result":"max","_timeUnit":"year","_value":2.9},{"_max":1,"_instance":"Cerchio"}],"_probability":0.1}],"_discrete":true},{"_max":1,"_instance":"Cerchio"}],"_resultRequest":[],"_type":"long"}]}],"_elementRef":"ref_XXX","_id":"el1","_costParameters":{"_fixedCost":{"_value":[{"_scale":2},{"_mean":0.7}],"_resultRequest":[]}}},{"_vendorExtensions":[],"_propertyParameters":[],"_elementRef":"ref_YYY","_id":"el2","_controlParameters":{"_triggerCount":{"_value":[{"_value":true}],"_resultRequest":[]}},"_timeParameters":{"_lagTime":{"_value":[{"_scale":2},{"_mean":0.7}],"_resultRequest":[]}},"_resourceParameters":{"_role":[{"_value":[{"_scale":2},{"_mean":0.7}],"_resultRequest":[]},{"_value":[{"_value":true}],"_resultRequest":[]}]},"_priorityParameters":{"_interruptible":{"_value":[{"_scale":2},{"_mean":0.7}],"_resultRequest":[]}}}]');
     });
 
   });
