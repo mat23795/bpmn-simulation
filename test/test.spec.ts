@@ -81,14 +81,14 @@ describe('Scenario testing complex attributes', () => {
     it('should return the number of \"VendorExtension\" elements', () => {
       expect(bpsimdata.scenario[1].vendorExtensions.length).to.equal(2);
     });
-    it('should return the JSON.stringfy \"VendorExtensions\" object', () => {
+    it('should return the JSON.stringify \"VendorExtensions\" object', () => {
       expect(JSON.stringify(bpsimdata.scenario[1].vendorExtensions)).to.equal('[{"_name":"Vendor XXXX","_value":"<ciao>"},{"_name":"Vendor YYYY","_value":"<hello>"}]');
     });
 
     it('should return the number of \"Calendar\" elements', () => {
       expect(bpsimdata.scenario[1].calendar.length).to.equal(3);
     });
-    it('should return the JSON.stringfy \"Calendar\" object', () => {
+    it('should return the JSON.stringify \"Calendar\" object', () => {
       expect(JSON.stringify(bpsimdata.scenario[1].calendar)).to.equal('[{"_id":"C1","_name":"Calendario attivo","_calendar":"TEST1"},{"_id":"C2","_name":"Calendario vecchio","_calendar":"TEST2"},{"_id":"C3","_name":"Calendario non valido","_calendar":"TEST3"}]');
     });
 
@@ -116,7 +116,7 @@ describe('Scenario testing complex attributes', () => {
 
     });
     describe('Scenario testing \"ScenarioParameters\" parameters', () => {
-      it('should return the \"Start\" value', () => {
+      it('should return the JSON.stringify \"Start\" object', () => {
         let calendar = new Calendar();
         calendar.id = "C1";
         bpsimdata.scenario[1].calendar = [calendar];
@@ -148,7 +148,7 @@ describe('Scenario testing complex attributes', () => {
     });
     describe('Scenario testing \"ScenarioParameters\" property parameters', () => {
 
-      it('should return the \"Property Parameters\" value', () => {
+      it('should return the JSON.strigify \"Property Parameters\" object', () => {
         let property1 = new Property();
         property1.type = PropertyType.long;
 
