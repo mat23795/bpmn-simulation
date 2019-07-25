@@ -109,8 +109,9 @@ function createScenarioOnClick(event, isUsed = false, name = "") {
 
 function checkScenarioName(valore) {
 
+    console.log(valore)
 
-    if (valore) {
+    if (valore && valore != true) {
 
         let name = valore.scenarioID;
         if (idListGlobal.includes(name)) {
@@ -167,7 +168,7 @@ function createCalendarOnClick(event, isUsed = false, name = "") {
 
 function checkCalendarName(valore) {
 
-    if (valore) {
+    if (valore && valore != true) {
 
         let newCalId = valore.calendarID;
         if (idListGlobal.includes(newCalId)) {
