@@ -109,7 +109,6 @@ function createScenarioOnClick(event, isUsed = false, name = "") {
 
 function checkScenarioName(valore) {
 
-    console.log(valore)
 
     if (valore && valore != true) {
 
@@ -2545,7 +2544,7 @@ function setElementParameter(parameter, section, elRef, elementName) {
 
             if (nameArrayUsed.length > 0) {
                 if (nameArrayUsed.includes(this.value) && this.value != "") {
-                    window.alert("ERROR: Value " + this.value + " is already used in this parameter");
+                    vex.dialog.alert("ERROR: Value " + this.value + " is already used in this parameter");
                     this.value = "";
                 }
             }
@@ -2903,7 +2902,7 @@ function setParameter(parameter, buttonID) {
 
             if (nameArrayUsed.length > 0) {
                 if (nameArrayUsed.includes(this.value) && this.value != "") {
-                    window.alert("ERROR: Value " + this.value + " is already used in this parameter");
+                    vex.dialog.alert("ERROR: Value " + this.value + " is already used in this parameter");
                     this.value = "";
                 }
             }
@@ -4542,7 +4541,7 @@ function saveScenarioAtrribute(field) {
         for (let i = 0; i < idListGlobal.length; i++) {
             if (idListGlobal[i] == value) {
                 setTimeout(function () {
-                    window.alert("ERROR: ID: " + value + " is already used")
+                    vex.dialog.alert("ERROR: ID: " + value + " is already used")
                 }, 10);
                 validName = false;
                 $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id); //reset scenario id
@@ -4550,7 +4549,7 @@ function saveScenarioAtrribute(field) {
         }
         if (value == "") {
             setTimeout(function () {
-                window.alert("ERROR: A scenario must have an ID")
+                vex.dialog.alert("ERROR: A scenario must have an ID")
             }, 10);
             validName = false;
             $('#scenario-id-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].id); //reset scenario id
@@ -4588,7 +4587,7 @@ function saveScenarioParameterAtrribute(field) {
         if (fieldName == "replication" || fieldName == "seed") {
             if (!value.match(/^\d+$/)) {
                 setTimeout(function () {
-                    window.alert("ERROR: You must insert an int value in replications");
+                    vex.dialog.alert("ERROR: You must insert an int value in replications");
                 }, 10);
                 if (fieldName == "replication") {
                     $('#scenarioParametersAttribute-replication-input').val(dataTreeObjGlobal.scenario[currentScenarioGlobal - 1].scenarioParameters.replication);
@@ -4628,7 +4627,7 @@ function saveOrCreateSingleFieldInElementParameters(field) {
     for (let i = 0; i < idListGlobal.length; i++) {
         if (idListGlobal[i] == value) {
             setTimeout(function () {
-                window.alert("ERROR: ID: " + value + " is already used")
+                vex.dialog.alert("ERROR: ID: " + value + " is already used")
             }, 10);
             validName = false;
         }
@@ -4703,7 +4702,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsExisting[j].id == calendarID) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: ID: " + value + " is already used")
+                            vex.dialog.alert("ERROR: ID: " + value + " is already used")
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsExisting[j][fieldName]); //reset value in iput
@@ -4717,7 +4716,7 @@ function saveCalendarField(field, isNew) {
                 if (calendarsExisting[j].id == calendarID) {
                     //silly timeout per far apparire l'errore in scrittura sull'input field
                     setTimeout(function () {
-                        window.alert("ERROR: A calendar must have an ID")
+                        vex.dialog.alert("ERROR: A calendar must have an ID")
                     }, 1);
                     flagIdUsed = true;
                     $('#calendar-' + calendarID + '-id-input').val(calendarsExisting[j][fieldName]); //reset value in iput
@@ -4731,7 +4730,7 @@ function saveCalendarField(field, isNew) {
                     if (calendarsNew[j].id == calendarID) {
                         //silly timeout per far apparire l'errore in scrittura sull'input field
                         setTimeout(function () {
-                            window.alert("ERROR: ID: " + value + " is already used")
+                            vex.dialog.alert("ERROR: ID: " + value + " is already used")
                         }, 1);
                         flagIdUsed = true;
                         $('#calendar-' + calendarID + '-id-input').val(calendarsNew[j][fieldName]); //reset value in iput
@@ -4745,7 +4744,7 @@ function saveCalendarField(field, isNew) {
                 if (calendarsNew[j].id == calendarID) {
                     //silly timeout per far apparire l'errore in scrittura sull'input field
                     setTimeout(function () {
-                        window.alert("ERROR: A calendar must have an ID")
+                        vex.dialog.alert("ERROR: A calendar must have an ID")
                     }, 1);
                     flagIdUsed = true;
                     $('#calendar-' + calendarID + '-id-input').val(calendarsNew[j][fieldName]); //reset value in iput
@@ -5101,7 +5100,7 @@ $('#js-drop-zone')
 
 // * Check file api availability
 if (!window.FileList || !window.FileReader) {
-    window.alert(
+    vex.dialog.alert(
         'Looks like you use an older browser that does not support drag and drop. ' +
         'Try using Chrome, Firefox or the Internet Explorer > 10.');
 } else {
