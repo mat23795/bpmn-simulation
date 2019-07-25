@@ -32,25 +32,6 @@ const vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
 
-// const icon = __dirname + '../img//icon.png';
-
-
-
-
-
-// const electronPrompt = require('electron-prompt');
-
-// const { dialog } = require('electron').remote;
-// import smalltalk from 'smalltalk/legacy';
-// const remote = require("electron").remote;
-// let win = remote.getCurrentWindow();
-
-
-// const prompt = require ("electron");
-// const remote = require ("electron").remote;
-
-
-
 const bpmnNamespaceURI = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 const bpsimNamespaceURI = "http://www.bpsim.org/schemas/1.0";
 
@@ -86,6 +67,8 @@ var viewer = new BpmnJS({
     height: "700px",
 });
 
+
+
 function isElectron() {
     if (typeof require !== 'function') return false;
     if (typeof window !== 'object') return false;
@@ -96,6 +79,218 @@ function isElectron() {
         return false;
     }
     return true;
+}
+
+
+function createScenarioOnClick(event, isUsed = false, name = "") {
+
+    let testoMessaggio;
+
+    if (isUsed) {
+        testoMessaggio = "ID: " + name + " is not availaible. Insert a new ID:";
+    } else {
+        testoMessaggio = "Insert Scenario ID (It can not be empty):";
+    }
+    vex.dialog.open({
+        message: testoMessaggio,
+        input: [
+            '<input name="scenarioID" type="text" placeholder="Scenario ID" required />'
+        ].join(''),
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+        ],
+        callback: function (data) {
+            checkScenarioName(data)
+        }
+    });
+}
+
+
+function checkScenarioName(valore) {
+
+
+    if (valore) {
+
+        let name = valore.scenarioID;
+        if (idListGlobal.includes(name)) {
+            $('#create-scenario').trigger('click', [true, name]);
+        } else {
+            let newScenario = new Scenario();
+
+            $('#delete-scenario').attr("disabled", false);
+            $('#generate-bpsim').attr("disabled", false);
+            $('#scenario-displayed').show();
+
+            newScenario.id = name;
+            let tempArrayScenario = [];
+            tempArrayScenario.push(newScenario);
+            dataTreeObjGlobal.scenario = tempArrayScenario;
+            idListGlobal.push(name);
+
+            $('#scenario-picker').append($('<option>', {
+                value: dataTreeObjGlobal.scenario.length,
+                text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
+            }));
+
+            $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
+
+            resetParameterDivs();
+        }
+    }
+
+
+}
+
+function createCalendarOnClick(event, isUsed = false, name = "") {
+    let testoMessaggio;
+
+    if (isUsed) {
+        testoMessaggio = "ID: " + name + " is not availaible. Insert a new Calendar ID:";
+    } else {
+        testoMessaggio = "Insert Calendar ID (It can not be empty):";
+    }
+    vex.dialog.open({
+        message: testoMessaggio,
+        input: [
+            '<input name="calendarID" type="text" placeholder="Calendar ID" required />'
+        ].join(''),
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+        ],
+        callback: function (data) {
+            checkCalendarName(data)
+        }
+    });
+}
+
+function checkCalendarName(valore) {
+
+    if (valore) {
+
+        let newCalId = valore.calendarID;
+        if (idListGlobal.includes(newCalId)) {
+            $('#create-calendar-btn').trigger('click', [true, newCalId]);
+        } else {
+            let calendarTemp = new Calendar();
+        idListGlobal.push(newCalId);
+
+        let divCalendarSection = jQuery('<div/>', {
+            id: newCalId
+        });
+
+        let calendarSection = $('#calendar-section');
+        let labelCalID = jQuery('<label/>', {
+            text: 'Calendar ID',
+            style: 'margin-top:10%; margin-right: 20%; white-space: nowrap'
+        });
+        let inputCalID = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-' + newCalId + '-id-input',
+            value: newCalId
+        });
+        inputCalID.on('change', function () {
+            saveCalendarField(this, true);
+            updateValidFor();
+        });
+
+        let btnTrash = jQuery('<button/>', {
+            class: 'btn btn-primary btn-lg button-calculate btn-icon',
+            type: 'button',
+            id: 'btn-delete-calendar-' + newCalId
+
+        });
+
+        let iEl = jQuery('<i/>', {
+            class: 'fa fa-trash',
+            id: 'icon-btn-delete-calendar-' + newCalId
+        });
+
+        btnTrash.append(iEl);
+
+        let div = jQuery('<div/>', {
+            style: 'display: inline-flex'
+        });
+
+        div.append(labelCalID);
+        div.append(btnTrash);
+
+        btnTrash.on('click', function () {
+            let positionToEliminate = 0;
+            for (let i = 0; i < calendarsCreatedGlobal.length; i++) {
+                if (calendarsCreatedGlobal[i].id == newCalId) {
+                    positionToEliminate = i;
+                }
+            }
+            calendarsCreatedGlobal.splice(positionToEliminate, 1);
+            $(document.getElementById(newCalId)).remove();
+            calendarsCreatedIDCounterGlobal -= 1;
+            idListGlobal.splice(idListGlobal.indexOf(newCalId), 1);
+            updateValidFor();
+
+        });
+
+        divCalendarSection.append(div);
+
+        divCalendarSection.append(inputCalID);
+
+        let labelCalName = jQuery('<label/>', {
+            text: 'Calendar Name'
+        });
+        let inputCalName = jQuery('<input/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-' + newCalId + '-name-input',
+            placeholder: "Calendar name"
+        });
+        inputCalName.on('change', function () {
+            saveCalendarField(this, true);
+        });
+        divCalendarSection.append(labelCalName);
+        divCalendarSection.append(inputCalName);
+
+        let labelCalCalendar = jQuery('<label/>', {
+            text: 'Calendar Content'
+        });
+
+        let inputCalCalendar = jQuery('<textarea/>', {
+            type: 'text',
+            class: 'form-control form-control-input',
+            id: 'calendar-' + newCalId + '-calendar-input',
+            placeholder: "Calendar content"
+        });
+        inputCalCalendar.on('input', function () {
+            saveCalendarField(this, true);
+        });
+        divCalendarSection.append(labelCalCalendar);
+        divCalendarSection.append(inputCalCalendar);
+        calendarSection.append(divCalendarSection);
+
+        //focus sull'id del nuovo calendar creato
+        focusDelayed(inputCalID);
+
+        calendarTemp.id = inputCalID.val();
+        if (inputCalName.val() == "") {
+            calendarTemp.name = undefined;
+
+        } else {
+            calendarTemp.name = inputCalName.val();
+
+        }
+        calendarTemp.calendar = inputCalCalendar.val();
+
+        calendarsCreatedGlobal.push(calendarTemp);
+        calendarsCreatedIDCounterGlobal += 1;
+        updateValidFor();
+
+        }
+    }
+
+    
+
+
 }
 
 function openDiagram() {
@@ -237,99 +432,7 @@ function openDiagram() {
         });
 
         // * aggiunta evento al bottone che crea un nuovo scenario
-        $('#create-scenario').on("click", function () {
-
-            let newScenario = new Scenario();
-
-            let name = "";
-            while (name == "" || idListGlobal.includes(name)) {
-                if (name == "") {
-                    // win.webContents.openDevTools();
-
-                    // electronPrompt({
-                    //     title: 'Prompt example',
-                    //     label: 'URL:',
-                    //     value: 'http://example.org',
-                    //     inputAttrs: {
-                    //         type: 'url'
-                    //     }
-                    // }, win)
-                    //     .then((r) => {
-                    //         if (r === null) {
-                    //             console.log('user cancelled');
-                    //         } else {
-                    //             console.log('result', r);
-                    //         }
-                    //     })
-                    //     .catch(console.error);
-
-
-                    // const dialogOptions = 
-
-                    // dialogs.prompt('username', ok => {
-                    //     console.log('prompt', ok)
-                    // });
-
-
-
-                    // smalltalk
-                    //     .prompt('Question', 'How old are you?', '10')
-                    //     .then((value) => {
-                    //         console.log(value);
-                    //     })
-                    //     .catch(() => {
-                    //         console.log('cancel');
-                    //     });
-
-                    // TODO finire gestione dell'input
-                    vex.dialog.open({
-                        message: 'Enter your username and password:',
-                        input: [
-                            '<input name="username" type="text" placeholder="Username" required />',
-                            '<input name="password" type="password" placeholder="Password" required />'
-                        ].join(''),
-                        buttons: [
-                            $.extend({}, vex.dialog.buttons.YES, { text: 'Login' }),
-                            $.extend({}, vex.dialog.buttons.NO, { text: 'Back' })
-                        ],
-                        callback: function (data) {
-                            if (!data) {
-                                console.log('Cancelled')
-                            } else {
-                                console.log('Username', data.username, 'Password', data.password)
-                            }
-                        }
-                    })
-
-                    // name = prompt("Insert Scenario ID (It can not be empty):");
-                    name = "pippo"
-                } else if (idListGlobal.includes(name)) {
-                    name = "pluto"
-                    // name = prompt("ID: " + name + " is not availaible. Insert a new ID:");
-                }
-            }
-            if (name != null) {
-                $('#delete-scenario').attr("disabled", false);
-                $('#generate-bpsim').attr("disabled", false);
-                $('#scenario-displayed').show();
-
-                newScenario.id = name;
-                let tempArrayScenario = [];
-                tempArrayScenario.push(newScenario);
-                dataTreeObjGlobal.scenario = tempArrayScenario;
-                idListGlobal.push(name);
-
-                $('#scenario-picker').append($('<option>', {
-                    value: dataTreeObjGlobal.scenario.length,
-                    text: dataTreeObjGlobal.scenario[dataTreeObjGlobal.scenario.length - 1].id
-                }));
-
-                $('#scenario-picker').val(dataTreeObjGlobal.scenario.length).trigger('change');
-
-                resetParameterDivs();
-
-            }
-        });
+        $('#create-scenario').on("click", createScenarioOnClick);
 
 
         // * rimozione commenti dal file xml perché creano problemi con il parsing
@@ -4423,130 +4526,7 @@ function populateCalendarForm(calendars) {
         htmlCalendarSection.append(divCalendarSection);
     }
 
-    buttonCreateCalendar.on("click", function () {
-        let calendarTemp = new Calendar();
-
-        let newCalId = "";
-        while (newCalId == "" || idListGlobal.includes(newCalId)) {
-            if (newCalId == "") {
-                newCalId = prompt("Insert Calendar ID (It can not be empty):");
-            } else if (idListGlobal.includes(newCalId)) {
-                newCalId = prompt("ID: " + newCalId + " is not availaible. Insert a new Calendar ID:");
-            }
-        }
-        if (newCalId != null) {
-            idListGlobal.push(newCalId);
-
-            let divCalendarSection = jQuery('<div/>', {
-                id: newCalId
-            });
-
-            let calendarSection = $('#calendar-section');
-            let labelCalID = jQuery('<label/>', {
-                text: 'Calendar ID',
-                style: 'margin-top:10%; margin-right: 20%; white-space: nowrap'
-            });
-            let inputCalID = jQuery('<input/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'calendar-' + newCalId + '-id-input',
-                value: newCalId
-            });
-            inputCalID.on('change', function () {
-                saveCalendarField(this, true);
-                updateValidFor();
-            });
-
-            let btnTrash = jQuery('<button/>', {
-                class: 'btn btn-primary btn-lg button-calculate btn-icon',
-                type: 'button',
-                id: 'btn-delete-calendar-' + newCalId
-
-            });
-
-            let iEl = jQuery('<i/>', {
-                class: 'fa fa-trash',
-                id: 'icon-btn-delete-calendar-' + newCalId
-            });
-
-            btnTrash.append(iEl);
-
-            let div = jQuery('<div/>', {
-                style: 'display: inline-flex'
-            });
-
-            div.append(labelCalID);
-            div.append(btnTrash);
-
-            btnTrash.on('click', function () {
-                let positionToEliminate = 0;
-                for (let i = 0; i < calendarsCreatedGlobal.length; i++) {
-                    if (calendarsCreatedGlobal[i].id == newCalId) {
-                        positionToEliminate = i;
-                    }
-                }
-                calendarsCreatedGlobal.splice(positionToEliminate, 1);
-                $(document.getElementById(newCalId)).remove();
-                calendarsCreatedIDCounterGlobal -= 1;
-                idListGlobal.splice(idListGlobal.indexOf(newCalId), 1);
-                updateValidFor();
-
-            });
-
-            divCalendarSection.append(div);
-
-            divCalendarSection.append(inputCalID);
-
-            let labelCalName = jQuery('<label/>', {
-                text: 'Calendar Name'
-            });
-            let inputCalName = jQuery('<input/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'calendar-' + newCalId + '-name-input',
-                placeholder: "Calendar name"
-            });
-            inputCalName.on('change', function () {
-                saveCalendarField(this, true);
-            });
-            divCalendarSection.append(labelCalName);
-            divCalendarSection.append(inputCalName);
-
-            let labelCalCalendar = jQuery('<label/>', {
-                text: 'Calendar Content'
-            });
-
-            let inputCalCalendar = jQuery('<textarea/>', {
-                type: 'text',
-                class: 'form-control form-control-input',
-                id: 'calendar-' + newCalId + '-calendar-input',
-                placeholder: "Calendar content"
-            });
-            inputCalCalendar.on('input', function () {
-                saveCalendarField(this, true);
-            });
-            divCalendarSection.append(labelCalCalendar);
-            divCalendarSection.append(inputCalCalendar);
-            calendarSection.append(divCalendarSection);
-
-            //focus sull'id del nuovo calendar creato
-            focusDelayed(inputCalID);
-
-            calendarTemp.id = inputCalID.val();
-            if (inputCalName.val() == "") {
-                calendarTemp.name = undefined;
-
-            } else {
-                calendarTemp.name = inputCalName.val();
-
-            }
-            calendarTemp.calendar = inputCalCalendar.val();
-
-            calendarsCreatedGlobal.push(calendarTemp);
-            calendarsCreatedIDCounterGlobal += 1;
-            updateValidFor();
-        }
-    });
+    buttonCreateCalendar.on("click", createCalendarOnClick);
 
 }
 
