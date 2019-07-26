@@ -388,13 +388,19 @@ function openDiagram() {
             while (extensionElementXML[0].firstChild) {
                 extensionElementXML[0].removeChild(extensionElementXML[0].firstChild);
             }
-            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
 
+            //eliminazione attributo xlmns da bpsimdata
+            for(let key in Object.keys(dataTreeObjGlobal)){
+                if(Object.keys(dataTreeObjGlobal)[key] != "_scenario"){
+                    delete dataTreeObjGlobal[Object.keys(dataTreeObjGlobal)[key]];
+                }
+            }
+            extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
             console.log("OUTPUT GENERAZIONE XML SIMULAZIONE");//TODO REMOVE?
             console.log(xmlDoc);//TODO REMOVE?
             console.log(extensionElementXML[0].lastChild); //TODO REMOVE?
             console.log(dataTreeObjGlobal); //TODO REMOVE?
-
+            
             //TODO commentare o scommentare se si vuole salvare o no il file
             download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
         });

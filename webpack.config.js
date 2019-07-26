@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require ('webpack')
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -10,10 +11,11 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([{
             from: './app/index.html'
-        }])
+        }]),
+        new webpack.IgnorePlugin(/jsdom$/)
     ],
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: ['.tsx', '.ts', '.js']
     },
     module: {
         rules: [

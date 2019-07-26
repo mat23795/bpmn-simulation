@@ -52,4 +52,8 @@ export class Calendar{
 
         return calendarXMLelement;
     }
+
+    toString(){
+        return this.id;
+    }
 }

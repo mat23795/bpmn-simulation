@@ -199,4 +199,8 @@ export class DateTime{
     set date(date: string){
         this._date = date;
     }
+
+    toString(){
+        return this.date;
+    }
 }
