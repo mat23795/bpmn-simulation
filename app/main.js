@@ -2,8 +2,6 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
 
-const prompt = require('electron-prompt');
-
 // const vex = require('vex-js')
 // vex.registerPlugin(require('vex-dialog'))
 // vex.defaultOptions.className = 'vex-theme-os'
@@ -36,34 +34,6 @@ function createWindow() {
     // win.webContents.openDevTools();
 
 
-    // prompt({
-    //     title: 'Prompt example',
-    //     label: 'URL:',
-    //     value: 'http://example.org',
-    //     inputAttrs: {
-    //         type: 'url'
-    //     }
-    // })
-    //     .then((r) => {
-    //         if (r === null) {
-    //             console.log('user cancelled');
-    //         } else {
-    //             console.log('result', r);
-    //         }
-    //     })
-    //     .catch(console.error);
-
-
-    // vex.dialog.confirm({
-    //     message: 'Are you absolutely sure you want to destroy the alien planet?',
-    //     callback: function (value) {
-    //         if (value) {
-    //             console.log('Successfully destroyed the planet.')
-    //         } else {
-    //             console.log('Chicken.')
-    //         }
-    //     }
-    // })
 
     win.on('closed', () => {
         win = null;
