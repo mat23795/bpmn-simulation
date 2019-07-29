@@ -8,7 +8,8 @@
     "all": "npx webpack --config webpack.config.js && google-chrome dist/index.html",
     "test": "mocha -r ts-node/register test/test.spec.ts",
     "dist": "electron-builder",
-    "pack": "build --dir"
+    "pack": "build --dir",
+    "cypress:open": "cypress open"
   },
   "build": {
     "appId": "bpmn-sim",
@@ -45,6 +46,7 @@
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "copy-webpack-plugin": "^5.0.2",
+    "cypress": "^3.4.0",
     "dialogs": "^2.0.1",
     "electron": "^5.0.7",
     "electron-builder": "^21.1.5",

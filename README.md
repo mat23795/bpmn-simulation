@@ -35,3 +35,13 @@ npm start
 ```
 
 Nella cartella [/resources](/../../tree/master/resources) sono presenti una serie di file con notazione BPSIM inclusa, usabili per capire il funzionamento della web app.
+
+###Test
+-sezione test type script
+
+-sezione test web
+
+controllare se si hanno queste dipendenze
+sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+prima di lanciare il comando 
+npm run cypress:open
