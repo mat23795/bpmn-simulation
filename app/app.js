@@ -5054,23 +5054,14 @@ function registerFileDrop(container, callback) {
         e.preventDefault();
 
         var files = e.dataTransfer.files;
-        console.log("files")
-        console.log(files)
 
         var file = files[0];
-        console.log("file")
-        console.log(file)
 
         var reader = new FileReader();
-        console.log("reader")
-        console.log(reader)
 
         reader.onload = function (e) {
             
-            console.log("prima")
             var xml = e.target.result;
-            console.log("xml")
-            console.log(xml)
 
             // * mette visibile il div del diagramma e toglie quello della drop-zone
             $('#js-drop-zone').css('display', 'none');
