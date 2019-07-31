@@ -413,17 +413,132 @@ describe('TEST_7 Manipolazione parametri per Events', () => {
 
 });
 
-// describe('TEST_8 Manipolazione parametri per Gateways', () => {
+describe('TEST_8 Manipolazione parametri per Gateways', () => {
+  let elementRef0 = "_10-593";
+  it('click di un\'event dell\'svg e check del focus su di esso e check che non si può aggiungere parameter', () => {
+    cy.get('[data-element-id="' + elementRef0 + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef0 + '$$"]').should('have.focus')
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef0 + '\\$\\$]').should('not.exist')
+  });
 
-// });
+  let elementRef = "_10-114";
+  it('click di un gateway dell\'svg e check del focus su di esso', () => {
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+  });
+  it('creazione nuovo parametro con 2 value, 1 solo valido + test dei rispettivi resultRequest ', () => {
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
 
-// describe('TEST_9 Manipolazione parametri per Connecting Objects', () => {
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Inter Trigger TimerTrigger Count')
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').select('InterTriggerTimer')
 
-// });
+    cy.get('#btn-create-parameter14-value').click()
 
-// describe('TEST_10 Manipolazione parametri per Resources', () => {
+    cy.get('#parameter14-value-picker-24').select('StringParameter')
 
-// });
+    cy.get('#parameter14-value-instance-input-24').type(12)
+    cy.get('#parameter14-value-result-picker-24').select('count')
+
+    cy.get('#parameter14-resultRequest-picker-23').select('sum')
+  })
+
+  it('controllo salvataggio', () => {
+    cy.get('#scenario-picker').select('S3').select('S2');
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+
+    cy.get('#select-parameter13-\\$\\$' + elementRef + '\\$\\$').should('have.value', 'InterTriggerTimer');
+
+    cy.get('#parameter13-value-picker-23').should('have.value', 'StringParameter')
+
+    cy.get('#parameter13-value-instance-input-23').should('have.value', '12')
+    cy.get('#parameter13-value-result-picker-23').should('have.value', 'count')
+
+    cy.get('#parameter13-resultRequest-picker-22').should('have.value', 'sum')
+  })
+
+});
+
+describe('TEST_9 Manipolazione parametri per Connecting Objects', () => {
+
+  let elementRef = "_10-740";
+
+  it('click di un connecting object dell\'svg e check del focus su di esso', () => {
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+  });
+  it('creazione nuovo parametro con 2 value, 1 solo valido property + test dei rispettivi resultRequest ', () => {
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+
+    cy.get('#select-parameter15-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'ProbabilityConditionProperty')
+
+    cy.get('#select-parameter15-\\$\\$' + elementRef + '\\$\\$').select('Probability')
+    cy.get('#select-parameter16-\\$\\$' + elementRef + '\\$\\$').select('Property')
+
+    cy.get('#divType-parameter16-\\$\\$' + elementRef + '\\$\\$ > .btn').click()
+
+    cy.get('#btn-create-property3-value').click()
+
+    cy.get('#property3-value-picker-26').select('EnumParameter')
+
+    cy.get('#property3-value-result-picker-26').select('mean')
+  })
+
+  it('controllo salvataggio', () => {
+    cy.get('#scenario-picker').select('S3').select('S2');
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').should('have.value', 'Property')
+
+    cy.get('#property3-value-picker-25').should('have.value', 'EnumParameter')
+
+    cy.get('#property3-value-result-picker-25').should('have.value', 'mean')
+
+  })
+});
+
+describe('TEST_10 Manipolazione parametri per Resources', () => {
+  it('creazione nuovo parametro in resourcescon 2 value, 1 solo valido property + test dei rispettivi resultRequest ', () => {
+    cy.get('#button-resources').click()
+
+    cy.get('#resource-id-input\\$\\$resource_Front_Office\\$\\$').type('nuovoID')
+
+    cy.get('button[id=btn-deleteParameter15-\\$\\$resource_Front_Office\\$\\$]').click()
+
+    cy.get('#btn-createParameter-\\$\\$resource_Front_Office\\$\\$').click()
+
+    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').should('have.text', 'AvailabilityQuantityRoleSectionFixed CostUnit Cost')
+
+    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').select('Role')
+
+    cy.get('#btn-create-role').click()
+
+    cy.get('#btn-create-role1-value').click()
+
+    cy.get('#role1-value-picker-28').select('BooleanParameter')
+
+    cy.get('#role1-value-result-picker').select('mean')
+
+    cy.get('#role1-resultRequest-picker-27').select('max')
+  })
+
+  it('controllo salvataggio', () => {
+    cy.get('#scenario-picker').select('S4').select('S2');
+    cy.get('#button-resources').click()
+
+    cy.get('#resource-id-input\\$\\$resource_Front_Office\\$\\$').should('have.value', 'nuovoID')
+
+    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').should('have.value', 'Role')
+
+    cy.get('#role1-value-picker-27').should('have.value', 'BooleanParameter')
+
+    cy.get('#role1-value-result-picker-27').select('mean')
+
+    cy.get('#role1-resultRequest-picker-27').select('max')
+
+  })
+});
 
 // describe('TEST_11 Controllare diagramma con la decomposition', () => {
 

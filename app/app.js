@@ -4320,42 +4320,6 @@ function setParameterField(inputElement, obj) {
             }
 
         }
-
-        
-
-
-        let elementRef = "_10-42";
-        it('click di un\'event dell\'svg e check del focus su di esso', () => {    
-            cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
-            cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
-        });
-        it('cambio cosegia essitenti ', () =>{
-            cy.get('#btn-create-elementParameter-$$'+elementRef+'$$').click()
-            cy.get('#btn-create-elementParameter-$$'+elementRef+'$$').click()
-            cy.get('#btn-create-elementParameter-$$'+elementRef+'$$').click()
-            cy.get('#select-parameter14-$$'+elementRef+'$$').select('BetaDistribution')
-            cy.get('#select-parameter14-$$'+elementRef+'$$').should('have.value', null)
-            cy.get('#select-parameter14-$$'+elementRef+'$$').select('InterTriggerTimer')
-            cy.get('#parameter14-resultRequest-picker-23').select('have.text', 'minmaxmeansum')
-            
-            cy.get('#select-parameter15-$$'+elementRef+'$$').select('TriggerCount')
-            cy.get('#parameter15-resultRequest-picker-23').should('have.text', 'count')
-
-            cy.get('#select-parameter16-$$'+elementRef+'$$').select('Probability')
-            cy.get('#parameter16-resultRequest-picker-23').should('not.exixt')
-        })
-        it('controllo salvataggio', () =>{
-            cy.get('#scenario-picker').select('S3').select('S2');
-            cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
-
-            cy.get('#select-parameter14-$$'+elementRef+'$$').should('not.exixt')
-        })
-
-
-
-
-
-
         if (obj.resultRequest.length > 0) {
             let offset = 0;
             if (inputElement.id.includes("scenarioParameters-property")) {
