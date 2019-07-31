@@ -5,7 +5,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   return false
 })
 
-describe('TEST_0 Avvio', () => {
+describe('TEST_1 Avvio', () => {
 
   it('apertura file .html', () => {
     cy.visit('./../../../dist/index.html')
@@ -13,15 +13,15 @@ describe('TEST_0 Avvio', () => {
 
 })
 
-describe('TEST_1 Drag-n-Drop', function () {
+describe('TEST_2 Drag-n-Drop', function () {
 
 
   it('esistenza dropzone con dicitura', function () {
     cy.get('#js-drop-zone')
-      .should('contain', 'Drop your BPMN diagram here')
+      .should('contain', "Drop your BPMN diagram here")
   })
 
-  describe('1.1 Fase eventi drag-n-drop', function () {
+  describe('2.1 Fase eventi drag-n-drop', function () {
     it('cambio colore dropzone quando si passa sopra', function () {
       cy.get('#js-drop-zone')
         .trigger('dragover')
@@ -199,7 +199,7 @@ describe('TEST_4 Manipolazione di Calendars', () => {
 });
 
 describe('TEST_5 Manipolazione parametri di Scenario', () => {
-  describe('5.1 Manipolazione parametro di tipo date di Scenario', () => {
+  describe('5.1 Manipolazione parametri di tipo date e select di Scenario', () => {
     it('inserimento valore nel campo created', () => {
       cy.get('#scenario-created-input').click().then(input => {
         input[0].dispatchEvent(new Event('input', { bubbles: true }))
@@ -250,8 +250,22 @@ describe('TEST_5 Manipolazione parametri di Scenario', () => {
 
       it('crezione nuovo value a start ed errore già usato', () => {
         cy.get('#btn-create-start-value').click();
+        cy.get('#start-value-picker-18').select('NumericParameter');
+        cy.get('.vex-dialog-button-primary').click()
         cy.get('#start-value-picker-18').select('EnumParameter');
         cy.get('#btn-create-start-value-enumParameter-values-18').click();
+        cy.get('#btn-create-start-value-enumParameter-values-18').click();
+        cy.get('#btn-create-start-value-enumParameter-values-18').click();
+
+        cy.get('#start-value-enum-values-picker-19').select('FloatingParameter');
+        cy.get('#enumParameter-start-value-floatingParameterValue-input-18-19').type("2.5");
+        cy.get('#enumParameter-value-timeUnit-floatingParameter-picker-18-19').select("days");
+
+        cy.get('#start-value-enum-values-picker-20').select('StringParameter');
+        cy.get('#enumParameter-start-value-stringParameterValue-input-18-20').type("Ciao");
+
+        cy.get('#btn-deleteValue-start-value-18-21').click();
+
       })
 
       it('cambio resultRequest di start', () => {
@@ -263,45 +277,141 @@ describe('TEST_5 Manipolazione parametri di Scenario', () => {
         cy.get('#warmup-value-div-4').should('not.exist');
       });
 
-      // it('aggiunta di parameter (UserDistribution con 1 point) a duration', () => {
-      //   cy.get('#btn-create-duration-value').click();
-      //   cy.get('#duration-value-picker-18').select('UserDistribution');
-      //   cy.get('#duration-value-result-picker-18').select('max');
-      //   cy.get('#btn-create-duration-points-userDistribution-18').click();
-      //   cy.get('#btn-create-point1-value').click();
-      //   cy.get('#point1-value-picker-20').select("BooleanParameter");
-      //   cy.get('#point1-value-content-div-20 > .onoffswitch > .onoffswitch-label > .onoffswitch-switch').click();
-      // });
+      it('aggiunta di parameter (UserDistribution con 1 point) a duration', () => {
+        cy.get('#btn-create-duration-value').click();
+        cy.get('#duration-value-picker-22').select('UserDistribution');
+        cy.get('#duration-value-result-picker-22').select('max');
+        cy.get('#btn-create-duration-points-userDistribution-22').click();
+        cy.get('#btn-create-point1-value').click();
+        cy.get('#point1-value-picker-24').select("BooleanParameter");
+        cy.get('#point1-value-content-div-24 > .onoffswitch > .onoffswitch-label > .onoffswitch-switch').click();
+      });
 
-      // it('controllo salvataggio modifiche al cambio di scenario', () => {
-      //   cy.get('#scenario-picker').select('S3').select('S2');
-      //   cy.get('#scen-par-btn').click()
+      it('controllo salvataggio modifiche al cambio di scenario', () => {
+        cy.get('#scenario-picker').select('S3').select('S2');
+        cy.get('#scen-par-btn').click()
 
-      //   cy.get('#warmup-value-div-4').should('not.exist');
-      //   cy.get('#duration-value-div-4').should('exist');
-      //   cy.get('#duration-value-picker-4').should('have.value','UserDistribution');
-      //   cy.get('#duration-value-result-picker-4').should('have.value','max');
-      //   cy.get('#point1-value-picker-6').should('have.value',"BooleanParameter");
-      //   cy.get('#point1-value-value-booleanParameter-input-6').should('have.value', 'on');
-      // })
+        cy.get('#start-value-picker-1').should('have.value', 'NumericParameter');
+        cy.get('#start-value-timeUnit-picker-1').should('have.value', 'hours');
+
+        cy.get('#start-value-picker-2').should('have.value', 'EnumParameter');
+        cy.get('#start-value-enum-values-picker-3').should('have.value', 'FloatingParameter');
+        cy.get('#enumParameter-start-value-floatingParameterValue-input-2-3').should('have.value', "2.5");
+        cy.get('#enumParameter-value-timeUnit-floatingParameter-picker-2-3').should('have.value', "days");
+
+        cy.get('#start-value-enum-values-picker-4').should('have.value', 'StringParameter');
+        cy.get('#enumParameter-start-value-stringParameterValue-input-2-4').should('have.value', "Ciao");
+
+        cy.get('#warmup-value-div-5').should('not.exist');
+        cy.get('#duration-value-div-5').should('exist');
+        cy.get('#duration-value-picker-5').should('have.value', 'UserDistribution');
+        cy.get('#duration-value-result-picker-5').should('have.value', 'max');
+        cy.get('#point1-value-picker-7').should('have.value', "BooleanParameter");
+        cy.get('#point1-value-value-booleanParameter-input-7').should('have.value', 'on');
+      })
 
 
     });
 
-    describe('5.2.2 Manipolazione parameters', () => {
+    describe('5.2.2 Manipolazione tipi semplici Scenario Parameter', () => {
+      it('cambio valori semplici scenario parameter', () => {
+        cy.get('#scenarioParametersAttribute-seed-input').type(1);
+        cy.get('#scenarioParameters-baseTimeUnit-picker').select('year');
+        cy.get(':nth-child(17) > .onoffswitch-label > .onoffswitch-switch').click();
+      });
 
+      it("controllo salvataggio modifiche al cambio di scenario", () => {
+        cy.get('#scenarioParametersAttribute-seed-input').should('have.value', '1');
+        cy.get('#scenarioParameters-baseTimeUnit-picker').should('have.value', 'year')
+        cy.get('#scenarioParametersAttribute-traceOutput-input').should('have.value', 'on');
+
+      });
+    });
+
+    describe('5.2.3 Manipolazione property parameters', () => {
+      it('aggiunta di più property e queueLength', () => {
+        cy.get('#btn-create-property').click()
+        cy.get('#btn-create-property').click()
+
+        cy.get('#btn-create-property1-value').click()
+        cy.get('#btn-create-property1-value').click()
+
+        cy.get('#property1-value-picker-24').select('ExpressionParameter')
+        cy.get('#propertyType-scenarioParameters-picker-21').select('long')
+
+        cy.get('#propertyType-scenarioParameters-picker-22').select('double')
+
+        cy.get('#btn-create-queueLength-value').click()
+        cy.get('#queueLength-resultRequest-picker-0').select('mean')
+      })
+
+      it('controllo modifiche corrette a cambio scenario', () => {
+        cy.get('#scenario-picker').select('S3').select('S2')
+        cy.get('#scen-par-btn').click()
+        cy.get('#property1-value-picker-9').should('have.value', 'ExpressionParameter')
+        cy.get('#propertyType-scenarioParameters-picker-8').should('have.value', 'long')
+
+        cy.get('#propertyType-scenarioParameters-picker-10').should('have.value', 'double')
+
+        cy.get('#queueLength-resultRequest-picker-0').should('have.value', 'min')
+      })
     });
 
   });
 });
 
-// describe('TEST_6 Manipolazione parametri per Activities', () => {
+describe('TEST_6 Manipolazione parametri per Activities', () => {
+  let elementRef = "_10-235";
 
-// });
+  it('click di un\'activity dell\'svg e check del focus su di esso', () => {
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+  });
+  it('cambio activity parameter già esitente ', () => {
+    cy.get('#activity-id-input\\$\\$' + elementRef + '\\$\\$').type('S2').blur()
+    cy.get('.vex-dialog-button-primary').click()
+    cy.get('#activity-id-input\\$\\$' + elementRef + '\\$\\$').type('el1').blur()
+    cy.get('#parameter1-value-picker-11').select('ErlangDistribution')
+  })
+  it('controllo salvataggio', () => {
+    cy.get('#scenario-picker').select('S3').select('S2');
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('#activity-id-input\\$\\$' + elementRef + '\\$\\$').should('have.value', 'el1')
+    cy.get('#parameter1-value-picker-11').should('have.value', 'ErlangDistribution')
+  })
 
-// describe('TEST_7 Manipolazione parametri per Events', () => {
+});
 
-// });
+describe('TEST_7 Manipolazione parametri per Events', () => {
+  let elementRef = "_10-42";
+  it('click di un\'event dell\'svg e check del focus su di esso', () => {
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+  });
+  it('creazione nuovo parametro con 3 value + test dei rispettivi resultRequest ', () => {
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+    cy.get('button[id = btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click()
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Inter Trigger TimerTrigger CountProbabilityConditionProperty')
+
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').select('InterTriggerTimer')
+    cy.get('#parameter14-resultRequest-picker-23').should('have.text', 'minmaxmeansum')
+
+    cy.get('#select-parameter15-\\$\\$' + elementRef + '\\$\\$').select('TriggerCount')
+    cy.get('#parameter15-resultRequest-picker-23').should('have.text', 'count')
+
+    cy.get('#select-parameter16-\\$\\$' + elementRef + '\\$\\$').select('Probability')
+    cy.get('#parameter16-resultRequest-picker-23').should('not.exist')
+  })
+
+  it('controllo salvataggio', () => {
+    cy.get('#scenario-picker').select('S3').select('S2');
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+
+    cy.get('#select-parameter14-\\$\\$' + elementRef + '\\$\\$').should('not.exist')
+  })
+
+});
 
 // describe('TEST_8 Manipolazione parametri per Gateways', () => {
 
