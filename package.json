@@ -33,6 +33,7 @@
     "jsdom": "^15.1.1",
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.1",
+    "npx": "^10.2.0",
     "text-loader": "0.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.3.0",
