@@ -7,7 +7,7 @@
     "start": "npx webpack --config webpack.config.js && electron .",
     "all": "npx webpack --config webpack.config.js && google-chrome dist/index.html",
     "test": "mocha -r ts-node/register test/test.spec.ts",
-    "cypress:open": "cypress open"
+    "cypress:open": "npx webpack --config webpack.config.js && cypress open"
   },
   "repository": {
     "type": "git",
