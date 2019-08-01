@@ -1,5 +1,5 @@
 # BPMN Simulation
-Progetto di Tesi Magistrale di Caputo Matteo e Lazazzera Pierluigi.
+Progetto di Tesi Magistrale di Caputo Matteo e Lazazzera Pierluigi A.A. 2018/2019.
 
 Lo scopo di questo progetto di tesi è quello di realizzare una web-app che, dato un diagramma BPMN, permetta l'aggiunta, la modifica e la rimozione di elementi di simulazione dello standard BPSim.
 
@@ -9,6 +9,7 @@ Lo scopo di questo progetto di tesi è quello di realizzare una web-app che, dat
 
 Possono anche essere utilizzati diagrammi BPMN che contengono già una notazione BPSIM: in tal caso se la notazione inserita è coerente con lo standard BPSIM, questi parametri di simulazione saranno mostrati nella web-app e sarà possibile modificarli, eliminarli o crearne di nuovi.
 
+
 Documentazione:
 
 * BPMN: https://www.omg.org/spec/BPMN/2.0.2/PDF
@@ -16,7 +17,7 @@ Documentazione:
 * BPSim: http://bpsim.org/specifications/2.0/WFMC-BPSWG-2016-01.pdf
 
 
-Per il corretto funzionamento della web-app occorre, inoltre, avere installato _npm_ e aver eseguito il seguente comando
+Per il corretto funzionamento della web-app occorre, inoltre, avere installato il browser [Google Chrome](https://www.google.com/intl/it/chrome/) ed avere [Node.js](https://www.npmjs.com/get-npm) e [npm](https://www.npmjs.com/get-npm). Successivamente occorre eseguire il seguente comando
 
 ```
 npm install
