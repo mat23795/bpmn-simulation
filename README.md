@@ -46,7 +46,5 @@ npm test
 Per eseguire il test relativo all'interfaccia presente in questo progetto occorre eseguire i seguenti comandi
 ```
 sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
-``` 
-```
 npm run cypress:open
 ```
