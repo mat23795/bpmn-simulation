@@ -504,11 +504,11 @@
                         </bpsim:ControlParameters>
                     </bpsim:ElementParameters>
                     <bpsim:ElementParameters elementRef="_BAE2D4BB-902F-4C3C-AF76-A0CABBA9A7AE">
-                        <bpsim:TimeParameters>
-                            <bpsim:ProcessingTime>
-                                <bpsim:TriangularDistribution max="6" min="4" mode="5"/>
-                            </bpsim:ProcessingTime>
-                        </bpsim:TimeParameters>
+                        <!-- <bpsim:TimeParameters> -->
+                            <!-- <bpsim:ProcessingTime> -->
+                                <!-- <bpsim:TriangularDistribution max="6" min="4" mode="5"/> -->
+                            <!-- </bpsim:ProcessingTime> -->
+                        <!-- </bpsim:TimeParameters> -->
                         <bpsim:ControlParameters>
                             <bpsim:InterTriggerTimer>
                                 <bpsim:TriangularDistribution max="6" min="4" mode="5"/>
@@ -630,27 +630,27 @@
                             </bpsim:Probability>
                         </bpsim:ControlParameters>
                     </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_6E1A332C-9187-4C4A-BD0F-27167F940786">
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_A2A06973-DC30-4BCF-BF0F-1FD60D68E1EB">
-                        <bpsim:ControlParameters>
-                            <bpsim:TriggerCount>
-                                <bpsim:ResultRequest>count</bpsim:ResultRequest>
-                            </bpsim:TriggerCount>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
-                    <bpsim:ElementParameters elementRef="_542AE8E6-9CEA-43E3-8177-C685A9F430FE">
-                        <bpsim:ControlParameters>
-                            <bpsim:InterTriggerTimer>
-                                <bpsim:DurationParameter value="PT60M"/>
-                            </bpsim:InterTriggerTimer>
-                        </bpsim:ControlParameters>
-                    </bpsim:ElementParameters>
+                    <!-- <bpsim:ElementParameters elementRef="_6E1A332C-9187-4C4A-BD0F-27167F940786"> -->
+                        <!-- <bpsim:ControlParameters> -->
+                            <!-- <bpsim:TriggerCount> -->
+                                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+                            <!-- </bpsim:TriggerCount> -->
+                        <!-- </bpsim:ControlParameters> -->
+                    <!-- </bpsim:ElementParameters> -->
+                    <!-- <bpsim:ElementParameters elementRef="_A2A06973-DC30-4BCF-BF0F-1FD60D68E1EB"> -->
+                        <!-- <bpsim:ControlParameters> -->
+                            <!-- <bpsim:TriggerCount> -->
+                                <!-- <bpsim:ResultRequest>count</bpsim:ResultRequest> -->
+                            <!-- </bpsim:TriggerCount> -->
+                        <!-- </bpsim:ControlParameters> -->
+                    <!-- </bpsim:ElementParameters> -->
+                    <!-- <bpsim:ElementParameters elementRef="_542AE8E6-9CEA-43E3-8177-C685A9F430FE"> -->
+                        <!-- <bpsim:ControlParameters> -->
+                            <!-- <bpsim:InterTriggerTimer> -->
+                                <!-- <bpsim:DurationParameter value="PT60M"/> -->
+                            <!-- </bpsim:InterTriggerTimer> -->
+                        <!-- </bpsim:ControlParameters> -->
+                    <!-- </bpsim:ElementParameters> -->
                 </bpsim:Scenario>
             </bpsim:BPSimData>
         </semantic:extensionElements>

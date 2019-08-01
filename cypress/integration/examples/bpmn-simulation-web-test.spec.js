@@ -15,7 +15,6 @@ describe('TEST_1 Avvio', () => {
 
 describe('TEST_2 Drag-n-Drop', function () {
 
-
   it('esistenza dropzone con dicitura', function () {
     cy.get('#js-drop-zone')
       .should('contain', "Drop your BPMN diagram here")
@@ -32,14 +31,7 @@ describe('TEST_2 Drag-n-Drop', function () {
 
     it('aggiunta del file e apertura al drop', function () {
 
-      // const fileName = '../../resources/firstDiagram.bpmn';
-      // const fileName = '../../resources/2_CarRepairProcessV2.bpmn';
-      // const fileName = '../../resources/1_CarRepairProcessV1.bpmn';
-      // const fileName = '../../resources/3_LoanProcessV1.bpmn';
-      // const fileName = '../../resources/4_LoanProcessV2.bpmn';
-      // const fileName = '../../resources/5_TechnicalSupportProcessV1.bpmn';
-      // const fileName = '../../resources/6_TechnicalSupportProcessV1_1.bpmn';
-      const fileName = '../../resources/7_TechnicalSupportProcessV2.bpmn';
+      const fileName = '../../resources/TechnicalSupportProcess.bpmn';
 
       cy.fixture(fileName).then(fileContent => {
         cy.get('#js-drop-zone').upload(
@@ -52,35 +44,6 @@ describe('TEST_2 Drag-n-Drop', function () {
 
   })
 })
-
-// describe('TEST_2 Eventi al click degli elementi nell\'svg', () => {
-//   let elementRef;
-
-//   it('click di un\'activity dell\'svg e check del focus su di esso', () => {
-//     elementRef = "_10-235";
-//     cy.get('[data-element-id="'+elementRef+'"]').trigger('click')
-//     cy.get('input[id*="$$'+elementRef+'$$"]').should('have.focus')
-//   });
-
-//   it('click di un event dell\'svg e check del focus su di esso',() =>{
-//     elementRef = "_10-42";
-//     cy.get('[data-element-id="'+elementRef+'"]').trigger('click')
-//     cy.get('input[id*="$$'+elementRef+'$$"]').should('have.focus')
-//   });
-
-//   it('click di un gateway dell\'svg e check del focus su di esso',() =>{
-//     elementRef = "_10-593";
-//     cy.get('[data-element-id="'+elementRef+'"]').trigger('click')
-//     cy.get('input[id*="$$'+elementRef+'$$"]').should('have.focus')
-//   });
-
-//   it('click di un connecting object dell\'svg e check del focus su di esso',() =>{
-//     elementRef = "_10-740";
-//     cy.get('[data-element-id="'+elementRef+'"]').trigger('click')
-//     cy.get('input[id*="$$'+elementRef+'$$"]').should('have.focus')
-//   });
-
-// })
 
 describe('TEST_3 Manipolazione di Scenarios', () => {
   it('elementi del picker corretti', () => {
@@ -506,9 +469,9 @@ describe('TEST_10 Manipolazione parametri per Resources', () => {
 
     cy.get('button[id=btn-deleteParameter15-\\$\\$resource_Front_Office\\$\\$]').click()
 
-    cy.get('#btn-createParameter-\\$\\$resource_Front_Office\\$\\$').click()
+    cy.get('button[id=btn-create-elementParameter-\\$\\$resource_Front_Office\\$\\$]').click()
 
-    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').should('have.text', 'AvailabilityQuantityRoleSectionFixed CostUnit Cost')
+    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').should('have.text', 'AvailabilityQuantityRoleSelectionFixed CostUnit Cost')
 
     cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').select('Role')
 
@@ -518,43 +481,109 @@ describe('TEST_10 Manipolazione parametri per Resources', () => {
 
     cy.get('#role1-value-picker-28').select('BooleanParameter')
 
-    cy.get('#role1-value-result-picker').select('mean')
+    cy.get('#role1-value-result-picker-28').select('mean')
 
     cy.get('#role1-resultRequest-picker-27').select('max')
   })
 
   it('controllo salvataggio', () => {
-    cy.get('#scenario-picker').select('S4').select('S2');
+    cy.get('#scenario-picker').select('S4').select('S2')
+
+    cy.get('#elem-par-btn').click()
+
     cy.get('#button-resources').click()
 
     cy.get('#resource-id-input\\$\\$resource_Front_Office\\$\\$').should('have.value', 'nuovoID')
 
-    cy.get('#select-parameter16-\\$\\$resource_Front_Office\\$\\$').should('have.value', 'Role')
+    cy.get('#select-parameter15-\\$\\$resource_Front_Office\\$\\$').should('have.value', 'Role')
 
     cy.get('#role1-value-picker-27').should('have.value', 'BooleanParameter')
 
     cy.get('#role1-value-result-picker-27').select('mean')
 
-    cy.get('#role1-resultRequest-picker-27').select('max')
+    cy.get('#role1-resultRequest-picker-26').select('max')
 
   })
 });
 
-// describe('TEST_11 Controllare diagramma con la decomposition', () => {
+describe('TEST_11 Generazione del file finale', () => {
 
-// });
+  it('Test click corretto del tasto di generazione file .bpmn', () => {
+    cy.get('#generate-bpsim').click();
+  });
 
-// describe('TEST_12 Gestione di un diagramma senza notazione BPSim', () => {
+});
 
-// });
+describe('TEST_12 Controllare diagramma con la decomposition con diagramma senza BPSim', () => {
 
-// describe('TEST_13 Generazione del file finale', () => {
+  it('apertura file .html', () => {
+    cy.visit('./../../../dist/index.html')
+  })
 
-// });
+  it('aggiunta del file con decomposition e senza BPSim e apertura al drop', function () {
 
-// describe('TEST_', () => {
+    const fileName = '../../resources/DecompositionWithoutBPSim.bpmn';
 
-// });
+    cy.fixture(fileName).then(fileContent => {
+      cy.get('#js-drop-zone').upload(
+        { fileContent, fileName, mimeType: 'text/xml', encoding: 'utf-8' },
+        { subjectType: 'drag-n-drop' },
+      );
+    });
+
+  })
+
+  it('controllo picker vuoto e funzionalità disabilitate (Diagramma senza BPSim)', function () {
+    cy.get('#scenario-picker').should('have.value', null);
+    cy.get('#generate-bpsim').should('be.disabled');
+    cy.get('#delete-scenario').should('be.disabled');
+    cy.get('#scenario-displayed').should('have.css', 'display', 'none');
+    
+  })
+
+  it('creazione scenario con element parameter con decomposition', () => {
+    cy.get('#create-scenario').trigger('click')
+    cy.get('.vex-dialog-input > input').type('NuovoScenario')
+    cy.get('.vex-dialog-button-primary').click()
+
+  });
+
+  let elementRef
+  it('click di un\'activity dell\'svg (con decomposizione), check del focus su di essa e check che deve avere meno cose per incoming', () => {
+    elementRef = "Task_19rd0am";
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
+    cy.get('#select-parameter1-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+  });
+
+  it('click di un\'activity dell\'svg (con decomposizione), check del focus su di essa e check che deve avere meno cose per incoming e decomposition', () => {
+    elementRef = 'Task_07b3goa';
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
+    cy.get('#select-parameter2-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+  });
+
+  it('click di un\'activity dell\'svg, check del focus su di essa e check che deve avere tutto', () => {
+    elementRef = 'SubProcess_1h4kdmv';
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
+    cy.get('#select-parameter3-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Transfer TimeQueue TimeWait TimeSetup TimeProcessing TimeValidation TimeRework TimeInter Trigger TimerTrigger CountFixed CostUnit CostPropertyQueue LengthInterruptiblePriority');
+  });
+
+  it('click di un\'activity dell\'svg (con decomposizione), check del focus su di essa e check che deve avere meno cose per decomposition', () => {
+    elementRef = 'SubProcess_0p2q579';
+    cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
+    cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
+    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
+    cy.get('#select-parameter4-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+  });
+  
+
+
+});
 
 
 

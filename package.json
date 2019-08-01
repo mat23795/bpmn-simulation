@@ -7,28 +7,7 @@
     "start": "npx webpack --config webpack.config.js && electron .",
     "all": "npx webpack --config webpack.config.js && google-chrome dist/index.html",
     "test": "mocha -r ts-node/register test/test.spec.ts",
-    "dist": "electron-builder",
-    "pack": "build --dir",
     "cypress:open": "cypress open"
-  },
-  "build": {
-    "appId": "bpmn-sim",
-    "files": [
-      "app/**/*",
-      "node_modules/**/*"
-    ],
-    "linux": {
-      "category": "office",
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "icon": "img/icon.png"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "img/icon.png"
-    }
   },
   "repository": {
     "type": "git",

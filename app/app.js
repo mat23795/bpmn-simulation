@@ -1,12 +1,3 @@
-import firstdiagramXML from '../resources/firstDiagram.bpmn';
-import bpmn_example1 from '../resources/1_CarRepairProcessV1.bpmn';
-import bpmn_example2 from '../resources/2_CarRepairProcessV2.bpmn';
-import bpmn_example3 from '../resources/3_LoanProcessV1.bpmn';
-import bpmn_example4 from '../resources/4_LoanProcessV2.bpmn';
-import bpmn_example5 from '../resources/5_TechnicalSupportProcessV1.bpmn';
-import bpmn_example6 from '../resources/6_TechnicalSupportProcessV1_1.bpmn';
-import bpmn_example7 from '../resources/7_TechnicalSupportProcessV2.bpmn';
-
 import { DateTime, DurationParameter, DateTimeParameter } from "./types/parameter_type/ConstantParameter";
 import { BPSimData } from "./types/scenario/BPSimData";
 import { Scenario } from "./types/scenario/Scenario";
@@ -390,10 +381,10 @@ function openDiagram() {
             }
             extensionElementXML[0].appendChild(dataTreeObjGlobal.toXMLelement(bpsimPrefixGlobal, bpsimNamespaceURI));
 
-            console.log("OUTPUT GENERAZIONE XML SIMULAZIONE");//TODO REMOVE?
-            console.log(xmlDoc);//TODO REMOVE?
-            console.log(extensionElementXML[0].lastChild); //TODO REMOVE?
-            console.log(dataTreeObjGlobal); //TODO REMOVE?
+            // console.log("OUTPUT GENERAZIONE XML SIMULAZIONE");//TODO REMOVE?
+            // console.log(xmlDoc);//TODO REMOVE?
+            // console.log(extensionElementXML[0].lastChild); //TODO REMOVE?
+            // console.log(dataTreeObjGlobal); //TODO REMOVE?
 
             //TODO commentare o scommentare se si vuole salvare o no il file
             download("bpmn-simulation.bpmn", vkbeautify.xml(new XMLSerializer().serializeToString(xmlDoc)));
@@ -503,9 +494,9 @@ function openDiagram() {
             dataTreeGlobal = xml2tree(extensionElementXML[0]);
             dataTreeObjGlobal = dataTreeGlobal[1];
 
-            console.log("obj finale post parsing"); //TODO REMOVE?
-            console.log(dataTreeObjGlobal); //TODO REMOVE?
-            console.log(xmlDoc);//TODO REMOVE?
+            // console.log("obj finale post parsing"); //TODO REMOVE?
+            // console.log(dataTreeObjGlobal); //TODO REMOVE?
+            // console.log(xmlDoc);//TODO REMOVE?
 
             // * popoliamo la lista di id globali perché ogni id deve essere univoco
             populateIdList();
@@ -1316,7 +1307,6 @@ function createFormFields(firstTime = true) {
             refreshFormFields(dataTreeObjGlobal.scenario, scenarioSelected);
 
             $('#js-simulation').scrollTop(0);
-            console.log(dataTreeObjGlobal)
         });
     }
 }
@@ -3898,7 +3888,6 @@ function setParameter(parameter, buttonID) {
 
         valuesSection.append(valueDiv);
         if ($('#' + buttonID).data('clicked') == true) {
-            console.log("sto focussando " + valueDiv[0].id)
             valueDiv.focus();
         }
     });
@@ -4764,7 +4753,6 @@ function saveCalendarField(field, isNew) {
                     } else {
                         calendarsNew[i][fieldName] = undefined;
                     }
-                    console.log(calendarsNew[i]);
                 }
             }
         } else {
@@ -4792,44 +4780,16 @@ function saveCalendarField(field, isNew) {
     }
 }
 
-// * funzione che cambia 
+// * funzione che refresha le dimensioni
 function refreshDimension(btn, isCalendar = false) {
     // btn.classList.toggle("active");
     var content = btn.nextElementSibling;
-    // var haveInner = content.id.includes("haveInner");
-    // var scrollHeightInner = 0;
-    // if (haveInner) {
-    //     var contentChildren = content.childNodes[0].childNodes;
-    //     for (let i = 0; i < contentChildren.length; i++) {
-    //         if (i % 2 != 0) {
-    //             scrollHeightInner = scrollHeightInner + contentChildren[i].scrollHeight;
-    //         }
-    //     }
-    // }
 
-    // if (isCalendar) {
-    //     content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
-    // } else {
     if (content.style.maxHeight) {
-        // console.log("si")
         content.style.maxHeight = null;
     } else {
-        // console.log("no");
         content.style.maxHeight = "unset"
-        // content.style.maxHeight = content.scrollHeight + scrollHeightInner + "px";
     }
-    // }
-}
-
-
-
-// * Funzione che salva la struttura dati
-function saveDataTreeStructure(scenarioSelected) {
-    scenarioSelected -= 1;
-    let idScenarioInput = $('#scenario-id-input');
-    let idScenarioVal = idScenarioInput.val();
-
-    dataTreeObjGlobal.scenario[scenarioSelected].id = idScenarioVal;
 }
 
 // * Funzione che parsa il file .bpmn e popola una struttura dati con le info della simulazione
@@ -5178,7 +5138,7 @@ event.forEach(function (event) {
 
             // * do il focus all'input tag che ha come id l'element ref che ho cliccato
 
-            console.log($("input[id*='$$" + elemRefClicked + "$$']")); //TODO REMOVE?
+            // console.log($("input[id*='$$" + elemRefClicked + "$$']")); //TODO REMOVE?
             focusDelayed($("input[id*='$$" + elemRefClicked + "$$']"));
 
             // non selezioniamo con un rettangolo blu le label dei task, ma gli altri elementi si
@@ -5187,7 +5147,7 @@ event.forEach(function (event) {
             } else {
                 $('.djs-element.selected .djs-outline').css("stroke-width", "8px");
             }
-            console.log(event + 'on' + e.element.id); //TODO REMOVE?
+            // console.log(event + 'on' + e.element.id); //TODO REMOVE?
         }
     });
 
