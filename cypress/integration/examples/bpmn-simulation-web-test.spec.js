@@ -46,25 +46,20 @@ describe('TEST_2 Drag-n-Drop', function () {
 })
 
 describe('TEST_3 Manipolazione di Scenarios', () => {
-  it('elementi del picker corretti', () => {
-    // cy.get('#scenario-picker')
+  it('controllo picker settato sul primo scenarioe avente opzioni corrette', () => {
     cy.get('#scenario-picker').should('have.text', 'S1S2S3').should('have.value', '1');
-
-
   });
 
   describe('3.1 Creazione di un nuovo Scenario', () => {
-    it('inserimento id corretto per il nuovo scenario', () => {
+    it('creazione nuovo scenario con id corretto', () => {
       cy.get('#create-scenario').trigger('click')
       cy.get('.vex-dialog-input > input').type('NuovoScenario')
       cy.get('.vex-dialog-button-primary').click()
-
-      cy.get('#scenario-picker').should('have.text', 'S1S2S3NuovoScenario').should('have.value', '4');
-      // cy.get('#scenario-picker').find(':selected').contains('S4')
-
-      cy.get('#scenario-id-input').should('have.value', 'NuovoScenario')
-
     });
+    it('controllo picker settato su nuovo scenario', () => {
+      cy.get('#scenario-picker').should('have.text', 'S1S2S3NuovoScenario').should('have.value', '4');
+      cy.get('#scenario-id-input').should('have.value', 'NuovoScenario')
+    })
 
   });
 
@@ -73,7 +68,6 @@ describe('TEST_3 Manipolazione di Scenarios', () => {
       cy.get('#scenario-id-input').clear().type('S1').blur();
       cy.get('.vex-dialog-button-primary').click()
       cy.get('#scenario-id-input').should('have.value', 'NuovoScenario').clear().type('S4').should('have.value', 'S4').blur();
-
     })
 
     it('cambio scenario e ritorno al precedente per controllare modifica esistente', () => {
@@ -89,6 +83,9 @@ describe('TEST_3 Manipolazione di Scenarios', () => {
     it('eliminazione dello scenario S1', () => {
       cy.get('#scenario-picker').select('S1');
       cy.get('#delete-scenario').trigger('click')
+      
+    })
+    it('controllo cambio valori a picker',()=>{
       cy.get('#scenario-picker').should('have.text', 'S2S3S4').should('have.value', '1');
       cy.get('#scenario-inherits-picker').should('have.text', 'S3S4').should('have.value', null);
     })
@@ -133,7 +130,6 @@ describe('TEST_4 Manipolazione di Calendars', () => {
       cy.get('#calendar-C9-id-input').clear().type('C1').blur();
       cy.get('.vex-dialog-button-primary').click();
       cy.get('#calendar-C9-id-input').should('have.value', 'C9').clear().type('C10').blur().should('have.value', 'C10');
-
     })
 
     it('cambio scenario e ritorno al precedente per controllare modifica esistente', () => {
@@ -143,15 +139,12 @@ describe('TEST_4 Manipolazione di Calendars', () => {
       cy.get('#calendar-btn').click();
       cy.get('#calendar-C10-id-input').should('have.value', 'C10')
     })
-
   });
 
   describe('4.3 Eliminazione di un Calendar', () => {
     it('eliminazione del calendar C10', () => {
       cy.get('#btn-delete-calendarC10').trigger('click')
       cy.get('#btn-delete-calendarC10').should('not.exist')
-
-
     })
     it('controllo che il validFor non contenga C10', () => {
       cy.get('#scen-par-btn').click()
@@ -211,10 +204,12 @@ describe('TEST_5 Manipolazione parametri di Scenario', () => {
         cy.get('#start-value-timeUnit-picker-1').select('hours');
       })
 
-      it('crezione nuovo value a start ed errore già usato', () => {
+      it('crezione nuovo value a start con errore già usato', () => {
         cy.get('#btn-create-start-value').click();
         cy.get('#start-value-picker-18').select('NumericParameter');
         cy.get('.vex-dialog-button-primary').click()
+      })
+      it('creazione nuovo valore non esistente', ()=>{
         cy.get('#start-value-picker-18').select('EnumParameter');
         cy.get('#btn-create-start-value-enumParameter-values-18').click();
         cy.get('#btn-create-start-value-enumParameter-values-18').click();
@@ -228,7 +223,6 @@ describe('TEST_5 Manipolazione parametri di Scenario', () => {
         cy.get('#enumParameter-start-value-stringParameterValue-input-18-20').type("Ciao");
 
         cy.get('#btn-deleteValue-start-value-18-21').click();
-
       })
 
       it('cambio resultRequest di start', () => {
@@ -538,7 +532,7 @@ describe('TEST_12 Controllare diagramma con la decomposition con diagramma senza
     cy.get('#generate-bpsim').should('be.disabled');
     cy.get('#delete-scenario').should('be.disabled');
     cy.get('#scenario-displayed').should('have.css', 'display', 'none');
-    
+
   })
 
   it('creazione scenario con element parameter con decomposition', () => {
@@ -553,34 +547,34 @@ describe('TEST_12 Controllare diagramma con la decomposition con diagramma senza
     elementRef = "Task_19rd0am";
     cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
     cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
-    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
-    cy.get('#select-parameter1-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+    cy.get('button[id=btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click();
+    cy.get('#select-parameter1-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
   });
 
   it('click di un\'activity dell\'svg (con decomposizione), check del focus su di essa e check che deve avere meno cose per incoming e decomposition', () => {
     elementRef = 'Task_07b3goa';
     cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
     cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
-    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
-    cy.get('#select-parameter2-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+    cy.get('button[id=btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click();
+    cy.get('#select-parameter2-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
   });
 
   it('click di un\'activity dell\'svg, check del focus su di essa e check che deve avere tutto', () => {
     elementRef = 'SubProcess_1h4kdmv';
     cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
     cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
-    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
-    cy.get('#select-parameter3-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Transfer TimeQueue TimeWait TimeSetup TimeProcessing TimeValidation TimeRework TimeInter Trigger TimerTrigger CountFixed CostUnit CostPropertyQueue LengthInterruptiblePriority');
+    cy.get('button[id=btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click();
+    cy.get('#select-parameter3-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Transfer TimeQueue TimeWait TimeSetup TimeProcessing TimeValidation TimeRework TimeInter Trigger TimerTrigger CountFixed CostUnit CostPropertyQueue LengthInterruptiblePriority');
   });
 
   it('click di un\'activity dell\'svg (con decomposizione), check del focus su di essa e check che deve avere meno cose per decomposition', () => {
     elementRef = 'SubProcess_0p2q579';
     cy.get('[data-element-id="' + elementRef + '"]').trigger('click')
     cy.get('input[id*="$$' + elementRef + '$$"]').should('have.focus')
-    cy.get('button[id=btn-create-elementParameter-\\$\\$'+elementRef+'\\$\\$]').click();
-    cy.get('#select-parameter4-\\$\\$'+elementRef+'\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
+    cy.get('button[id=btn-create-elementParameter-\\$\\$' + elementRef + '\\$\\$]').click();
+    cy.get('#select-parameter4-\\$\\$' + elementRef + '\\$\\$').should('have.text', 'Fixed CostUnit CostProperty');
   });
-  
+
 
 
 });
