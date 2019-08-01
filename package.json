@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "Lazazzera & Caputo <pierluigi.lazazzera@studio.unibo.it>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mat23795/bpmn-simulation/issues"
   },

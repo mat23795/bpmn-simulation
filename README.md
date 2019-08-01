@@ -1,7 +1,7 @@
 # BPMN Simulation
 Progetto di Tesi Magistrale di Caputo Matteo e Lazazzera Pierluigi.
 
-Lo scopo di questo progetto di tesi è quello di realizzare una web app che, dato un diagramma BPMN, permetta l'aggiunta, la modifica e la rimozione di elementi di simulazione dello standard BPSim.
+Lo scopo di questo progetto di tesi è quello di realizzare una web-app che, dato un diagramma BPMN, permetta l'aggiunta, la modifica e la rimozione di elementi di simulazione dello standard BPSim.
 
 
 ### Requisiti
@@ -48,3 +48,9 @@ Per eseguire il test relativo all'interfaccia presente in questo progetto occorr
 sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
 npm run cypress:open
 ```
+Successivamente occorre cliccare sul file _bpmn-simulation-web-test.spec.js_ per visualizzare il test in azione.
+
+
+### Licenza
+
+[MIT](https://opensource.org/licenses/MIT)
