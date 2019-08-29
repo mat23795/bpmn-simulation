@@ -1218,12 +1218,12 @@ function createFormFields(firstTime = true) {
     if (firstTime) {
         //salvataggio delle modifiche per ogni attributo di scenario
         $("input[id*='scenario-']").on('change', function () {
-            saveScenarioAtrribute(this);
+            saveScenarioAttribute(this);
         });
 
         //salvataggio delle modifiche per ogni attributo semplice (no baseTimeUnit) di scenarioParameters
         $("input[id*='scenarioParametersAttribute-']").on('change', function () {
-            saveScenarioParameterAtrribute(this);
+            saveScenarioParameterAttribute(this);
         });
 
         //salvataggio delle modifiche sul picker di baseTimeUnit di scenarioParameters
@@ -4522,7 +4522,7 @@ function populateCalendarForm(calendars) {
 }
 
 //* Funzione che salva nella struttura dati il singolo attributo di scenario cambiato
-function saveScenarioAtrribute(field) {
+function saveScenarioAttribute(field) {
     let value = field.value;
     let fieldName = field.id.split("-")[1];
 
@@ -4563,7 +4563,7 @@ function saveScenarioAtrribute(field) {
 }
 
 // * Funzione che salva gli attributi di scenarioParameters
-function saveScenarioParameterAtrribute(field) {
+function saveScenarioParameterAttribute(field) {
     let value = field.value;
     let fieldName = field.id.split("-")[1];
     if (field.type == "checkbox") {
