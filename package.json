@@ -46,7 +46,7 @@
     "dialogs": "^2.0.1",
     "electron": "^5.0.7",
     "electron-builder": "^21.1.5",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.5.0",
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.1",
     "npx": "^10.2.0",
